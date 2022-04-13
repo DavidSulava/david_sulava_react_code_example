@@ -1,2 +1,0 @@
-# DesignGear.Cloud
-
