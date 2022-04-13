@@ -8,7 +8,7 @@ namespace ConfigurationsManager
 		static readonly string bucketName = "test_bucket_tv237s4155";
 		static readonly string svfPath = @"d:\Suspension\";
 		static readonly string outputPath = @"d:\result";
-		public async Task<string> GetSvf(string filePath)
+		public async Task<string> GetSvfAsync(string filePath)
 		{
 			var api = new Derivative();
 			await api.Authenticate();
@@ -19,7 +19,7 @@ namespace ConfigurationsManager
 			return urn;
 		}
 
-		public async Task<string> ProcessModel(string filePath)
+		public async Task<string> ProcessModelAsync(string filePath)
 		{
 			var inventor = new Automation();
 			await inventor.SetupOwnerAsync();
