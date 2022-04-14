@@ -7,19 +7,23 @@ using DesignGear.Contractor.Core.Services.Interfaces;
 using DesignGear.Contractor.Core.Dto;
 using DesignGear.Contracts.Models;
 using DesignGear.Contracts.Models.Contractor;
+using DesignGear.Contractor.Core.Helpers;
 
 namespace DesignGear.Contractor.Core.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
         private readonly ApplicationDbContext _dbContext;
-        public AuthenticationService(ApplicationDbContext dbContext)
+        private readonly AppSettings _appSettings;
+
+        public AuthenticationService(ApplicationDbContext dbContext, IOptions<AppSettings> appSettings)
         {
             if (dbContext == null)
             {
                 throw new ArgumentNullException(nameof(dbContext));
             }
             _dbContext = dbContext;
+            _appSettings = appSettings.Value;
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
@@ -46,7 +50,7 @@ namespace DesignGear.Contractor.Core.Services
         {
             // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("very secret phrase for encoding jwt token"/*_appSettings.Secret*/);
+            var key = Encoding.UTF8.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("UserId", user.UserId.ToString()) }),
