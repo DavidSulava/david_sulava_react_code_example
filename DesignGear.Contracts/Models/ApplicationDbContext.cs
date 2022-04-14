@@ -12,6 +12,7 @@ namespace DesignGear.Contracts.Models
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
+            Database.EnsureCreated();
         }
 
         public DbSet<Organization> Organizations { get; set; }
