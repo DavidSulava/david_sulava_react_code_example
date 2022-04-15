@@ -9,6 +9,7 @@ namespace DesignGear.Contractor.Core.Data.Entity
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid OrganizationId { get; set; }
 
+        [StringLength(300)]
         public string Name { get; set; }
 
         public DateTime Created { get; set; }

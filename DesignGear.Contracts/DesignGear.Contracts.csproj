@@ -10,7 +10,6 @@
     <Folder Include="Models\Billing\" />
     <Folder Include="Models\ConfigManager\" />
     <Folder Include="Models\Consumer\" />
-    <Folder Include="Models\Contractor\" />
     <Folder Include="Models\ServerManager\" />
   </ItemGroup>
 

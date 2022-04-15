@@ -2,7 +2,7 @@
 
 namespace DesignGear.Contractor.Core.Dto
 {
-    public class AuthenticateResponse
+    public class AuthenticateResponseDto
     {
         public Guid UserId { get; set; }
         public string? FirstName { get; set; }
@@ -11,7 +11,7 @@ namespace DesignGear.Contractor.Core.Dto
         public string Token { get; set; }
 
 
-        public AuthenticateResponse(User user, string token)
+        public AuthenticateResponseDto(User user, string token)
         {
             UserId = user.UserId;
             FirstName = user.FirstName;

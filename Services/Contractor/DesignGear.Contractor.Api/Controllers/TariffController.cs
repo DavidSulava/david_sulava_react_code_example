@@ -4,10 +4,10 @@ namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class TariffController : ControllerBase
     {
-        [HttpPost]
-        public IActionResult CreateUser()
+        [HttpGet]
+        public IActionResult TariffList()
         {
             return Ok();
         }

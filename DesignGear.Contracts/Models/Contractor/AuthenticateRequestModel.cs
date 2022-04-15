@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DesignGear.Contractor.Core.Dto
+namespace DesignGear.Contracts.Models.Contractor
 {
-    public class AuthenticateRequest
+    public class AuthenticateRequestModel
     {
         [Required]
         public string Email { get; set; }

@@ -1,5 +1,5 @@
-﻿using DesignGear.Contractor.Core.Dto;
-using DesignGear.Contractor.Core.Services.Interfaces;
+﻿using DesignGear.Contractor.Core.Services.Interfaces;
+using DesignGear.Contracts.Models.Contractor;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesignGear.Contractor.Api.Controllers
@@ -15,8 +15,8 @@ namespace DesignGear.Contractor.Api.Controllers
             _authenticationService = authenticationService;
         }
 
-        [HttpPost("authenticate")]
-        public IActionResult Authenticate(AuthenticateRequest model)
+        [HttpPost]
+        public IActionResult Authenticate(AuthenticateRequestModel model)
         {
             var response = _authenticationService.Authenticate(model);
 

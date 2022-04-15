@@ -8,6 +8,7 @@ using DesignGear.Contractor.Core.Dto;
 using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contractor.Core.Data;
 using DesignGear.Contractor.Core.Data.Entity;
+using DesignGear.Contracts.Models.Contractor;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -26,7 +27,7 @@ namespace DesignGear.Contractor.Core.Services
             _appSettings = appSettings.Value;
         }
 
-        public AuthenticateResponse Authenticate(AuthenticateRequest model)
+        public AuthenticateResponseDto Authenticate(AuthenticateRequestModel model)
         {
             var user = _dbContext.Users.FirstOrDefault(x => x.Email == model.Email && x.Password == model.Password);
 
@@ -36,7 +37,7 @@ namespace DesignGear.Contractor.Core.Services
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
 
-            return new AuthenticateResponse(user, token);
+            return new AuthenticateResponseDto(user, token);
         }
 
         public User? GetById(Guid userId)
