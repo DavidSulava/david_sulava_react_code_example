@@ -1,4 +1,4 @@
-﻿using DesignGear.Contracts.Models.Contractor;
+﻿using DesignGear.Contractor.Core.Data.Entity;
 
 namespace DesignGear.Contractor.Core.Dto
 {

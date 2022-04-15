@@ -1,4 +1,4 @@
-﻿using DesignGear.Contracts.Models.Contractor;
+﻿using DesignGear.Contractor.Core.Data.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

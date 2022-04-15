@@ -5,9 +5,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using DesignGear.Contractor.Core.Services.Interfaces;
 using DesignGear.Contractor.Core.Dto;
-using DesignGear.Contracts.Models;
-using DesignGear.Contracts.Models.Contractor;
 using DesignGear.Contractor.Core.Helpers;
+using DesignGear.Contractor.Core.Data;
+using DesignGear.Contractor.Core.Data.Entity;
 
 namespace DesignGear.Contractor.Core.Services
 {

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DesignGear.Contracts\DesignGear.Contracts.csproj" />
+    <ProjectReference Include="..\Services\Contractor\DesignGear.Contractor.Core\DesignGear.Contractor.Core.csproj" />
   </ItemGroup>
 
 

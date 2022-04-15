@@ -1,5 +1,5 @@
-﻿using DesignGear.Contractor.Core.Dto;
-using DesignGear.Contracts.Models.Contractor;
+﻿using DesignGear.Contractor.Core.Data.Entity;
+using DesignGear.Contractor.Core.Dto;
 
 namespace DesignGear.Contractor.Core.Services.Interfaces
 {

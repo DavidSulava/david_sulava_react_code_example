@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DesignGear.Contracts.Models.Contractor
+namespace DesignGear.Contractor.Core.Data.Entity
 {
     public class Organization
     {

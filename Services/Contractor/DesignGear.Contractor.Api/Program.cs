@@ -1,7 +1,7 @@
+using DesignGear.Contractor.Core.Data;
 using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contractor.Core.Services;
 using DesignGear.Contractor.Core.Services.Interfaces;
-using DesignGear.Contracts.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

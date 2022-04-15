@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesignGear.Contracts.Models.Contractor
+namespace DesignGear.Contractor.Core.Data.Entity
 {
     public class Tariff
     {
