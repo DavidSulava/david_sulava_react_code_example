@@ -22,7 +22,7 @@ namespace ConfigurationsManager.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
-			var urn = await new ServerManager().GetSvf(@"D:\Suspension.zip");
+			var urn = await new ServerManager().GetSvfAsync(@"D:\Suspension.zip");
 			return new ObjectResult(urn);
 		}
 	}

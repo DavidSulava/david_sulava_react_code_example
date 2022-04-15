@@ -18,7 +18,7 @@ namespace ConfigurationsManager.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
-			var url = await new ServerManager().ProcessModel(@"D:\blocks_and_tables_ - _imperial.dwg");
+			var url = await new ServerManager().ProcessModelAsync(@"D:\blocks_and_tables_ - _imperial.dwg");
 			return new ObjectResult(url);
 		}
 	}
