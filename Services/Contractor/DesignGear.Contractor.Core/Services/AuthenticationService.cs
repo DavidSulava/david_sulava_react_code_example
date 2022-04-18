@@ -14,10 +14,10 @@ namespace DesignGear.Contractor.Core.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly DataContext _dbContext;
         private readonly AppSettings _appSettings;
 
-        public AuthenticationService(ApplicationDbContext dbContext, IOptions<AppSettings> appSettings)
+        public AuthenticationService(DataContext dbContext, IOptions<AppSettings> appSettings)
         {
             if (dbContext == null)
             {
@@ -40,14 +40,14 @@ namespace DesignGear.Contractor.Core.Services
             return new AuthenticateResponseDto(user, token);
         }
 
-        public User? GetById(Guid userId)
+        public UserInfo? GetById(Guid userId)
         {
             return _dbContext.Users.FirstOrDefault(x => x.UserId == userId);
         }
 
         // helper methods
 
-        private string generateJwtToken(User user)
+        private string generateJwtToken(UserInfo user)
         {
             // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();

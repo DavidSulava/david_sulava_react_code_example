@@ -11,7 +11,7 @@ namespace DesignGear.Contractor.Core.Dto
         public string Token { get; set; }
 
 
-        public AuthenticateResponseDto(User user, string token)
+        public AuthenticateResponseDto(UserInfo user, string token)
         {
             UserId = user.UserId;
             FirstName = user.FirstName;

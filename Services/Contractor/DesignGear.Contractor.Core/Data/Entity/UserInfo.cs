@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesignGear.Contractor.Core.Data.Entity
 {
-    public class User
+    public class UserInfo
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid UserId { get; set; }

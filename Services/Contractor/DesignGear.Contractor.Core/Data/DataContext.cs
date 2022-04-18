@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DesignGear.Contractor.Core.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class DataContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
             Database.EnsureCreated();
         }
@@ -14,6 +14,6 @@ namespace DesignGear.Contractor.Core.Data
 
         public DbSet<Tariff> Tariffs { get; set; }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserInfo> Users { get; set; }
     }
 }
