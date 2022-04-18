@@ -7,9 +7,9 @@ namespace DesignGear.Contractor.Api.Controllers
     public class UserController : ControllerBase
     {
         [HttpPost]
-        public IActionResult CreateUser()
+        public Guid CreateUser(UserCreateDto user)
         {
-            return Ok();
+            return null;
         }
     }
 }
