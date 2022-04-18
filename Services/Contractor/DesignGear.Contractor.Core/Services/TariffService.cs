@@ -4,7 +4,7 @@ using DesignGear.Contracts.Dto;
 
 namespace DesignGear.Contractor.Core.Services
 {
-    internal class TariffService : ITariffService
+    public class TariffService : ITariffService
     {
         private readonly DataAccessor _dataAccessor;
 
