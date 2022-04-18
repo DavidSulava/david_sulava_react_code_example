@@ -8,6 +8,6 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
     {
         AuthenticateResponseDto Authenticate(AuthenticateRequestModel model);
 
-        UserInfo? GetById(Guid userId);
+        User? GetById(Guid userId);
     }
 }

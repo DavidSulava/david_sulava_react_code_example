@@ -1,6 +1,8 @@
 ﻿using DesignGear.Contractor.Core.Data;
 using DesignGear.Contracts.Dto;
 using DesignGear.Contractor.Core.Services.Interfaces;
+using DesignGear.Contractor.Core.Data.Entity;
+using DesignGear.Common.Enums;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -12,9 +14,28 @@ namespace DesignGear.Contractor.Core.Services
         {
             _dataAccessor = dataAccessor;
         }
-        public void CreateOrganization(OrganizationDto organization)
+
+        public Guid CreateOrganization(OrganizationCreateDto organization)
         {
-            throw new NotImplementedException();
+            var newOrg = new Organization
+            {
+                OrganizationId = Guid.NewGuid(),
+                Name = organization.Name,
+                Created = DateTime.Now,
+                Description = organization.Description,
+                TariffId = organization.TariffId
+            };
+            var newUserAssignment = new UserAssignment
+            {
+                UserAssignmentId = Guid.NewGuid(),
+                UserId = organization.UserId,
+                OrganizationId = newOrg.OrganizationId,
+                Role = UserRole.User
+            };
+            _dataAccessor.Editor.Create(newOrg);
+            _dataAccessor.Editor.Create(newUserAssignment);
+            _dataAccessor.Editor.Save();
+            return newOrg.OrganizationId;
         }
 
         public ICollection<OrganizationDto> GetOrganizationsByUser()

@@ -40,14 +40,14 @@ namespace DesignGear.Contractor.Core.Services
             return new AuthenticateResponseDto(user, token);
         }
 
-        public UserInfo? GetById(Guid userId)
+        public User? GetById(Guid userId)
         {
             return _dbContext.Users.FirstOrDefault(x => x.UserId == userId);
         }
 
         // helper methods
 
-        private string generateJwtToken(UserInfo user)
+        private string generateJwtToken(User user)
         {
             // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DesignGear.Contractor.Core.Services.Interfaces;
+using DesignGear.Contracts.Dto;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
@@ -6,10 +8,17 @@ namespace DesignGear.Contractor.Api.Controllers
     [Route("[controller]")]
     public class TariffController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult TariffList()
+        private readonly ITariffService _tariffService;
+
+        public TariffController(ITariffService tariffService)
         {
-            return Ok();
+            _tariffService = tariffService;
+        }
+
+        [HttpGet]
+        public ICollection<TariffDto> TariffList()
+        {
+            return _tariffService.GetTariffs();
         }
     }
 }

@@ -19,5 +19,28 @@ namespace DesignGear.Contractor.Core.Data
         }
 
         public IQueryable<Organization> Organizations => _context.Organizations;
+        public IQueryable<Tariff> Tariffs => _context.Tariffs;
+        public IQueryable<User> Users => _context.Users;
+        public IQueryable<UserAssignment> UserAssignments => _context.UserAssignments;
+
+        public void Create<T>(T entity) where T : class
+        {
+            _context.Set<T>().Add(entity);
+        }
+
+        public void Delete<T>(T entity)
+        {
+            _context.Remove(entity);
+        }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
     }
 }

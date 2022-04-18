@@ -21,5 +21,10 @@ namespace DesignGear.Contractor.Core.Data.Entity
         public int SpaceUsed { get; set; }
 
         public OrganizationType OrgType { get; set; }
+        
+        [ForeignKey("Tariff")]
+        public Guid TariffId { get; set; }
+        
+        public virtual Tariff Tariff { get; set; }
     }
 }

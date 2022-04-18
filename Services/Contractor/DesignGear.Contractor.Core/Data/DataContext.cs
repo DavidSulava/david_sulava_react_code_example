@@ -14,6 +14,8 @@ namespace DesignGear.Contractor.Core.Data
 
         public DbSet<Tariff> Tariffs { get; set; }
 
-        public DbSet<UserInfo> Users { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<UserAssignment> UserAssignments { get; set; }
     }
 }

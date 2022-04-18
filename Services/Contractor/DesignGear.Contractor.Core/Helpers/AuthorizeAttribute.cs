@@ -10,7 +10,7 @@ namespace DesignGear.Contractor.Core.Helpers
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var user = (UserInfo)context.HttpContext.Items["User"];
+            var user = (User)context.HttpContext.Items["User"];
             if (user == null)
             {
                 // not logged in

@@ -6,6 +6,6 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
     {
         ICollection<OrganizationDto> GetOrganizationsByUser();
 
-        void CreateOrganization(OrganizationDto organization);
+        Guid CreateOrganization(OrganizationCreateDto organization);
     }
 }

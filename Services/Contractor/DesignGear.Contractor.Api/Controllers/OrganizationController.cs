@@ -10,16 +10,15 @@ namespace DesignGear.Contractor.Api.Controllers
     {
         private readonly IOrganizationService _organizationService;
 
-
         public OrganizationController(IOrganizationService organizationService)
         {
             _organizationService = organizationService;
         }
 
         [HttpPost]
-        public IActionResult CreateOrganization()
+        public Guid CreateOrganization(OrganizationCreateDto organization)
         {
-            return Ok();
+            return _organizationService.CreateOrganization(organization);
         }
 
         [HttpGet("organizationbyuser")]
