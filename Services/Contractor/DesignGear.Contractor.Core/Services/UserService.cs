@@ -17,6 +17,9 @@ namespace DesignGear.Contractor.Core.Services
 
         public Guid CreateUser(UserCreateDto user)
         {
+            if (VerifyEmail(user.Email))
+                return Guid.Empty;
+
             var newUser = new User
             {
                 UserId = Guid.NewGuid(),
@@ -31,6 +34,11 @@ namespace DesignGear.Contractor.Core.Services
             _dataAccessor.Editor.Create(newUser);
             _dataAccessor.Editor.Save();
             return newUser.UserId;
+        }
+
+        public bool VerifyEmail(string email)
+        {
+            return _dataAccessor.Reader.Users.Any(x => x.Email == email);
         }
     }
 }

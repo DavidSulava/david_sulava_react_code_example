@@ -15,9 +15,14 @@ namespace DesignGear.Contractor.Api.Controllers
             _userService = userService;
         }
         [HttpPost]
-        public Guid CreateUser(UserCreateDto user)
+        public IActionResult CreateUser(UserCreateDto user)
         {
-            return _userService.CreateUser(user);
+            var response = _userService.CreateUser(user);
+
+            if(response == Guid.Empty)
+                return BadRequest(new { message = "Email already exists" });
+
+            return Ok(response);
         }
     }
 }
