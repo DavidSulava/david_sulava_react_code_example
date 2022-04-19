@@ -14,22 +14,18 @@ namespace DesignGear.Contractor.Core.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly DataContext _dbContext;
+        private readonly DataAccessor _dataAccessor;
         private readonly AppSettings _appSettings;
 
-        public AuthenticationService(DataContext dbContext, IOptions<AppSettings> appSettings)
+        public AuthenticationService(DataAccessor dataAccessor, IOptions<AppSettings> appSettings)
         {
-            if (dbContext == null)
-            {
-                throw new ArgumentNullException(nameof(dbContext));
-            }
-            _dbContext = dbContext;
+            _dataAccessor = dataAccessor;
             _appSettings = appSettings.Value;
         }
 
         public AuthenticateResponseDto Authenticate(AuthenticateRequestModel model)
         {
-            var user = _dbContext.Users.FirstOrDefault(x => x.Email == model.Email && x.Password == model.Password);
+            var user = _dataAccessor.Reader.Users.FirstOrDefault(x => x.Email == model.Email && x.Password == model.Password);
 
             // return null if user not found
             if (user == null) return null;
@@ -40,13 +36,7 @@ namespace DesignGear.Contractor.Core.Services
             return new AuthenticateResponseDto(user, token);
         }
 
-        public User? GetById(Guid userId)
-        {
-            return _dbContext.Users.FirstOrDefault(x => x.UserId == userId);
-        }
-
         // helper methods
-
         private string generateJwtToken(User user)
         {
             // generate token that is valid for 7 days

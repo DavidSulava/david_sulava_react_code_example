@@ -1,6 +1,7 @@
 ﻿using DesignGear.Contracts.Dto;
 using DesignGear.Contractor.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using DesignGear.Contractor.Core.Helpers;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
@@ -15,12 +16,14 @@ namespace DesignGear.Contractor.Api.Controllers
             _organizationService = organizationService;
         }
 
+        [Authorize]
         [HttpPost]
         public Guid CreateOrganization(OrganizationCreateDto organization)
         {
             return _organizationService.CreateOrganization(organization);
         }
 
+        [Authorize]
         [HttpGet("organizationbyuser")]
         public ICollection<OrganizationDto> OrganizationsByUser()
         {

@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Http;
 using DesignGear.Contractor.Core.Services.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DesignGear.Contractor.Core.Helpers
 {
@@ -18,17 +18,17 @@ namespace DesignGear.Contractor.Core.Helpers
             _appSettings = appSettings.Value;
         }
 
-        public async Task Invoke(HttpContext context, IAuthenticationService authenticationService)
+        public async Task Invoke(HttpContext context, IUserService userService)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                attachUserToContext(context, authenticationService, token);
+                attachUserToContext(context, userService, token);
 
             await _next(context);
         }
 
-        private void attachUserToContext(HttpContext context, IAuthenticationService authenticationService, string token)
+        private void attachUserToContext(HttpContext context, IUserService userService, string token)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace DesignGear.Contractor.Core.Helpers
                 var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "UserId").Value);
 
                 // attach user to context on successful jwt validation
-                context.Items["User"] = authenticationService.GetById(userId);
+                context.Items["User"] = userService.GetById(userId);
             }
             catch
             {

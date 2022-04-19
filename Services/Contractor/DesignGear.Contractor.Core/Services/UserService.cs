@@ -15,6 +15,11 @@ namespace DesignGear.Contractor.Core.Services
             _dataAccessor = dataAccessor;
         }
 
+        public User? GetById(Guid userId)
+        {
+            return _dataAccessor.Reader.Users.FirstOrDefault(x => x.UserId == userId);
+        }
+
         public Guid CreateUser(UserCreateDto user)
         {
             if (VerifyEmail(user.Email))

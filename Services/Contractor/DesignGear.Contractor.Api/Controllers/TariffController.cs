@@ -1,4 +1,5 @@
-﻿using DesignGear.Contractor.Core.Services.Interfaces;
+﻿using DesignGear.Contractor.Core.Helpers;
+using DesignGear.Contractor.Core.Services.Interfaces;
 using DesignGear.Contracts.Dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,7 @@ namespace DesignGear.Contractor.Api.Controllers
             _tariffService = tariffService;
         }
 
+        [Authorize]
         [HttpGet]
         public ICollection<TariffDto> TariffList()
         {
