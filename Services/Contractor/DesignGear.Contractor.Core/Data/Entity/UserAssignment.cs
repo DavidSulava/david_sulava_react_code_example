@@ -7,7 +7,7 @@ namespace DesignGear.Contractor.Core.Data.Entity
     public class UserAssignment
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid UserAssignmentId { get; set; }
+        public Guid Id { get; set; }
 
         [ForeignKey("User")]
         public Guid UserId { get; set; }

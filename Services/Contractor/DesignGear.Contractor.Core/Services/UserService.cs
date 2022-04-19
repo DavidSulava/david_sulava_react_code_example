@@ -1,4 +1,5 @@
-﻿using DesignGear.Common.Enums;
+﻿using AutoMapper;
+using DesignGear.Common.Enums;
 using DesignGear.Contractor.Core.Data;
 using DesignGear.Contractor.Core.Data.Entity;
 using DesignGear.Contractor.Core.Services.Interfaces;
@@ -8,16 +9,18 @@ namespace DesignGear.Contractor.Core.Services
 {
     public class UserService : IUserService
     {
+        private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
 
-        public UserService(DataAccessor dataAccessor)
+        public UserService(IMapper mapper, DataAccessor dataAccessor)
         {
+            _mapper = mapper;
             _dataAccessor = dataAccessor;
         }
 
         public User? GetById(Guid userId)
         {
-            return _dataAccessor.Reader.Users.FirstOrDefault(x => x.UserId == userId);
+            return _dataAccessor.Reader.Users.FirstOrDefault(x => x.Id == userId);
         }
 
         public Guid CreateUser(UserCreateDto user)
@@ -25,20 +28,10 @@ namespace DesignGear.Contractor.Core.Services
             if (VerifyEmail(user.Email))
                 return Guid.Empty;
 
-            var newUser = new User
-            {
-                UserId = Guid.NewGuid(),
-                Email = user.Email,
-                Password = user.Password,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Phone = user.Phone,
-                Created = DateTime.Now,
-                Role = UserRole.User
-            };
+            var newUser = _mapper.Map<User>(user);
             _dataAccessor.Editor.Create(newUser);
             _dataAccessor.Editor.Save();
-            return newUser.UserId;
+            return newUser.Id;
         }
 
         public bool VerifyEmail(string email)

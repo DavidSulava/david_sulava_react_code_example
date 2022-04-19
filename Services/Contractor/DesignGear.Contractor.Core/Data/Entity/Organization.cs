@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesignGear.Contractor.Core.Data.Entity
 {
-    public class Organization
+    public class Organization : IGenerateUid, ICreated
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid OrganizationId { get; set; }
+        public Guid Id { get; set; }
 
         [StringLength(300)]
         public string Name { get; set; }
