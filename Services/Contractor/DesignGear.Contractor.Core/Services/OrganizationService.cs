@@ -19,7 +19,7 @@ namespace DesignGear.Contractor.Core.Services
             _dataAccessor = dataAccessor;
         }
 
-        public Guid CreateOrganization(OrganizationCreateDto organization)
+        public async Task<Guid> CreateOrganization(OrganizationCreateDto organization)
         {
             //TODO: add transaction
             /*var newOrg = new Organization
@@ -45,7 +45,7 @@ namespace DesignGear.Contractor.Core.Services
             
             _dataAccessor.Editor.Create(newOrg);
             _dataAccessor.Editor.Create(newUserAssignment);
-            _dataAccessor.Editor.Save();
+            await _dataAccessor.Editor.SaveAsync();
             return newOrg.Id;
         }
 

@@ -4,6 +4,7 @@ using DesignGear.Contractor.Core.Data;
 using DesignGear.Contractor.Core.Data.Entity;
 using DesignGear.Contractor.Core.Services.Interfaces;
 using DesignGear.Contracts.Dto;
+using Microsoft.EntityFrameworkCore;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -18,25 +19,25 @@ namespace DesignGear.Contractor.Core.Services
             _dataAccessor = dataAccessor;
         }
 
-        public User? GetById(Guid userId)
+        public async Task<User?> GetById(Guid userId)
         {
-            return _dataAccessor.Reader.Users.FirstOrDefault(x => x.Id == userId);
+            return await _dataAccessor.Reader.Users.FirstOrDefaultAsync(x => x.Id == userId);
         }
 
-        public Guid CreateUser(UserCreateDto user)
+        public async Task<Guid> CreateUser(UserCreateDto user)
         {
-            if (VerifyEmail(user.Email))
+            if (await VerifyEmail(user.Email))
                 return Guid.Empty;
 
             var newUser = _mapper.Map<User>(user);
             _dataAccessor.Editor.Create(newUser);
-            _dataAccessor.Editor.Save();
+            await _dataAccessor.Editor.SaveAsync();
             return newUser.Id;
         }
 
-        public bool VerifyEmail(string email)
+        public async Task<bool> VerifyEmail(string email)
         {
-            return _dataAccessor.Reader.Users.Any(x => x.Email == email);
+            return await _dataAccessor.Reader.Users.AnyAsync(x => x.Email == email);
         }
     }
 }
