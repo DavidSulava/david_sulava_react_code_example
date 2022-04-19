@@ -3,6 +3,7 @@ using DesignGear.Contracts.Dto;
 using DesignGear.Contractor.Core.Services.Interfaces;
 using DesignGear.Contractor.Core.Data.Entity;
 using DesignGear.Common.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -38,9 +39,15 @@ namespace DesignGear.Contractor.Core.Services
             return newOrg.OrganizationId;
         }
 
-        public ICollection<OrganizationDto> GetOrganizationsByUser()
+        public ICollection<OrganizationDto> GetOrganizationsByUser(Guid userId)
         {
-            return _dataAccessor.Reader.Organizations.Select(x => new OrganizationDto
+            var organizationIds = _dataAccessor.Reader.UserAssignments.
+                Where(x => x.UserId == userId).
+                Select(x => x.OrganizationId);
+
+            return _dataAccessor.Reader.Organizations.
+                Where(x => organizationIds.Contains(x.OrganizationId)).
+                Select(x => new OrganizationDto
             {
                 Name = x.Name,
                 Description = x.Description ?? String.Empty,

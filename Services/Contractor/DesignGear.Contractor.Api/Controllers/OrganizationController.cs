@@ -25,9 +25,9 @@ namespace DesignGear.Contractor.Api.Controllers
 
         [Authorize]
         [HttpGet("organizationbyuser")]
-        public ICollection<OrganizationDto> OrganizationsByUser()
+        public ICollection<OrganizationDto> OrganizationsByUser(Guid userId)
         {
-            return _organizationService.GetOrganizationsByUser();
+            return _organizationService.GetOrganizationsByUser(userId);
         }
     }
 }
