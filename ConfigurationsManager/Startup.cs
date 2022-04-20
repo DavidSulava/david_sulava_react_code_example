@@ -24,7 +24,7 @@ namespace ConfigurationsManager
 			services.AddControllers();
 			services.AddDesignAutomation(Configuration);
 
-			services.AddDbContext<ApplicationDbContext>(
+			services.AddDbContext<DataContext>(
 				options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
 		}
 

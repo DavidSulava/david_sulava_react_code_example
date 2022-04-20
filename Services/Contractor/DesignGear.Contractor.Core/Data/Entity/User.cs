@@ -1,13 +1,14 @@
 ﻿using DesignGear.Common.Enums;
+using DesignGear.Contractor.Core.Data.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesignGear.Contractor.Core.Data.Entity
 {
-    public class User
+    public class User : IGenerateUid, ICreated
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
 
         [StringLength(300)]
         public string Email { get; set; }

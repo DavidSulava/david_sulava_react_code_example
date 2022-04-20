@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DesignGear.Contracts.Dto;
+using DesignGear.Contractor.Core.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using DesignGear.Contractor.Core.Helpers;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
@@ -6,16 +9,25 @@ namespace DesignGear.Contractor.Api.Controllers
     [Route("[controller]")]
     public class OrganizationController : ControllerBase
     {
-        [HttpPost]
-        public IActionResult CreateOrganization()
+        private readonly IOrganizationService _organizationService;
+
+        public OrganizationController(IOrganizationService organizationService)
         {
-            return Ok();
+            _organizationService = organizationService;
         }
 
-        [HttpGet("organizationbyuser")]
-        public IActionResult OrganizationsByUser()
+        [Authorize]
+        [HttpPost]
+        public Guid CreateOrganization(OrganizationCreateDto organization)
         {
-            return Ok();
+            return _organizationService.CreateOrganization(organization);
+        }
+
+        [Authorize]
+        [HttpGet("organizationbyuser")]
+        public ICollection<OrganizationDto> OrganizationsByUser(Guid userId)
+        {
+            return _organizationService.GetOrganizationsByUser(userId);
         }
     }
 }

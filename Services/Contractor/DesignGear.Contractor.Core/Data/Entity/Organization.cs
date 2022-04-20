@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesignGear.Contractor.Core.Data.Entity
 {
-    public class Organization
+    public class Organization : IGenerateUid, ICreated
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid OrganizationId { get; set; }
+        public Guid Id { get; set; }
 
         [StringLength(300)]
         public string Name { get; set; }
@@ -21,5 +21,12 @@ namespace DesignGear.Contractor.Core.Data.Entity
         public int SpaceUsed { get; set; }
 
         public OrganizationType OrgType { get; set; }
+        
+        [ForeignKey("Tariff")]
+        public Guid TariffId { get; set; }
+        
+        public virtual Tariff Tariff { get; set; }
+
+        public virtual ICollection<UserAssignment> UserAssignments { get; set; }
     }
 }

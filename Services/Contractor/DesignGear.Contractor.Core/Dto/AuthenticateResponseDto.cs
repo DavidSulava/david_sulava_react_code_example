@@ -13,7 +13,7 @@ namespace DesignGear.Contractor.Core.Dto
 
         public AuthenticateResponseDto(User user, string token)
         {
-            UserId = user.UserId;
+            UserId = user.Id;
             FirstName = user.FirstName;
             LastName = user.LastName;
             Email = user.Email;

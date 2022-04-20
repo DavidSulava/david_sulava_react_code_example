@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DesignGear.Contractor.Core.Services.Interfaces;
+using DesignGear.Contracts.Dto;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
@@ -6,10 +8,21 @@ namespace DesignGear.Contractor.Api.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        [HttpPost]
-        public IActionResult CreateUser()
+        private readonly IUserService _userService;
+
+        public UserController(IUserService userService)
         {
-            return Ok();
+            _userService = userService;
+        }
+        [HttpPost]
+        public IActionResult CreateUser(UserCreateDto user)
+        {
+            var response = _userService.CreateUser(user);
+
+            if(response == Guid.Empty)
+                return BadRequest(new { message = "Email already exists" });
+
+            return Ok(response);
         }
     }
 }
