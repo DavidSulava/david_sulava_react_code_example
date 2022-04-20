@@ -5,10 +5,10 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 {
     public interface IUserService
     {
-        User? GetById(Guid userId);
+        Task<User?> GetById(Guid userId);
 
-        Guid CreateUser(UserCreateDto user);
+        Task<Guid> CreateUser(UserCreateDto user);
 
-        bool VerifyEmail(string email);
+        Task<bool> VerifyEmail(string email);
     }
 }

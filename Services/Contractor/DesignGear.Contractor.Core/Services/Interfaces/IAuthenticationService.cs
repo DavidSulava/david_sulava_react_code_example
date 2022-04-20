@@ -1,10 +1,9 @@
-﻿using DesignGear.Contractor.Core.Dto;
-using DesignGear.Contracts.Models.Contractor;
+﻿using DesignGear.Contracts.Dto;
 
 namespace DesignGear.Contractor.Core.Services.Interfaces
 {
     public interface IAuthenticationService
     {
-        AuthenticateResponseDto Authenticate(AuthenticateRequestModel model);
+        Task<AuthenticateResponseDto> Authenticate(AuthenticateRequestDto model);
     }
 }

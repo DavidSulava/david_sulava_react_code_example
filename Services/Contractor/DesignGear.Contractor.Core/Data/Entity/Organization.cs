@@ -1,4 +1,5 @@
 ﻿using DesignGear.Common.Enums;
+using DesignGear.Contractor.Core.Data.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

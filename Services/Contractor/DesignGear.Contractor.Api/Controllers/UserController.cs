@@ -1,26 +1,28 @@
-﻿using DesignGear.Contractor.Core.Services.Interfaces;
+﻿using AutoMapper;
+using DesignGear.Common.Extensions;
+using DesignGear.Contractor.Core.Services.Interfaces;
 using DesignGear.Contracts.Dto;
+using DesignGear.Contracts.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
-    //todo Anton Методы контроллера принимают и возвращают Model вместо Dto.
-    //В приложении api должен быть маппинг Model -> Dto и Dto -> Model
-    //Т.е. на уровне контроллеров работаем с Model, на уровне сервисов работаем с Dto, на уровне данных работаем с Entity
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
         [HttpPost]
-        public IActionResult CreateUser(UserCreateDto user)
+        public async Task<IActionResult> CreateUser(VmUserCreate user)
         {
-            var response = _userService.CreateUser(user);
+            var response = await _userService.CreateUser(user.MapTo<UserCreateDto>(_mapper));
 
             if(response == Guid.Empty)
                 return BadRequest(new { message = "Email already exists" });

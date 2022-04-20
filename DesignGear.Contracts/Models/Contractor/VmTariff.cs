@@ -1,6 +1,6 @@
-﻿namespace DesignGear.Contracts.Dto
+﻿namespace DesignGear.Contracts.Models
 {
-    public class TariffDto
+    public class VmTariff
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

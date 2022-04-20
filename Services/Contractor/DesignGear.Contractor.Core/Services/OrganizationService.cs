@@ -5,6 +5,7 @@ using DesignGear.Contractor.Core.Data.Entity;
 using DesignGear.Common.Enums;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -49,17 +50,14 @@ namespace DesignGear.Contractor.Core.Services
             return newOrg.Id;
         }
 
-        public ICollection<OrganizationDto> GetOrganizationsByUser(Guid userId)
+        public async Task<ICollection<OrganizationDto>> GetOrganizationsByUser(Guid userId)
         {
             var organizationIds = _dataAccessor.Reader.UserAssignments.
                 Where(x => x.UserId == userId).
                 Select(x => x.OrganizationId);
 
-            var orgList = _dataAccessor.Reader.Organizations.
-                Where(x => organizationIds.Contains(x.Id)).ToList();
-
-            var result = _mapper.Map<List<OrganizationDto>>(orgList);
-            return result;
+            return await _dataAccessor.Reader.Organizations.Where(x => organizationIds.Contains(x.Id))
+                .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider).ToListAsync();
         }
     }
 }

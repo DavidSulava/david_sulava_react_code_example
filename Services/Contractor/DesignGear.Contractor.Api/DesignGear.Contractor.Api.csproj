@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Mapping\" />
     <Folder Include="V1\" />
   </ItemGroup>
 

@@ -2,35 +2,37 @@
 using DesignGear.Contractor.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using DesignGear.Contractor.Core.Helpers;
+using DesignGear.Contracts.Models;
+using AutoMapper;
+using DesignGear.Common.Extensions;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
-    //todo Anton Методы контроллера принимают и возвращают Model вместо Dto.
-    //В приложении api должен быть маппинг Model -> Dto и Dto -> Model
-    //Т.е. на уровне контроллеров работаем с Model, на уровне сервисов работаем с Dto, на уровне данных работаем с Entity
     [ApiController]
     [Route("[controller]")]
     public class OrganizationController : ControllerBase
     {
         private readonly IOrganizationService _organizationService;
+        private readonly IMapper _mapper;
 
-        public OrganizationController(IOrganizationService organizationService)
+        public OrganizationController(IOrganizationService organizationService, IMapper mapper)
         {
             _organizationService = organizationService;
+            _mapper = mapper;
         }
 
         [Authorize]
         [HttpPost]
-        public Guid CreateOrganization(OrganizationCreateDto organization)
+        public async Task<Guid> CreateOrganization(VmOrganizationCreate organization)
         {
-            return _organizationService.CreateOrganization(organization);
+            return await _organizationService.CreateOrganization(organization.MapTo<OrganizationCreateDto>(_mapper));
         }
 
         [Authorize]
-        [HttpGet("organizationbyuser")]
-        public ICollection<OrganizationDto> OrganizationsByUser(Guid userId)
+        [HttpGet("byuser")]
+        public async Task<ICollection<VmOrganization>> OrganizationsByUser(Guid userId)
         {
-            return _organizationService.GetOrganizationsByUser(userId);
+            return (await _organizationService.GetOrganizationsByUser(userId)).MapTo<ICollection<VmOrganization>>(_mapper);
         }
     }
 }

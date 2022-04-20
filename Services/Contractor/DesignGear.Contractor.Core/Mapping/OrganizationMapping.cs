@@ -9,8 +9,8 @@ namespace DesignGear.Contractor.Core.Mapping
         public OrganizationMapping()
         {
             CreateMap<Organization, OrganizationDto>();
-            CreateMap<OrganizationDto, Organization>();
-            CreateMap<OrganizationDto, UserAssignment>();
+            CreateMap<OrganizationCreateDto, Organization>();
+            CreateMap<OrganizationCreateDto, UserAssignment>();
         }
     }
 }

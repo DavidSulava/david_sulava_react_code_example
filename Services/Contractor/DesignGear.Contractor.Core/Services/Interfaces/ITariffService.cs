@@ -9,6 +9,6 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 {
     public interface ITariffService
     {
-        ICollection<TariffDto> GetTariffs();
+        Task<ICollection<TariffDto>> GetTariffs();
     }
 }
