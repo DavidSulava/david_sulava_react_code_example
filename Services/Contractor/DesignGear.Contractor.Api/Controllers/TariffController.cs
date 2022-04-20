@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
+    //todo Anton Методы контроллера принимают и возвращают Model вместо Dto.
+    //В приложении api должен быть маппинг Model -> Dto и Dto -> Model
+    //Т.е. на уровне контроллеров работаем с Model, на уровне сервисов работаем с Dto, на уровне данных работаем с Entity
     [ApiController]
     [Route("[controller]")]
     public class TariffController : ControllerBase

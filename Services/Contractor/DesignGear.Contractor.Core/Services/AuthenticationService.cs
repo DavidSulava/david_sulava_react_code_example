@@ -25,6 +25,7 @@ namespace DesignGear.Contractor.Core.Services
 
         public AuthenticateResponseDto Authenticate(AuthenticateRequestModel model)
         {
+            //todo Anton это можно сделать в конце фазы. Необходимо будет хранить пароли в бд хэшированными, вместе с солью
             var user = _dataAccessor.Reader.Users.FirstOrDefault(x => x.Email == model.Email && x.Password == model.Password);
 
             // return null if user not found
@@ -36,6 +37,7 @@ namespace DesignGear.Contractor.Core.Services
             return new AuthenticateResponseDto(user, token);
         }
 
+        //todo Anton лучше сразу вынести в отдельный статический класс, например JwtHelper
         // helper methods
         private string generateJwtToken(User user)
         {

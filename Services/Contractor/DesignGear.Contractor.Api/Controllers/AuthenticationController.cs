@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
+    //todo Anton Методы контроллера принимают и возвращают Model вместо Dto.
+    //В приложении api должен быть маппинг Model -> Dto и Dto -> Model
+    //Т.е. на уровне контроллеров работаем с Model, на уровне сервисов работаем с Dto, на уровне данных работаем с Entity
     [ApiController]
     [Route("[controller]")]
     public class AuthenticationController : ControllerBase
@@ -15,6 +18,8 @@ namespace DesignGear.Contractor.Api.Controllers
             _authenticationService = authenticationService;
         }
 
+        //todo Anton тут можно указать сваггеру какие типы (AuthenticateResponseModel) может возвращать метод,
+        //чтобы сваггер это задокументировал и фронтдендер видел эту информацию. Вроде есть како-йто атрибут для этого
         [HttpPost]
         public IActionResult Authenticate(AuthenticateRequestModel model)
         {
