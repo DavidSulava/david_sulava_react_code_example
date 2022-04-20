@@ -22,24 +22,8 @@ namespace DesignGear.Contractor.Core.Services
 
         public async Task<Guid> CreateOrganization(OrganizationCreateDto organization)
         {
-            //TODO: add transaction
-            /*var newOrg = new Organization
-            {
-                Id = Guid.NewGuid(),
-                Name = organization.Name,
-                Created = DateTime.Now,
-                Description = organization.Description,
-                TariffId = organization.TariffId
-            };*/
             var newOrg = _mapper.Map<Organization>(organization);
             newOrg.Id = Guid.NewGuid();
-            /*var newUserAssignment = new UserAssignment
-            {
-                Id = Guid.NewGuid(),
-                UserId = organization.UserId,
-                OrganizationId = newOrg.Id,
-                Role = UserRole.User
-            };*/
             var newUserAssignment = _mapper.Map<UserAssignment>(organization);
             newUserAssignment.OrganizationId = newOrg.Id;
             newUserAssignment.Role = UserRole.User;
