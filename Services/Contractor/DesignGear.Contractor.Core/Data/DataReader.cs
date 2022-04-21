@@ -20,6 +20,7 @@ namespace DesignGear.Contractor.Core.Data
         }
 
         public IQueryable<Organization> Organizations => _context.Organizations.AsNoTracking();
+        public IQueryable<Product> Products => _context.Products.AsNoTracking();
         public IQueryable<Tariff> Tariffs => _context.Tariffs.AsNoTracking();
         public IQueryable<User> Users => _context.Users.AsNoTracking();
         public IQueryable<UserAssignment> UserAssignments => _context.UserAssignments.AsNoTracking();
