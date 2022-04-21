@@ -11,5 +11,7 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
         Task RemoveProduct(Guid productId);
 
         Task<ICollection<ProductDto>> GetProductsByOrganization(Guid organizationId);
+
+        Task<ProductDto> GetProductAsync(Guid productId);
     }
 }

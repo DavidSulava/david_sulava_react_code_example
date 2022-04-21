@@ -48,5 +48,12 @@ namespace DesignGear.Contractor.Api.Controllers
         {
             return (await _productService.GetProductsByOrganization(organizationId)).MapTo<ICollection<VmProduct>>(_mapper);
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<VmProduct> ProductsById(Guid productId)
+        {
+            return (await _productService.GetProductAsync(productId)).MapTo<VmProduct>(_mapper);
+        }
     }
 }
