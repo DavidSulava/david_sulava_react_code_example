@@ -20,7 +20,7 @@ namespace DesignGear.Contractor.Core.Services
             _dataAccessor = dataAccessor;
         }
 
-        public async Task<Guid> CreateOrganization(OrganizationCreateDto organization)
+        public async Task<Guid> CreateOrganizationAsync(OrganizationCreateDto organization)
         {
             var newOrg = _mapper.Map<Organization>(organization);
             newOrg.Id = Guid.NewGuid();
@@ -34,7 +34,7 @@ namespace DesignGear.Contractor.Core.Services
             return newOrg.Id;
         }
 
-        public async Task<ICollection<OrganizationDto>> GetOrganizationsByUser(Guid userId)
+        public async Task<ICollection<OrganizationDto>> GetOrganizationsByUserAsync(Guid userId)
         {
             var organizationIds = _dataAccessor.Reader.UserAssignments.
                 Where(x => x.UserId == userId).

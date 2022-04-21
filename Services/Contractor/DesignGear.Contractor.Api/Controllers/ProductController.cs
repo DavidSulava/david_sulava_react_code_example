@@ -25,28 +25,28 @@ namespace DesignGear.Contractor.Api.Controllers
         [HttpPost]
         public async Task<Guid> CreateProduct(VmProductCreate product)
         {
-            return await _productService.CreateProduct(product.MapTo<ProductCreateDto>(_mapper));
+            return await _productService.CreateProductAsync(product.MapTo<ProductCreateDto>(_mapper));
         }
 
         [Authorize]
         [HttpPost("update")]
         public async Task UpdateProduct(VmProductUpdate product)
         {
-            await _productService.UpdateProduct(product.MapTo<ProductUpdateDto>(_mapper));
+            await _productService.UpdateProductAsync(product.MapTo<ProductUpdateDto>(_mapper));
         }
 
         [Authorize]
         [HttpPost("remove")]
         public async Task RemoveProduct(Guid productId)
         {
-            await _productService.RemoveProduct(productId);
+            await _productService.RemoveProductAsync(productId);
         }
 
         [Authorize]
         [HttpGet("byorganization")]
         public async Task<ICollection<VmProduct>> ProductsByOrganization(Guid organizationId)
         {
-            return (await _productService.GetProductsByOrganization(organizationId)).MapTo<ICollection<VmProduct>>(_mapper);
+            return (await _productService.GetProductsByOrganizationAsync(organizationId)).MapTo<ICollection<VmProduct>>(_mapper);
         }
 
         [Authorize]

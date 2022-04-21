@@ -20,7 +20,7 @@ namespace DesignGear.Contractor.Core.Services
             _dataAccessor = dataAccessor;
         }
 
-        public async Task<Guid> CreateProduct(ProductCreateDto create)
+        public async Task<Guid> CreateProductAsync(ProductCreateDto create)
         {
             if (create == null)
             {
@@ -33,7 +33,7 @@ namespace DesignGear.Contractor.Core.Services
             return newProduct.Id;
         }
 
-        public async Task UpdateProduct(ProductUpdateDto update)
+        public async Task UpdateProductAsync(ProductUpdateDto update)
         {
             if (update == null)
             {
@@ -50,7 +50,7 @@ namespace DesignGear.Contractor.Core.Services
             await _dataAccessor.Editor.SaveAsync();
         }
 
-        public async Task RemoveProduct(Guid id)
+        public async Task RemoveProductAsync(Guid id)
         {
             var product = await _dataAccessor.Editor.Products.FirstOrDefaultAsync(x => x.Id == id);
             if (product == null)
@@ -62,7 +62,7 @@ namespace DesignGear.Contractor.Core.Services
             await _dataAccessor.Editor.SaveAsync();
         }
 
-        public async Task<ICollection<ProductDto>> GetProductsByOrganization(Guid organizationId)
+        public async Task<ICollection<ProductDto>> GetProductsByOrganizationAsync(Guid organizationId)
         {
             return await _dataAccessor.Reader.Products.Where(x => x.OrganizationId == organizationId).
                 ProjectTo<ProductDto>(_mapper.ConfigurationProvider).ToListAsync();

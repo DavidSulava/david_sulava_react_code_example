@@ -25,14 +25,14 @@ namespace DesignGear.Contractor.Api.Controllers
         [HttpPost]
         public async Task<Guid> CreateOrganization(VmOrganizationCreate organization)
         {
-            return await _organizationService.CreateOrganization(organization.MapTo<OrganizationCreateDto>(_mapper));
+            return await _organizationService.CreateOrganizationAsync(organization.MapTo<OrganizationCreateDto>(_mapper));
         }
 
         [Authorize]
         [HttpGet("byuser")]
         public async Task<ICollection<VmOrganization>> OrganizationsByUser(Guid userId)
         {
-            return (await _organizationService.GetOrganizationsByUser(userId)).MapTo<ICollection<VmOrganization>>(_mapper);
+            return (await _organizationService.GetOrganizationsByUserAsync(userId)).MapTo<ICollection<VmOrganization>>(_mapper);
         }
     }
 }

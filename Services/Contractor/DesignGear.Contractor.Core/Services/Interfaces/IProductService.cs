@@ -4,13 +4,13 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 {
     public interface IProductService
     {
-        Task<Guid> CreateProduct(ProductCreateDto product);
+        Task<Guid> CreateProductAsync(ProductCreateDto product);
 
-        Task UpdateProduct(ProductUpdateDto product);
+        Task UpdateProductAsync(ProductUpdateDto product);
 
-        Task RemoveProduct(Guid productId);
+        Task RemoveProductAsync(Guid productId);
 
-        Task<ICollection<ProductDto>> GetProductsByOrganization(Guid organizationId);
+        Task<ICollection<ProductDto>> GetProductsByOrganizationAsync(Guid organizationId);
 
         Task<ProductDto> GetProductAsync(Guid productId);
     }

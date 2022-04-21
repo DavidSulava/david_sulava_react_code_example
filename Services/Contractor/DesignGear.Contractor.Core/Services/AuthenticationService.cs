@@ -22,7 +22,7 @@ namespace DesignGear.Contractor.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<AuthenticateResponseDto> Authenticate(AuthenticateRequestDto model)
+        public async Task<AuthenticateResponseDto> AuthenticateAsync(AuthenticateRequestDto model)
         {
             //todo Anton это можно сделать в конце фазы. Необходимо будет хранить пароли в бд хэшированными, вместе с солью
             var user = await _dataAccessor.Reader.Users.FirstOrDefaultAsync(x => x.Email == model.Email && x.Password == model.Password);

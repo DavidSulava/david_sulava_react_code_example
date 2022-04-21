@@ -4,8 +4,8 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 {
     public interface IOrganizationService
     {
-        Task<ICollection<OrganizationDto>> GetOrganizationsByUser(Guid userId);
+        Task<ICollection<OrganizationDto>> GetOrganizationsByUserAsync(Guid userId);
 
-        Task<Guid> CreateOrganization(OrganizationCreateDto organization);
+        Task<Guid> CreateOrganizationAsync(OrganizationCreateDto organization);
     }
 }

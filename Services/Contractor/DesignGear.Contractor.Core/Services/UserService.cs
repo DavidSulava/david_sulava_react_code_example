@@ -19,14 +19,14 @@ namespace DesignGear.Contractor.Core.Services
             _dataAccessor = dataAccessor;
         }
 
-        public async Task<User?> GetById(Guid userId)
+        public async Task<User?> GetByIdAsync(Guid userId)
         {
             return await _dataAccessor.Reader.Users.FirstOrDefaultAsync(x => x.Id == userId);
         }
 
-        public async Task<Guid> CreateUser(UserCreateDto user)
+        public async Task<Guid> CreateUserAsync(UserCreateDto user)
         {
-            if (await VerifyEmail(user.Email))
+            if (await VerifyEmailAsync(user.Email))
                 return Guid.Empty;
 
             var newUser = _mapper.Map<User>(user);
@@ -35,7 +35,7 @@ namespace DesignGear.Contractor.Core.Services
             return newUser.Id;
         }
 
-        public async Task<bool> VerifyEmail(string email)
+        public async Task<bool> VerifyEmailAsync(string email)
         {
             return await _dataAccessor.Reader.Users.AnyAsync(x => x.Email == email);
         }
