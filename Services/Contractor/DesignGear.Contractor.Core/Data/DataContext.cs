@@ -6,12 +6,31 @@ namespace DesignGear.Contractor.Core.Data
 {
     public class DataContext : DbContext
     {
+        public DataContext() : base()
+        {
+        }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            if (!options.IsConfigured)
+            {
+                options.UseSqlServer("Server=DATABASE3\\DEV2019;Database=DesignGearCloud;Trusted_Connection=True;");
+            }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
         }
 
         public virtual DbSet<Organization> Organizations { get; set; }
+
+        public virtual DbSet<Product> Products { get; set; }
 
         public virtual DbSet<Tariff> Tariffs { get; set; }
 

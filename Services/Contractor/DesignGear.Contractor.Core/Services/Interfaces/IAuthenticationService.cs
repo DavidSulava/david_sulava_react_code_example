@@ -4,6 +4,6 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 {
     public interface IAuthenticationService
     {
-        Task<AuthenticateResponseDto> Authenticate(AuthenticateRequestDto model);
+        Task<AuthenticateResponseDto> AuthenticateAsync(AuthenticateRequestDto model);
     }
 }

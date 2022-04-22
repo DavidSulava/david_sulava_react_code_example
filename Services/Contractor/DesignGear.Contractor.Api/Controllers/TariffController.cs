@@ -24,7 +24,7 @@ namespace DesignGear.Contractor.Api.Controllers
         [HttpGet]
         public async Task<ICollection<VmTariff>> TariffList()
         {
-            return (await _tariffService.GetTariffs()).MapTo<ICollection<VmTariff>>(_mapper);
+            return (await _tariffService.GetTariffsAsync()).MapTo<ICollection<VmTariff>>(_mapper);
         }
     }
 }

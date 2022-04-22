@@ -18,7 +18,7 @@ namespace DesignGear.Contractor.Core.Services
             _dataAccessor = dataAccessor;
         }
 
-        public async Task<ICollection<TariffDto>> GetTariffs()
+        public async Task<ICollection<TariffDto>> GetTariffsAsync()
         {
             return await _dataAccessor.Reader.Tariffs.ProjectTo<TariffDto>(_mapper.ConfigurationProvider).ToListAsync();
         }

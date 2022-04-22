@@ -25,7 +25,7 @@ namespace DesignGear.Contractor.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Authenticate(VmAuthenticateRequest model)
         {
-            var response = await _authenticationService.Authenticate(model.MapTo<AuthenticateRequestDto>(_mapper));
+            var response = await _authenticationService.AuthenticateAsync(model.MapTo<AuthenticateRequestDto>(_mapper));
 
             if (response == null)
                 return BadRequest(new { message = "Username or password is incorrect" });

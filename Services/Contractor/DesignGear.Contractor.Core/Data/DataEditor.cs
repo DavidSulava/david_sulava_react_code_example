@@ -19,6 +19,7 @@ namespace DesignGear.Contractor.Core.Data
         }
 
         public IQueryable<Organization> Organizations => _context.Organizations;
+        public IQueryable<Product> Products => _context.Products;
         public IQueryable<Tariff> Tariffs => _context.Tariffs;
         public IQueryable<User> Users => _context.Users;
         public IQueryable<UserAssignment> UserAssignments => _context.UserAssignments;

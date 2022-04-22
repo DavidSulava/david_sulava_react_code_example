@@ -19,23 +19,28 @@ namespace DesignGear.Contractor.Core.Services
             _dataAccessor = dataAccessor;
         }
 
-        public async Task<User?> GetById(Guid userId)
+        public async Task<User?> GetByIdAsync(Guid userId)
         {
             return await _dataAccessor.Reader.Users.FirstOrDefaultAsync(x => x.Id == userId);
         }
 
-        public async Task<Guid> CreateUser(UserCreateDto user)
+        public async Task<Guid> CreateUserAsync(UserCreateDto create)
         {
-            if (await VerifyEmail(user.Email))
+            if (create == null)
+            {
+                throw new ArgumentNullException(nameof(create));
+            }
+
+            if (await VerifyEmailAsync(create.Email))
                 return Guid.Empty;
 
-            var newUser = _mapper.Map<User>(user);
+            var newUser = _mapper.Map<User>(create);
             _dataAccessor.Editor.Create(newUser);
             await _dataAccessor.Editor.SaveAsync();
             return newUser.Id;
         }
 
-        public async Task<bool> VerifyEmail(string email)
+        public async Task<bool> VerifyEmailAsync(string email)
         {
             return await _dataAccessor.Reader.Users.AnyAsync(x => x.Email == email);
         }

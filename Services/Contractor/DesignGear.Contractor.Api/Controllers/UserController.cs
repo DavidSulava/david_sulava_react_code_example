@@ -22,7 +22,7 @@ namespace DesignGear.Contractor.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(VmUserCreate user)
         {
-            var response = await _userService.CreateUser(user.MapTo<UserCreateDto>(_mapper));
+            var response = await _userService.CreateUserAsync(user.MapTo<UserCreateDto>(_mapper));
 
             if(response == Guid.Empty)
                 return BadRequest(new { message = "Email already exists" });
