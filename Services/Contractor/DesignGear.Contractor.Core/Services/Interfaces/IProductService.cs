@@ -8,10 +8,10 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 
         Task UpdateProductAsync(ProductUpdateDto product);
 
-        Task RemoveProductAsync(Guid productId);
+        Task RemoveProductAsync(Guid id);
 
         Task<ICollection<ProductDto>> GetProductsByOrganizationAsync(Guid organizationId);
 
-        Task<ProductDto> GetProductAsync(Guid productId);
+        Task<ProductDto> GetProductAsync(Guid id);
     }
 }

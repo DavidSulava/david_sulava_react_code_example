@@ -10,21 +10,21 @@ namespace DesignGear.Contractor.Api.Controllers
     [ApiController]
     [Authorize]
     [Route("[controller]")]
-    public class TariffController : ControllerBase
+    public class AppBundleController : ControllerBase
     {
-        private readonly ITariffService _tariffService;
+        private readonly IAppBundleService _appBundleService;
         private readonly IMapper _mapper;
 
-        public TariffController(ITariffService tariffService, IMapper mapper)
+        public AppBundleController(IAppBundleService appBundleService, IMapper mapper)
         {
-            _tariffService = tariffService;
+            _appBundleService = appBundleService;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ICollection<VmTariff>> TariffList()
+        public async Task<ICollection<VmAppBundle>> AppBundleList()
         {
-            return (await _tariffService.GetTariffsAsync()).MapTo<ICollection<VmTariff>>(_mapper);
+            return (await _appBundleService.GetAppBundlesAsync()).MapTo<ICollection<VmAppBundle>>(_mapper);
         }
     }
 }

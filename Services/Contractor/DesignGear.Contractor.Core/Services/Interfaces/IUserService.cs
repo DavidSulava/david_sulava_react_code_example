@@ -5,7 +5,7 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<User?> GetByIdAsync(Guid userId);
+        Task<User?> GetByIdAsync(Guid id);
 
         Task<Guid> CreateUserAsync(UserCreateDto user);
 

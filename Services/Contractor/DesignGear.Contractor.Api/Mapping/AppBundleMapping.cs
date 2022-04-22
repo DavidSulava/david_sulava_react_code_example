@@ -4,11 +4,11 @@ using DesignGear.Contracts.Models;
 
 namespace DesignGear.Contractor.Api.Mapping
 {
-    public class TariffMapping : Profile
+    public class AppBundleMapping : Profile
     {
-        public TariffMapping()
+        public AppBundleMapping()
         {
-            CreateMap<TariffDto, VmTariff>(MemberList.None);
+            CreateMap<AppBundleDto, VmAppBundle>(MemberList.None);
         }
     }
 }
