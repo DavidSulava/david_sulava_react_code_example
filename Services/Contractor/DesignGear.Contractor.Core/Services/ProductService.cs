@@ -68,15 +68,15 @@ namespace DesignGear.Contractor.Core.Services
                 ProjectTo<ProductDto>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
-        public async Task<ProductDto> GetProductAsync(Guid productId)
+        public async Task<ProductDto> GetProductAsync(Guid id)
         {
-            var product = await _dataAccessor.Reader.Products.ProjectTo<ProductDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == productId);
-            if (product == null)
+            var result = await _dataAccessor.Reader.Products.ProjectTo<ProductDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
+            if (result == null)
             {
-                throw new EntityNotFoundException<Product>(productId);
+                throw new EntityNotFoundException<Product>(id);
             }
 
-            return product;
+            return result;
         }
     }
 }

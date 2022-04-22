@@ -24,12 +24,17 @@ namespace DesignGear.Contractor.Core.Services
             return await _dataAccessor.Reader.Users.FirstOrDefaultAsync(x => x.Id == userId);
         }
 
-        public async Task<Guid> CreateUserAsync(UserCreateDto user)
+        public async Task<Guid> CreateUserAsync(UserCreateDto create)
         {
-            if (await VerifyEmailAsync(user.Email))
+            if (create == null)
+            {
+                throw new ArgumentNullException(nameof(create));
+            }
+
+            if (await VerifyEmailAsync(create.Email))
                 return Guid.Empty;
 
-            var newUser = _mapper.Map<User>(user);
+            var newUser = _mapper.Map<User>(create);
             _dataAccessor.Editor.Create(newUser);
             await _dataAccessor.Editor.SaveAsync();
             return newUser.Id;

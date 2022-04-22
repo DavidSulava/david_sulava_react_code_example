@@ -20,11 +20,16 @@ namespace DesignGear.Contractor.Core.Services
             _dataAccessor = dataAccessor;
         }
 
-        public async Task<Guid> CreateOrganizationAsync(OrganizationCreateDto organization)
+        public async Task<Guid> CreateOrganizationAsync(OrganizationCreateDto create)
         {
-            var newOrg = _mapper.Map<Organization>(organization);
+            if (create == null)
+            {
+                throw new ArgumentNullException(nameof(create));
+            }
+
+            var newOrg = _mapper.Map<Organization>(create);
             newOrg.Id = Guid.NewGuid();
-            var newUserAssignment = _mapper.Map<UserAssignment>(organization);
+            var newUserAssignment = _mapper.Map<UserAssignment>(create);
             newUserAssignment.OrganizationId = newOrg.Id;
             newUserAssignment.Role = UserRole.User;
             

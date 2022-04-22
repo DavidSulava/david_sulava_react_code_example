@@ -9,6 +9,7 @@ using DesignGear.Common.Extensions;
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class ProductController : ControllerBase
     {
@@ -21,39 +22,34 @@ namespace DesignGear.Contractor.Api.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<Guid> CreateProduct(VmProductCreate product)
         {
             return await _productService.CreateProductAsync(product.MapTo<ProductCreateDto>(_mapper));
         }
 
-        [Authorize]
-        [HttpPost("update")]
+        [HttpPut]
         public async Task UpdateProduct(VmProductUpdate product)
         {
             await _productService.UpdateProductAsync(product.MapTo<ProductUpdateDto>(_mapper));
         }
 
-        [Authorize]
-        [HttpPost("remove")]
+        [HttpDelete]
         public async Task RemoveProduct(Guid productId)
         {
             await _productService.RemoveProductAsync(productId);
         }
 
-        [Authorize]
         [HttpGet("byorganization")]
         public async Task<ICollection<VmProduct>> ProductsByOrganization(Guid organizationId)
         {
             return (await _productService.GetProductsByOrganizationAsync(organizationId)).MapTo<ICollection<VmProduct>>(_mapper);
         }
 
-        [Authorize]
-        [HttpGet]
-        public async Task<VmProduct> ProductsById(Guid productId)
+        [HttpGet("{id}")]
+        public async Task<VmProduct> ProductById([FromRoute] Guid id)
         {
-            return (await _productService.GetProductAsync(productId)).MapTo<VmProduct>(_mapper);
+            return (await _productService.GetProductAsync(id)).MapTo<VmProduct>(_mapper);
         }
     }
 }

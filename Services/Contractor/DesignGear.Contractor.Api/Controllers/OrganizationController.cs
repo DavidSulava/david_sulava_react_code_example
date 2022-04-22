@@ -9,6 +9,7 @@ using DesignGear.Common.Extensions;
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class OrganizationController : ControllerBase
     {
@@ -21,14 +22,12 @@ namespace DesignGear.Contractor.Api.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<Guid> CreateOrganization(VmOrganizationCreate organization)
         {
             return await _organizationService.CreateOrganizationAsync(organization.MapTo<OrganizationCreateDto>(_mapper));
         }
 
-        [Authorize]
         [HttpGet("byuser")]
         public async Task<ICollection<VmOrganization>> OrganizationsByUser(Guid userId)
         {
