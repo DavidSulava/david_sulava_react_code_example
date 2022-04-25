@@ -11,5 +11,7 @@
         public DateTime Created { get; set; }
         public Guid ProductId { get; set; }
         public Guid AppBundleId { get; set; }
+        public string ModelFile { get; set; }
+        public List<string> ImageFiles { get; set; }
     }
 }

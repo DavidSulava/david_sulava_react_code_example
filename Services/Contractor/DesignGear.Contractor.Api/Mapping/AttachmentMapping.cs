@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DesignGear.Contracts.Dto;
 using DesignGear.Contractor.Api.Extensions;
+using DesignGear.Contracts.Models;
 
 namespace DesignGear.Contractor.Api.Mapping
 {
@@ -10,6 +11,7 @@ namespace DesignGear.Contractor.Api.Mapping
         {
             CreateMap<IFormFile, AttachmentDto>(MemberList.None)
                 .ForMember(x => x.Content, m => m.MapFrom(x => x.ToArray()));
+            CreateMap<AttachmentDto, VmAttachment>(MemberList.None);
         }
     }
 }

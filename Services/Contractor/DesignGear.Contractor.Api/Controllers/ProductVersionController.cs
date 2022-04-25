@@ -25,8 +25,6 @@ namespace DesignGear.Contractor.Api.Controllers
         [HttpPost]
         public async Task<Guid> CreateProductVersion([FromForm]VmProductVersionCreate create)
         {
-            var fileName = create.ModelFile.FileName;
-
             return await _productVersionService.CreateProductVersionAsync(create.MapTo<ProductVersionCreateDto>(_mapper));
         }
 
@@ -53,5 +51,18 @@ namespace DesignGear.Contractor.Api.Controllers
         {
             return (await _productVersionService.GetProductVersionAsync(id)).MapTo<VmProductVersion>(_mapper);
         }
+
+        [HttpGet("model")]
+        public async Task<VmAttachment> ModelFile(Guid id)
+        {
+            return (await _productVersionService.GetModelFileAsync(id)).MapTo<VmAttachment>(_mapper);
+        }
+
+        [HttpGet("images")]
+        public async Task<ICollection<VmAttachment>> Images(Guid id)
+        {
+            return (await _productVersionService.GetImageFilesAsync(id)).MapTo<ICollection<VmAttachment>>(_mapper);
+        }
+
     }
 }

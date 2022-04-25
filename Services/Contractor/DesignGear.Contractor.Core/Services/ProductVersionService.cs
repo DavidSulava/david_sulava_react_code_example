@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DesignGear.Common.Exceptions;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -13,6 +14,7 @@ namespace DesignGear.Contractor.Core.Services
     {
         private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
+        private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
 
         public ProductVersionService(IMapper mapper, DataAccessor dataAccessor)
         {
@@ -30,6 +32,7 @@ namespace DesignGear.Contractor.Core.Services
             var newItem = _mapper.Map<ProductVersion>(create);
             _dataAccessor.Editor.Create(newItem);
             await _dataAccessor.Editor.SaveAsync();
+            await SaveFilesAsync(newItem.Id, create.ModelFile, create.ImageFiles);
             return newItem.Id;
         }
 
@@ -48,6 +51,7 @@ namespace DesignGear.Contractor.Core.Services
 
             _mapper.Map(update, item);
             await _dataAccessor.Editor.SaveAsync();
+            await SaveFilesAsync(update.Id, update.ModelFile, update.ImageFiles);
         }
 
         public async Task RemoveProductVersionAsync(Guid id)
@@ -60,6 +64,7 @@ namespace DesignGear.Contractor.Core.Services
 
             _dataAccessor.Editor.Delete(item);
             await _dataAccessor.Editor.SaveAsync();
+            DeleteFiles(id);
         }
 
         public async Task<ICollection<ProductVersionDto>> GetProductVersionsByProductAsync(Guid productId)
@@ -76,6 +81,112 @@ namespace DesignGear.Contractor.Core.Services
             {
                 throw new EntityNotFoundException<ProductVersion>(id);
             }
+            result.ModelFile = GetModelFileName(id);
+            result.ImageFiles = GetImageFileNames(id);
+            
+            return result;
+        }
+
+        private async Task SaveFilesAsync(Guid id, AttachmentDto modelFile, List<AttachmentDto> imageFiles)
+        {
+            if (modelFile != null)
+            {
+                var filePath = $"{_fileBucket}{id}\\model\\";
+                var di = new DirectoryInfo(filePath);
+                if (!di.Exists)
+                    di.Create();
+                else
+                    foreach (var file in di.EnumerateFiles())
+                        file.Delete();
+
+                var originalFileName = Path.GetFileName(modelFile.FileName);
+                var uniqueFilePath = Path.Combine(filePath, originalFileName);
+                await File.WriteAllBytesAsync(uniqueFilePath, modelFile.Content);
+            }
+
+            if (imageFiles != null)
+            {
+                var filePath = $"{_fileBucket}{id}\\images\\";
+                var di = new DirectoryInfo(filePath);
+                if (!di.Exists)
+                    di.Create();
+                else
+                    foreach (var file in di.EnumerateFiles())
+                        file.Delete();
+
+                foreach (var image in imageFiles)
+                {
+                    var originalFileName = Path.GetFileName(image.FileName);
+                    var uniqueFilePath = Path.Combine(filePath, originalFileName);
+                    await File.WriteAllBytesAsync(uniqueFilePath, image.Content);
+                }
+            }
+        }
+
+        private void DeleteFiles(Guid id)
+        {
+            var filePath = $"{_fileBucket}{id}";
+            var di = new DirectoryInfo(filePath);
+            if (di.Exists)
+                di.Delete();
+        }
+
+        private string GetModelFileName(Guid id)
+        {
+            var filePath = $"{_fileBucket}{id}\\model\\";
+            var di = new DirectoryInfo(filePath);
+            if (di.Exists)
+                foreach (var file in di.EnumerateFiles())
+                    return file.Name;
+            
+            return string.Empty;
+        }
+
+        public async Task<AttachmentDto> GetModelFileAsync(Guid id)
+        {
+            var filePath = $"{_fileBucket}{id}\\model\\";
+            var di = new DirectoryInfo(filePath);
+            if (di.Exists)
+                foreach (var file in di.EnumerateFiles())
+                    return await GetFileAsync(file);
+
+            return null;
+        }
+
+        private async Task<AttachmentDto> GetFileAsync(FileInfo file)
+        {
+            string contentType;
+            new FileExtensionContentTypeProvider().TryGetContentType(file.FullName, out contentType);
+            var result = new AttachmentDto
+            {
+                FileName = file.Name,
+                Content = await File.ReadAllBytesAsync(file.FullName),
+                ContentType = contentType ?? "application/octet-stream"
+            };
+            result.Length = result.Content.Length;
+            return result;
+        }
+
+        private List<string> GetImageFileNames(Guid id)
+        {
+            var result = new List<string>();
+            var filePath = $"{_fileBucket}{id}\\images\\";
+            var di = new DirectoryInfo(filePath);
+            if (di.Exists)
+                foreach (var file in di.EnumerateFiles())
+                    result.Add(file.Name);
+
+            return result;
+        }
+
+        public async Task<ICollection<AttachmentDto>> GetImageFilesAsync(Guid id)
+        {
+            var result = new List<AttachmentDto>();
+            var filePath = $"{_fileBucket}{id}\\images\\";
+            var di = new DirectoryInfo(filePath);
+            if (di.Exists)
+                foreach (var file in di.EnumerateFiles())
+                    result.Add(await GetFileAsync(file));
 
             return result;
         }
