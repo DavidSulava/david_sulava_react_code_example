@@ -9,7 +9,8 @@ namespace DesignGear.Contractor.Core.Mapping
         public ProductVersionMapping()
         {
             CreateMap<ProductVersion, ProductVersionDto>();
-            CreateMap<ProductVersionCreateDto, ProductVersion>();
+            CreateMap<ProductVersionCreateDto, ProductVersion>(MemberList.None)
+                .ForMember(x => x.Id, m => m.MapFrom(z => Guid.NewGuid()));
             CreateMap<ProductVersionUpdateDto, ProductVersion>();
         }
     }

@@ -20,11 +20,13 @@ namespace DesignGear.Contractor.Core.Data
 
         public IQueryable<AppBundle> AppBundles => _context.AppbBundles;
         public IQueryable<Organization> Organizations => _context.Organizations;
+        public IQueryable<ParameterDefinition> ParameterDefinitions => _context.ParameterDefinitions;
         public IQueryable<Product> Products => _context.Products;
         public IQueryable<ProductVersion> ProductVersions => _context.ProductVersions;
         public IQueryable<Tariff> Tariffs => _context.Tariffs;
         public IQueryable<User> Users => _context.Users;
         public IQueryable<UserAssignment> UserAssignments => _context.UserAssignments;
+        public IQueryable<ValueOption> ValueOptions => _context.ValueOptions;
 
         public void Create<T>(T entity) where T : class
         {

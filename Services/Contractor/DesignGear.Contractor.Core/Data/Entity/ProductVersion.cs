@@ -25,13 +25,15 @@ namespace DesignGear.Contractor.Core.Data.Entity
 
         public DateTime Created { get; set; }
 
+        [ForeignKey("Product")]
         public Guid ProductId { get; set; }
-
         public virtual Product Product { get; set; }
 
+        [ForeignKey("AppBundle")]
         public Guid AppBundleId { get; set; }
-
         public virtual AppBundle AppBundle { get; set; }
+
+        public ICollection<ParameterDefinition> ParameterDefinitions { get; set; }
     }
 }
 

@@ -4,18 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesignGear.Contractor.Core.Data.Entity
 {
-    public class Product : IGenerateUid
+    public class ValueOption : IGenerateUid
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-
-        [StringLength(300)]
-        public string Name { get; set; }
-
-        public string Description { get; set; }
-
-        [ForeignKey("Organization")]
-        public Guid OrganizationId { get; set; }
-        public virtual Organization Organization { get; set; }
+        
+        public string Value { get; set; }
+        
+        [ForeignKey("ParameterDefinition")]
+        public Guid ParameterDefinitionId { get; set; }
+        public virtual ParameterDefinition ParameterDefinition { get; set; }
     }
 }

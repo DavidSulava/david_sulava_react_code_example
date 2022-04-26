@@ -9,7 +9,7 @@ using DesignGear.Common.Extensions;
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("[controller]")]
     public class ProductVersionController : ControllerBase
     {
@@ -23,13 +23,13 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> CreateProductVersion([FromForm]VmProductVersionCreate create)
+        public async Task<Guid> CreateProductVersion([FromForm] VmProductVersionCreate create)
         {
             return await _productVersionService.CreateProductVersionAsync(create.MapTo<ProductVersionCreateDto>(_mapper));
         }
 
         [HttpPut]
-        public async Task UpdateProductVersion(VmProductVersionUpdate update)
+        public async Task UpdateProductVersion([FromForm] VmProductVersionUpdate update)
         {
             await _productVersionService.UpdateProductVersionAsync(update.MapTo<ProductVersionUpdateDto>(_mapper));
         }

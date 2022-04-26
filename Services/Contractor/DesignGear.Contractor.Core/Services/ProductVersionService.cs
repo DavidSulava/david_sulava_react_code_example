@@ -7,6 +7,10 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DesignGear.Common.Exceptions;
 using Microsoft.AspNetCore.StaticFiles;
+using System.IO.Compression;
+using Newtonsoft.Json;
+using System.Data;
+using DesignGear.ModelPackage;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -30,9 +34,14 @@ namespace DesignGear.Contractor.Core.Services
             }
 
             var newItem = _mapper.Map<ProductVersion>(create);
+
+            await SaveFilesAsync(newItem.Id, create.ModelFile, create.ImageFiles);
+
+            newItem.ParameterDefinitions = ParseModelFile(newItem.Id);
+
             _dataAccessor.Editor.Create(newItem);
             await _dataAccessor.Editor.SaveAsync();
-            await SaveFilesAsync(newItem.Id, create.ModelFile, create.ImageFiles);
+            
             return newItem.Id;
         }
 
@@ -43,15 +52,29 @@ namespace DesignGear.Contractor.Core.Services
                 throw new ArgumentNullException(nameof(update));
             }
 
-            var item = await _dataAccessor.Editor.ProductVersions.FirstOrDefaultAsync(x => x.Id == update.Id);
+            var item = await _dataAccessor.Editor.ProductVersions
+                .Include(x => x.ParameterDefinitions)
+                    .ThenInclude(x => x.ValueOptions)
+                .FirstOrDefaultAsync(x => x.Id == update.Id);
             if (item == null)
             {
                 throw new EntityNotFoundException<ProductVersion>(update.Id);
             }
 
             _mapper.Map(update, item);
-            await _dataAccessor.Editor.SaveAsync();
+
             await SaveFilesAsync(update.Id, update.ModelFile, update.ImageFiles);
+
+            item.ParameterDefinitions.Clear();
+
+            var parameters = ParseModelFile(update.Id);
+            foreach (var param in parameters)
+            {
+                _dataAccessor.Editor.Create(param);
+            }
+            //item.ParameterDefinitions = ParseModelFile(update.Id);
+
+            await _dataAccessor.Editor.SaveAsync();
         }
 
         public async Task RemoveProductVersionAsync(Guid id)
@@ -81,9 +104,10 @@ namespace DesignGear.Contractor.Core.Services
             {
                 throw new EntityNotFoundException<ProductVersion>(id);
             }
+
             result.ModelFile = GetModelFileName(id);
             result.ImageFiles = GetImageFileNames(id);
-            
+
             return result;
         }
 
@@ -128,18 +152,14 @@ namespace DesignGear.Contractor.Core.Services
             var filePath = $"{_fileBucket}{id}";
             var di = new DirectoryInfo(filePath);
             if (di.Exists)
-                di.Delete();
+                di.Delete(true);
         }
 
         private string GetModelFileName(Guid id)
         {
             var filePath = $"{_fileBucket}{id}\\model\\";
             var di = new DirectoryInfo(filePath);
-            if (di.Exists)
-                foreach (var file in di.EnumerateFiles())
-                    return file.Name;
-            
-            return string.Empty;
+            return di.Exists ? di.EnumerateFiles().FirstOrDefault()?.Name ?? string.Empty : string.Empty;
         }
 
         public async Task<AttachmentDto> GetModelFileAsync(Guid id)
@@ -147,8 +167,11 @@ namespace DesignGear.Contractor.Core.Services
             var filePath = $"{_fileBucket}{id}\\model\\";
             var di = new DirectoryInfo(filePath);
             if (di.Exists)
-                foreach (var file in di.EnumerateFiles())
+            {
+                var file = di.EnumerateFiles().FirstOrDefault();
+                if (file != null)
                     return await GetFileAsync(file);
+            }
 
             return null;
         }
@@ -189,6 +212,39 @@ namespace DesignGear.Contractor.Core.Services
                     result.Add(await GetFileAsync(file));
 
             return result;
+        }
+
+        private ICollection<ParameterDefinition> ParseModelFile(Guid id)
+        {
+            string fullName = null;
+            var filePath = $"{_fileBucket}{id}\\model\\";
+            var di = new DirectoryInfo(filePath);
+            if (di.Exists)
+            {
+                fullName = di.EnumerateFiles().FirstOrDefault()?.FullName;
+                if (!string.IsNullOrEmpty(fullName))
+                {
+                    using (var archive = ZipFile.OpenRead(fullName))
+                    {
+                        var entry = archive.Entries.FirstOrDefault(x => x.Name == "DesignGearPackageContents.json");
+                        if (entry != null)
+                            using (var stream = entry.Open())
+                            {
+                                StreamReader reader = new StreamReader(stream);
+                                string json = reader.ReadToEnd();
+                                var result = JsonConvert.DeserializeObject<DesignGearModelPackage>(json);
+                                var parameters = _mapper.Map<ICollection<ParameterDefinition>>(result.Parameter.Rows);
+                                foreach(var p in parameters)
+                                {
+                                    p.ProductVersionId = id;
+                                    p.ValueOptions = _mapper.Map<ICollection<ValueOption>>(result.ValueOption.Where(x => x.ParameterId == p.ParameterId));
+                                }
+                                return parameters;
+                            }
+                    }
+                }
+            }
+            return null;
         }
     }
 }

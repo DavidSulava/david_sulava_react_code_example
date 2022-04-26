@@ -32,6 +32,8 @@ namespace DesignGear.Contractor.Core.Data
 
         public virtual DbSet<Organization> Organizations { get; set; }
 
+        public virtual DbSet<ParameterDefinition> ParameterDefinitions { get; set; }
+
         public virtual DbSet<Product> Products { get; set; }
 
         public virtual DbSet<ProductVersion> ProductVersions { get; set; }
@@ -41,6 +43,8 @@ namespace DesignGear.Contractor.Core.Data
         public virtual DbSet<User> Users { get; set; }
 
         public virtual DbSet<UserAssignment> UserAssignments { get; set; }
+
+        public virtual DbSet<ValueOption> ValueOptions { get; set; }
 
         private void BeforeSaveChanges()
         {
