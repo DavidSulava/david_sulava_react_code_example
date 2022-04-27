@@ -8,7 +8,7 @@ namespace DesignGear.Contractor.Core.Mapping
     {
         public AuthenticateMapping()
         {
-            CreateMap<User, AuthenticateResponseDto>();
+            CreateMap<User, AuthenticateResponseDto>(MemberList.None);
         }
     }
 }

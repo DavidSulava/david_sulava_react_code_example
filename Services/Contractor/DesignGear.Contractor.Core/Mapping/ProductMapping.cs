@@ -8,9 +8,9 @@ namespace DesignGear.Contractor.Core.Mapping
     {
         public ProductMapping()
         {
-            CreateMap<Product, ProductDto>();
-            CreateMap<ProductCreateDto, Product>();
-            CreateMap<ProductUpdateDto, Product>();
+            CreateMap<Product, ProductDto>(MemberList.None);
+            CreateMap<ProductCreateDto, Product>(MemberList.None);
+            CreateMap<ProductUpdateDto, Product>(MemberList.None);
         }
     }
 }

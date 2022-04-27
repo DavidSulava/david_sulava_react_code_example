@@ -9,7 +9,7 @@ using DesignGear.Common.Extensions;
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Route("[controller]")]
     public class ProductVersionController : ControllerBase
     {

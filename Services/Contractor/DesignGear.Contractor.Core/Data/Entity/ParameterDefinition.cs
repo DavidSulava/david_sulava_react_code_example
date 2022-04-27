@@ -22,9 +22,11 @@ namespace DesignGear.Contractor.Core.Data.Entity
         
         [StringLength(300)]
         public string Units { get; set; }
-        
-        //public string ConfigurationId { get; set; }
-        
+
+        [ForeignKey("Configuration")]
+        public Guid ConfigurationId { get; set; }
+        public virtual Configuration Configuration { get; set; }
+
         public bool IsReadOnly { get; set; }
         
         public bool IsHidden { get; set; }
@@ -36,11 +38,11 @@ namespace DesignGear.Contractor.Core.Data.Entity
         [StringLength(300)]
         public string Value { get; set; }
         
-        public ICollection<ValueOption> ValueOptions { get; set; }
-        
-        [ForeignKey("ProductVersion")]
+        public virtual ICollection<ValueOption> ValueOptions { get; set; }
+
+        /*[ForeignKey("ProductVersion")]
         public Guid ProductVersionId { get; set; }
-        public virtual ProductVersion ProductVersion { get; set; }
+        public virtual ProductVersion ProductVersion { get; set; }*/
 
         [NotMapped]
         public int ParameterId { get; set; }

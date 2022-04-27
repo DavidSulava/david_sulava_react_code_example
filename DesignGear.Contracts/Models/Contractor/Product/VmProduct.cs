@@ -9,5 +9,7 @@
         public string Description { get; set; }
 
         public Guid OrganizationId { get; set; }
+
+        public ICollection<VmProductVersion> ProductVersions { get; set; }
     }
 }

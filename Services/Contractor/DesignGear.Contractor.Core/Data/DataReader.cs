@@ -20,6 +20,7 @@ namespace DesignGear.Contractor.Core.Data
         }
 
         public IQueryable<AppBundle> AppBundles => _context.AppbBundles.AsNoTracking();
+        public IQueryable<Configuration> Configurations => _context.Configurations.AsNoTracking();
         public IQueryable<Organization> Organizations => _context.Organizations.AsNoTracking();
         public IQueryable<ParameterDefinition> ParameterDefinitions => _context.ParameterDefinitions.AsNoTracking();
         public IQueryable<Product> Products => _context.Products.AsNoTracking();

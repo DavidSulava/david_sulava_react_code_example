@@ -11,7 +11,6 @@
         public DateTime Created { get; set; }
         public Guid ProductId { get; set; }
         public Guid AppBundleId { get; set; }
-        public AttachmentDto ModelFile { get; set; }
-        public List<AttachmentDto> ImageFiles { get; set; }
+        public ICollection<AttachmentDto> ImageFiles { get; set; }
     }
 }

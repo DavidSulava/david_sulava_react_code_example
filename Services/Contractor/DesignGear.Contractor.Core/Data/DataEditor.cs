@@ -19,6 +19,7 @@ namespace DesignGear.Contractor.Core.Data
         }
 
         public IQueryable<AppBundle> AppBundles => _context.AppbBundles;
+        public IQueryable<Configuration> Configurations => _context.Configurations;
         public IQueryable<Organization> Organizations => _context.Organizations;
         public IQueryable<ParameterDefinition> ParameterDefinitions => _context.ParameterDefinitions;
         public IQueryable<Product> Products => _context.Products;

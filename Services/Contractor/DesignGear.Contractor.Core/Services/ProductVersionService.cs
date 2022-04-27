@@ -8,9 +8,7 @@ using AutoMapper.QueryableExtensions;
 using DesignGear.Common.Exceptions;
 using Microsoft.AspNetCore.StaticFiles;
 using System.IO.Compression;
-using Newtonsoft.Json;
 using System.Data;
-using DesignGear.ModelPackage;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -19,6 +17,7 @@ namespace DesignGear.Contractor.Core.Services
         private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
         private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
+        private readonly string _designGearPackageFileName = "DesignGearPackageContents.json";
 
         public ProductVersionService(IMapper mapper, DataAccessor dataAccessor)
         {
@@ -37,7 +36,13 @@ namespace DesignGear.Contractor.Core.Services
 
             await SaveFilesAsync(newItem.Id, create.ModelFile, create.ImageFiles);
 
-            newItem.ParameterDefinitions = ParseModelFile(newItem.Id);
+            var modelFile = ParseModelFile(newItem.Id);
+            if (modelFile != null)
+            {
+                /*newItem.Configurations = new List<Configuration>();
+                newItem.Configurations.Add(modelFile.Configuration);*/
+                _dataAccessor.Editor.Create(modelFile.Configuration);
+            }
 
             _dataAccessor.Editor.Create(newItem);
             await _dataAccessor.Editor.SaveAsync();
@@ -52,10 +57,7 @@ namespace DesignGear.Contractor.Core.Services
                 throw new ArgumentNullException(nameof(update));
             }
 
-            var item = await _dataAccessor.Editor.ProductVersions
-                .Include(x => x.ParameterDefinitions)
-                    .ThenInclude(x => x.ValueOptions)
-                .FirstOrDefaultAsync(x => x.Id == update.Id);
+            var item = await _dataAccessor.Editor.ProductVersions.FirstOrDefaultAsync(x => x.Id == update.Id);
             if (item == null)
             {
                 throw new EntityNotFoundException<ProductVersion>(update.Id);
@@ -63,16 +65,7 @@ namespace DesignGear.Contractor.Core.Services
 
             _mapper.Map(update, item);
 
-            await SaveFilesAsync(update.Id, update.ModelFile, update.ImageFiles);
-
-            item.ParameterDefinitions.Clear();
-
-            var parameters = ParseModelFile(update.Id);
-            foreach (var param in parameters)
-            {
-                _dataAccessor.Editor.Create(param);
-            }
-            //item.ParameterDefinitions = ParseModelFile(update.Id);
+            await SaveFilesAsync(update.Id, null, update.ImageFiles);
 
             await _dataAccessor.Editor.SaveAsync();
         }
@@ -111,7 +104,7 @@ namespace DesignGear.Contractor.Core.Services
             return result;
         }
 
-        private async Task SaveFilesAsync(Guid id, AttachmentDto modelFile, List<AttachmentDto> imageFiles)
+        private async Task SaveFilesAsync(Guid id, AttachmentDto? modelFile, ICollection<AttachmentDto> imageFiles)
         {
             if (modelFile != null)
             {
@@ -190,7 +183,7 @@ namespace DesignGear.Contractor.Core.Services
             return result;
         }
 
-        private List<string> GetImageFileNames(Guid id)
+        private ICollection<string> GetImageFileNames(Guid id)
         {
             var result = new List<string>();
             var filePath = $"{_fileBucket}{id}\\images\\";
@@ -214,32 +207,23 @@ namespace DesignGear.Contractor.Core.Services
             return result;
         }
 
-        private ICollection<ParameterDefinition> ParseModelFile(Guid id)
+        private ModelFileParsed? ParseModelFile(Guid id)
         {
-            string fullName = null;
             var filePath = $"{_fileBucket}{id}\\model\\";
             var di = new DirectoryInfo(filePath);
             if (di.Exists)
             {
-                fullName = di.EnumerateFiles().FirstOrDefault()?.FullName;
+                var fullName = di.EnumerateFiles().FirstOrDefault()?.FullName;
                 if (!string.IsNullOrEmpty(fullName))
                 {
                     using (var archive = ZipFile.OpenRead(fullName))
                     {
-                        var entry = archive.Entries.FirstOrDefault(x => x.Name == "DesignGearPackageContents.json");
+                        var entry = archive.Entries.FirstOrDefault(x => x.Name == _designGearPackageFileName);
                         if (entry != null)
                             using (var stream = entry.Open())
                             {
-                                StreamReader reader = new StreamReader(stream);
-                                string json = reader.ReadToEnd();
-                                var result = JsonConvert.DeserializeObject<DesignGearModelPackage>(json);
-                                var parameters = _mapper.Map<ICollection<ParameterDefinition>>(result.Parameter.Rows);
-                                foreach(var p in parameters)
-                                {
-                                    p.ProductVersionId = id;
-                                    p.ValueOptions = _mapper.Map<ICollection<ValueOption>>(result.ValueOption.Where(x => x.ParameterId == p.ParameterId));
-                                }
-                                return parameters;
+                                string json = new StreamReader(stream).ReadToEnd();
+                                return new ModelFileParsed(id, json, _mapper);
                             }
                     }
                 }

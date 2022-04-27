@@ -30,6 +30,8 @@ namespace DesignGear.Contractor.Core.Data
 
         public virtual DbSet<AppBundle> AppbBundles { get; set; }
 
+        public virtual DbSet<Configuration> Configurations { get; set; }
+
         public virtual DbSet<Organization> Organizations { get; set; }
 
         public virtual DbSet<ParameterDefinition> ParameterDefinitions { get; set; }

@@ -13,7 +13,6 @@ namespace DesignGear.Contracts.Models
         public DateTime Created { get; set; }
         public Guid ProductId { get; set; }
         public Guid AppBundleId { get; set; }
-        public IFormFile ModelFile { get; set; }
-        public List<IFormFile> ImageFiles { get; set; }
+        public ICollection<IFormFile> ImageFiles { get; set; }
     }
 }

@@ -33,7 +33,9 @@ namespace DesignGear.Contractor.Core.Data.Entity
         public Guid AppBundleId { get; set; }
         public virtual AppBundle AppBundle { get; set; }
 
-        public ICollection<ParameterDefinition> ParameterDefinitions { get; set; }
+        //public ICollection<ParameterDefinition> ParameterDefinitions { get; set; }
+
+        public virtual ICollection<Configuration> Configurations { get; set; }
     }
 }
 

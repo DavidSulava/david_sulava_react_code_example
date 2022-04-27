@@ -8,7 +8,7 @@ namespace DesignGear.Contractor.Core.Mapping
     {
         public AppBundleMapping()
         {
-            CreateMap<AppBundle, AppBundleDto>();
+            CreateMap<AppBundle, AppBundleDto>(MemberList.None);
         }
     }
 }
