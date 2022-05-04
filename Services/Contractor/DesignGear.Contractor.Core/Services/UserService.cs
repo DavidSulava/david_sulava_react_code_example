@@ -19,9 +19,9 @@ namespace DesignGear.Contractor.Core.Services
             _dataAccessor = dataAccessor;
         }
 
-        public async Task<User?> GetByIdAsync(Guid userId)
+        public async Task<User?> GetByIdAsync(Guid id)
         {
-            return await _dataAccessor.Reader.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            return await _dataAccessor.Reader.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Guid> CreateUserAsync(UserCreateDto create)

@@ -8,7 +8,7 @@ namespace DesignGear.Contractor.Core.Mapping
     {
         public TariffMapping()
         {
-            CreateMap<Tariff, TariffDto>();
+            CreateMap<Tariff, TariffDto>(MemberList.None);
         }
     }
 }

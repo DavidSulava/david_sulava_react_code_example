@@ -28,15 +28,25 @@ namespace DesignGear.Contractor.Core.Data
             base.OnModelCreating(modelBuilder);
         }
 
+        public virtual DbSet<AppBundle> AppbBundles { get; set; }
+
+        public virtual DbSet<Configuration> Configurations { get; set; }
+
         public virtual DbSet<Organization> Organizations { get; set; }
 
+        public virtual DbSet<ParameterDefinition> ParameterDefinitions { get; set; }
+
         public virtual DbSet<Product> Products { get; set; }
+
+        public virtual DbSet<ProductVersion> ProductVersions { get; set; }
 
         public virtual DbSet<Tariff> Tariffs { get; set; }
 
         public virtual DbSet<User> Users { get; set; }
 
         public virtual DbSet<UserAssignment> UserAssignments { get; set; }
+
+        public virtual DbSet<ValueOption> ValueOptions { get; set; }
 
         private void BeforeSaveChanges()
         {

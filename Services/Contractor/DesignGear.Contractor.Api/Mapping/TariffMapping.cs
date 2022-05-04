@@ -8,7 +8,6 @@ namespace DesignGear.Contractor.Api.Mapping
     {
         public TariffMapping()
         {
-            CreateMap<VmTariff, TariffDto>(MemberList.None);
             CreateMap<TariffDto, VmTariff>(MemberList.None);
         }
     }

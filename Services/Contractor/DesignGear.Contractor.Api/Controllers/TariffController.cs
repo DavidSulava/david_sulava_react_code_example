@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class TariffController : ControllerBase
     {
@@ -20,7 +21,6 @@ namespace DesignGear.Contractor.Api.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<ICollection<VmTariff>> TariffList()
         {

@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignGear.ServerManager.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignGear.ServerManager.Core", "Services\ServerManager\DesignGear.ServerManager.Core\DesignGear.ServerManager.Core.csproj", "{A9DC5B1F-0399-43BE-BFB3-FDCE7FC8AA19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesignGear.ModelPackage", "DesignGear.ModelPackage\DesignGear.ModelPackage.csproj", "{7424A46B-7708-45E3-8449-8AD2CF9A8331}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{A9DC5B1F-0399-43BE-BFB3-FDCE7FC8AA19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9DC5B1F-0399-43BE-BFB3-FDCE7FC8AA19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9DC5B1F-0399-43BE-BFB3-FDCE7FC8AA19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7424A46B-7708-45E3-8449-8AD2CF9A8331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7424A46B-7708-45E3-8449-8AD2CF9A8331}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7424A46B-7708-45E3-8449-8AD2CF9A8331}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7424A46B-7708-45E3-8449-8AD2CF9A8331}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

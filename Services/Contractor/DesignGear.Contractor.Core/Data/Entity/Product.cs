@@ -16,7 +16,8 @@ namespace DesignGear.Contractor.Core.Data.Entity
 
         [ForeignKey("Organization")]
         public Guid OrganizationId { get; set; }
-
         public virtual Organization Organization { get; set; }
+
+        public virtual ICollection<ProductVersion> ProductVersions { get; set; }
     }
 }

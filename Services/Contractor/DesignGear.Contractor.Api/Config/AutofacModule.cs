@@ -16,8 +16,10 @@ namespace DesignGear.Contractor.Api.Config
             builder.RegisterType<DataAccessor>().AsSelf().InstancePerLifetimeScope();
 
             //services
+            builder.RegisterType<AppBundleService>().As<IAppBundleService>().InstancePerLifetimeScope();
             builder.RegisterType<OrganizationService>().As<IOrganizationService>().InstancePerLifetimeScope();
             builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
+            builder.RegisterType<ProductVersionService>().As<IProductVersionService>().InstancePerLifetimeScope();
             builder.RegisterType<TariffService>().As<ITariffService>().InstancePerLifetimeScope();
             builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
         }

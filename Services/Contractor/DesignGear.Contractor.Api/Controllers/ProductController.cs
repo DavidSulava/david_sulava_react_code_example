@@ -40,7 +40,7 @@ namespace DesignGear.Contractor.Api.Controllers
             await _productService.RemoveProductAsync(productId);
         }
 
-        [HttpGet("byorganization")]
+        [HttpGet()]
         public async Task<ICollection<VmProduct>> ProductsByOrganization(Guid organizationId)
         {
             return (await _productService.GetProductsByOrganizationAsync(organizationId)).MapTo<ICollection<VmProduct>>(_mapper);

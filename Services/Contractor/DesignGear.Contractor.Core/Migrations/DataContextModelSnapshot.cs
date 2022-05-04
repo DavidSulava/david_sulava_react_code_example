@@ -22,6 +22,67 @@ namespace DesignGear.Contractor.Core.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.AppBundle", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DesignGearVersion")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("InventorVersion")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppbBundles");
+                });
+
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.Configuration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ModelState")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<Guid>("ProductVersionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TargetFileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductVersionId");
+
+                    b.ToTable("Configurations");
+                });
+
             modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.Organization", b =>
                 {
                     b.Property<Guid>("Id")
@@ -58,6 +119,57 @@ namespace DesignGear.Contractor.Core.Migrations
                     b.ToTable("Organizations");
                 });
 
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.ParameterDefinition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("AllowCustomValues")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("ConfigurationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("DisplayPriority")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsReadOnly")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Units")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("ValueType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConfigurationId");
+
+                    b.ToTable("ParameterDefinitions");
+                });
+
             modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -81,6 +193,53 @@ namespace DesignGear.Contractor.Core.Migrations
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.ProductVersion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AppBundleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DesignGearVersion")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("InventorVersion")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SequenceNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Version")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppBundleId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductVersions");
                 });
 
             modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.Tariff", b =>
@@ -162,6 +321,37 @@ namespace DesignGear.Contractor.Core.Migrations
                     b.ToTable("UserAssignments");
                 });
 
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.ValueOption", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ParameterDefinitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParameterDefinitionId");
+
+                    b.ToTable("ValueOptions");
+                });
+
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.Configuration", b =>
+                {
+                    b.HasOne("DesignGear.Contractor.Core.Data.Entity.ProductVersion", "ProductVersion")
+                        .WithMany("Configurations")
+                        .HasForeignKey("ProductVersionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductVersion");
+                });
+
             modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.Organization", b =>
                 {
                     b.HasOne("DesignGear.Contractor.Core.Data.Entity.Tariff", "Tariff")
@@ -173,6 +363,17 @@ namespace DesignGear.Contractor.Core.Migrations
                     b.Navigation("Tariff");
                 });
 
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.ParameterDefinition", b =>
+                {
+                    b.HasOne("DesignGear.Contractor.Core.Data.Entity.Configuration", "Configuration")
+                        .WithMany("ParameterDefinitions")
+                        .HasForeignKey("ConfigurationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Configuration");
+                });
+
             modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.Product", b =>
                 {
                     b.HasOne("DesignGear.Contractor.Core.Data.Entity.Organization", "Organization")
@@ -182,6 +383,25 @@ namespace DesignGear.Contractor.Core.Migrations
                         .IsRequired();
 
                     b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.ProductVersion", b =>
+                {
+                    b.HasOne("DesignGear.Contractor.Core.Data.Entity.AppBundle", "AppBundle")
+                        .WithMany()
+                        .HasForeignKey("AppBundleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DesignGear.Contractor.Core.Data.Entity.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppBundle");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.UserAssignment", b =>
@@ -203,9 +423,35 @@ namespace DesignGear.Contractor.Core.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.ValueOption", b =>
+                {
+                    b.HasOne("DesignGear.Contractor.Core.Data.Entity.ParameterDefinition", "ParameterDefinition")
+                        .WithMany("ValueOptions")
+                        .HasForeignKey("ParameterDefinitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ParameterDefinition");
+                });
+
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.Configuration", b =>
+                {
+                    b.Navigation("ParameterDefinitions");
+                });
+
             modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.Organization", b =>
                 {
                     b.Navigation("UserAssignments");
+                });
+
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.ParameterDefinition", b =>
+                {
+                    b.Navigation("ValueOptions");
+                });
+
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.ProductVersion", b =>
+                {
+                    b.Navigation("Configurations");
                 });
 #pragma warning restore 612, 618
         }

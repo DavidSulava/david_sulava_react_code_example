@@ -27,10 +27,10 @@ namespace DesignGear.Contractor.Core.Services
                 throw new ArgumentNullException(nameof(create));
             }
 
-            var newProduct = _mapper.Map<Product>(create);
-            _dataAccessor.Editor.Create(newProduct);
+            var newItem = _mapper.Map<Product>(create);
+            _dataAccessor.Editor.Create(newItem);
             await _dataAccessor.Editor.SaveAsync();
-            return newProduct.Id;
+            return newItem.Id;
         }
 
         public async Task UpdateProductAsync(ProductUpdateDto update)
@@ -40,25 +40,25 @@ namespace DesignGear.Contractor.Core.Services
                 throw new ArgumentNullException(nameof(update));
             }
 
-            var product = await _dataAccessor.Editor.Products.FirstOrDefaultAsync(x => x.Id == update.Id);
-            if (product == null)
+            var item = await _dataAccessor.Editor.Products.FirstOrDefaultAsync(x => x.Id == update.Id);
+            if (item == null)
             {
                 throw new EntityNotFoundException<Product>(update.Id);
             }
 
-            _mapper.Map(update, product);
+            _mapper.Map(update, item);
             await _dataAccessor.Editor.SaveAsync();
         }
 
         public async Task RemoveProductAsync(Guid id)
         {
-            var product = await _dataAccessor.Editor.Products.FirstOrDefaultAsync(x => x.Id == id);
-            if (product == null)
+            var item = await _dataAccessor.Editor.Products.FirstOrDefaultAsync(x => x.Id == id);
+            if (item == null)
             {
                 throw new EntityNotFoundException<Product>(id);
             }
 
-            _dataAccessor.Editor.Delete(product);
+            _dataAccessor.Editor.Delete(item);
             await _dataAccessor.Editor.SaveAsync();
         }
 

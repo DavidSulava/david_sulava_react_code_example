@@ -8,8 +8,8 @@ namespace DesignGear.Contractor.Core.Mapping
     {
         public UserMapping()
         {
-            CreateMap<User, UserCreateDto>();
-            CreateMap<UserCreateDto, User>();
+            CreateMap<User, UserCreateDto>(MemberList.None);
+            CreateMap<UserCreateDto, User>(MemberList.None);
         }
     }
 }
