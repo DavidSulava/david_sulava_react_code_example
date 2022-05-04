@@ -40,6 +40,10 @@ namespace DesignGear.Contractor.Api.Controllers
             await _productService.RemoveProductAsync(productId);
         }
 
+        /*
+         * todo Anton Должно быть просто [HttpGet()]. organizationId - одно из условий фильтра (в котором помимо этого параметра могут быть любые другие)
+         * Возможно после того как подключится фронтендер, метод изменится, если заюзаем Kendo
+         */
         [HttpGet("byorganization")]
         public async Task<ICollection<VmProduct>> ProductsByOrganization(Guid organizationId)
         {
