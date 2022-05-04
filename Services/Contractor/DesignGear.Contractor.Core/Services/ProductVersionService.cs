@@ -199,7 +199,7 @@ namespace DesignGear.Contractor.Core.Services
         {
             var filePath = $"{_fileBucket}{id}\\images\\";
             var di = new DirectoryInfo(filePath);
-            if (!di.Exists)
+            if (di.Exists)
             {
                 var file = di.EnumerateFiles().FirstOrDefault(x => x.Name == fileName);
                 if (file != null)
