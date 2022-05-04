@@ -65,7 +65,7 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/Images/{fileName")]
+        [Route("{id}/Images/{fileName}")]
         public async Task<ActionResult> Images([FromRoute] Guid id, [FromRoute] string fileName)
         {
             var image = await _productVersionService.GetImageFileAsync(id, fileName);
