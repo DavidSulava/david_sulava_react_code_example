@@ -195,16 +195,18 @@ namespace DesignGear.Contractor.Core.Services
             return result;
         }
 
-        public async Task<ICollection<AttachmentDto>> GetImageFilesAsync(Guid id)
+        public async Task<AttachmentDto> GetImageFileAsync(Guid id, string fileName)
         {
-            var result = new List<AttachmentDto>();
             var filePath = $"{_fileBucket}{id}\\images\\";
             var di = new DirectoryInfo(filePath);
-            if (di.Exists)
-                foreach (var file in di.EnumerateFiles())
-                    result.Add(await GetFileAsync(file));
+            if (!di.Exists)
+            {
+                var file = di.EnumerateFiles().FirstOrDefault(x => x.Name == fileName);
+                if (file != null)
+                    return await GetFileAsync(file);
+            }
 
-            return result;
+            return null;
         }
 
         private ModelFileParsed? ParseModelFile(Guid id)
