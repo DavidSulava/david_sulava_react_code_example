@@ -1,7 +1,6 @@
-﻿namespace DesignGear.ModelPackage
-{
-    public partial class DesignGearModelPackage
-    {
-
+﻿namespace DesignGear.ModelPackage {
+    public partial class DesignGearModelPackage {
+        partial class ConfigurationInstanceDataTable {
+        }
     }
 }
