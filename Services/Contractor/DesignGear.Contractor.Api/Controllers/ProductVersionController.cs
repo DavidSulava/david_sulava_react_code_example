@@ -53,18 +53,6 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/Model")]
-        public async Task<ActionResult> ModelFile([FromRoute] Guid id)
-        {
-            var modelFile = await _productVersionService.GetModelFileAsync(id);
-            if (modelFile == null || modelFile.Content == null)
-            {
-                return Ok();
-            }
-            return File(modelFile.Content, "application/octet-stream", modelFile.FileName);
-        }
-
-        [HttpGet]
         [Route("{id}/Images/{fileName}")]
         public async Task<ActionResult> Images([FromRoute] Guid id, [FromRoute] string fileName)
         {

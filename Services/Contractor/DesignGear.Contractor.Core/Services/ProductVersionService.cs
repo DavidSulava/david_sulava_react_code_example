@@ -34,19 +34,19 @@ namespace DesignGear.Contractor.Core.Services
 
             var newItem = _mapper.Map<ProductVersion>(create);
 
-            await SaveFilesAsync(newItem.Id, create.ModelFile, create.ImageFiles);
-
-            var modelFile = ParseModelFile(newItem.Id);
+            var modelFile = ParseModelFile(newItem.Id, create.ModelFile);
             if (modelFile != null)
             {
-                /*newItem.Configurations = new List<Configuration>();
-                newItem.Configurations.Add(modelFile.Configuration);*/
                 _dataAccessor.Editor.Create(modelFile.Configuration);
             }
 
             _dataAccessor.Editor.Create(newItem);
             await _dataAccessor.Editor.SaveAsync();
-            
+
+            await SaveImageFilesAsync(newItem.Id, create.ImageFiles);
+            if (modelFile != null)
+                await SaveModelFileAsync(newItem.Id, modelFile.Configuration.Id, create.ModelFile);
+
             return newItem.Id;
         }
 
@@ -65,7 +65,7 @@ namespace DesignGear.Contractor.Core.Services
 
             _mapper.Map(update, item);
 
-            await SaveFilesAsync(update.Id, null, update.ImageFiles);
+            await SaveImageFilesAsync(update.Id, update.ImageFiles);
 
             await _dataAccessor.Editor.SaveAsync();
         }
@@ -98,30 +98,14 @@ namespace DesignGear.Contractor.Core.Services
                 throw new EntityNotFoundException<ProductVersion>(id);
             }
 
-            result.ModelFile = GetModelFileName(id);
             result.ImageFiles = GetImageFileNames(id);
 
             return result;
         }
 
-        private async Task SaveFilesAsync(Guid id, AttachmentDto? modelFile, ICollection<AttachmentDto> imageFiles)
+        private async Task SaveImageFilesAsync(Guid id, ICollection<AttachmentDto> imageFiles)
         {
-            if (modelFile != null)
-            {
-                var filePath = $"{_fileBucket}{id}\\model\\";
-                var di = new DirectoryInfo(filePath);
-                if (!di.Exists)
-                    di.Create();
-                else
-                    foreach (var file in di.EnumerateFiles())
-                        file.Delete();
-
-                var originalFileName = Path.GetFileName(modelFile.FileName);
-                var uniqueFilePath = Path.Combine(filePath, originalFileName);
-                await File.WriteAllBytesAsync(uniqueFilePath, modelFile.Content);
-            }
-
-            if (imageFiles != null)
+            if (imageFiles != null && imageFiles.Count > 0)
             {
                 var filePath = $"{_fileBucket}{id}\\images\\";
                 var di = new DirectoryInfo(filePath);
@@ -140,33 +124,28 @@ namespace DesignGear.Contractor.Core.Services
             }
         }
 
+        private async Task SaveModelFileAsync(Guid id, Guid configurationId, AttachmentDto modelFile)
+        {
+            var filePath = $"{_fileBucket}{id}\\{configurationId}\\";
+            var di = new DirectoryInfo(filePath);
+            if (!di.Exists)
+                di.Create();
+            else
+                foreach (var file in di.EnumerateFiles())
+                    file.Delete();
+
+            var originalFileName = Path.GetFileName(modelFile.FileName);
+            var uniqueFilePath = Path.Combine(filePath, originalFileName);
+            await File.WriteAllBytesAsync(uniqueFilePath, modelFile.Content);
+
+        }
+
         private void DeleteFiles(Guid id)
         {
             var filePath = $"{_fileBucket}{id}";
             var di = new DirectoryInfo(filePath);
             if (di.Exists)
                 di.Delete(true);
-        }
-
-        private string GetModelFileName(Guid id)
-        {
-            var filePath = $"{_fileBucket}{id}\\model\\";
-            var di = new DirectoryInfo(filePath);
-            return di.Exists ? di.EnumerateFiles().FirstOrDefault()?.Name ?? string.Empty : string.Empty;
-        }
-
-        public async Task<AttachmentDto> GetModelFileAsync(Guid id)
-        {
-            var filePath = $"{_fileBucket}{id}\\model\\";
-            var di = new DirectoryInfo(filePath);
-            if (di.Exists)
-            {
-                var file = di.EnumerateFiles().FirstOrDefault();
-                if (file != null)
-                    return await GetFileAsync(file);
-            }
-
-            return null;
         }
 
         private async Task<AttachmentDto> GetFileAsync(FileInfo file)
@@ -209,27 +188,20 @@ namespace DesignGear.Contractor.Core.Services
             return null;
         }
 
-        private ModelFileParsed? ParseModelFile(Guid id)
+        private ModelFileParsed? ParseModelFile(Guid id, AttachmentDto modelFile)
         {
-            var filePath = $"{_fileBucket}{id}\\model\\";
-            var di = new DirectoryInfo(filePath);
-            if (di.Exists)
+            using (var streamContent = new MemoryStream(modelFile.Content))
+            using (var archive = new ZipArchive(streamContent))
             {
-                var fullName = di.EnumerateFiles().FirstOrDefault()?.FullName;
-                if (!string.IsNullOrEmpty(fullName))
-                {
-                    using (var archive = ZipFile.OpenRead(fullName))
+                var entry = archive.Entries.FirstOrDefault(x => x.Name == _designGearPackageFileName);
+                if (entry != null)
+                    using (var stream = entry.Open())
                     {
-                        var entry = archive.Entries.FirstOrDefault(x => x.Name == _designGearPackageFileName);
-                        if (entry != null)
-                            using (var stream = entry.Open())
-                            {
-                                string json = new StreamReader(stream).ReadToEnd();
-                                return new ModelFileParsed(id, json, _mapper);
-                            }
+                        string json = new StreamReader(stream).ReadToEnd();
+                        return new ModelFileParsed(id, json, _mapper);
                     }
-                }
             }
+
             return null;
         }
     }

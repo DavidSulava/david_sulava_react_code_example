@@ -20,7 +20,7 @@
     "ConfigurationsManager": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "automation/BA8F50B3-3668-485E-864B-A4EA8D05AF87",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

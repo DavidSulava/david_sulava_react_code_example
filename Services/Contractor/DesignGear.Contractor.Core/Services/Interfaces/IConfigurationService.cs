@@ -13,5 +13,7 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
         Task<ICollection<ConfigurationDto>> GetConfigurationsByProductVersionAsync(Guid productVersionId);
 
         Task<ConfigurationDto> GetConfigurationAsync(Guid id);
+
+        Task<AttachmentDto> GetModelFileAsync(Guid id);
     }
 }

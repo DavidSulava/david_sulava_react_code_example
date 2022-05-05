@@ -2,9 +2,9 @@
 
 namespace DesignGear.Contracts.Models
 {
-    public class VmConfiguration
+    public class VmConfigurationCreate
     {
-        public Guid Id { get; set; }
+        public Guid TemplateConfigurationId { get; set; }
 
         public string Name { get; set; }
 
@@ -13,8 +13,6 @@ namespace DesignGear.Contracts.Models
         public ModelState ModelState { get; set; }
 
         public Guid ProductVersionId { get; set; }
-
-        public string ModelFile { get; set; }
 
         public Guid TargetFileId { get; set; }
 

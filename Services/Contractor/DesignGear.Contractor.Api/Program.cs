@@ -34,7 +34,7 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "bearer",
         Type = SecuritySchemeType.Http
     });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement{ 
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement{
     {
         new OpenApiSecurityScheme{
             Reference = new OpenApiReference{
@@ -47,7 +47,20 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+builder.Services.AddHttpClient();/* Configuration.GetSection("SharepointService")["Tag"], c =>
+{
+    c.BaseAddress = new Uri(Configuration.GetSection("SharepointService")["BaseUrl"]);
+    c.DefaultRequestHeaders.Add("Accept", "application/json");
+}).ConfigurePrimaryHttpMessageHandler(() =>
+{
+    return new HttpClientHandler()
+    {
+        PreAuthenticate = true,
+        UseDefaultCredentials = true,
+        ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
+    };
+});*/
 
 var app = builder.Build();
 

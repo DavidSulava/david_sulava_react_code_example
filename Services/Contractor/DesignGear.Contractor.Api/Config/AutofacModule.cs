@@ -3,6 +3,8 @@ using DesignGear.Contractor.Core.Data;
 using DesignGear.Contractor.Core.Data.Entity;
 using DesignGear.Contractor.Core.Services;
 using DesignGear.Contractor.Core.Services.Interfaces;
+using DesignGear.Contracts.Communicators;
+using DesignGear.Contracts.Communicators.Interfaces;
 
 namespace DesignGear.Contractor.Api.Config
 {
@@ -15,8 +17,13 @@ namespace DesignGear.Contractor.Api.Config
             builder.RegisterType<DataEditor>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<DataAccessor>().AsSelf().InstancePerLifetimeScope();
 
+            //communicators
+            builder.RegisterType<ConfigManagerCommunicator>().As<IConfigManagerCommunicator>().InstancePerLifetimeScope();
+
             //services
             builder.RegisterType<AppBundleService>().As<IAppBundleService>().InstancePerLifetimeScope();
+            builder.RegisterType<AuthenticationService>().As<IAuthenticationService>().InstancePerLifetimeScope();
+            builder.RegisterType<ConfigurationService>().As<IConfigurationService>().InstancePerLifetimeScope();
             builder.RegisterType<OrganizationService>().As<IOrganizationService>().InstancePerLifetimeScope();
             builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
             builder.RegisterType<ProductVersionService>().As<IProductVersionService>().InstancePerLifetimeScope();

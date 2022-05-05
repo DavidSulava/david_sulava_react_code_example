@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ConfigurationsManager.Controllers
 {
-	[Route("[controller]")]
+    [Route("[controller]")]
 	[ApiController]
 	public class DerivativeController : ControllerBase
 	{
@@ -19,8 +16,8 @@ namespace ConfigurationsManager.Controllers
 			_logger = logger;
 		}
 
-		[HttpGet]
-		public async Task<IActionResult> Get()
+		[HttpGet("{id}")]
+		public async Task<IActionResult> Get([FromRoute] Guid id)
 		{
 			var urn = await new ServerManager().GetSvfAsync(@"D:\Suspension.zip");
 			return new ObjectResult(urn);
