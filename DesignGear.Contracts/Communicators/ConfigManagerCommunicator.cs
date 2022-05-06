@@ -14,12 +14,12 @@ namespace DesignGear.Contracts.Communicators
         }
         public async Task<string> ProcessConfigurationAsync(Guid id)
         {
-            return await SendHttpRequestAsync(string.Format("https://localhost:5001/automation/{0}", id));
+            return await SendHttpRequestAsync(string.Format("https://localhost:7029/automation/{0}", id));
         }
 
         public async Task<string> GetSvfAsync(Guid id)
         {
-            return await SendHttpRequestAsync(string.Format("https://localhost:5001/automation/{0}", id));
+            return await SendHttpRequestAsync(string.Format("https://localhost:7029/derivative/{0}", id));
         }
 
         private async Task<T> SendHttpRequestAsync<T>(string url)

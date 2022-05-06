@@ -48,19 +48,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
-builder.Services.AddHttpClient();/* Configuration.GetSection("SharepointService")["Tag"], c =>
-{
-    c.BaseAddress = new Uri(Configuration.GetSection("SharepointService")["BaseUrl"]);
-    c.DefaultRequestHeaders.Add("Accept", "application/json");
-}).ConfigurePrimaryHttpMessageHandler(() =>
-{
-    return new HttpClientHandler()
-    {
-        PreAuthenticate = true,
-        UseDefaultCredentials = true,
-        ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; }
-    };
-});*/
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

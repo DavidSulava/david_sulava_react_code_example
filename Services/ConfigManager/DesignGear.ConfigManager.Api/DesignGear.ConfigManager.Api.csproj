@@ -10,4 +10,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DesignGear.ConfigManager.Core\DesignGear.ConfigManager.Core.csproj" />
+  </ItemGroup>
+
 </Project>
