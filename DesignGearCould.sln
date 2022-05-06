@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigurationsManager", "ConfigurationsManager\ConfigurationsManager.csproj", "{C1B8A1E4-24CC-41E2-AA9F-2C964D6B0FAA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignGear.Common", "DesignGear.Common\DesignGear.Common.csproj", "{97383B04-98FC-45EA-8AD7-2CFEE044D5BC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignGear.Contracts", "DesignGear.Contracts\DesignGear.Contracts.csproj", "{5DC4919E-EBD1-4956-8B00-077CA492A6A4}"
@@ -39,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignGear.ServerManager.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignGear.ServerManager.Core", "Services\ServerManager\DesignGear.ServerManager.Core\DesignGear.ServerManager.Core.csproj", "{A9DC5B1F-0399-43BE-BFB3-FDCE7FC8AA19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesignGear.ModelPackage", "DesignGear.ModelPackage\DesignGear.ModelPackage.csproj", "{7424A46B-7708-45E3-8449-8AD2CF9A8331}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignGear.ModelPackage", "DesignGear.ModelPackage\DesignGear.ModelPackage.csproj", "{7424A46B-7708-45E3-8449-8AD2CF9A8331}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +45,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C1B8A1E4-24CC-41E2-AA9F-2C964D6B0FAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1B8A1E4-24CC-41E2-AA9F-2C964D6B0FAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1B8A1E4-24CC-41E2-AA9F-2C964D6B0FAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1B8A1E4-24CC-41E2-AA9F-2C964D6B0FAA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{97383B04-98FC-45EA-8AD7-2CFEE044D5BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{97383B04-98FC-45EA-8AD7-2CFEE044D5BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97383B04-98FC-45EA-8AD7-2CFEE044D5BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
