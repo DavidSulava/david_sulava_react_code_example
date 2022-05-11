@@ -78,10 +78,10 @@ namespace DesignGear.Contractor.Core.Services
             await _dataAccessor.Editor.SaveAsync();
         }
 
-        public async Task<ICollection<ConfigurationDto>> GetConfigurationsByProductVersionAsync(Guid productVersionId)
+        public async Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId)
         {
             return await _dataAccessor.Reader.Configurations.Where(x => x.ProductVersionId == productVersionId).
-                ProjectTo<ConfigurationDto>(_mapper.ConfigurationProvider).ToListAsync();
+                ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
         public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)

@@ -11,6 +11,7 @@ namespace DesignGear.Contractor.Api.Mapping
             CreateMap<VmConfigurationCreate, ConfigurationCreateDto>(MemberList.None);
             CreateMap<VmConfigurationUpdate, ConfigurationUpdateDto>(MemberList.None);
             CreateMap<ConfigurationDto, VmConfiguration>(MemberList.None);
+            CreateMap<ConfigurationItemDto, VmConfigurationItem>(MemberList.None);
         }
     }
 }

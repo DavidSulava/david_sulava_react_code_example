@@ -22,54 +22,32 @@ namespace DesignGear.Contractor.Api.Controllers
             _mapper = mapper;
         }
 
-        /*
-         * todo Anton
-         * Добавить async в название метода
-         */
         [HttpPost]
-        public async Task<Guid> CreateProduct(VmProductCreate product)
+        public async Task<Guid> CreateProductAsync(VmProductCreate product)
         {
             return await _productService.CreateProductAsync(product.MapTo<ProductCreateDto>(_mapper));
         }
 
-        /*
-         * todo Anton
-         * Добавить async в название метода
-         */
         [HttpPut]
-        public async Task UpdateProduct(VmProductUpdate product)
+        public async Task UpdateProductAsync(VmProductUpdate product)
         {
             await _productService.UpdateProductAsync(product.MapTo<ProductUpdateDto>(_mapper));
         }
 
-        /*
-         * todo Anton
-         * Добавить async в название метода
-         */
         [HttpDelete]
-        public async Task RemoveProduct(Guid productId)
+        public async Task RemoveProductAsync(Guid productId)
         {
             await _productService.RemoveProductAsync(productId);
         }
 
-        /*
-         * todo Anton
-         * Добавить async в название метода
-         * Переименовать в метод GetProductItemsAsync
-         */
         [HttpGet]
-        public async Task<ICollection<VmProduct>> ProductsByOrganization(Guid organizationId)
+        public async Task<ICollection<VmProduct>> GetProductItemsAsync(Guid organizationId)
         {
             return (await _productService.GetProductsByOrganizationAsync(organizationId)).MapTo<ICollection<VmProduct>>(_mapper);
         }
 
-        /*
-         * todo Anton
-         * Добавить async в название метода
-         * Переименовать в метод GetProductAsync
-         */
         [HttpGet("{id}")]
-        public async Task<VmProduct> ProductById([FromRoute] Guid id)
+        public async Task<VmProduct> GetProductAsync([FromRoute] Guid id)
         {
             return (await _productService.GetProductAsync(id)).MapTo<VmProduct>(_mapper);
         }

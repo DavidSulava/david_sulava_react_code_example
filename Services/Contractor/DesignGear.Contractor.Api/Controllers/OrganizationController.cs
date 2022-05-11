@@ -22,21 +22,14 @@ namespace DesignGear.Contractor.Api.Controllers
             _mapper = mapper;
         }
 
-        /*
-         * todo Anton добавить async в конце
-         */
         [HttpPost]
-        public async Task<Guid> CreateOrganization(VmOrganizationCreate organization)
+        public async Task<Guid> CreateOrganizationAsync(VmOrganizationCreate organization)
         {
             return await _organizationService.CreateOrganizationAsync(organization.MapTo<OrganizationCreateDto>(_mapper));
         }
 
-        /*
-         * todo Anton [HttpGet]
-         * Метод лучше назвать GetOrganizationsAsync
-         */
         [HttpGet("byuser")]
-        public async Task<ICollection<VmOrganization>> OrganizationsByUser(Guid userId)
+        public async Task<ICollection<VmOrganization>> GetOrganizationsAsync(Guid userId)
         {
             return (await _organizationService.GetOrganizationsByUserAsync(userId)).MapTo<ICollection<VmOrganization>>(_mapper);
         }
