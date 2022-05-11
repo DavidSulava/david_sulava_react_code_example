@@ -50,7 +50,7 @@ namespace DesignGear.ConfigManager.Api.Controllers {
         public ICollection<VmComponentParameterDefinitions> ChildComponents { get; set; }
     }
 
-    public class ConfigurationController : ControllerBase {
+    /*public class ConfigurationController : ControllerBase {
         public ConfigurationController() {
 
         }
@@ -85,5 +85,5 @@ namespace DesignGear.ConfigManager.Api.Controllers {
         public async Task<VmConfigurationParameters> GetComponentParameterDefinitions(Guid productVersionId) {
 
         }
-    }
+    }*/
 }
