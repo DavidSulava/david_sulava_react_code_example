@@ -21,6 +21,11 @@ namespace DesignGear.Contractor.Api.Controllers
             _mapper = mapper;
         }
 
+        /*
+         * todo Anton
+         * Добавить async в название метода
+         * Переименовать метод в GetTariffListAsync
+         */
         [HttpGet]
         public async Task<ICollection<VmTariff>> TariffList()
         {

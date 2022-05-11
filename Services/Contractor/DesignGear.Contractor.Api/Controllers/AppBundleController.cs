@@ -21,6 +21,10 @@ namespace DesignGear.Contractor.Api.Controllers
             _mapper = mapper;
         }
 
+        /*
+         * todo Anton
+         * Добавить async в название метода
+         */
         [HttpGet]
         public async Task<ICollection<VmAppBundle>> AppBundleList()
         {

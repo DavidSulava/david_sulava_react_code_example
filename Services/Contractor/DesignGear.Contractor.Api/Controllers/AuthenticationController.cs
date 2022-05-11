@@ -20,6 +20,10 @@ namespace DesignGear.Contractor.Api.Controllers
             _mapper = mapper;
         }
 
+        /*
+         * todo Anton добавить async в название метода
+         */
+
         //todo Anton тут можно указать сваггеру какие типы (AuthenticateResponseModel) может возвращать метод,
         //чтобы сваггер это задокументировал и фронтдендер видел эту информацию. Вроде есть како-йто атрибут для этого
         [HttpPost]

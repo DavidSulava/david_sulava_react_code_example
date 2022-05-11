@@ -19,6 +19,11 @@ namespace DesignGear.Contractor.Api.Controllers
             _userService = userService;
             _mapper = mapper;
         }
+
+        /*
+         * todo Anton
+         * Добавить async в название метода
+         */
         [HttpPost]
         public async Task<IActionResult> CreateUser(VmUserCreate user)
         {
