@@ -3,15 +3,18 @@ using DesignGear.Contracts.Models.ConfigManager;
 
 namespace DesignGear.ConfigManager.Api.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class ConfigurationController : ControllerBase
     {
-        public ConfigurationController() {
+        public ConfigurationController()
+        {
 
         }
 
         [HttpPost]
-        public async Task CreateConfigurationAsync(VmConfigurationCreate create) {
-
+        public async Task CreateConfigurationAsync([FromRoute] VmConfigurationCreate create) {
+            var a = 1;
         }
 
         [HttpGet]

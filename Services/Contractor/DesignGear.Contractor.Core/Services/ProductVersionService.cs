@@ -37,7 +37,7 @@ namespace DesignGear.Contractor.Core.Services
 
             var newItem = _mapper.Map<ProductVersion>(create);
 
-            var modelFile = ParseModelFile(newItem.Id, create.ModelFile);
+            /*var modelFile = ParseModelFile(newItem.Id, create.ModelFile);
             if (modelFile != null)
             {
                 _dataAccessor.Editor.Create(modelFile.Configuration);
@@ -48,13 +48,16 @@ namespace DesignGear.Contractor.Core.Services
 
             await SaveImageFilesAsync(newItem.Id, create.ImageFiles);
             if (modelFile != null)
-                await SaveModelFileAsync(newItem.Id, modelFile.Configuration.Id, create.ModelFile);
+                await SaveModelFileAsync(newItem.Id, modelFile.Configuration.Id, create.ModelFile);*/
 
 
 
             var request = _mapper.Map<CreateConfigurationRequest>(create);
+            request.ProductVersionId = newItem.Id;
+            var product = await _dataAccessor.Reader.Products.FirstOrDefaultAsync(x => x.Id == create.ProductId);
+            request.OrganizationId = product?.OrganizationId ?? Guid.Empty;
 
-            await _configManagerService.CreateConfigurationAsync(request, create.ModelFile);
+            await _configManagerService.CreateConfigurationAsync(request);
 
             return newItem.Id;
         }

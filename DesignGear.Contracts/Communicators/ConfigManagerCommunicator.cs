@@ -37,11 +37,14 @@ namespace DesignGear.Contracts.Communicators
             return await message.Content.ReadAsStringAsync();
         }
 
-        public async Task CreateConfigurationAsync(CreateConfigurationRequest create, AttachmentDto attachment)
+        public async Task CreateConfigurationAsync(CreateConfigurationRequest create)
         {
             var content = new MultipartFormDataContent();
-            content.Add(new StringContent(JsonConvert.SerializeObject(create)), "Configuration");
-            content.Add(new StreamContent(new MemoryStream(attachment.Content)), "Attachment", attachment.FileName);
+            content.Add(new StringContent(create.OrganizationId.ToString()), "\"OrganizationId\"");
+            content.Add(new StringContent(create.ProductId.ToString()), "ProductId");
+            content.Add(new StringContent(create.ProductVersionId.ToString()), "ProductVersionId");
+            //content.Add(new StreamContent(new MemoryStream(create.ModelFile.Content)), "Attachment", create.ModelFile.FileName);
+            content.Add(new ByteArrayContent(create.ModelFile.Content), "\"ModelFile\"", create.ModelFile.FileName);
 
             var response = await _httpClient.PostAsync("https://localhost:7029/configuration", content);
             response.EnsureSuccessStatusCode();
