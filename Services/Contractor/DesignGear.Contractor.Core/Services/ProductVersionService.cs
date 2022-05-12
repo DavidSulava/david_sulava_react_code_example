@@ -9,6 +9,7 @@ using DesignGear.Common.Exceptions;
 using Microsoft.AspNetCore.StaticFiles;
 using System.IO.Compression;
 using System.Data;
+using DesignGear.Contracts.Communicators.Interfaces;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -16,13 +17,15 @@ namespace DesignGear.Contractor.Core.Services
     {
         private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
+        private readonly IConfigManagerCommunicator _configManagerService;
         private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
         private readonly string _designGearPackageFileName = "DesignGearPackageContents.json";
 
-        public ProductVersionService(IMapper mapper, DataAccessor dataAccessor)
+        public ProductVersionService(IMapper mapper, DataAccessor dataAccessor, IConfigManagerCommunicator configManagerService)
         {
             _mapper = mapper;
             _dataAccessor = dataAccessor;
+            _configManagerService = configManagerService;
         }
 
         public async Task<Guid> CreateProductVersionAsync(ProductVersionCreateDto create)
@@ -46,6 +49,12 @@ namespace DesignGear.Contractor.Core.Services
             await SaveImageFilesAsync(newItem.Id, create.ImageFiles);
             if (modelFile != null)
                 await SaveModelFileAsync(newItem.Id, modelFile.Configuration.Id, create.ModelFile);
+
+
+
+            var request = _mapper.Map<CreateConfigurationRequest>(create);
+
+            await _configManagerService.CreateConfigurationAsync(request, create.ModelFile);
 
             return newItem.Id;
         }

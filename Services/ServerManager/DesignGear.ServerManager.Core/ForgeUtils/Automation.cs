@@ -5,7 +5,7 @@ using System.IO.Compression;
 using System.Net;
 using System.Security.Cryptography;
 
-namespace DesignGear.ConfigManager.Core.ForgeUtils
+namespace DesignGear.ServerManager.Core.ForgeUtils
 {
     public class Automation
     {

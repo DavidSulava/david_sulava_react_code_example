@@ -2,7 +2,7 @@
 using DesignGear.Contractor.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using DesignGear.Contractor.Core.Helpers;
-using DesignGear.Contracts.Models;
+using DesignGear.Contracts.Models.Contractor;
 using AutoMapper;
 using DesignGear.Common.Extensions;
 

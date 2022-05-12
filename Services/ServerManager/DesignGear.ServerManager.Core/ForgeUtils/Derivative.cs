@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using RestSharp;
-using DesignGear.ConfigManager.Core.Helpers;
+using DesignGear.ServerManager.Core.Helpers;
 using Microsoft.Extensions.Options;
 
-namespace DesignGear.ConfigManager.Core.ForgeUtils
+namespace DesignGear.ServerManager.Core.ForgeUtils
 {
     public class Derivative
     {

@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace DesignGear.ConfigManager.Core.ForgeUtils
+namespace DesignGear.ServerManager.Core.ForgeUtils
 {
     public static class ExtractSvf
     {

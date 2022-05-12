@@ -2,7 +2,7 @@
 using DesignGear.Common.Extensions;
 using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contractor.Core.Services.Interfaces;
-using DesignGear.Contracts.Models;
+using DesignGear.Contracts.Models.Contractor;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesignGear.Contractor.Api.Controllers

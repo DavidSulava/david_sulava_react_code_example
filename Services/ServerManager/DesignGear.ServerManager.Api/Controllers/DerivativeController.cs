@@ -1,8 +1,8 @@
-﻿using DesignGear.ConfigManager.Core;
-using DesignGear.ConfigManager.Core.Services.Interfaces;
+﻿using DesignGear.ServerManager.Core;
+using DesignGear.ServerManager.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DesignGear.ConfigManager.Api.Controllers
+namespace DesignGear.ServerManager.Api.Controllers
 {
     [Route("[controller]")]
 	[ApiController]

@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Models\Billing\" />
-    <Folder Include="Models\ConfigManager\" />
     <Folder Include="Models\Consumer\" />
     <Folder Include="Models\ServerManager\" />
   </ItemGroup>

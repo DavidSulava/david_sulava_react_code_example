@@ -1,9 +1,9 @@
-﻿using DesignGear.ConfigManager.Core.ForgeUtils;
-using DesignGear.ConfigManager.Core.Helpers;
-using DesignGear.ConfigManager.Core.Services.Interfaces;
+﻿using DesignGear.ServerManager.Core.ForgeUtils;
+using DesignGear.ServerManager.Core.Helpers;
+using DesignGear.ServerManager.Core.Services.Interfaces;
 using Microsoft.Extensions.Options;
 
-namespace DesignGear.ConfigManager.Core.Services
+namespace DesignGear.ServerManager.Core.Services
 {
     public class ServerManagerService : IServerManagerService
 	{

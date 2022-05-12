@@ -1,4 +1,5 @@
 ﻿using DesignGear.Contracts.Communicators.Interfaces;
+using DesignGear.Contracts.Dto;
 using Newtonsoft.Json;
 
 namespace DesignGear.Contracts.Communicators
@@ -34,6 +35,16 @@ namespace DesignGear.Contracts.Communicators
             var message = await _httpClient.GetAsync(url);
             message.EnsureSuccessStatusCode();
             return await message.Content.ReadAsStringAsync();
+        }
+
+        public async Task CreateConfigurationAsync(CreateConfigurationRequest create, AttachmentDto attachment)
+        {
+            var content = new MultipartFormDataContent();
+            content.Add(new StringContent(JsonConvert.SerializeObject(create)), "Configuration");
+            content.Add(new StreamContent(new MemoryStream(attachment.Content)), "Attachment", attachment.FileName);
+
+            var response = await _httpClient.PostAsync("https://localhost:7029/configuration", content);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

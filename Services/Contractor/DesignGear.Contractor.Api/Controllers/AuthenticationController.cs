@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DesignGear.Common.Extensions;
 using DesignGear.Contractor.Core.Services.Interfaces;
-using DesignGear.Contracts.Models;
+using DesignGear.Contracts.Models.Contractor;
 using DesignGear.Contracts.Dto;
 using Microsoft.AspNetCore.Mvc;
 

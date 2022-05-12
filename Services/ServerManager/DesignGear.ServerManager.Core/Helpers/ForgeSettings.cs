@@ -1,4 +1,4 @@
-﻿namespace DesignGear.ConfigManager.Core.Helpers
+﻿namespace DesignGear.ServerManager.Core.Helpers
 {
     public class ForgeSettings
     {

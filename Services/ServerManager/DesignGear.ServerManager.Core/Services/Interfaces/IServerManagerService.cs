@@ -1,4 +1,4 @@
-﻿namespace DesignGear.ConfigManager.Core.Services.Interfaces
+﻿namespace DesignGear.ServerManager.Core.Services.Interfaces
 {
     public interface IServerManagerService
 	{
