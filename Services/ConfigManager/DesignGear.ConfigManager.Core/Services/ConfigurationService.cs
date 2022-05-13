@@ -9,6 +9,18 @@ using DesignGear.ConfigManager.Core.Data;
 
 namespace DesignGear.ConfigManager.Core.Services
 {
+    public class ParameterValueDto {
+        public Guid ParameterDefinitionId { get; set; }
+        public string Value { get; set; }
+    }
+
+    public class ConfigurationCreateDto {
+        public Guid TemplateConfigurationId { get; set; }
+        public string Name { get; set; }
+        public ICollection<ParameterValueDto> ParameterValues { get; set; }
+    }
+
+
     public class ConfigurationService : IConfigurationService
     {
         private readonly IMapper _mapper;
@@ -23,30 +35,63 @@ namespace DesignGear.ConfigManager.Core.Services
             _configManagerCommunicator = configManagerCommunicator;
         }
 
-        public async Task<Guid> CreateConfigurationAsync(ConfigurationCreateDto create)
-        {
-            if (create == null)
-            {
-                throw new ArgumentNullException(nameof(create));
-            }
+        /*
+         * Присваиваем конфигурации статус InQueue
+         */
+        public async Task CreateConfigurationAsync(ConfigurationCreateDto create) {
 
-            /*var templateItem = await _dataAccessor.Reader.Configurations.
-                Include(x => x.ParameterDefinitions).FirstOrDefaultAsync(x => x.Id == create.TemplateConfigurationId);
-            //compare parameter definitions
-            if (templateItem.ParameterDefinitions.Where(y => create.ParameterDefinitions.Any(z => z.DisplayName == y.DisplayName)).ToList().Count !=
-                templateItem.ParameterDefinitions.Count)
-            {
-                //throw new OperationErrorException(0, "Incorrect parameter list");
         }
 
-            var newItem = _mapper.Map<Configuration>(create);
-            _dataAccessor.Editor.Create(newItem);
-            //await _dataAccessor.Editor.SaveAsync();
-            var result1 = await _configManagerCommunicator.ProcessConfigurationAsync(newItem.Id);
-            var result2 = await _configManagerCommunicator.GetSvfAsync(newItem.Id);
-            return newItem.Id;*/
-            return Guid.Empty;
+        /*
+         * Присваиваем конфигурации статус Ready
+         */
+        public async Task CreateConfigurationAsync(Stream package) {
+
         }
+
+        /*
+         * Имя файла (архива), содержащего все необходимые для инвентора данные
+         */
+        public async Task<string> CreateConfigurationRequestPackage(Guid configurationId) {
+            return "";
+        }
+
+        public async Task AddSvfAsync() {
+
+        }
+
+        /*
+         * Возвращает набор svf?
+         */
+        public async Task<Stream> GetSvfAsync(Guid configurationId) {
+            return null;
+        }
+
+
+        //public async Task<Guid> CreateConfigurationAsync(ConfigurationCreateDto create)
+        //{
+        //    if (create == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(create));
+        //    }
+
+        //    /*var templateItem = await _dataAccessor.Reader.Configurations.
+        //        Include(x => x.ParameterDefinitions).FirstOrDefaultAsync(x => x.Id == create.TemplateConfigurationId);
+        //    //compare parameter definitions
+        //    if (templateItem.ParameterDefinitions.Where(y => create.ParameterDefinitions.Any(z => z.DisplayName == y.DisplayName)).ToList().Count !=
+        //        templateItem.ParameterDefinitions.Count)
+        //    {
+        //        //throw new OperationErrorException(0, "Incorrect parameter list");
+        //}
+
+        //    var newItem = _mapper.Map<Configuration>(create);
+        //    _dataAccessor.Editor.Create(newItem);
+        //    //await _dataAccessor.Editor.SaveAsync();
+        //    var result1 = await _configManagerCommunicator.ProcessConfigurationAsync(newItem.Id);
+        //    var result2 = await _configManagerCommunicator.GetSvfAsync(newItem.Id);
+        //    return newItem.Id;*/
+        //    return Guid.Empty;
+    }
             
         /*public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update)
         {
@@ -137,5 +182,4 @@ namespace DesignGear.ConfigManager.Core.Services
             if (di.Exists)
                 di.Delete(true);
         }*/
-    }
 }
