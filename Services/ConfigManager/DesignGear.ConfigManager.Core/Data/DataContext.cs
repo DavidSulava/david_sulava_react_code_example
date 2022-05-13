@@ -47,7 +47,7 @@ namespace DesignGear.ConfigManager.Core.Data
 
         public virtual DbSet<ParameterDefinition> ParameterDefinitions { get; set; }
 
-        public virtual DbSet<ParameterValue> ParameterValue { get; set; }
+        public virtual DbSet<ParameterValue> ParameterValues { get; set; }
 
         public virtual DbSet<ValueOption> ValueOptions { get; set; }
 
