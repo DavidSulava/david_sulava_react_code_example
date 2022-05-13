@@ -8,10 +8,10 @@ namespace DesignGear.Contractor.Api.Mapping
     {
         public ConfigurationMapping()
         {
-            CreateMap<VmConfigurationCreate, ConfigurationCreateDto>(MemberList.None);
+            //CreateMap<VmConfigurationCreate, ConfigurationCreateDto>(MemberList.None);
             CreateMap<VmConfigurationUpdate, ConfigurationUpdateDto>(MemberList.None);
             CreateMap<ConfigurationDto, VmConfiguration>(MemberList.None);
-            CreateMap<ConfigurationItemDto, VmConfigurationItem>(MemberList.None);
+            //CreateMap<ConfigurationItemDto, VmConfigurationItem>(MemberList.None);
         }
     }
 }
