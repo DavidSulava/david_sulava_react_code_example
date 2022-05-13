@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using DesignGear.Contractor.Api.Config;
 using DesignGear.Contractor.Core.Data;
 using DesignGear.Contractor.Core.Helpers;
+using DesignGear.Contracts.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -44,6 +45,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+builder.Services.Configure<CommunicatorSettings>(builder.Configuration.GetSection("CommunicatorSettings"));
 
 builder.Services.AddHttpClient();
 
