@@ -2,7 +2,7 @@
 using DesignGear.Common.Extensions;
 using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contractor.Core.Services.Interfaces;
-using DesignGear.Contracts.Models;
+using DesignGear.Contracts.Models.Contractor;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesignGear.Contractor.Api.Controllers
@@ -22,7 +22,7 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ICollection<VmAppBundle>> AppBundleList()
+        public async Task<ICollection<VmAppBundle>> AppBundleListAsync()
         {
             return (await _appBundleService.GetAppBundlesAsync()).MapTo<ICollection<VmAppBundle>>(_mapper);
         }

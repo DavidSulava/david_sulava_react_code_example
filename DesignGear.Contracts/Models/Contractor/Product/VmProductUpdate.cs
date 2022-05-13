@@ -1,4 +1,4 @@
-﻿namespace DesignGear.Contracts.Models
+﻿namespace DesignGear.Contracts.Models.Contractor
 {
     public class VmProductUpdate
     {

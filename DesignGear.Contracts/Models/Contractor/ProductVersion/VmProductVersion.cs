@@ -1,4 +1,4 @@
-﻿namespace DesignGear.Contracts.Models
+﻿namespace DesignGear.Contracts.Models.Contractor
 {
     public class VmProductVersion
     {
@@ -19,8 +19,6 @@
         public Guid ProductId { get; set; }
         
         public Guid AppBundleId { get; set; }
-        
-        public string ModelFile { get; set; }
         
         public ICollection<string> ImageFiles { get; set; }
 

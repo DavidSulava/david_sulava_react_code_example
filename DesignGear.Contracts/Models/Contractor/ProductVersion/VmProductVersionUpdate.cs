@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace DesignGear.Contracts.Models
+namespace DesignGear.Contracts.Models.Contractor
 {
     public class VmProductVersionUpdate
     {

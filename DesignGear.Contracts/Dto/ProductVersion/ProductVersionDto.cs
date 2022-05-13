@@ -20,8 +20,6 @@
         
         public Guid AppBundleId { get; set; }
         
-        public string ModelFile { get; set; }
-        
         public ICollection<string> ImageFiles { get; set; }
 
         public ICollection<ConfigurationDto> Configurations { get; set; }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DesignGear.Contracts.Dto;
 using DesignGear.Contractor.Api.Extensions;
-using DesignGear.Contracts.Models;
+using DesignGear.Contracts.Models.Contractor;
 
 namespace DesignGear.Contractor.Api.Mapping
 {
