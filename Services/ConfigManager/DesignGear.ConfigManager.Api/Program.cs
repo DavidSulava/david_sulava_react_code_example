@@ -30,6 +30,22 @@ builder.Services.AddSwaggerGen();
 RecurringJob.AddOrUpdate<ConfigurationPushingJob>("Pushing configurations to inventor", (x) => x.Do(), "0 */1 * ? * *");
 RecurringJob.AddOrUpdate<ConfigurationPullingJob>("Pulling configurations from inventor", (x) => x.Do(), "0 */1 * ? * *");
 
+builder.Services.AddCors(options => {
+    options.AddDefaultPolicy(builder => {
+        builder.WithOrigins(
+            "http://localhost:3000",
+            "https://localhost:3000",
+            "http://localhost:3000/",
+            "https://localhost:3000/");
+        
+
+        builder.WithExposedHeaders("Content-Disposition");
+        builder.AllowAnyHeader();
+        builder.AllowAnyMethod();
+        builder.AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -39,6 +55,8 @@ if (app.Environment.IsDevelopment()) {
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 

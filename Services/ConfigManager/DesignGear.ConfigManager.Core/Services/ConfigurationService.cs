@@ -14,14 +14,13 @@ namespace DesignGear.ConfigManager.Core.Services
     {
         private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
-        //private readonly IConfigManagerCommunicator _configManagerCommunicator;
         private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
 
-        public ConfigurationService(IMapper mapper, DataAccessor dataAccessor/*, IConfigManagerCommunicator configManagerCommunicator*/)
+        public ConfigurationService(IMapper mapper, DataAccessor dataAccessor)
         {
             _mapper = mapper;
             _dataAccessor = dataAccessor;
-            //_configManagerCommunicator = configManagerCommunicator;
+            
         }
 
         public async Task<ICollection<ConfigurationItemDto>> GetConfigurationList() {

@@ -13,6 +13,7 @@ namespace DesignGear.ConfigManager.Core.Mapping {
             CreateMap<Configuration, ConfigurationItemDto>(MemberList.None)
                 .ForMember(x => x.ConfigurationName, m => m.MapFrom(x => x.Name))
                 .ForMember(x => x.ComponentName, m => m.MapFrom(x => x.ComponentDefinition.Name));
+            CreateMap<ConfigurationRequestDto, Configuration>(MemberList.None);
         }
     }
 }

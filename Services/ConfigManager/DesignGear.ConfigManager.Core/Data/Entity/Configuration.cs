@@ -28,6 +28,10 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
 
         public Guid ProductVersionId { get; set; }
 
+        [ForeignKey("TemplateConfiguration")]
+        public Guid? TemplateConfigurationId { get; set; }
+        public virtual Configuration TemplateConfiguration { get; set; }
+
         [ForeignKey("ComponentDefinition")]
         public Guid ComponentDefinitionId { get; set; }
         public virtual ComponentDefinition ComponentDefinition { get; set; }
