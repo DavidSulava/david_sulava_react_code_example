@@ -20,6 +20,7 @@ namespace DesignGear.ConfigManager.Api.Config
             //builder.RegisterType<ConfigManagerCommunicator>().As<IConfigManagerCommunicator>().InstancePerLifetimeScope();
 
             //services
+            builder.RegisterType<AppBundleService>().As<IAppBundleService>().InstancePerLifetimeScope();
             builder.RegisterType<ConfigurationService>().As<IConfigurationService>().InstancePerLifetimeScope();
         }
     }

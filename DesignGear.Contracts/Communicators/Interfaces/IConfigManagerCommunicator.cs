@@ -9,5 +9,7 @@ namespace DesignGear.Contracts.Communicators.Interfaces
         Task<string> GetSvfAsync(Guid id);
 
         Task CreateConfigurationAsync(CreateConfigurationRequest create);
+
+        Task<ICollection<AppBundleDto>> GetAppBundleListAsync();
     }
 }

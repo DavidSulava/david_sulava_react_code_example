@@ -6,6 +6,7 @@ namespace DesignGear.Contracts.Communicators
 {
     public class ConfigManagerCommunicator : IConfigManagerCommunicator
     {
+        private readonly string _configMgrUrl = "https://localhost:7029/";
         private readonly HttpClient _httpClient;
         //private readonly AppOptions _options;
 
@@ -15,12 +16,12 @@ namespace DesignGear.Contracts.Communicators
         }
         public async Task<string> ProcessConfigurationAsync(Guid id)
         {
-            return await SendHttpRequestAsync(string.Format("https://localhost:7029/automation/{0}", id));
+            return await SendHttpRequestAsync(string.Format($"{_configMgrUrl}automation/{0}", id));
         }
 
         public async Task<string> GetSvfAsync(Guid id)
         {
-            return await SendHttpRequestAsync(string.Format("https://localhost:7029/derivative/{0}", id));
+            return await SendHttpRequestAsync(string.Format($"{_configMgrUrl}derivative/{0}", id));
         }
 
         private async Task<T> SendHttpRequestAsync<T>(string url)
@@ -45,8 +46,13 @@ namespace DesignGear.Contracts.Communicators
             content.Add(new StringContent(create.ProductVersionId.ToString()), "\"ProductVersionId\"");
             content.Add(new ByteArrayContent(create.ModelFile.Content), "\"ModelFile\"", create.ModelFile.FileName);
 
-            var response = await _httpClient.PostAsync("https://localhost:7029/configuration", content);
+            var response = await _httpClient.PostAsync($"{ _configMgrUrl}configuration", content);
             response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<ICollection<AppBundleDto>> GetAppBundleListAsync()
+        {
+            return await SendHttpRequestAsync<ICollection<AppBundleDto>>($"{_configMgrUrl}appbundle");
         }
     }
 }
