@@ -1,11 +1,8 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using AutoMapper;
 using DesignGear.Contractor.Api.Config;
 using DesignGear.Contractor.Core.Data;
 using DesignGear.Contractor.Core.Helpers;
-using DesignGear.Contractor.Core.Services;
-using DesignGear.Contractor.Core.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -34,7 +31,7 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "bearer",
         Type = SecuritySchemeType.Http
     });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement{ 
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement{
     {
         new OpenApiSecurityScheme{
             Reference = new OpenApiReference{
@@ -47,15 +44,16 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) {
+//if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DesignGear.Common.Extensions;
 using DesignGear.Contractor.Core.Services.Interfaces;
-using DesignGear.Contracts.Models;
+using DesignGear.Contracts.Models.Contractor;
 using DesignGear.Contracts.Dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +23,7 @@ namespace DesignGear.Contractor.Api.Controllers
         //todo Anton тут можно указать сваггеру какие типы (AuthenticateResponseModel) может возвращать метод,
         //чтобы сваггер это задокументировал и фронтдендер видел эту информацию. Вроде есть како-йто атрибут для этого
         [HttpPost]
-        public async Task<IActionResult> Authenticate(VmAuthenticateRequest model)
+        public async Task<IActionResult> AuthenticateAsync(VmAuthenticateRequest model)
         {
             var response = await _authenticationService.AuthenticateAsync(model.MapTo<AuthenticateRequestDto>(_mapper));
 

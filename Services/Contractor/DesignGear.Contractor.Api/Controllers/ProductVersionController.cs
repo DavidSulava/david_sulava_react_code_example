@@ -2,7 +2,7 @@
 using DesignGear.Contractor.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using DesignGear.Contractor.Core.Helpers;
-using DesignGear.Contracts.Models;
+using DesignGear.Contracts.Models.Contractor;
 using AutoMapper;
 using DesignGear.Common.Extensions;
 
@@ -23,45 +23,33 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> CreateProductVersion([FromForm] VmProductVersionCreate create)
+        public async Task<Guid> CreateProductVersionAsync([FromForm] VmProductVersionCreate create)
         {
             return await _productVersionService.CreateProductVersionAsync(create.MapTo<ProductVersionCreateDto>(_mapper));
         }
 
         [HttpPut]
-        public async Task UpdateProductVersion([FromForm] VmProductVersionUpdate update)
+        public async Task UpdateProductVersionAsync([FromForm] VmProductVersionUpdate update)
         {
             await _productVersionService.UpdateProductVersionAsync(update.MapTo<ProductVersionUpdateDto>(_mapper));
         }
 
         [HttpDelete]
-        public async Task RemoveProductVersion(Guid id)
+        public async Task RemoveProductVersionAsync(Guid id)
         {
             await _productVersionService.RemoveProductVersionAsync(id);
         }
 
-        [HttpGet()]
-        public async Task<ICollection<VmProductVersion>> ProductVersionsByProduct(Guid productId)
+        [HttpGet]
+        public async Task<ICollection<VmProductVersion>> GetProductVersionItemsAsync(Guid productId)
         {
             return (await _productVersionService.GetProductVersionsByProductAsync(productId)).MapTo<ICollection<VmProductVersion>>(_mapper);
         }
 
         [HttpGet("{id}")]
-        public async Task<VmProductVersion> ProductVersionById([FromRoute] Guid id)
+        public async Task<VmProductVersion> ProductVersionByIdAsync([FromRoute] Guid id)
         {
             return (await _productVersionService.GetProductVersionAsync(id)).MapTo<VmProductVersion>(_mapper);
-        }
-
-        [HttpGet]
-        [Route("{id}/Model")]
-        public async Task<ActionResult> ModelFile([FromRoute] Guid id)
-        {
-            var modelFile = await _productVersionService.GetModelFileAsync(id);
-            if (modelFile == null || modelFile.Content == null)
-            {
-                return Ok();
-            }
-            return File(modelFile.Content, "application/octet-stream", modelFile.FileName);
         }
 
         [HttpGet]

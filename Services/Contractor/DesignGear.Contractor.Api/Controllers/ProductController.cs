@@ -2,7 +2,7 @@
 using DesignGear.Contractor.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using DesignGear.Contractor.Core.Helpers;
-using DesignGear.Contracts.Models;
+using DesignGear.Contracts.Models.Contractor;
 using AutoMapper;
 using DesignGear.Common.Extensions;
 
@@ -23,31 +23,31 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> CreateProduct(VmProductCreate product)
+        public async Task<Guid> CreateProductAsync(VmProductCreate product)
         {
             return await _productService.CreateProductAsync(product.MapTo<ProductCreateDto>(_mapper));
         }
 
         [HttpPut]
-        public async Task UpdateProduct(VmProductUpdate product)
+        public async Task UpdateProductAsync(VmProductUpdate product)
         {
             await _productService.UpdateProductAsync(product.MapTo<ProductUpdateDto>(_mapper));
         }
 
         [HttpDelete]
-        public async Task RemoveProduct(Guid productId)
+        public async Task RemoveProductAsync(Guid productId)
         {
             await _productService.RemoveProductAsync(productId);
         }
 
-        [HttpGet()]
-        public async Task<ICollection<VmProduct>> ProductsByOrganization(Guid organizationId)
+        [HttpGet]
+        public async Task<ICollection<VmProduct>> GetProductItemsAsync(Guid organizationId)
         {
             return (await _productService.GetProductsByOrganizationAsync(organizationId)).MapTo<ICollection<VmProduct>>(_mapper);
         }
 
         [HttpGet("{id}")]
-        public async Task<VmProduct> ProductById([FromRoute] Guid id)
+        public async Task<VmProduct> GetProductAsync([FromRoute] Guid id)
         {
             return (await _productService.GetProductAsync(id)).MapTo<VmProduct>(_mapper);
         }

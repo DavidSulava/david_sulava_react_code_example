@@ -2,7 +2,7 @@
 using DesignGear.Contractor.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using DesignGear.Contractor.Core.Helpers;
-using DesignGear.Contracts.Models;
+using DesignGear.Contracts.Models.Contractor;
 using AutoMapper;
 using DesignGear.Common.Extensions;
 
@@ -23,13 +23,13 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> CreateOrganization(VmOrganizationCreate organization)
+        public async Task<Guid> CreateOrganizationAsync(VmOrganizationCreate organization)
         {
             return await _organizationService.CreateOrganizationAsync(organization.MapTo<OrganizationCreateDto>(_mapper));
         }
 
         [HttpGet("byuser")]
-        public async Task<ICollection<VmOrganization>> OrganizationsByUser(Guid userId)
+        public async Task<ICollection<VmOrganization>> GetOrganizationsAsync(Guid userId)
         {
             return (await _organizationService.GetOrganizationsByUserAsync(userId)).MapTo<ICollection<VmOrganization>>(_mapper);
         }

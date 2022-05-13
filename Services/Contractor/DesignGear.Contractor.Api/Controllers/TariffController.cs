@@ -2,7 +2,7 @@
 using DesignGear.Common.Extensions;
 using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contractor.Core.Services.Interfaces;
-using DesignGear.Contracts.Models;
+using DesignGear.Contracts.Models.Contractor;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesignGear.Contractor.Api.Controllers
@@ -22,7 +22,7 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ICollection<VmTariff>> TariffList()
+        public async Task<ICollection<VmTariff>> GetTariffListAsync()
         {
             return (await _tariffService.GetTariffsAsync()).MapTo<ICollection<VmTariff>>(_mapper);
         }

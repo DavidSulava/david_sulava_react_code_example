@@ -2,7 +2,7 @@
 using DesignGear.Common.Extensions;
 using DesignGear.Contractor.Core.Services.Interfaces;
 using DesignGear.Contracts.Dto;
-using DesignGear.Contracts.Models;
+using DesignGear.Contracts.Models.Contractor;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesignGear.Contractor.Api.Controllers
@@ -19,8 +19,9 @@ namespace DesignGear.Contractor.Api.Controllers
             _userService = userService;
             _mapper = mapper;
         }
+
         [HttpPost]
-        public async Task<IActionResult> CreateUser(VmUserCreate user)
+        public async Task<IActionResult> CreateUserAsync(VmUserCreate user)
         {
             var response = await _userService.CreateUserAsync(user.MapTo<UserCreateDto>(_mapper));
 

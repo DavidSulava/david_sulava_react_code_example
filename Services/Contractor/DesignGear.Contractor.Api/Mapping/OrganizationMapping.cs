@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DesignGear.Contracts.Dto;
-using DesignGear.Contracts.Models;
+using DesignGear.Contracts.Models.Contractor;
 
 namespace DesignGear.Contractor.Api.Mapping
 {

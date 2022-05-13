@@ -10,7 +10,7 @@ namespace DesignGear.Contractor.Core.Mapping
         public ConfigurationMapping()
         {
             CreateMap<Configuration, ConfigurationDto>(MemberList.None);
-            CreateMap<ConfigurationCreateDto, Configuration>(MemberList.None);
+           // CreateMap<ConfigurationCreateDto, Configuration>(MemberList.None);
             CreateMap<ConfigurationUpdateDto, Configuration>(MemberList.None);
             CreateMap<DesignGearModelPackage.ConfigurationRow, Configuration>(MemberList.None)
                 .ForMember(x => x.Id, m => m.MapFrom(z => Guid.NewGuid()))
