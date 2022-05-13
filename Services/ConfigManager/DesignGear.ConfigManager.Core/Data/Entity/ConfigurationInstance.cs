@@ -17,6 +17,7 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         public Guid? ParentConfigurationId { get; set; }
         public virtual Configuration? ParentConfiguration { get; set; }
 
+        //todo Anton - Координаты и повороты имеют тип float
         public int X { get; set; }
         public int Y { get; set; }
         public int Z { get; set; }

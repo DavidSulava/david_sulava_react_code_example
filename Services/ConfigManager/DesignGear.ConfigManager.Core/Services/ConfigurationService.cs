@@ -37,7 +37,7 @@ namespace DesignGear.ConfigManager.Core.Services
                 templateItem.ParameterDefinitions.Count)
             {
                 //throw new OperationErrorException(0, "Incorrect parameter list");
-            }
+        }
 
             var newItem = _mapper.Map<Configuration>(create);
             _dataAccessor.Editor.Create(newItem);
@@ -47,13 +47,13 @@ namespace DesignGear.ConfigManager.Core.Services
             return newItem.Id;*/
             return Guid.Empty;
         }
-
+            
         /*public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update)
         {
             if (update == null)
             {
                 throw new ArgumentNullException(nameof(update));
-            }
+        }
 
             var item = await _dataAccessor.Editor.Configurations.FirstOrDefaultAsync(x => x.Id == update.Id);
             if (item == null)
@@ -90,7 +90,7 @@ namespace DesignGear.ConfigManager.Core.Services
             if (result == null)
             {
                 throw new EntityNotFoundException<Configuration>(id);
-            }
+        }
 
             result.ModelFile = GetModelFileName(result.ProductVersionId, id);
 
@@ -113,7 +113,7 @@ namespace DesignGear.ConfigManager.Core.Services
                 var file = di.EnumerateFiles().FirstOrDefault();
                 if (file != null)
                     return await GetFileAsync(file);
-            }
+        }
 
             return null;
         }

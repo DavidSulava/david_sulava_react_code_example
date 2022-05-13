@@ -1,5 +1,6 @@
 ﻿using DesignGear.Common.Enums;
 using DesignGear.ConfigManager.Core.Data.Interfaces;
+using DesignGear.Contracts.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,6 +10,8 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+        public ConfigurationStatus Status { get; set; }
+        public SvfStatus SvfStatus { get; set; }
 
         [StringLength(300)]
         public string Name { get; set; }
