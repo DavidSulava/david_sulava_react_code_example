@@ -24,8 +24,13 @@ namespace DesignGear.ConfigManager.Core.Services
             //_configManagerCommunicator = configManagerCommunicator;
         }
 
-        public async Task<ConfigurationItemDto> GetConfigurationList() {
+        public async Task<ICollection<ConfigurationItemDto>> GetConfigurationList() {
+            var items = await _dataAccessor.Reader.Configurations
+                .Where(x => x.ComponentDefinition.ParentComponentDefinitionId == null)
+                .ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
 
+            return items;
         }
 
         /*
