@@ -24,6 +24,10 @@ namespace DesignGear.ConfigManager.Core.Services
             //_configManagerCommunicator = configManagerCommunicator;
         }
 
+        public async Task<ConfigurationItemDto> GetConfigurationList() {
+
+        }
+
         /*
          * Создаем новую конфигурацию и присваиваем конфигурации статус InQueue
          */
