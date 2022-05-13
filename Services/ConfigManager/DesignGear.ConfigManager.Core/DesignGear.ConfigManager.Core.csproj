@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\DesignGear.Common\DesignGear.Common.csproj" />
+    <ProjectReference Include="..\..\..\DesignGear.Contracts\DesignGear.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
