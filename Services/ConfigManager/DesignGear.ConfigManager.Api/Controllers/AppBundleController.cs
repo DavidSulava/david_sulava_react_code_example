@@ -21,7 +21,7 @@ namespace DesignGear.ConfigManager.Api.Controllers {
 
         [HttpGet]
         public async Task<ICollection<VmAppBundleItem>> GetAppBundleListAsync() {
-            
+            return null;
         }
     }
 }

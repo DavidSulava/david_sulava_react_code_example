@@ -51,6 +51,8 @@ namespace DesignGear.ConfigManager.Core.Data
 
         public virtual DbSet<ValueOption> ValueOptions { get; set; }
 
+        public virtual DbSet<ConfigurationFile> ConfigurationFiles { get; set; }
+
         private void BeforeSaveChanges()
         {
             var milliseconds = 0;
