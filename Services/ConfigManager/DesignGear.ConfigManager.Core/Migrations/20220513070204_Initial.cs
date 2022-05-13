@@ -115,7 +115,8 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         name: "FK_ConfigurationInstances_Configurations_ConfigurationId",
                         column: x => x.ConfigurationId,
                         principalTable: "Configurations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ConfigurationInstances_Configurations_ParentConfigurationId",
                         column: x => x.ParentConfigurationId,
@@ -140,13 +141,13 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         column: x => x.ConfigurationId,
                         principalTable: "Configurations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ParameterValue_ParameterDefinitions_ParameterDefinitionId",
                         column: x => x.ParameterDefinitionId,
                         principalTable: "ParameterDefinitions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

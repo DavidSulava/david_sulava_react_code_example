@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using DesignGear.Contractor.Core.Data;
-using DesignGear.Contractor.Core.Data.Entity;
 using DesignGear.Contractor.Core.Services;
 using DesignGear.Contractor.Core.Services.Interfaces;
 using DesignGear.Contracts.Communicators;

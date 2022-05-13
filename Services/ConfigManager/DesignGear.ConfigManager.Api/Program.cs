@@ -1,4 +1,22 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using DesignGear.ConfigManager.Api.Config;
+using DesignGear.ConfigManager.Core.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddDbContext<DataContext>(
+    options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+    .ConfigureContainer<ContainerBuilder>(builder =>
+    {
+        builder.RegisterModule(new AutofacModule());
+    });
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Add services to the container.
 

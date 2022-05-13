@@ -24,15 +24,15 @@ namespace DesignGear.ConfigManager.Core.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Configuration>()
-                .HasMany(x => x.ConfigurationInstances)
-                .WithOne(y => y.Configuration)
-                .IsRequired(false);
+            modelBuilder.Entity<ParameterValue>()
+                .HasOne(x => x.Configuration)
+                .WithMany(y => y.ParameterValues)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Configuration>()
-                .HasMany(x => x.ParentConfigurationInstances)
-                .WithOne(y => y.ParentConfiguration)
-                .IsRequired(false);
+            modelBuilder.Entity<ParameterValue>()
+                .HasOne(x => x.ParameterDefinition)
+                .WithMany(y => y.ParameterValues)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //base.OnModelCreating(modelBuilder);
         }

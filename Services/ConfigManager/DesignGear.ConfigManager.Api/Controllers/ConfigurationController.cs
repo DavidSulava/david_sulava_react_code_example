@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DesignGear.Contracts.Models.ConfigManager;
+using DesignGear.ConfigManager.Core.Services.Interfaces;
+using AutoMapper;
+using DesignGear.Contracts.Dto;
 
 namespace DesignGear.ConfigManager.Api.Controllers
 {
@@ -7,14 +10,19 @@ namespace DesignGear.ConfigManager.Api.Controllers
     [Route("[controller]")]
     public class ConfigurationController : ControllerBase
     {
-        public ConfigurationController()
-        {
+        private readonly IConfigurationService _configurationService;
+        private readonly IMapper _mapper;
 
+        public ConfigurationController(IConfigurationService configurationService, IMapper mapper)
+        {
+            _configurationService = configurationService;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task CreateConfigurationAsync([FromRoute] VmConfigurationCreate create) {
-            var a = 1;
+        public async Task CreateConfigurationAsync([FromForm] VmConfigurationCreate create)
+        {
+            //return null;// await _configurationService.CreateConfigurationAsync(create.MapTo<ConfigurationCreateDto>(_mapper));
         }
 
         [HttpGet]

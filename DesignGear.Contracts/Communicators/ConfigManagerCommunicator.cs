@@ -41,9 +41,8 @@ namespace DesignGear.Contracts.Communicators
         {
             var content = new MultipartFormDataContent();
             content.Add(new StringContent(create.OrganizationId.ToString()), "\"OrganizationId\"");
-            content.Add(new StringContent(create.ProductId.ToString()), "ProductId");
-            content.Add(new StringContent(create.ProductVersionId.ToString()), "ProductVersionId");
-            //content.Add(new StreamContent(new MemoryStream(create.ModelFile.Content)), "Attachment", create.ModelFile.FileName);
+            content.Add(new StringContent(create.ProductId.ToString()), "\"ProductId\"");
+            content.Add(new StringContent(create.ProductVersionId.ToString()), "\"ProductVersionId\"");
             content.Add(new ByteArrayContent(create.ModelFile.Content), "\"ModelFile\"", create.ModelFile.FileName);
 
             var response = await _httpClient.PostAsync("https://localhost:7029/configuration", content);

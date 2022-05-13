@@ -220,10 +220,12 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ConfigurationId")
+                    b.Property<Guid?>("ConfigurationId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ParameterDefinitionId")
+                    b.Property<Guid?>("ParameterDefinitionId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Value")
@@ -275,7 +277,9 @@ namespace DesignGear.ConfigManager.Core.Migrations
                 {
                     b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "Configuration")
                         .WithMany("ConfigurationInstances")
-                        .HasForeignKey("ConfigurationId");
+                        .HasForeignKey("ConfigurationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "ParentConfiguration")
                         .WithMany("ParentConfigurationInstances")
@@ -302,13 +306,13 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "Configuration")
                         .WithMany("ParameterValues")
                         .HasForeignKey("ConfigurationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.ParameterDefinition", "ParameterDefinition")
                         .WithMany("ParameterValues")
                         .HasForeignKey("ParameterDefinitionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Configuration");

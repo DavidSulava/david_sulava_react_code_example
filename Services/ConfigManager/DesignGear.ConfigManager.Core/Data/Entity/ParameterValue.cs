@@ -13,11 +13,11 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         public string Value { get; set; }
 
         [ForeignKey("ParameterDefinition")]
-        public Guid ParameterDefinitionId { get; set; }
+        public Guid? ParameterDefinitionId { get; set; }
         public virtual ParameterDefinition ParameterDefinition { get; set; }
 
         [ForeignKey("Configuration")]
-        public Guid ConfigurationId { get; set; }
+        public Guid? ConfigurationId { get; set; }
         public virtual Configuration Configuration { get; set; }
     }
 }
