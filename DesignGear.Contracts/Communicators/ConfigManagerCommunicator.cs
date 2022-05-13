@@ -38,17 +38,18 @@ namespace DesignGear.Contracts.Communicators
             return await message.Content.ReadAsStringAsync();
         }
 
-        public async Task CreateConfigurationAsync(CreateConfigurationRequest create)
-        {
-            var content = new MultipartFormDataContent();
-            content.Add(new StringContent(create.OrganizationId.ToString()), "\"OrganizationId\"");
-            content.Add(new StringContent(create.ProductId.ToString()), "\"ProductId\"");
-            content.Add(new StringContent(create.ProductVersionId.ToString()), "\"ProductVersionId\"");
-            content.Add(new ByteArrayContent(create.ModelFile.Content), "\"ModelFile\"", create.ModelFile.FileName);
+        //public async Task CreateConfigurationAsync(CreateConfigurationRequest create)
+        //{
+        //    var content = new MultipartFormDataContent();
+        //    content.Add(new StringContent(create.OrganizationId.ToString()), "\"OrganizationId\"");
+        //    content.Add(new StringContent(create.ProductId.ToString()), "\"ProductId\"");
+        //    content.Add(new StringContent(create.ProductVersionId.ToString()), "\"ProductVersionId\"");
+        //    content.Add(new ByteArrayContent(create.ModelFile.Content), "\"ModelFile\"", create.ModelFile.FileName);
 
-            var response = await _httpClient.PostAsync($"{ _configMgrUrl}configuration", content);
-            response.EnsureSuccessStatusCode();
-        }
+        //    var response = await _httpClient.PostAsync("https://localhost:7029/configuration", content);
+        //    response.EnsureSuccessStatusCode();
+        //}
+            
 
         public async Task<ICollection<AppBundleDto>> GetAppBundleListAsync()
         {

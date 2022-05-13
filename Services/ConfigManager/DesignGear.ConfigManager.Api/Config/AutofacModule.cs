@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using DesignGear.ConfigManager.Core.Data;
+using DesignGear.ConfigManager.Core.Jobs;
 using DesignGear.ConfigManager.Core.Services;
 using DesignGear.ConfigManager.Core.Services.Interfaces;
 using DesignGear.Contracts.Communicators;
@@ -22,6 +23,10 @@ namespace DesignGear.ConfigManager.Api.Config
             //services
             builder.RegisterType<AppBundleService>().As<IAppBundleService>().InstancePerLifetimeScope();
             builder.RegisterType<ConfigurationService>().As<IConfigurationService>().InstancePerLifetimeScope();
+
+            //jobs
+            builder.RegisterType<ConfigurationPushingJob>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<ConfigurationPullingJob>().AsSelf().InstancePerLifetimeScope();
         }
     }
 }

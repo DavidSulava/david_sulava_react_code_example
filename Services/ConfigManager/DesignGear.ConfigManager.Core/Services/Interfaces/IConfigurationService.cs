@@ -1,10 +1,17 @@
-﻿using DesignGear.Contracts.Dto;
+﻿using DesignGear.Contracts.Dto.ConfigManager;
 
 namespace DesignGear.ConfigManager.Core.Services.Interfaces
 {
     public interface IConfigurationService
     {
-        Task<Guid> CreateConfigurationAsync(ConfigurationCreateDto Configuration);
+        Task<ICollection<ConfigurationItemDto>> GetConfigurationList();
+        Task CreateConfigurationRequestAsync(ConfigurationRequestDto request);
+        Task CreateConfigurationAsync(ConfigurationCreateDto create);
+        Task<string> CreateConfigurationRequestPackage(Guid configurationId);
+        Task AddSvfAsync();
+        Task<Stream> GetSvfAsync(Guid configurationId);
+
+
 
         /*Task UpdateConfigurationAsync(ConfigurationUpdateDto Configuration);
 

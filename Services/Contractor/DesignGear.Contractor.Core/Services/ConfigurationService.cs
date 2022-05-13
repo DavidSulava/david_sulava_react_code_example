@@ -24,29 +24,29 @@ namespace DesignGear.Contractor.Core.Services
             _configManagerCommunicator = configManagerCommunicator;
         }
 
-        public async Task<Guid> CreateConfigurationAsync(ConfigurationCreateDto create)
-        {
-            if (create == null)
-            {
-                throw new ArgumentNullException(nameof(create));
-            }
+        //public async Task<Guid> CreateConfigurationAsync(ConfigurationCreateDto create)
+        //{
+        //    if (create == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(create));
+        //    }
 
-            var templateItem = await _dataAccessor.Reader.Configurations.
-                Include(x => x.ParameterDefinitions).FirstOrDefaultAsync(x => x.Id == create.TemplateConfigurationId);
-            //compare parameter definitions
-            if (templateItem.ParameterDefinitions.Where(y => create.ParameterDefinitions.Any(z => z.DisplayName == y.DisplayName)).ToList().Count !=
-                templateItem.ParameterDefinitions.Count)
-            {
-                //throw new OperationErrorException(0, "Incorrect parameter list");
-            }
+        //    var templateItem = await _dataAccessor.Reader.Configurations.
+        //        Include(x => x.ParameterDefinitions).FirstOrDefaultAsync(x => x.Id == create.TemplateConfigurationId);
+        //    //compare parameter definitions
+        //    if (templateItem.ParameterDefinitions.Where(y => create.ParameterDefinitions.Any(z => z.DisplayName == y.DisplayName)).ToList().Count !=
+        //        templateItem.ParameterDefinitions.Count)
+        //    {
+        //        //throw new OperationErrorException(0, "Incorrect parameter list");
+        //    }
 
-            var newItem = _mapper.Map<Configuration>(create);
-            _dataAccessor.Editor.Create(newItem);
-            //await _dataAccessor.Editor.SaveAsync();
-            var result1 = await _configManagerCommunicator.ProcessConfigurationAsync(newItem.Id);
-            var result2 = await _configManagerCommunicator.GetSvfAsync(newItem.Id);
-            return newItem.Id;
-        }
+        //    var newItem = _mapper.Map<Configuration>(create);
+        //    _dataAccessor.Editor.Create(newItem);
+        //    //await _dataAccessor.Editor.SaveAsync();
+        //    var result1 = await _configManagerCommunicator.ProcessConfigurationAsync(newItem.Id);
+        //    var result2 = await _configManagerCommunicator.GetSvfAsync(newItem.Id);
+        //    return newItem.Id;
+        //}
 
         public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update)
         {
@@ -78,11 +78,11 @@ namespace DesignGear.Contractor.Core.Services
             await _dataAccessor.Editor.SaveAsync();
         }
 
-        public async Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId)
-        {
-            return await _dataAccessor.Reader.Configurations.Where(x => x.ProductVersionId == productVersionId).
-                ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider).ToListAsync();
-        }
+        //public async Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId)
+        //{
+        //    return await _dataAccessor.Reader.Configurations.Where(x => x.ProductVersionId == productVersionId).
+        //        ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider).ToListAsync();
+        //}
 
         public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
         {

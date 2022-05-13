@@ -52,12 +52,12 @@ namespace DesignGear.Contractor.Core.Services
 
 
 
-            var request = _mapper.Map<CreateConfigurationRequest>(create);
-            request.ProductVersionId = newItem.Id;
-            var product = await _dataAccessor.Reader.Products.FirstOrDefaultAsync(x => x.Id == create.ProductId);
-            request.OrganizationId = product?.OrganizationId ?? Guid.Empty;
+            //var request = _mapper.Map<CreateConfigurationRequest>(create);
+            //request.ProductVersionId = newItem.Id;
+            //var product = await _dataAccessor.Reader.Products.FirstOrDefaultAsync(x => x.Id == create.ProductId);
+            //request.OrganizationId = product?.OrganizationId ?? Guid.Empty;
 
-            await _configManagerService.CreateConfigurationAsync(request);
+            //await _configManagerService.CreateConfigurationAsync(request);
 
             return newItem.Id;
         }

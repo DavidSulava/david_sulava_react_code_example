@@ -22,11 +22,11 @@ namespace DesignGear.Contractor.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
-        public async Task<Guid> CreateConfigurationAsync([FromForm] VmConfigurationCreate create)
-        {
-            return await _configurationService.CreateConfigurationAsync(create.MapTo<ConfigurationCreateDto>(_mapper));
-        }
+        //[HttpPost]
+        //public async Task<Guid> CreateConfigurationAsync([FromForm] VmConfigurationCreate create)
+        //{
+        //    return await _configurationService.CreateConfigurationAsync(create.MapTo<ConfigurationCreateDto>(_mapper));
+        //}
 
         [HttpPut]
         public async Task UpdateConfigurationAsync([FromForm] VmConfigurationUpdate update)
@@ -40,11 +40,11 @@ namespace DesignGear.Contractor.Api.Controllers
             await _configurationService.RemoveConfigurationAsync(id);
         }
 
-        [HttpGet]
-        public async Task<ICollection<VmConfigurationItem>> GetConfigurationItemsAsync(Guid productVersionId)
-        {
-            return (await _configurationService.GetConfigurationItemsAsync(productVersionId)).MapTo<ICollection<VmConfigurationItem>>(_mapper);
-        }
+        //[HttpGet]
+        //public async Task<ICollection<VmConfigurationItem>> GetConfigurationItemsAsync(Guid productVersionId)
+        //{
+        //    return (await _configurationService.GetConfigurationItemsAsync(productVersionId)).MapTo<ICollection<VmConfigurationItem>>(_mapper);
+        //}
 
         [HttpGet("{id}")]
         public async Task<VmConfiguration> GetConfigurationAsync([FromRoute] Guid id)
