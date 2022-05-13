@@ -6,46 +6,35 @@ using DesignGear.Common.Exceptions;
 using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.ConfigManager.Core.Services.Interfaces;
 using DesignGear.ConfigManager.Core.Data;
+using DesignGear.Contracts.Dto.ConfigManager;
 
 namespace DesignGear.ConfigManager.Core.Services
 {
-    public class ParameterValueDto {
-        public Guid ParameterDefinitionId { get; set; }
-        public string Value { get; set; }
-    }
-
-    public class ConfigurationCreateDto {
-        public Guid TemplateConfigurationId { get; set; }
-        public string Name { get; set; }
-        public ICollection<ParameterValueDto> ParameterValues { get; set; }
-    }
-
-
     public class ConfigurationService : IConfigurationService
     {
         private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
-        private readonly IConfigManagerCommunicator _configManagerCommunicator;
+        //private readonly IConfigManagerCommunicator _configManagerCommunicator;
         private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
 
-        public ConfigurationService(IMapper mapper, DataAccessor dataAccessor, IConfigManagerCommunicator configManagerCommunicator)
+        public ConfigurationService(IMapper mapper, DataAccessor dataAccessor/*, IConfigManagerCommunicator configManagerCommunicator*/)
         {
             _mapper = mapper;
             _dataAccessor = dataAccessor;
-            _configManagerCommunicator = configManagerCommunicator;
+            //_configManagerCommunicator = configManagerCommunicator;
         }
 
         /*
-         * Присваиваем конфигурации статус InQueue
+         * Создаем новую конфигурацию и присваиваем конфигурации статус InQueue
+         */
+        public async Task CreateConfigurationRequestAsync(ConfigurationRequestDto requst) {
+
+        }
+
+        /*
+         * Создаем новую конфигурацию (и если есть дочерние организации), распарсив json. Присваиваем конфигурации статус Ready
          */
         public async Task CreateConfigurationAsync(ConfigurationCreateDto create) {
-
-        }
-
-        /*
-         * Присваиваем конфигурации статус Ready
-         */
-        public async Task CreateConfigurationAsync(Stream package) {
 
         }
 
