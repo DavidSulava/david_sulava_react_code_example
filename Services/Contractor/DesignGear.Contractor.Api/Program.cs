@@ -49,6 +49,22 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
+builder.Services.AddCors(options => {
+    options.AddDefaultPolicy(builder => {
+        builder.WithOrigins(
+            "http://localhost:3000",
+            "https://localhost:3000",
+            "http://localhost:3000/",
+            "https://localhost:3000/");
+
+
+        builder.WithExposedHeaders("Content-Disposition");
+        builder.AllowAnyHeader();
+        builder.AllowAnyMethod();
+        builder.AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -58,6 +74,8 @@ if (app.Environment.IsDevelopment()) {
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseMiddleware<JwtMiddleware>();
 
