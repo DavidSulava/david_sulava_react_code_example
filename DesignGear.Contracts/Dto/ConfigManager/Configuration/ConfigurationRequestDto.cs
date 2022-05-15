@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 namespace DesignGear.Contracts.Dto.ConfigManager {
     public class ConfigurationRequestDto {
         public Guid TemplateConfigurationId { get; set; }
+        public Guid ComponentDefinitionId { get; set; }
+        public Guid AppBundleId { get; set; }
         public string Name { get; set; }
+        public string Comment { get; set; }
         public ICollection<ParameterValueDto> ParameterValues { get; set; }
     }
 }

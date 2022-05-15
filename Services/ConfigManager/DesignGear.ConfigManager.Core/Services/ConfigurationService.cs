@@ -7,6 +7,9 @@ using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.ConfigManager.Core.Services.Interfaces;
 using DesignGear.ConfigManager.Core.Data;
 using DesignGear.Contracts.Dto.ConfigManager;
+using DesignGear.ConfigManager.Core.Data.Entity;
+using Newtonsoft.Json;
+using DesignGear.ModelPackage;
 
 namespace DesignGear.ConfigManager.Core.Services
 {
@@ -20,7 +23,6 @@ namespace DesignGear.ConfigManager.Core.Services
         {
             _mapper = mapper;
             _dataAccessor = dataAccessor;
-            
         }
 
         public async Task<ICollection<ConfigurationItemDto>> GetConfigurationList() {
@@ -32,17 +34,17 @@ namespace DesignGear.ConfigManager.Core.Services
             return items;
         }
 
-        /*
-         * Создаем новую конфигурацию и присваиваем конфигурации статус InQueue
-         */
-        public async Task CreateConfigurationRequestAsync(ConfigurationRequestDto requst) {
-
+        public async Task CreateConfigurationRequestAsync(ConfigurationRequestDto request) {
+            var newConfiguration = _mapper.Map<Configuration>(request);
+            await _dataAccessor.Editor.CreateAsync(newConfiguration);
+            await _dataAccessor.Editor.SaveAsync();
         }
 
         /*
          * Создаем новую конфигурацию (и если есть дочерние организации), распарсив json. Присваиваем конфигурации статус Ready
          */
         public async Task CreateConfigurationAsync(ConfigurationCreateDto create) {
+            var model = JsonConvert.DeserializeObject<DesignGearModelPackage>(create.);
 
         }
 

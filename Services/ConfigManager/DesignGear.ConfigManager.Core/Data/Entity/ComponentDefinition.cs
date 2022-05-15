@@ -11,6 +11,11 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
 
         [StringLength(300)]
         public string Name { get; set; }
+        public Guid OrganizationId { get; set; }
+
+        public Guid ProductId { get; set; }
+
+        public Guid ProductVersionId { get; set; }
 
         public Guid TemplateConfigurationId { get; set; }
         public Guid? ParentComponentDefinitionId { get; set; }

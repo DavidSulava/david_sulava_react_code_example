@@ -22,13 +22,7 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
 
         public Guid TargetFileId { get; set; }
 
-        public Guid OrganizationId { get; set; }
-
-        public Guid ProductId { get; set; }
-
-        public Guid ProductVersionId { get; set; }
-
-        [ForeignKey("TemplateConfiguration")]
+       [ForeignKey("TemplateConfiguration")]
         public Guid? TemplateConfigurationId { get; set; }
         public virtual Configuration TemplateConfiguration { get; set; }
 

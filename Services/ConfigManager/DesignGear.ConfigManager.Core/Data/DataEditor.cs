@@ -28,6 +28,11 @@ namespace DesignGear.ConfigManager.Core.Data
             _context.Set<T>().Add(entity);
         }
 
+        public async Task CreateAsync<T>(T entity) where T : class {
+            await _context.Set<T>().AddAsync(entity);
+        }
+
+
         public void Delete<T>(T entity)
         {
             _context.Remove(entity);
