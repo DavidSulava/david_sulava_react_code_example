@@ -6,7 +6,8 @@ using DesignGear.ConfigManager.Core.Jobs;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args); 
+builder.Configuration.AddJsonFile($"appsettings.Local.json", optional: true);
 
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>(

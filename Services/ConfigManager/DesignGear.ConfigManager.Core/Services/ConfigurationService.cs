@@ -10,7 +10,6 @@ using DesignGear.ConfigManager.Core.Data.Entity;
 using Newtonsoft.Json;
 using DesignGear.ModelPackage;
 using DesignGear.ConfigManager.Core.Storage.Interfaces;
-using DesignGear.Contracts.Dto.ConfigManager.Configuration;
 using DesignGear.Common.Extensions;
 using DesignGear.Contracts.Enums;
 
@@ -21,7 +20,6 @@ namespace DesignGear.ConfigManager.Core.Services
         private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
         private readonly IConfigurationFileStorage _configurationFileStorage;
-        //private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
 
         public ConfigurationService(IMapper mapper, 
             DataAccessor dataAccessor, 
@@ -34,13 +32,16 @@ namespace DesignGear.ConfigManager.Core.Services
 
         public async Task<ICollection<ConfigurationItemDto>> GetConfigurationList() {
             var items = await _dataAccessor.Reader.Configurations
-                .Where(x => x.ComponentDefinition.ParentComponentDefinitionId == null)
+                .Where(x => x.ParentConfigurationId == null)
                 .ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return items;
         }
 
+        /*
+         * Создаем заявку на конфигурацию. Т.е. создается конфигурация со статусом InQueue
+         */
         public async Task CreateConfigurationRequestAsync(ConfigurationRequestDto request) {
             var newConfiguration = _mapper.Map<Configuration>(request);
             await _dataAccessor.Editor.CreateAsync(newConfiguration);
@@ -48,49 +49,94 @@ namespace DesignGear.ConfigManager.Core.Services
         }
 
         /*
-         * Создаем новую конфигурацию (и если есть дочерние организации), распарсив json. Присваиваем конфигурации статус Ready
+         * Создаем новую конфигурацию (и дочерние если есть) из пакета. Сразу присваиваем конфигурации статус Ready
+         * Svf при этом у нас отсутствует и его нужно сформировать. Для этого присваивается соответствующий статус
          * todo - создание записи в БД и папки с файлами должно быть в рамках транзакции
          */
-        public async Task CreateConfigurationAsync(ConfigurationCreateDto create) {
-            var configurationId = Guid.NewGuid();
+        public async Task CreateConfigurationFromPackageAsync(ConfigurationCreateDto create) {
+            /*
+             * Распаковываем пакет и кладем его в хранилище
+             * Заранее формируем id конфигурации, т.к. хранилище должно его знать
+             */
+            var rootConfigurationId = Guid.NewGuid();
             var model = await _configurationFileStorage.SaveConfigurationPackageAsync(new ConfigurationPackageDto {
                 ProductVersionId = create.ProductVersionId,
-                ConfigurationId = configurationId,
+                ConfigurationId = rootConfigurationId,
                 ConfigurationPackage = create.ConfigurationPackage
             });
-            var configuration = model.MapTo<Configuration>(_mapper);
-            _mapper.Map(create, configuration);
-            configuration.Id = configurationId;
+
+            /* todo
+             * Необходимо проверять, не существуют ли уже в БД ComponentDefinition, которые есть внутри нового Configuration
+             * Проверять можно по UniqueId
+             */
+            var configurations = model.MapTo<ICollection<Configuration>>(_mapper);
+            foreach(var configuration in configurations) {
+                _mapper.Map(create, configuration);
+                if (configuration.ParentConfigurationId == null) {
+                    configuration.Id = rootConfigurationId;
+                } 
+                configuration.Status = ConfigurationStatus.Ready;
+                configuration.SvfStatus = SvfStatus.InQueue;
+                await _dataAccessor.Editor.CreateAsync(configuration);
+            }
+
+            /* todo
+             * Добавить в базу эмэилы для уведомления подписчиков, когда будет сформирован svf
+             */
             
-            await _dataAccessor.Editor.CreateAsync(configuration);
             await _dataAccessor.Editor.SaveAsync();
         }
 
+        /*
+         * Данный метод выполняется когда конфигурация перерасчитана и ее нужно сохранить
+         * При этом учитываем, что запись корневой кофигурации была создана ранее как заявка
+         */
         public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update) {
-            var configuration = await _dataAccessor.Editor.Configurations
+            /*
+             * Получаем из базы корневую конфигурацию (заявку)
+             */
+            var rootConfiguration = await _dataAccessor.Editor.Configurations
                 .Include(x => x.TemplateConfiguration)
                     .ThenInclude(x => x.ComponentDefinition)
                 .FirstOrDefaultAsync(x => x.Id == update.ConfigurationId);
-            if (configuration == null) {
+            if (rootConfiguration == null) {
                 throw new EntityNotFoundException<Configuration>(update.ConfigurationId);
             }
 
+            /*
+             *  Распаковываем пакет и кладем его в хранилище
+             */
             var model = await _configurationFileStorage.SaveConfigurationPackageAsync(new ConfigurationPackageDto {
-                ProductVersionId = configuration.TemplateConfiguration.ComponentDefinition.ProductVersionId,
+                ProductVersionId = rootConfiguration.ProductVersionId,
                 ConfigurationId = update.ConfigurationId,
                 ConfigurationPackage = update.ConfigurationPackage,
             });
-            
-            _mapper.Map(model, configuration);
-            _mapper.Map(update, configuration);
+
+            /*
+             * todo Обновляем базу, обновляя корневую конфигурацию, добавляя дочерние кофигурации, 
+             * добавляя ComponentDefinition (если такового нет), ParameterDefinition
+             */
+
+            var configurations = model.MapTo<ICollection<Configuration>>(_mapper);
+            foreach (var configuration in configurations) {
+                if (configuration.ParentConfigurationId == null) {
+                    _mapper.Map(configuration, rootConfiguration);
+                } else {
+                    await _dataAccessor.Editor.CreateAsync(configuration);                    
+                }
+            }
 
             await _dataAccessor.Editor.SaveAsync();
+
+            /*
+             * todo Уведомляем подписчиков по email о том, что конфигурация перерасчитана
+             */
         }
 
         /*
          * Имя файла (архива), содержащего все необходимые для инвентора данные
          */
-        public async Task<string> CreateConfigurationRequestPackage(Guid configurationId) {
+        public async Task<Stream> CreateConfigurationRequestPackage(Guid configurationId) {
             return "";
         }
 

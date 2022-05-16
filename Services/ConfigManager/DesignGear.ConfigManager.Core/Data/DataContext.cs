@@ -24,15 +24,15 @@ namespace DesignGear.ConfigManager.Core.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ParameterValue>()
-                .HasOne(x => x.Configuration)
-                .WithMany(y => y.ParameterValues)
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<ParameterValue>()
+            //    .HasOne(x => x.Configuration)
+            //    .WithMany(y => y.ParameterValues)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<ParameterValue>()
-                .HasOne(x => x.ParameterDefinition)
-                .WithMany(y => y.ParameterValues)
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<ParameterValue>()
+            //    .HasOne(x => x.ParameterDefinition)
+            //    .WithMany(y => y.ParameterValues)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             //base.OnModelCreating(modelBuilder);
         }
@@ -43,15 +43,11 @@ namespace DesignGear.ConfigManager.Core.Data
 
         public virtual DbSet<Configuration> Configurations { get; set; }
 
-        public virtual DbSet<ConfigurationInstance> ConfigurationInstances { get; set; }
-
         public virtual DbSet<ParameterDefinition> ParameterDefinitions { get; set; }
-
-        public virtual DbSet<ParameterValue> ParameterValue { get; set; }
 
         public virtual DbSet<ValueOption> ValueOptions { get; set; }
 
-        public virtual DbSet<ConfigurationFile> ConfigurationFiles { get; set; }
+        public virtual DbSet<ConfigurationRequestParameter> ConfigurationRequestParameters { get; set; }
 
         private void BeforeSaveChanges()
         {

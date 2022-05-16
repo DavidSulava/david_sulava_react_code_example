@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesignGear.ConfigManager.Core.Data.Entity
 {
-    public class ValueOption : IGenerateUid
+    public class ValueOption : IGenerateUid, ICreated
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
@@ -14,5 +14,7 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         [ForeignKey("ParameterDefinition")]
         public Guid ParameterDefinitionId { get; set; }
         public virtual ParameterDefinition ParameterDefinition { get; set; }
+
+        public DateTime Created { get; set; }
     }
 }

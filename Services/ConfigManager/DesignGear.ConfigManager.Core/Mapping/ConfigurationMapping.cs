@@ -19,10 +19,7 @@ namespace DesignGear.ConfigManager.Core.Mapping {
                 .ForMember(x => x.SvfStatus, m => m.MapFrom(x => ConfigurationStatus.InQueue));
             CreateMap<ConfigurationCreateDto, Configuration>(MemberList.None)
                 .ForMember(x => x.Status, m => m.MapFrom(x => ConfigurationStatus.Ready))
-                .ForMember(x => x.SvfStatus, m => m.MapFrom(x => ConfigurationStatus.InQueue))
-                .ForMember(x => x.ComponentDefinition.OrganizationId, m => m.MapFrom(x => x.OrganizationId))
-                .ForMember(x => x.ComponentDefinition.ProductVersionId, m => m.MapFrom(x => x.ProductVersionId))
-                .ForMember(x => x.ComponentDefinition.ProductId, m => m.MapFrom(x => x.ProductId));
+                .ForMember(x => x.SvfStatus, m => m.MapFrom(x => ConfigurationStatus.InQueue));
             CreateMap<ConfigurationUpdateDto, Configuration>(MemberList.None);
         }
     }
