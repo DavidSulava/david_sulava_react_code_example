@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DesignGear.ConfigManager.Core.Services.Interfaces;
+using DesignGear.Contracts.Dto;
 
-namespace DesignGear.ConfigManager.Core.Services {
-    public class ModelService {
-        public ModelService() {
+namespace DesignGear.ConfigManager.Core.Services
+{
+    public class ModelService : IModelService
+    {
+        public ModelService()
+        {
             
         }
 
-        public async Task SetModelAsync() {
+        /*public async Task SetModelAsync(ModelDto create)
+        {
+            throw new NotImplementedException();
+        }*/
 
-        }
-
-        public async Task GetParamaterDefinitions() {
-
+        public async Task<ICollection<ParameterDefinitionDto>> GetParamaterDefinitions()
+        {
+            throw new NotImplementedException();
         }
     }
 }

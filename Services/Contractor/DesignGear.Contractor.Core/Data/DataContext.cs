@@ -1,9 +1,17 @@
 ﻿using DesignGear.Contractor.Core.Data.Entity;
 using DesignGear.Contractor.Core.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DesignGear.Contractor.Core.Data
 {
+    public class GuidToNullConverter : ValueConverter<Guid?, Guid?>
+    {
+        public GuidToNullConverter(ConverterMappingHints mappingHints = null) :
+            base(x => x == Guid.Empty ? default : x, x => x, mappingHints)
+        { }
+    }
+
     public class DataContext : DbContext
     {
         public DataContext() : base()
