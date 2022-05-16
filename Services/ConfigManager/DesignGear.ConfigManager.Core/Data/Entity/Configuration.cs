@@ -14,6 +14,8 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         public string UniqueId { get; set; }
         public ConfigurationStatus Status { get; set; }
         public SvfStatus SvfStatus { get; set; }
+        [StringLength(2000)]
+        public string ErrorMessage { get; set; }
 
         [StringLength(300)]
         public string Name { get; set; }

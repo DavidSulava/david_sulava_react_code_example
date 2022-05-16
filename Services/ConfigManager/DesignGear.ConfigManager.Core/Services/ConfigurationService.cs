@@ -30,7 +30,13 @@ namespace DesignGear.ConfigManager.Core.Services
             _configurationFileStorage = configurationFileStorage ?? throw new ArgumentNullException(nameof(configurationFileStorage));
         }
 
-        public async Task<ICollection<ConfigurationItemDto>> GetConfigurationList() {
+        /*
+         * Возвращает список конфигураций (пока что только корневых - сборок верхнего уровня) по фильтру
+         * todo Использовать Kendo UI
+         * Используется как снаружи для получения и отображения списка конфигураций, так и фоновыми задачами
+         */
+        public async Task<ICollection<ConfigurationItemDto>> GetConfigurationListAsync(ConfigurationFilterDto filter) {
+
             var items = await _dataAccessor.Reader.Configurations
                 .Where(x => x.ParentConfigurationId == null)
                 .ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider)
@@ -90,6 +96,7 @@ namespace DesignGear.ConfigManager.Core.Services
         /*
          * Данный метод выполняется когда конфигурация перерасчитана и ее нужно сохранить
          * При этом учитываем, что запись корневой кофигурации была создана ранее как заявка
+         * Вызывается фоновой задачей, когда получен ответ от инвентора
          */
         public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update) {
             /*
@@ -135,20 +142,40 @@ namespace DesignGear.ConfigManager.Core.Services
 
         /*
          * Имя файла (архива), содержащего все необходимые для инвентора данные
+         * Вызывается фоновой задачей, которая делает отправку кофигурации на перерасчет в инвентор
          */
-        public async Task<Stream> CreateConfigurationRequestPackage(Guid configurationId) {
-            return "";
-        }
-
-        public async Task AddSvfAsync() {
-
+        public async Task<Stream> CreateConfigurationRequestPackageAsync(Guid configurationId) {
+            /*
+             * todo Поднять конфигурацию (запрос) с ее параметрами, поднять распакованный пакет из хранилища, 
+             * заменить в json значения параметров, упаковать и вернуть архив как ответ             
+             */
+            throw new NotImplementedException();
         }
 
         /*
-         * Возвращает набор svf?
+         * Возвращает дерево параметров конфигурации
+         * Вызывается снаружи
+         */
+        public async Task<ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId) {
+            throw new NotImplementedException();
+        }
+
+        /*
+         * Добавляет svf-файлы в хранилище и меняет статус svf конфигурации
+         * Вызывается фоновой задачей, когда Forge API возвращает результат
+         * Файлы добавляются в хранилище через IConfigurationFileStorage
+         */
+        public async Task AddSvfAsync(Guid configurationId, ICollection<Stream> svfList) {
+            throw new NotImplementedException();
+        }
+
+        /*
+         * Возвращает архив svf-файлов для заданной конфигурации
+         * Вызывается снаружи
+         * Архив svf-файлов получаем при помощи IConfigurationFileStorage
          */
         public async Task<Stream> GetSvfAsync(Guid configurationId) {
-            return null;
+            throw new NotImplementedException();
         }
 
 
