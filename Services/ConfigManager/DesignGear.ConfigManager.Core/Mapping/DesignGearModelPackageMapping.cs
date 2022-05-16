@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 namespace DesignGear.ConfigManager.Core.Mapping {
     public class DesignGearModelPackageMapping : Profile {
         public DesignGearModelPackageMapping() {
-            CreateMap<DesignGearModelPackage, ComponentDefinition>(MemberList.None);
             CreateMap<DesignGearModelPackage, Configuration>(MemberList.None);
             CreateMap<Configuration, DesignGearModelPackage>(MemberList.None);
         }

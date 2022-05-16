@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 using DesignGear.ModelPackage;
 using DesignGear.ConfigManager.Core.Storage.Interfaces;
 using DesignGear.Contracts.Dto.ConfigManager.Configuration;
+using DesignGear.Common.Extensions;
+using DesignGear.Contracts.Enums;
 
 namespace DesignGear.ConfigManager.Core.Services
 {
@@ -19,7 +21,7 @@ namespace DesignGear.ConfigManager.Core.Services
         private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
         private readonly IConfigurationFileStorage _configurationFileStorage;
-        private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
+        //private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
 
         public ConfigurationService(IMapper mapper, 
             DataAccessor dataAccessor, 
@@ -56,11 +58,33 @@ namespace DesignGear.ConfigManager.Core.Services
                 ConfigurationId = configurationId,
                 ConfigurationPackage = create.ConfigurationPackage
             });
+            var configuration = model.MapTo<Configuration>(_mapper);
+            _mapper.Map(create, configuration);
+            configuration.Id = configurationId;
+            
+            await _dataAccessor.Editor.CreateAsync(configuration);
+            await _dataAccessor.Editor.SaveAsync();
         }
 
         public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update) {
-            var model = await _configurationFileStorage.SaveConfigurationPackageAsync(create);
+            var configuration = await _dataAccessor.Editor.Configurations
+                .Include(x => x.TemplateConfiguration)
+                    .ThenInclude(x => x.ComponentDefinition)
+                .FirstOrDefaultAsync(x => x.Id == update.ConfigurationId);
+            if (configuration == null) {
+                throw new EntityNotFoundException<Configuration>(update.ConfigurationId);
+            }
 
+            var model = await _configurationFileStorage.SaveConfigurationPackageAsync(new ConfigurationPackageDto {
+                ProductVersionId = configuration.TemplateConfiguration.ComponentDefinition.ProductVersionId,
+                ConfigurationId = update.ConfigurationId,
+                ConfigurationPackage = update.ConfigurationPackage,
+            });
+            
+            _mapper.Map(model, configuration);
+            _mapper.Map(update, configuration);
+
+            await _dataAccessor.Editor.SaveAsync();
         }
 
         /*
