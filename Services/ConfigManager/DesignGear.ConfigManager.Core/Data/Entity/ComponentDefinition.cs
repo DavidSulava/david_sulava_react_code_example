@@ -18,7 +18,6 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         public Guid ProductVersionId { get; set; }
 
         public Guid TemplateConfigurationId { get; set; }
-        public Guid? ParentComponentDefinitionId { get; set; }
         public virtual ComponentDefinition ParentComponentDefinition { get; set; }
 
         public virtual ICollection<Configuration> Configurations { get; set; }
