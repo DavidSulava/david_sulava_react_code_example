@@ -8,7 +8,7 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
 {
     public class Configuration : IGenerateUid
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Guid Id { get; set; }
         public ConfigurationStatus Status { get; set; }
         public SvfStatus SvfStatus { get; set; }
@@ -21,6 +21,7 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         public ModelState ModelState { get; set; }
 
         public Guid TargetFileId { get; set; }
+        public Guid RootConfiguration { get; set; }
 
        [ForeignKey("TemplateConfiguration")]
         public Guid? TemplateConfigurationId { get; set; }

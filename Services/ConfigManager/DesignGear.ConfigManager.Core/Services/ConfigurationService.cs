@@ -1,5 +1,4 @@
-﻿using DesignGear.Contracts.Dto;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DesignGear.Common.Exceptions;
@@ -10,6 +9,8 @@ using DesignGear.Contracts.Dto.ConfigManager;
 using DesignGear.ConfigManager.Core.Data.Entity;
 using Newtonsoft.Json;
 using DesignGear.ModelPackage;
+using DesignGear.ConfigManager.Core.Storage.Interfaces;
+using DesignGear.Contracts.Dto.ConfigManager.Configuration;
 
 namespace DesignGear.ConfigManager.Core.Services
 {
@@ -17,12 +18,16 @@ namespace DesignGear.ConfigManager.Core.Services
     {
         private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
+        private readonly IConfigurationFileStorage _configurationFileStorage;
         private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
 
-        public ConfigurationService(IMapper mapper, DataAccessor dataAccessor)
+        public ConfigurationService(IMapper mapper, 
+            DataAccessor dataAccessor, 
+            IConfigurationFileStorage configurationFileStorage)
         {
-            _mapper = mapper;
-            _dataAccessor = dataAccessor;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _dataAccessor = dataAccessor ?? throw new ArgumentNullException(nameof(dataAccessor));
+            _configurationFileStorage = configurationFileStorage ?? throw new ArgumentNullException(nameof(configurationFileStorage));
         }
 
         public async Task<ICollection<ConfigurationItemDto>> GetConfigurationList() {
@@ -42,9 +47,19 @@ namespace DesignGear.ConfigManager.Core.Services
 
         /*
          * Создаем новую конфигурацию (и если есть дочерние организации), распарсив json. Присваиваем конфигурации статус Ready
+         * todo - создание записи в БД и папки с файлами должно быть в рамках транзакции
          */
         public async Task CreateConfigurationAsync(ConfigurationCreateDto create) {
-            var model = JsonConvert.DeserializeObject<DesignGearModelPackage>(create.);
+            var configurationId = Guid.NewGuid();
+            var model = await _configurationFileStorage.SaveConfigurationPackageAsync(new ConfigurationPackageDto {
+                ProductVersionId = create.ProductVersionId,
+                ConfigurationId = configurationId,
+                ConfigurationPackage = create.ConfigurationPackage
+            });
+        }
+
+        public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update) {
+            var model = await _configurationFileStorage.SaveConfigurationPackageAsync(create);
 
         }
 

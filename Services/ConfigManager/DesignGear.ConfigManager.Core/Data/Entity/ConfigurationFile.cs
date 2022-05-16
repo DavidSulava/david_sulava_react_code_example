@@ -9,7 +9,7 @@ namespace DesignGear.ConfigManager.Core.Data.Entity {
     public class ConfigurationFile {
         public Guid Id { get; set; }
         public Guid ConfigurationId { get; set; }
-        [StringLength(2000)]        
+        [StringLength(4000)]        
         public string FileName { get; set; }
 
         public virtual Configuration Configuration { get; set; }

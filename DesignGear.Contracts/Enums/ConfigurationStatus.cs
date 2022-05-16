@@ -8,7 +8,8 @@ namespace DesignGear.Contracts.Enums {
     public enum ConfigurationStatus {
         InQueue,
         InProcess,
-        Error,
+        ServiceUnavailableError,
+        IncorrectRequestError,
         Ready
     }
 }
