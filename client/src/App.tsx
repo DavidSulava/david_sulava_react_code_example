@@ -1,12 +1,22 @@
-import React from 'react';
-import S from './App.styled';
+import RouteList from './router/RouteList';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ERoutes } from './router/Routes';
+import Layout from './components/Layout/Layout';
+import './styles/base.scss';
 
-const App = () => {
+
+function App() {
   return (
-    <div>
-      <S.Title>Hello from React</S.Title>
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout/>}>
+            <Route path={`${ERoutes.Root}*`} element={<RouteList/>}/>
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
-};
+}
 
 export default App;
