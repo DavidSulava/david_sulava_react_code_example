@@ -1,6 +1,5 @@
-import { IOrganisation } from '../../types/OrganisationPage';
-import { IOrganisationActions } from './actions';
-import { IS_LOADING_ORGANISATION, SAVE_ORGANISATIONS } from './constants';
+import { IOrganisation, IPostOrganisation } from '../../types/OrganisationPage';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface IOrganisationState {
   organisations: IOrganisation[],
@@ -12,22 +11,23 @@ const initialState: IOrganisationState = {
   isLoadingOrganisation: false
 }
 
-export const organisationReducer = (
-  state: IOrganisationState = initialState,
-  action: IOrganisationActions
-) => {
-  switch(action.type) {
-    case SAVE_ORGANISATIONS:
-      return {
-        ...state,
-        organisations: action.payload
-      }
-    case IS_LOADING_ORGANISATION:
-      return {
-        ...state,
-        isLoadingOrganisation: action.payload
-      }
-    default:
-      return state
+const organisationSlice = createSlice({
+  name: "organisation",
+  initialState: initialState,
+  reducers: {
+    getOrganisations: (state, action: PayloadAction<string>) => {
+    },
+    postOrganisation: (state, action: PayloadAction<IPostOrganisation>) => {
+    },
+    isLoadingOrganisation: (state, action: PayloadAction<boolean>) => {
+      state.isLoadingOrganisation = action.payload
+    },
+    saveOrganisations: (state, action: PayloadAction<IOrganisation[]>) => {
+      state.organisations = action.payload
+    }
   }
-}
+});
+
+export const {isLoadingOrganisation, saveOrganisations, getOrganisations, postOrganisation} = organisationSlice.actions
+
+export default organisationSlice.reducer

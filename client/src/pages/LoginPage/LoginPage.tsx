@@ -2,13 +2,13 @@ import { Field, Form, FormElement } from '@progress/kendo-react-form';
 import { Button } from 'react-bootstrap';
 import CInput from '../../components/form-components/CInput';
 import { isEmpty } from '../../components/form-components/helpers/valodation-functions';
-import { AuthenticationActions } from '../../stores/authentication/actions';
 import { ISignInData } from '../../types/LoginPage';
 import {useDispatch} from 'react-redux'
 import useAuthCheck from '../../helpers/hooks/useAuthCheck';
 import { Link } from 'react-router-dom';
 import { ERoutes } from '../../router/Routes';
 import React from 'react';
+import { signIn } from '../../stores/authentication/reducer';
 
 const LoginPage = () => {
   const dispatch = useDispatch()
@@ -16,7 +16,7 @@ const LoginPage = () => {
 
   const handleSubmit = (dataItem: {[p:string]: any}) => {
     const postData = {...dataItem} as ISignInData
-    dispatch(AuthenticationActions.signIn(postData))
+    dispatch(signIn(postData))
   }
 
   return (

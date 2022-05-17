@@ -2,11 +2,11 @@ import useAuthCheck from '../../helpers/hooks/useAuthCheck';
 import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '../../stores/configureStore';
 import React, { useEffect, useState } from 'react';
-import { OrganisationActions } from '../../stores/organisation/actions';
 import { Button } from 'react-bootstrap';
 import CreateNewOrganisationModal from './Modals/CreateNewOrganisationModal';
 import { Link } from 'react-router-dom';
 import { ERoutes } from '../../router/Routes';
+import { getOrganisations } from '../../stores/organisation/reducer';
 
 const OrganisationPage = () => {
   const dispatch = useDispatch()
@@ -17,7 +17,7 @@ const OrganisationPage = () => {
 
   useEffect(() => {
     if(user)
-      dispatch(OrganisationActions.getOrganisations(user?.id))
+      dispatch(getOrganisations(user?.id))
   }, [dispatch])
 
   const onCreateOrganisation = () => setShowCreateOrgModal(true)

@@ -1,41 +1,43 @@
-import { GET_TARIFF, SIGN_IN } from './constants';
 import { all, takeLatest, call, put, delay } from 'typed-redux-saga';
-import { AuthenticationActions, ISignInAction } from './actions';
 import Api from '../../services/api/api';
-import { CommonActions } from '../common/actions';
 import { setLocalStorage } from '../../helpers/localStorage';
 import { ACCESS_TOKEN_KEY } from '../../types/user';
+import { setError } from '../common/reducer';
+import { getTariff, setIsUserLoading, setTariff, setUser, signIn } from './reducer';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { ISignInData } from '../../types/LoginPage';
 
-function* signIn({formData}: ISignInAction) {
+function* signInSaga({payload:formData}: PayloadAction<ISignInData>) {
   try {
-    yield put(AuthenticationActions.setIsUserLoading(true))
+    yield put(setIsUserLoading(true))
     yield* call(delay, 300);
     const response = yield* call(Api.signIn, formData)
-    yield put(AuthenticationActions.setUser(response))
+    yield put(setUser(response))
     setLocalStorage(ACCESS_TOKEN_KEY, response.token)
-    yield put(AuthenticationActions.getTariff())
+    yield put(getTariff())
   }
   catch(e) {
-    yield put(CommonActions.setError(e as string))
+    yield put(setError(e as string))
   }
   finally {
-    yield put(AuthenticationActions.setIsUserLoading(false))
+    yield put(setIsUserLoading(false))
   }
 }
-function* getTariff() {
+
+function* getTariffSaga() {
   try {
     const response = yield* call(Api.getTariff)
-    yield put(AuthenticationActions.setTariff(response))
+    yield put(setTariff(response))
   }
   catch(e) {
-    yield put(CommonActions.setError(e as string))
+    yield put(setError(e as string))
   }
 }
 
 function* authWatcher() {
   yield all([
-    takeLatest(SIGN_IN, signIn),
-    takeLatest(GET_TARIFF, getTariff),
+    takeLatest(signIn.type, signInSaga),
+    takeLatest(getTariff.type, getTariffSaga),
   ])
 }
 

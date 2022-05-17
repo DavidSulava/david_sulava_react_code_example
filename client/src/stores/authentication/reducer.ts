@@ -1,6 +1,6 @@
 import { ITariff, IUser, Nullable } from "../../types/user";
-import { IAuthActions } from "./actions";
-import { SET_IS_USER_LOADING, SET_TARIFF, SET_USER } from './constants';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ISignInData } from '../../types/LoginPage';
 
 export interface IAuthState {
   user: Nullable<IUser>,
@@ -14,27 +14,24 @@ const initialState: IAuthState = {
   isUserLoading: false
 }
 
-export const authReducer = (
-  state: IAuthState = initialState,
-  action: IAuthActions
-) => {
-  switch(action.type) {
-    case SET_USER:
-      return {
-        ...state,
-        user: action.payload
-      }
-    case SET_TARIFF:
-      return {
-        ...state,
-        tariff: action.payload
-      }
-    case SET_IS_USER_LOADING:
-      return {
-        ...state,
-        isUserLoading: action.payload
-      }
-    default:
-      return state
+const authSlice = createSlice({
+  name: "auth",
+  initialState: initialState,
+  reducers: {
+    signIn: (state, action: PayloadAction<ISignInData>) => {},
+    getTariff: (state, action: PayloadAction) => {},
+    setUser: (state, action: PayloadAction<Nullable<IUser>>) => {
+      state.user = action.payload
+    },
+    setIsUserLoading: (state, action: PayloadAction<boolean>) => {
+      state.isUserLoading = action.payload
+    },
+    setTariff: (state, action: PayloadAction<Nullable<ITariff[]>>) => {
+      state.tariff = action.payload
+    }
   }
-}
+});
+
+export const {setUser, setIsUserLoading, setTariff, signIn, getTariff} = authSlice.actions
+
+export default authSlice.reducer

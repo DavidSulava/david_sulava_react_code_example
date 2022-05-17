@@ -1,5 +1,0 @@
-export const SIGN_IN = 'SIGN_IN'
-export const SET_USER = 'SET_USER'
-export const SET_IS_USER_LOADING = 'SET_IS_USER_LOADING'
-export const GET_TARIFF = 'GET_TARIFF'
-export const SET_TARIFF = 'SET_TARIFF'

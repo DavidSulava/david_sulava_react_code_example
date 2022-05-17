@@ -10,8 +10,8 @@ import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { eOrganisationTypes, IPostOrganisation } from '../../../types/OrganisationPage';
 import getEnumKeys from '../../../helpers/getEnumKeys';
 import { useDispatch } from 'react-redux';
-import { OrganisationActions } from '../../../stores/organisation/actions';
 import useAuthCheck from '../../../helpers/hooks/useAuthCheck';
+import { postOrganisation } from '../../../stores/organisation/reducer';
 
 const CreateNewOrganisationModal: React.FC<ICreateNewOrganisationModalProps> = ({
   isOpen,
@@ -39,7 +39,7 @@ const CreateNewOrganisationModal: React.FC<ICreateNewOrganisationModalProps> = (
     sendData.orgType = eOrganisationTypes[sendData.orgType]
     sendData.userId = user?.id
 
-    dispatch(OrganisationActions.postOrganisation(sendData as IPostOrganisation))
+    dispatch(postOrganisation(sendData as IPostOrganisation))
 
     if(onSubmit) onSubmit()
     onClose()
