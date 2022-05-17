@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DesignGear.Contracts.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,8 @@ namespace DesignGear.Contracts.Dto.ConfigManager {
         public Guid OrganizationId { get; set; }
         public Guid ProductId { get; set; }
         public Guid ProductVersionId { get; set; }
+        public Guid AppBundleId { get; set; }
+        public ICollection<string> Emails { get; set; }
+        public Stream ConfigurationPackage { get;set; }
     }
 }

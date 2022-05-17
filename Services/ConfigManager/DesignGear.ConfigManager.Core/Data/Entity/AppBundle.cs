@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesignGear.ConfigManager.Core.Data.Entity
 {
-    public class AppBundle : IGenerateUid
+    public class AppBundle : IGenerateUid, ICreated
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
@@ -19,5 +19,6 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
 
         [StringLength(300)]
         public string InventorVersion { get; set; }
+        public DateTime Created { get; set; }
     }
 }

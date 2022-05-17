@@ -23,6 +23,9 @@ namespace DesignGear.Contractor.Core.Data.Entity
 
         public Guid TargetFileId { get; set; }
 
+        public Guid AppBundleId { get; set; }
+        public virtual AppBundle AppBundle { get; set; }
+
         public virtual ICollection<ParameterDefinition> ParameterDefinitions { get; set; }
     }
 }

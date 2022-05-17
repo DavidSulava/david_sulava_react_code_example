@@ -1,5 +1,4 @@
-﻿using DesignGear.Contracts.Dto;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DesignGear.Common.Exceptions;
@@ -7,6 +6,12 @@ using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.ConfigManager.Core.Services.Interfaces;
 using DesignGear.ConfigManager.Core.Data;
 using DesignGear.Contracts.Dto.ConfigManager;
+using DesignGear.ConfigManager.Core.Data.Entity;
+using Newtonsoft.Json;
+using DesignGear.ModelPackage;
+using DesignGear.ConfigManager.Core.Storage.Interfaces;
+using DesignGear.Common.Extensions;
+using DesignGear.Contracts.Enums;
 
 namespace DesignGear.ConfigManager.Core.Services
 {
@@ -14,18 +19,26 @@ namespace DesignGear.ConfigManager.Core.Services
     {
         private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
-        private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
+        private readonly IConfigurationFileStorage _configurationFileStorage;
 
-        public ConfigurationService(IMapper mapper, DataAccessor dataAccessor)
+        public ConfigurationService(IMapper mapper, 
+            DataAccessor dataAccessor, 
+            IConfigurationFileStorage configurationFileStorage)
         {
-            _mapper = mapper;
-            _dataAccessor = dataAccessor;
-            
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _dataAccessor = dataAccessor ?? throw new ArgumentNullException(nameof(dataAccessor));
+            _configurationFileStorage = configurationFileStorage ?? throw new ArgumentNullException(nameof(configurationFileStorage));
         }
 
-        public async Task<ICollection<ConfigurationItemDto>> GetConfigurationList() {
+        /*
+         * Возвращает список конфигураций (пока что только корневых - сборок верхнего уровня) по фильтру
+         * todo Использовать Kendo UI
+         * Используется как снаружи для получения и отображения списка конфигураций, так и фоновыми задачами
+         */
+        public async Task<ICollection<ConfigurationItemDto>> GetConfigurationListAsync(ConfigurationFilterDto filter) {
+
             var items = await _dataAccessor.Reader.Configurations
-                .Where(x => x.ComponentDefinition.ParentComponentDefinitionId == null)
+                .Where(x => x.ParentConfigurationId == null)
                 .ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -33,35 +46,136 @@ namespace DesignGear.ConfigManager.Core.Services
         }
 
         /*
-         * Создаем новую конфигурацию и присваиваем конфигурации статус InQueue
+         * Создаем заявку на конфигурацию. Т.е. создается конфигурация со статусом InQueue
          */
-        public async Task CreateConfigurationRequestAsync(ConfigurationRequestDto requst) {
-
+        public async Task CreateConfigurationRequestAsync(ConfigurationRequestDto request) {
+            var newConfiguration = _mapper.Map<Configuration>(request);
+            await _dataAccessor.Editor.CreateAsync(newConfiguration);
+            await _dataAccessor.Editor.SaveAsync();
         }
 
         /*
-         * Создаем новую конфигурацию (и если есть дочерние организации), распарсив json. Присваиваем конфигурации статус Ready
+         * Создаем новую конфигурацию (и дочерние если есть) из пакета. Сразу присваиваем конфигурации статус Ready
+         * Svf при этом у нас отсутствует и его нужно сформировать. Для этого присваивается соответствующий статус
+         * todo - создание записи в БД и папки с файлами должно быть в рамках транзакции
          */
-        public async Task CreateConfigurationAsync(ConfigurationCreateDto create) {
+        public async Task CreateConfigurationFromPackageAsync(ConfigurationCreateDto create) {
+            /*
+             * Распаковываем пакет и кладем его в хранилище
+             * Заранее формируем id конфигурации, т.к. хранилище должно его знать
+             */
+            var rootConfigurationId = Guid.NewGuid();
+            var model = await _configurationFileStorage.SaveConfigurationPackageAsync(new ConfigurationPackageDto {
+                ProductVersionId = create.ProductVersionId,
+                ConfigurationId = rootConfigurationId,
+                ConfigurationPackage = create.ConfigurationPackage
+            });
 
+            /* todo
+             * Необходимо проверять, не существуют ли уже в БД ComponentDefinition, которые есть внутри нового Configuration
+             * Проверять можно по UniqueId
+             */
+            var configurations = model.MapTo<ICollection<Configuration>>(_mapper);
+            foreach(var configuration in configurations) {
+                _mapper.Map(create, configuration);
+                if (configuration.ParentConfigurationId == null) {
+                    configuration.Id = rootConfigurationId;
+                } 
+                configuration.Status = ConfigurationStatus.Ready;
+                configuration.SvfStatus = SvfStatus.InQueue;
+                await _dataAccessor.Editor.CreateAsync(configuration);
+            }
+
+            /* todo
+             * Добавить в базу эмэилы для уведомления подписчиков, когда будет сформирован svf
+             */
+            
+            await _dataAccessor.Editor.SaveAsync();
+        }
+
+        /*
+         * Данный метод выполняется когда конфигурация перерасчитана и ее нужно сохранить
+         * При этом учитываем, что запись корневой кофигурации была создана ранее как заявка
+         * Вызывается фоновой задачей, когда получен ответ от инвентора
+         */
+        public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update) {
+            /*
+             * Получаем из базы корневую конфигурацию (заявку)
+             */
+            var rootConfiguration = await _dataAccessor.Editor.Configurations
+                .Include(x => x.TemplateConfiguration)
+                    .ThenInclude(x => x.ComponentDefinition)
+                .FirstOrDefaultAsync(x => x.Id == update.ConfigurationId);
+            if (rootConfiguration == null) {
+                throw new EntityNotFoundException<Configuration>(update.ConfigurationId);
+            }
+
+            /*
+             *  Распаковываем пакет и кладем его в хранилище
+             */
+            var model = await _configurationFileStorage.SaveConfigurationPackageAsync(new ConfigurationPackageDto {
+                ProductVersionId = rootConfiguration.ProductVersionId,
+                ConfigurationId = update.ConfigurationId,
+                ConfigurationPackage = update.ConfigurationPackage,
+            });
+
+            /*
+             * todo Обновляем базу, обновляя корневую конфигурацию, добавляя дочерние кофигурации, 
+             * добавляя ComponentDefinition (если такового нет), ParameterDefinition
+             */
+
+            var configurations = model.MapTo<ICollection<Configuration>>(_mapper);
+            foreach (var configuration in configurations) {
+                if (configuration.ParentConfigurationId == null) {
+                    _mapper.Map(configuration, rootConfiguration);
+                } else {
+                    await _dataAccessor.Editor.CreateAsync(configuration);                    
+                }
+            }
+
+            await _dataAccessor.Editor.SaveAsync();
+
+            /*
+             * todo Уведомляем подписчиков по email о том, что конфигурация перерасчитана
+             */
         }
 
         /*
          * Имя файла (архива), содержащего все необходимые для инвентора данные
+         * Вызывается фоновой задачей, которая делает отправку кофигурации на перерасчет в инвентор
          */
-        public async Task<string> CreateConfigurationRequestPackage(Guid configurationId) {
-            return "";
-        }
-
-        public async Task AddSvfAsync() {
-
+        public async Task<Stream> CreateConfigurationRequestPackageAsync(Guid configurationId) {
+            /*
+             * todo Поднять конфигурацию (запрос) с ее параметрами, поднять распакованный пакет из хранилища, 
+             * заменить в json значения параметров, упаковать и вернуть архив как ответ             
+             */
+            throw new NotImplementedException();
         }
 
         /*
-         * Возвращает набор svf?
+         * Возвращает дерево параметров конфигурации
+         * Вызывается снаружи
+         */
+        public async Task<ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId) {
+            throw new NotImplementedException();
+        }
+
+        /*
+         * Добавляет svf-файлы в хранилище и меняет статус svf конфигурации
+         * Вызывается фоновой задачей, когда Forge API возвращает результат
+         * Файлы добавляются в хранилище через IConfigurationFileStorage
+         */
+        public async Task AddSvfAsync(Guid configurationId, ICollection<Stream> svfList) {
+            throw new NotImplementedException();
+        }
+
+        /*
+         * Возвращает архив svf-файлов для заданной конфигурации
+         * Вызывается снаружи
+         * Архив svf-файлов получаем при помощи IConfigurationFileStorage
          */
         public async Task<Stream> GetSvfAsync(Guid configurationId) {
-            return null;
+            throw new NotImplementedException();
         }
 
 

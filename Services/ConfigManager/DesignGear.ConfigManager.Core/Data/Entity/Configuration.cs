@@ -6,27 +6,35 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesignGear.ConfigManager.Core.Data.Entity
 {
-    public class Configuration : IGenerateUid
+    public class Configuration : IGenerateUid, ICreated
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Guid Id { get; set; }
+        [StringLength(200)]
+        public string UniqueId { get; set; }
         public ConfigurationStatus Status { get; set; }
         public SvfStatus SvfStatus { get; set; }
+        [StringLength(2000)]
+        public string ErrorMessage { get; set; }
 
         [StringLength(300)]
         public string Name { get; set; }
 
         public string Comment { get; set; }
 
-        public ModelState ModelState { get; set; }
-
-        public Guid TargetFileId { get; set; }
-
         public Guid OrganizationId { get; set; }
 
         public Guid ProductId { get; set; }
 
         public Guid ProductVersionId { get; set; }
+
+        public ModelState ModelState { get; set; }
+
+        public Guid TargetFileId { get; set; }
+
+        public Guid RootConfigurationId { get; set; }
+
+        public Guid? ParentConfigurationId { get; set; }
 
         [ForeignKey("TemplateConfiguration")]
         public Guid? TemplateConfigurationId { get; set; }
@@ -36,12 +44,11 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         public Guid ComponentDefinitionId { get; set; }
         public virtual ComponentDefinition ComponentDefinition { get; set; }
 
-        public virtual ICollection<ParameterValue> ParameterValues { get; set; }
+        public Guid AppBundleId { get; set; }
+        public virtual AppBundle AppBundle { get; set; }
 
-        [InverseProperty(nameof(ConfigurationInstance.Configuration))]
-        public virtual ICollection<ConfigurationInstance> ConfigurationInstances { get; set; }
-
-        [InverseProperty(nameof(ConfigurationInstance.ParentConfiguration))]
-        public virtual ICollection<ConfigurationInstance> ParentConfigurationInstances { get; set; }
+        public virtual ICollection<ParameterDefinition> ParameterDefinitions { get; set; }
+        public DateTime Created { get; set; }
+        
     }
 }

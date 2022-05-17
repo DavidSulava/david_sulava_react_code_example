@@ -4,20 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesignGear.ConfigManager.Core.Data.Entity
 {
-    public class ComponentDefinition : IGenerateUid
+    public class ComponentDefinition : IGenerateUid, ICreated
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+        [StringLength(200)]
+        public string UniqueId { get; set; }
 
         [StringLength(300)]
         public string Name { get; set; }
-
         public Guid TemplateConfigurationId { get; set; }
-        public Guid? ParentComponentDefinitionId { get; set; }
-        public virtual ComponentDefinition ParentComponentDefinition { get; set; }
-
         public virtual ICollection<Configuration> Configurations { get; set; }
-
-        public virtual ICollection<ParameterDefinition> ParameterDefinitions { get; set; }
+        public DateTime Created { get; set; }
     }
 }

@@ -18,21 +18,34 @@ namespace DesignGear.ConfigManager.Api.Controllers {
             _mapper = mapper;
         }
 
-        /*
-         *  Этот метод у нас перееезжает в ModelController
-         */
-        //[HttpPost]
-        //public async Task CreateConfigurationAsync([FromForm] VmConfigurationCreate create) {
-        //    await _configurationService.CreateConfigurationAsync(create.MapTo<ConfigurationCreateDto>(_mapper));
-        //}
 
         [HttpPost]
-        public async Task CreateConfigurationRequestAsync([FromForm] VmConfigurationRequest request) {
+        public async Task CreateConfigurationAsync([FromForm] VmConfigurationCreate create) {
+            await _configurationService.CreateConfigurationFromPackageAsync(create.MapTo<ConfigurationCreateDto>(_mapper));
+        }
+
+        [HttpPost("request")]
+        public async Task CreateConfigurationRequestAsync([FromBody] VmConfigurationRequest request) {
             await _configurationService.CreateConfigurationRequestAsync(request.MapTo<ConfigurationRequestDto>(_mapper));
         }
 
         [HttpGet]
         public async Task<ICollection<VmConfigurationItem>> GetConfigurationItemsAsync() {
+            return null;
+        }
+
+        [HttpGet("{configurationId}/svf")]
+        public async Task<IEnumerable<string>> GetSvfListAsync([FromRoute] Guid configurationId) {
+            return null;
+        }
+
+        [HttpGet("{configurationId}/svf/{svfName}")]
+        public async Task<IActionResult> GetSvfAsync([FromRoute] Guid configurationId, [FromRoute] string svfName) {
+            return null;
+        }
+
+        [HttpGet("parameters")]
+        public async Task<VmComponentParameterDefinitions> GetComponentParameterDefinitionsAsync(Guid productVersionId) {
             return null;
         }
 
@@ -43,23 +56,6 @@ namespace DesignGear.ConfigManager.Api.Controllers {
 
         //[HttpDelete("{id}")]
         //public async Task DeleteConfigurationAsync([FromRoute] Guid id) {
-
-        //}
-
-        //Пока возвращаем файл в потоке, потом скорее всего это будет ссылка на файл в хранилище
-        [HttpGet("{id}/svf")]
-        public async Task<IActionResult> GetSvfAsync([FromRoute] Guid id) {
-            return null;
-
-        }
-
-        /*
-         * Уезжает в ModelController
-         */
-
-        //[HttpGet("parameters")]
-        //public async Task<VmComponentParameterDefinitions> GetComponentParameterDefinitionsAsync(Guid productVersionId) {
-        //    return null;
 
         //}
     }
