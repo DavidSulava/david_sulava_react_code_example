@@ -28,8 +28,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-RecurringJob.AddOrUpdate<ConfigurationPushingJob>("Pushing configurations to inventor", (x) => x.Do(), "0 */1 * ? * *");
-RecurringJob.AddOrUpdate<ConfigurationPullingJob>("Pulling configurations from inventor", (x) => x.Do(), "0 */1 * ? * *");
+//RecurringJob.AddOrUpdate<ConfigurationPushingJob>("Pushing configurations to inventor", (x) => x.Do(), "0 */1 * ? * *");
+//RecurringJob.AddOrUpdate<ConfigurationPullingJob>("Pulling configurations from inventor", (x) => x.Do(), "0 */1 * ? * *");
 
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(builder => {

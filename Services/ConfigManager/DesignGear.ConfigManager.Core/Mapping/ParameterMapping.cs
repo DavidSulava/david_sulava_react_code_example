@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace DesignGear.ConfigManager.Core.Mapping {
     public class ParameterMapping : Profile {
         public ParameterMapping() {
-            CreateMap<ParameterValueDto, ParameterValue>(MemberList.None);
+            //CreateMap<ParameterValueDto, ParameterValue>(MemberList.None);
         }
     }
 }

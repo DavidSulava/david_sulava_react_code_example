@@ -1,5 +1,4 @@
 ﻿using DesignGear.Contracts.Dto.ConfigManager;
-using DesignGear.Contracts.Dto.ConfigManager.Configuration;
 using DesignGear.ModelPackage;
 
 namespace DesignGear.ConfigManager.Core.Storage.Interfaces {

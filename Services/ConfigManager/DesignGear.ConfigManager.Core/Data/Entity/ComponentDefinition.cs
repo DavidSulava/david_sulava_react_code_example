@@ -14,11 +14,7 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         [StringLength(300)]
         public string Name { get; set; }
         public Guid TemplateConfigurationId { get; set; }
-        public virtual ComponentDefinition ParentComponentDefinition { get; set; }
-
         public virtual ICollection<Configuration> Configurations { get; set; }
-
-        public virtual ICollection<ParameterDefinition> ParameterDefinitions { get; set; }
         public DateTime Created { get; set; }
     }
 }
