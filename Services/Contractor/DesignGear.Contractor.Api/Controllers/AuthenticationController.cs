@@ -35,7 +35,7 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("organization")]
         public async Task<IActionResult> SetOrganizationAsync(Guid organizationId)
         {
             var response = await _authenticationService.SetOrganizationAsync(organizationId);
