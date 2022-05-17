@@ -12,6 +12,6 @@ namespace DesignGear.Contracts.Dto.ConfigManager {
         public Guid ProductVersionId { get; set; }
         public Guid AppBundleId { get; set; }
         public ICollection<string> Emails { get; set; }
-        public Stream ConfigurationPackage { get;set; }
+        public FileStreamDto ConfigurationPackage { get;set; }
     }
 }

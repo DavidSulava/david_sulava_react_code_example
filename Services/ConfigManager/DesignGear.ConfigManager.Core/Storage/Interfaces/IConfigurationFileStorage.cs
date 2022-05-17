@@ -1,13 +1,25 @@
-﻿using DesignGear.Contracts.Dto.ConfigManager;
+﻿using DesignGear.Contracts.Dto;
+using DesignGear.Contracts.Dto.ConfigManager;
 using DesignGear.ModelPackage;
 
 namespace DesignGear.ConfigManager.Core.Storage.Interfaces {
     public interface IConfigurationFileStorage {
-        Task<DesignGearModelPackage> GetPackageModel(Guid productVersionId, Guid configurationId);
-        Task<Stream> GetSvfAsync(string svfName);
-        Task<string> GetSvfNameListAsync(Guid productVersionId, Guid configurationId);
+        // Получение JSON из модели
+        Task<DesignGearModelPackage> GetPackageModelAsync(Guid productVersionId, Guid configurationId);
+
+        // Получение файла SVF (по имени)
+        FileStreamDto GetSvf(Guid productVersionId, Guid configurationId, string fileName);
+
+        //Получение корневого файла для отображения SVF
+        string GetSvfRootFileName(Guid productVersionId, Guid configurationId);
+
+        // Сохранение модели на диск и получение JSON
         Task<DesignGearModelPackage> SaveConfigurationPackageAsync(ConfigurationPackageDto package);
-        Task SaveSvfAsync(Guid productVersionId, Guid configurationId, Stream svf);
-        Task SaveSvfListAsync(ICollection<Stream> svfList);
+
+        // Сохранение файлов для SVF
+        Task SaveSvfAsync(Guid productVersionId, Guid configurationId, FileStreamDto svf);
+
+        //Получение архива с моделью
+        FileStreamDto GetZipArchive(Guid productVersionId, Guid configurationId);
     }
 }

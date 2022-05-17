@@ -10,6 +10,6 @@ namespace DesignGear.Contracts.Dto.ConfigManager {
         public Guid ConfigurationId { get; set; }
         public ConfigurationStatus Status { get; set; }
         public SvfStatus SvfStatus { get; set; }
-        public Stream ConfigurationPackage { get; set; }
+        public FileStreamDto ConfigurationPackage { get; set; }
     }
 }
