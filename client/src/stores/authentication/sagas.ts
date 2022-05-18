@@ -1,11 +1,11 @@
 import { all, takeLatest, call, put, delay } from 'typed-redux-saga';
 import Api from '../../services/api/api';
 import { setLocalStorage } from '../../helpers/localStorage';
-import { ACCESS_TOKEN_KEY } from '../../types/user';
-import { setError } from '../common/reducer';
-import { getTariff, setIsUserLoading, setTariff, setUser, signIn } from './reducer';
+import { ACCESS_TOKEN_KEY, ISignInData, ISignUpData } from '../../types/user';
+import { setError, setPostReqResp } from '../common/reducer';
+import { getTariff, setIsUserLoading, setTariff, setUser, signIn, signUp } from './reducer';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { ISignInData } from '../../types/LoginPage';
+import axios, { AxiosError } from 'axios';
 
 function* signInSaga({payload:formData}: PayloadAction<ISignInData>) {
   try {
@@ -16,8 +16,30 @@ function* signInSaga({payload:formData}: PayloadAction<ISignInData>) {
     setLocalStorage(ACCESS_TOKEN_KEY, response.token)
     yield put(getTariff())
   }
-  catch(e) {
-    yield put(setError(e as string))
+  catch(e: any) {
+    yield put(setError(e))
+  }
+  finally {
+    yield put(setIsUserLoading(false))
+  }
+}
+
+function* signUpSaga({payload:formData}: PayloadAction<ISignUpData>) {
+  try {
+    yield put(setIsUserLoading(true))
+    yield* call(delay, 300);
+    const response = yield* call(Api.signUp, formData)
+    yield put(setPostReqResp(response))
+  }
+  catch(e: any) {
+    if (axios.isAxiosError(e)){
+      const error = e as AxiosError
+      let msg =  error.response?.data as any
+      yield put(setError(msg?.message || error.message))
+      return
+    }
+
+    yield put(setError(e?.message))
   }
   finally {
     yield put(setIsUserLoading(false))
@@ -29,14 +51,15 @@ function* getTariffSaga() {
     const response = yield* call(Api.getTariff)
     yield put(setTariff(response))
   }
-  catch(e) {
-    yield put(setError(e as string))
+  catch(e: any) {
+    yield put(setError(e))
   }
 }
 
 function* authWatcher() {
   yield all([
     takeLatest(signIn.type, signInSaga),
+    takeLatest(signUp.type, signUpSaga),
     takeLatest(getTariff.type, getTariffSaga),
   ])
 }

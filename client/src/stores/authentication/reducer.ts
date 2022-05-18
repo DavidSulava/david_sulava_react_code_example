@@ -1,6 +1,5 @@
-import { ITariff, IUser, Nullable } from "../../types/user";
+import { ISignInData, ISignUpData, ITariff, IUser, Nullable } from "../../types/user";
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ISignInData } from '../../types/LoginPage';
 
 export interface IAuthState {
   user: Nullable<IUser>,
@@ -11,15 +10,19 @@ export interface IAuthState {
 const initialState: IAuthState = {
   user: null,
   tariff: null,
-  isUserLoading: false
+  isUserLoading: false,
 }
 
 const authSlice = createSlice({
   name: "auth",
   initialState: initialState,
   reducers: {
-    signIn: (state, action: PayloadAction<ISignInData>) => {},
-    getTariff: (state, action: PayloadAction) => {},
+    signIn: (state, action: PayloadAction<ISignInData>) => {
+    },
+    signUp: (state, action: PayloadAction<ISignUpData>) => {
+    },
+    getTariff: (state, action: PayloadAction) => {
+    },
     setUser: (state, action: PayloadAction<Nullable<IUser>>) => {
       state.user = action.payload
     },
@@ -32,6 +35,6 @@ const authSlice = createSlice({
   }
 });
 
-export const {setUser, setIsUserLoading, setTariff, signIn, getTariff} = authSlice.actions
+export const {setUser, setIsUserLoading, setTariff, signIn, signUp, getTariff} = authSlice.actions
 
 export default authSlice.reducer

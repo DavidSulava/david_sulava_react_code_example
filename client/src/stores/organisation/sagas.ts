@@ -11,8 +11,8 @@ function* getOrganisationsSaga({payload: userId}: PayloadAction<string>) {
     const response = yield* call(Api.getOrganisations, userId)
     yield put(saveOrganisations(response))
   }
-  catch(e) {
-    yield put(setError(e as string))
+  catch(e: any) {
+    yield put(setError(e))
   }
   finally {
     yield put(isLoadingOrganisation(false))
@@ -26,8 +26,8 @@ function* postOrganisationSaga({payload: organisation}: PayloadAction<IPostOrgan
     yield put(getOrganisations(organisation.userId))
     put(getOrganisations(organisation.userId))
   }
-  catch(e) {
-    yield put(setError(e as string))
+  catch(e: any) {
+    yield put(setError(e))
   }
   finally {
     yield put(isLoadingOrganisation(false))
