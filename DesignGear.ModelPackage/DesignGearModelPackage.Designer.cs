@@ -74,31 +74,31 @@ namespace DesignGear.ModelPackage {
         
         private global::System.Data.DataRelation relationFK_Bom_BomRow;
         
-        private global::System.Data.DataRelation relationFK_BomColumn_BomCell;
-        
         private global::System.Data.DataRelation relationFK_BomRow_BomCell;
+        
+        private global::System.Data.DataRelation relationFK_BomColumn_BomCell;
         
         private global::System.Data.DataRelation relationFK_DescriptionItem_OutputForPresales;
         
-        private global::System.Data.DataRelation relationFK_Configuration_DescriptionItem;
-        
         private global::System.Data.DataRelation relationFK_File_DescriptionItem;
+        
+        private global::System.Data.DataRelation relationFK_Configuration_DescriptionItem;
         
         private global::System.Data.DataRelation relationFK_DescriptionItem_OutputForPostsales;
         
         private global::System.Data.DataRelation relationFK_DescriptionItem_OutputForProduction;
         
-        private global::System.Data.DataRelation relationFK_Configuration_ConfigurationRequest1;
-        
         private global::System.Data.DataRelation relationFK_Configuration_ConfigurationRequest;
         
-        private global::System.Data.DataRelation relationFK_Parameter_ParameterChange;
+        private global::System.Data.DataRelation relationFK_Configuration_ConfigurationRequest1;
         
         private global::System.Data.DataRelation relationFK_ConfigurationRequest_ParameterChange;
         
+        private global::System.Data.DataRelation relationFK_Parameter_ParameterChange;
+        
         private global::System.Data.DataRelation relationConfiguration_ConfigurationInstance;
         
-        private global::System.Data.DataRelation relationConfiguration_ConfigurationInstance1;
+        private global::System.Data.DataRelation relationConfiguration_Configuration;
         
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
@@ -628,19 +628,19 @@ namespace DesignGear.ModelPackage {
             this.relationFK_Configuration_Property = this.Relations["FK_Configuration_Property"];
             this.relationFK_Bom_BomColumn = this.Relations["FK_Bom_BomColumn"];
             this.relationFK_Bom_BomRow = this.Relations["FK_Bom_BomRow"];
-            this.relationFK_BomColumn_BomCell = this.Relations["FK_BomColumn_BomCell"];
             this.relationFK_BomRow_BomCell = this.Relations["FK_BomRow_BomCell"];
+            this.relationFK_BomColumn_BomCell = this.Relations["FK_BomColumn_BomCell"];
             this.relationFK_DescriptionItem_OutputForPresales = this.Relations["FK_DescriptionItem_OutputForPresales"];
-            this.relationFK_Configuration_DescriptionItem = this.Relations["FK_Configuration_DescriptionItem"];
             this.relationFK_File_DescriptionItem = this.Relations["FK_File_DescriptionItem"];
+            this.relationFK_Configuration_DescriptionItem = this.Relations["FK_Configuration_DescriptionItem"];
             this.relationFK_DescriptionItem_OutputForPostsales = this.Relations["FK_DescriptionItem_OutputForPostsales"];
             this.relationFK_DescriptionItem_OutputForProduction = this.Relations["FK_DescriptionItem_OutputForProduction"];
-            this.relationFK_Configuration_ConfigurationRequest1 = this.Relations["FK_Configuration_ConfigurationRequest1"];
             this.relationFK_Configuration_ConfigurationRequest = this.Relations["FK_Configuration_ConfigurationRequest"];
-            this.relationFK_Parameter_ParameterChange = this.Relations["FK_Parameter_ParameterChange"];
+            this.relationFK_Configuration_ConfigurationRequest1 = this.Relations["FK_Configuration_ConfigurationRequest1"];
             this.relationFK_ConfigurationRequest_ParameterChange = this.Relations["FK_ConfigurationRequest_ParameterChange"];
+            this.relationFK_Parameter_ParameterChange = this.Relations["FK_Parameter_ParameterChange"];
             this.relationConfiguration_ConfigurationInstance = this.Relations["Configuration_ConfigurationInstance"];
-            this.relationConfiguration_ConfigurationInstance1 = this.Relations["Configuration_ConfigurationInstance1"];
+            this.relationConfiguration_Configuration = this.Relations["Configuration_Configuration"];
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -742,16 +742,16 @@ namespace DesignGear.ModelPackage {
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_BomColumn_BomCell", new global::System.Data.DataColumn[] {
-                        this.tableBomColumn.IdColumn}, new global::System.Data.DataColumn[] {
-                        this.tableBomCell.BomColumnIdColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_BomRow_BomCell", new global::System.Data.DataColumn[] {
+                        this.tableBomRow.IdColumn}, new global::System.Data.DataColumn[] {
+                        this.tableBomCell.BomRowIdColumn});
             this.tableBomCell.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_BomRow_BomCell", new global::System.Data.DataColumn[] {
-                        this.tableBomRow.IdColumn}, new global::System.Data.DataColumn[] {
-                        this.tableBomCell.BomRowIdColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_BomColumn_BomCell", new global::System.Data.DataColumn[] {
+                        this.tableBomColumn.IdColumn}, new global::System.Data.DataColumn[] {
+                        this.tableBomCell.BomColumnIdColumn});
             this.tableBomCell.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
@@ -763,16 +763,16 @@ namespace DesignGear.ModelPackage {
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_Configuration_DescriptionItem", new global::System.Data.DataColumn[] {
-                        this.tableConfiguration.IdColumn}, new global::System.Data.DataColumn[] {
-                        this.tableDescriptionItem.ConfigurationIdColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_File_DescriptionItem", new global::System.Data.DataColumn[] {
+                        this.tableFile.IdColumn}, new global::System.Data.DataColumn[] {
+                        this.tableDescriptionItem.FileIdColumn});
             this.tableDescriptionItem.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_File_DescriptionItem", new global::System.Data.DataColumn[] {
-                        this.tableFile.IdColumn}, new global::System.Data.DataColumn[] {
-                        this.tableDescriptionItem.FileIdColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Configuration_DescriptionItem", new global::System.Data.DataColumn[] {
+                        this.tableConfiguration.IdColumn}, new global::System.Data.DataColumn[] {
+                        this.tableDescriptionItem.ConfigurationIdColumn});
             this.tableDescriptionItem.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
@@ -791,13 +791,6 @@ namespace DesignGear.ModelPackage {
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_Configuration_ConfigurationRequest1", new global::System.Data.DataColumn[] {
-                        this.tableConfiguration.IdColumn}, new global::System.Data.DataColumn[] {
-                        this.tableConfigurationRequest.ResultConfigurationIdColumn});
-            this.tableConfigurationRequest.Constraints.Add(fkc);
-            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.Cascade;
-            fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_Configuration_ConfigurationRequest", new global::System.Data.DataColumn[] {
                         this.tableConfiguration.IdColumn}, new global::System.Data.DataColumn[] {
                         this.tableConfigurationRequest.SourceConfigurationIdColumn});
@@ -805,16 +798,23 @@ namespace DesignGear.ModelPackage {
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_Parameter_ParameterChange", new global::System.Data.DataColumn[] {
-                        this.tableParameter.IdColumn}, new global::System.Data.DataColumn[] {
-                        this.tableParameterChange.ParameterIdColumn});
-            this.tableParameterChange.Constraints.Add(fkc);
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Configuration_ConfigurationRequest1", new global::System.Data.DataColumn[] {
+                        this.tableConfiguration.IdColumn}, new global::System.Data.DataColumn[] {
+                        this.tableConfigurationRequest.ResultConfigurationIdColumn});
+            this.tableConfigurationRequest.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_ConfigurationRequest_ParameterChange", new global::System.Data.DataColumn[] {
                         this.tableConfigurationRequest.IdColumn}, new global::System.Data.DataColumn[] {
                         this.tableParameterChange.ConfigurationChangeIdColumn});
+            this.tableParameterChange.Constraints.Add(fkc);
+            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
+            fkc.UpdateRule = global::System.Data.Rule.Cascade;
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Parameter_ParameterChange", new global::System.Data.DataColumn[] {
+                        this.tableParameter.IdColumn}, new global::System.Data.DataColumn[] {
+                        this.tableParameterChange.ParameterIdColumn});
             this.tableParameterChange.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
@@ -852,26 +852,26 @@ namespace DesignGear.ModelPackage {
                         this.tableBom.IdColumn}, new global::System.Data.DataColumn[] {
                         this.tableBomRow.BomIdColumn}, false);
             this.Relations.Add(this.relationFK_Bom_BomRow);
-            this.relationFK_BomColumn_BomCell = new global::System.Data.DataRelation("FK_BomColumn_BomCell", new global::System.Data.DataColumn[] {
-                        this.tableBomColumn.IdColumn}, new global::System.Data.DataColumn[] {
-                        this.tableBomCell.BomColumnIdColumn}, false);
-            this.Relations.Add(this.relationFK_BomColumn_BomCell);
             this.relationFK_BomRow_BomCell = new global::System.Data.DataRelation("FK_BomRow_BomCell", new global::System.Data.DataColumn[] {
                         this.tableBomRow.IdColumn}, new global::System.Data.DataColumn[] {
                         this.tableBomCell.BomRowIdColumn}, false);
             this.Relations.Add(this.relationFK_BomRow_BomCell);
+            this.relationFK_BomColumn_BomCell = new global::System.Data.DataRelation("FK_BomColumn_BomCell", new global::System.Data.DataColumn[] {
+                        this.tableBomColumn.IdColumn}, new global::System.Data.DataColumn[] {
+                        this.tableBomCell.BomColumnIdColumn}, false);
+            this.Relations.Add(this.relationFK_BomColumn_BomCell);
             this.relationFK_DescriptionItem_OutputForPresales = new global::System.Data.DataRelation("FK_DescriptionItem_OutputForPresales", new global::System.Data.DataColumn[] {
                         this.tableDescriptionItem.IdColumn}, new global::System.Data.DataColumn[] {
                         this.tableOutputForPresales.DescriptionItemIdColumn}, false);
             this.Relations.Add(this.relationFK_DescriptionItem_OutputForPresales);
-            this.relationFK_Configuration_DescriptionItem = new global::System.Data.DataRelation("FK_Configuration_DescriptionItem", new global::System.Data.DataColumn[] {
-                        this.tableConfiguration.IdColumn}, new global::System.Data.DataColumn[] {
-                        this.tableDescriptionItem.ConfigurationIdColumn}, false);
-            this.Relations.Add(this.relationFK_Configuration_DescriptionItem);
             this.relationFK_File_DescriptionItem = new global::System.Data.DataRelation("FK_File_DescriptionItem", new global::System.Data.DataColumn[] {
                         this.tableFile.IdColumn}, new global::System.Data.DataColumn[] {
                         this.tableDescriptionItem.FileIdColumn}, false);
             this.Relations.Add(this.relationFK_File_DescriptionItem);
+            this.relationFK_Configuration_DescriptionItem = new global::System.Data.DataRelation("FK_Configuration_DescriptionItem", new global::System.Data.DataColumn[] {
+                        this.tableConfiguration.IdColumn}, new global::System.Data.DataColumn[] {
+                        this.tableDescriptionItem.ConfigurationIdColumn}, false);
+            this.Relations.Add(this.relationFK_Configuration_DescriptionItem);
             this.relationFK_DescriptionItem_OutputForPostsales = new global::System.Data.DataRelation("FK_DescriptionItem_OutputForPostsales", new global::System.Data.DataColumn[] {
                         this.tableDescriptionItem.IdColumn}, new global::System.Data.DataColumn[] {
                         this.tableOutputForPostsales.DescriptionItemIdColumn}, false);
@@ -880,30 +880,30 @@ namespace DesignGear.ModelPackage {
                         this.tableDescriptionItem.IdColumn}, new global::System.Data.DataColumn[] {
                         this.tableOutputForProduction.DescriptionItemIdColumn}, false);
             this.Relations.Add(this.relationFK_DescriptionItem_OutputForProduction);
-            this.relationFK_Configuration_ConfigurationRequest1 = new global::System.Data.DataRelation("FK_Configuration_ConfigurationRequest1", new global::System.Data.DataColumn[] {
-                        this.tableConfiguration.IdColumn}, new global::System.Data.DataColumn[] {
-                        this.tableConfigurationRequest.ResultConfigurationIdColumn}, false);
-            this.Relations.Add(this.relationFK_Configuration_ConfigurationRequest1);
             this.relationFK_Configuration_ConfigurationRequest = new global::System.Data.DataRelation("FK_Configuration_ConfigurationRequest", new global::System.Data.DataColumn[] {
                         this.tableConfiguration.IdColumn}, new global::System.Data.DataColumn[] {
                         this.tableConfigurationRequest.SourceConfigurationIdColumn}, false);
             this.Relations.Add(this.relationFK_Configuration_ConfigurationRequest);
-            this.relationFK_Parameter_ParameterChange = new global::System.Data.DataRelation("FK_Parameter_ParameterChange", new global::System.Data.DataColumn[] {
-                        this.tableParameter.IdColumn}, new global::System.Data.DataColumn[] {
-                        this.tableParameterChange.ParameterIdColumn}, false);
-            this.Relations.Add(this.relationFK_Parameter_ParameterChange);
+            this.relationFK_Configuration_ConfigurationRequest1 = new global::System.Data.DataRelation("FK_Configuration_ConfigurationRequest1", new global::System.Data.DataColumn[] {
+                        this.tableConfiguration.IdColumn}, new global::System.Data.DataColumn[] {
+                        this.tableConfigurationRequest.ResultConfigurationIdColumn}, false);
+            this.Relations.Add(this.relationFK_Configuration_ConfigurationRequest1);
             this.relationFK_ConfigurationRequest_ParameterChange = new global::System.Data.DataRelation("FK_ConfigurationRequest_ParameterChange", new global::System.Data.DataColumn[] {
                         this.tableConfigurationRequest.IdColumn}, new global::System.Data.DataColumn[] {
                         this.tableParameterChange.ConfigurationChangeIdColumn}, false);
             this.Relations.Add(this.relationFK_ConfigurationRequest_ParameterChange);
+            this.relationFK_Parameter_ParameterChange = new global::System.Data.DataRelation("FK_Parameter_ParameterChange", new global::System.Data.DataColumn[] {
+                        this.tableParameter.IdColumn}, new global::System.Data.DataColumn[] {
+                        this.tableParameterChange.ParameterIdColumn}, false);
+            this.Relations.Add(this.relationFK_Parameter_ParameterChange);
             this.relationConfiguration_ConfigurationInstance = new global::System.Data.DataRelation("Configuration_ConfigurationInstance", new global::System.Data.DataColumn[] {
                         this.tableConfiguration.IdColumn}, new global::System.Data.DataColumn[] {
                         this.tableConfigurationInstance.ConfigurationIdColumn}, false);
             this.Relations.Add(this.relationConfiguration_ConfigurationInstance);
-            this.relationConfiguration_ConfigurationInstance1 = new global::System.Data.DataRelation("Configuration_ConfigurationInstance1", new global::System.Data.DataColumn[] {
-                        this.tableConfiguration.IdColumn}, new global::System.Data.DataColumn[] {
-                        this.tableConfigurationInstance.ParentConfigurationIdColumn}, false);
-            this.Relations.Add(this.relationConfiguration_ConfigurationInstance1);
+            this.relationConfiguration_Configuration = new global::System.Data.DataRelation("Configuration_Configuration", new global::System.Data.DataColumn[] {
+                        this.tableConfiguration.ParentConfigurationIdColumn}, new global::System.Data.DataColumn[] {
+                        this.tableConfiguration.IdColumn}, false);
+            this.Relations.Add(this.relationConfiguration_Configuration);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1430,6 +1430,8 @@ namespace DesignGear.ModelPackage {
             
             private global::System.Data.DataColumn columnTargetFileId;
             
+            private global::System.Data.DataColumn columnParentConfigurationId;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public ConfigurationDataTable() {
@@ -1521,6 +1523,14 @@ namespace DesignGear.ModelPackage {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn ParentConfigurationIdColumn {
+                get {
+                    return this.columnParentConfigurationId;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1556,7 +1566,7 @@ namespace DesignGear.ModelPackage {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public ConfigurationRow AddConfigurationRow(string UniqueId, string Name, string Comment, string ModelState, ComponentDefinitionRow parentComponentDefinitionRowByFK_ComponentDefinition_Configuration, long TargetFileId) {
+            public ConfigurationRow AddConfigurationRow(string UniqueId, string Name, string Comment, string ModelState, ComponentDefinitionRow parentComponentDefinitionRowByFK_ComponentDefinition_Configuration, long TargetFileId, long ParentConfigurationId) {
                 ConfigurationRow rowConfigurationRow = ((ConfigurationRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -1565,7 +1575,8 @@ namespace DesignGear.ModelPackage {
                         Comment,
                         ModelState,
                         null,
-                        TargetFileId};
+                        TargetFileId,
+                        ParentConfigurationId};
                 if ((parentComponentDefinitionRowByFK_ComponentDefinition_Configuration != null)) {
                     columnValuesArray[5] = parentComponentDefinitionRowByFK_ComponentDefinition_Configuration[0];
                 }
@@ -1598,6 +1609,7 @@ namespace DesignGear.ModelPackage {
                 this.columnModelState = base.Columns["ModelState"];
                 this.columnComponentDefinitionId = base.Columns["ComponentDefinitionId"];
                 this.columnTargetFileId = base.Columns["TargetFileId"];
+                this.columnParentConfigurationId = base.Columns["ParentConfigurationId"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1617,6 +1629,8 @@ namespace DesignGear.ModelPackage {
                 base.Columns.Add(this.columnComponentDefinitionId);
                 this.columnTargetFileId = new global::System.Data.DataColumn("TargetFileId", typeof(long), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTargetFileId);
+                this.columnParentConfigurationId = new global::System.Data.DataColumn("ParentConfigurationId", typeof(long), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnParentConfigurationId);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnId}, false));
                 this.columnId.AutoIncrement = true;
@@ -5932,8 +5946,6 @@ namespace DesignGear.ModelPackage {
             
             private global::System.Data.DataColumn columnConfigurationId;
             
-            private global::System.Data.DataColumn columnParentConfigurationId;
-            
             private global::System.Data.DataColumn columnX;
             
             private global::System.Data.DataColumn columnY;
@@ -6004,14 +6016,6 @@ namespace DesignGear.ModelPackage {
             public global::System.Data.DataColumn ConfigurationIdColumn {
                 get {
                     return this.columnConfigurationId;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public global::System.Data.DataColumn ParentConfigurationIdColumn {
-                get {
-                    return this.columnParentConfigurationId;
                 }
             }
             
@@ -6148,11 +6152,10 @@ namespace DesignGear.ModelPackage {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public ConfigurationInstanceRow AddConfigurationInstanceRow(long Id, ConfigurationRow parentConfigurationRowByConfiguration_ConfigurationInstance, ConfigurationRow parentConfigurationRowByConfiguration_ConfigurationInstance1, long X, long Y, long Z, long XX, long YY, long ZZ, long XY, long YX, long XZ, long ZX, long YZ, long ZY) {
+            public ConfigurationInstanceRow AddConfigurationInstanceRow(long Id, ConfigurationRow parentConfigurationRowByConfiguration_ConfigurationInstance, long X, long Y, long Z, long XX, long YY, long ZZ, long XY, long YX, long XZ, long ZX, long YZ, long ZY) {
                 ConfigurationInstanceRow rowConfigurationInstanceRow = ((ConfigurationInstanceRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Id,
-                        null,
                         null,
                         X,
                         Y,
@@ -6168,9 +6171,6 @@ namespace DesignGear.ModelPackage {
                         ZY};
                 if ((parentConfigurationRowByConfiguration_ConfigurationInstance != null)) {
                     columnValuesArray[1] = parentConfigurationRowByConfiguration_ConfigurationInstance[0];
-                }
-                if ((parentConfigurationRowByConfiguration_ConfigurationInstance1 != null)) {
-                    columnValuesArray[2] = parentConfigurationRowByConfiguration_ConfigurationInstance1[0];
                 }
                 rowConfigurationInstanceRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowConfigurationInstanceRow);
@@ -6196,7 +6196,6 @@ namespace DesignGear.ModelPackage {
             internal void InitVars() {
                 this.columnId = base.Columns["Id"];
                 this.columnConfigurationId = base.Columns["ConfigurationId"];
-                this.columnParentConfigurationId = base.Columns["ParentConfigurationId"];
                 this.columnX = base.Columns["X"];
                 this.columnY = base.Columns["Y"];
                 this.columnZ = base.Columns["Z"];
@@ -6218,8 +6217,6 @@ namespace DesignGear.ModelPackage {
                 base.Columns.Add(this.columnId);
                 this.columnConfigurationId = new global::System.Data.DataColumn("ConfigurationId", typeof(long), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnConfigurationId);
-                this.columnParentConfigurationId = new global::System.Data.DataColumn("ParentConfigurationId", typeof(long), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnParentConfigurationId);
                 this.columnX = new global::System.Data.DataColumn("X", typeof(long), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnX);
                 this.columnY = new global::System.Data.DataColumn("Y", typeof(long), null, global::System.Data.MappingType.Element);
@@ -6640,12 +6637,39 @@ namespace DesignGear.ModelPackage {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public long ParentConfigurationId {
+                get {
+                    try {
+                        return ((long)(this[this.tableConfiguration.ParentConfigurationIdColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'ParentConfigurationId\' in table \'Configuration\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableConfiguration.ParentConfigurationIdColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public ComponentDefinitionRow ComponentDefinitionRow {
                 get {
                     return ((ComponentDefinitionRow)(this.GetParentRow(this.Table.ParentRelations["FK_ComponentDefinition_Configuration"])));
                 }
                 set {
                     this.SetParentRow(value, this.Table.ParentRelations["FK_ComponentDefinition_Configuration"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public ConfigurationRow ConfigurationRowParent {
+                get {
+                    return ((ConfigurationRow)(this.GetParentRow(this.Table.ParentRelations["Configuration_Configuration"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["Configuration_Configuration"]);
                 }
             }
             
@@ -6735,6 +6759,18 @@ namespace DesignGear.ModelPackage {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsParentConfigurationIdNull() {
+                return this.IsNull(this.tableConfiguration.ParentConfigurationIdColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetParentConfigurationIdNull() {
+                this[this.tableConfiguration.ParentConfigurationIdColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public BomRow[] GetBomRows() {
                 if ((this.Table.ChildRelations["FK_Configuration_Bom"] == null)) {
                     return new BomRow[0];
@@ -6746,23 +6782,23 @@ namespace DesignGear.ModelPackage {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public ConfigurationRequestRow[] GetConfigurationRequestRowsByFK_Configuration_ConfigurationRequest1() {
-                if ((this.Table.ChildRelations["FK_Configuration_ConfigurationRequest1"] == null)) {
-                    return new ConfigurationRequestRow[0];
-                }
-                else {
-                    return ((ConfigurationRequestRow[])(base.GetChildRows(this.Table.ChildRelations["FK_Configuration_ConfigurationRequest1"])));
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public ConfigurationRequestRow[] GetConfigurationRequestRowsByFK_Configuration_ConfigurationRequest() {
                 if ((this.Table.ChildRelations["FK_Configuration_ConfigurationRequest"] == null)) {
                     return new ConfigurationRequestRow[0];
                 }
                 else {
                     return ((ConfigurationRequestRow[])(base.GetChildRows(this.Table.ChildRelations["FK_Configuration_ConfigurationRequest"])));
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public ConfigurationRequestRow[] GetConfigurationRequestRowsByFK_Configuration_ConfigurationRequest1() {
+                if ((this.Table.ChildRelations["FK_Configuration_ConfigurationRequest1"] == null)) {
+                    return new ConfigurationRequestRow[0];
+                }
+                else {
+                    return ((ConfigurationRequestRow[])(base.GetChildRows(this.Table.ChildRelations["FK_Configuration_ConfigurationRequest1"])));
                 }
             }
             
@@ -6823,12 +6859,12 @@ namespace DesignGear.ModelPackage {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public ConfigurationInstanceRow[] GetConfigurationInstanceRowsByConfiguration_ConfigurationInstance1() {
-                if ((this.Table.ChildRelations["Configuration_ConfigurationInstance1"] == null)) {
-                    return new ConfigurationInstanceRow[0];
+            public ConfigurationRow[] GetConfigurationRows() {
+                if ((this.Table.ChildRelations["Configuration_Configuration"] == null)) {
+                    return new ConfigurationRow[0];
                 }
                 else {
-                    return ((ConfigurationInstanceRow[])(base.GetChildRows(this.Table.ChildRelations["Configuration_ConfigurationInstance1"])));
+                    return ((ConfigurationRow[])(base.GetChildRows(this.Table.ChildRelations["Configuration_Configuration"])));
                 }
             }
         }
@@ -8056,23 +8092,23 @@ namespace DesignGear.ModelPackage {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public BomColumnRow BomColumnRow {
-                get {
-                    return ((BomColumnRow)(this.GetParentRow(this.Table.ParentRelations["FK_BomColumn_BomCell"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["FK_BomColumn_BomCell"]);
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public BomRowRow BomRowRow {
                 get {
                     return ((BomRowRow)(this.GetParentRow(this.Table.ParentRelations["FK_BomRow_BomCell"])));
                 }
                 set {
                     this.SetParentRow(value, this.Table.ParentRelations["FK_BomRow_BomCell"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public BomColumnRow BomColumnRow {
+                get {
+                    return ((BomColumnRow)(this.GetParentRow(this.Table.ParentRelations["FK_BomColumn_BomCell"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_BomColumn_BomCell"]);
                 }
             }
             
@@ -8331,23 +8367,23 @@ namespace DesignGear.ModelPackage {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public ConfigurationRow ConfigurationRow {
-                get {
-                    return ((ConfigurationRow)(this.GetParentRow(this.Table.ParentRelations["FK_Configuration_DescriptionItem"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["FK_Configuration_DescriptionItem"]);
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public FileRow FileRow {
                 get {
                     return ((FileRow)(this.GetParentRow(this.Table.ParentRelations["FK_File_DescriptionItem"])));
                 }
                 set {
                     this.SetParentRow(value, this.Table.ParentRelations["FK_File_DescriptionItem"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public ConfigurationRow ConfigurationRow {
+                get {
+                    return ((ConfigurationRow)(this.GetParentRow(this.Table.ParentRelations["FK_Configuration_DescriptionItem"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_Configuration_DescriptionItem"]);
                 }
             }
             
@@ -8689,23 +8725,23 @@ namespace DesignGear.ModelPackage {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public ConfigurationRow ConfigurationRowByFK_Configuration_ConfigurationRequest1 {
-                get {
-                    return ((ConfigurationRow)(this.GetParentRow(this.Table.ParentRelations["FK_Configuration_ConfigurationRequest1"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["FK_Configuration_ConfigurationRequest1"]);
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public ConfigurationRow ConfigurationRowByFK_Configuration_ConfigurationRequest {
                 get {
                     return ((ConfigurationRow)(this.GetParentRow(this.Table.ParentRelations["FK_Configuration_ConfigurationRequest"])));
                 }
                 set {
                     this.SetParentRow(value, this.Table.ParentRelations["FK_Configuration_ConfigurationRequest"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public ConfigurationRow ConfigurationRowByFK_Configuration_ConfigurationRequest1 {
+                get {
+                    return ((ConfigurationRow)(this.GetParentRow(this.Table.ParentRelations["FK_Configuration_ConfigurationRequest1"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_Configuration_ConfigurationRequest1"]);
                 }
             }
             
@@ -8838,23 +8874,23 @@ namespace DesignGear.ModelPackage {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public ParameterRow ParameterRow {
-                get {
-                    return ((ParameterRow)(this.GetParentRow(this.Table.ParentRelations["FK_Parameter_ParameterChange"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["FK_Parameter_ParameterChange"]);
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public ConfigurationRequestRow ConfigurationRequestRow {
                 get {
                     return ((ConfigurationRequestRow)(this.GetParentRow(this.Table.ParentRelations["FK_ConfigurationRequest_ParameterChange"])));
                 }
                 set {
                     this.SetParentRow(value, this.Table.ParentRelations["FK_ConfigurationRequest_ParameterChange"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public ParameterRow ParameterRow {
+                get {
+                    return ((ParameterRow)(this.GetParentRow(this.Table.ParentRelations["FK_Parameter_ParameterChange"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_Parameter_ParameterChange"]);
                 }
             }
             
@@ -8951,23 +8987,6 @@ namespace DesignGear.ModelPackage {
                 }
                 set {
                     this[this.tableConfigurationInstance.ConfigurationIdColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public long ParentConfigurationId {
-                get {
-                    try {
-                        return ((long)(this[this.tableConfigurationInstance.ParentConfigurationIdColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'ParentConfigurationId\' in table \'ConfigurationInstance\' is " +
-                                "DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableConfigurationInstance.ParentConfigurationIdColumn] = value;
                 }
             }
             
@@ -9176,17 +9195,6 @@ namespace DesignGear.ModelPackage {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public ConfigurationRow ConfigurationRowByConfiguration_ConfigurationInstance1 {
-                get {
-                    return ((ConfigurationRow)(this.GetParentRow(this.Table.ParentRelations["Configuration_ConfigurationInstance1"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["Configuration_ConfigurationInstance1"]);
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public bool IsIdNull() {
                 return this.IsNull(this.tableConfigurationInstance.IdColumn);
             }
@@ -9207,18 +9215,6 @@ namespace DesignGear.ModelPackage {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetConfigurationIdNull() {
                 this[this.tableConfigurationInstance.ConfigurationIdColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public bool IsParentConfigurationIdNull() {
-                return this.IsNull(this.tableConfigurationInstance.ParentConfigurationIdColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public void SetParentConfigurationIdNull() {
-                this[this.tableConfigurationInstance.ParentConfigurationIdColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

@@ -16,5 +16,14 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         public Guid TemplateConfigurationId { get; set; }
         public virtual ICollection<Configuration> Configurations { get; set; }
         public DateTime Created { get; set; }
+
+        public Guid OrganizationId { get; set; }
+
+        public Guid ProductId { get; set; }
+
+        public Guid ProductVersionId { get; set; }
+
+        public Guid AppBundleId { get; set; }
+        public virtual AppBundle AppBundle { get; set; }
     }
 }

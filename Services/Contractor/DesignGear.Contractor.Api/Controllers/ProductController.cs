@@ -5,6 +5,8 @@ using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contracts.Models.Contractor;
 using AutoMapper;
 using DesignGear.Common.Extensions;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
@@ -40,7 +42,14 @@ namespace DesignGear.Contractor.Api.Controllers
             await _productService.RemoveProductAsync(productId);
         }
 
+        
         [HttpGet]
+        public async Task<DataSourceResult> GetProductItemsAsync([DataSourceRequest] DataSourceRequest dataSourceRequest)
+        {
+            return await _productService.GetProductsByOrganizationKendoAsync(query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ProductDto, VmProduct>));
+        }
+
+        [HttpGet("byorganization")]
         public async Task<ICollection<VmProduct>> GetProductItemsAsync(Guid organizationId)
         {
             return (await _productService.GetProductsByOrganizationAsync(organizationId)).MapTo<ICollection<VmProduct>>(_mapper);

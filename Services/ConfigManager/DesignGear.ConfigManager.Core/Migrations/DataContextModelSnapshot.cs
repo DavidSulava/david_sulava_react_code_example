@@ -61,6 +61,9 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("AppBundleId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -68,6 +71,15 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
+
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductVersionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("TemplateConfigurationId")
                         .HasColumnType("uniqueidentifier");
@@ -79,6 +91,8 @@ namespace DesignGear.ConfigManager.Core.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppBundleId");
+
                     b.ToTable("ComponentDefinitions");
                 });
 
@@ -86,9 +100,6 @@ namespace DesignGear.ConfigManager.Core.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AppBundleId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comment")
@@ -114,16 +125,7 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("ParentConfigurationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductVersionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RootConfigurationId")
@@ -148,8 +150,6 @@ namespace DesignGear.ConfigManager.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppBundleId");
-
                     b.HasIndex("ComponentDefinitionId");
 
                     b.HasIndex("TemplateConfigurationId");
@@ -157,7 +157,7 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.ToTable("Configurations");
                 });
 
-            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ConfigurationRequestEmail", b =>
+            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ConfigurationInstance", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -166,48 +166,47 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.Property<Guid>("ConfigurationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                    b.Property<double>("X")
+                        .HasColumnType("float");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                    b.Property<double>("XX")
+                        .HasColumnType("float");
+
+                    b.Property<double>("XY")
+                        .HasColumnType("float");
+
+                    b.Property<double>("XZ")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Y")
+                        .HasColumnType("float");
+
+                    b.Property<double>("YX")
+                        .HasColumnType("float");
+
+                    b.Property<double>("YY")
+                        .HasColumnType("float");
+
+                    b.Property<double>("YZ")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Z")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ZX")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ZY")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ZZ")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ConfigurationId");
 
-                    b.ToTable("ConfigurationRequestEmails");
-                });
-
-            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ConfigurationRequestParameter", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ConfigurationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ParameterDefinitionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConfigurationId");
-
-                    b.HasIndex("ParameterDefinitionId");
-
-                    b.ToTable("ConfigurationRequestParameters");
+                    b.ToTable("ConfigurationInstances");
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ParameterDefinition", b =>
@@ -292,7 +291,7 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.ToTable("ValueOptions");
                 });
 
-            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.Configuration", b =>
+            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ComponentDefinition", b =>
                 {
                     b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.AppBundle", "AppBundle")
                         .WithMany()
@@ -300,6 +299,11 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("AppBundle");
+                });
+
+            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.Configuration", b =>
+                {
                     b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.ComponentDefinition", "ComponentDefinition")
                         .WithMany("Configurations")
                         .HasForeignKey("ComponentDefinitionId")
@@ -310,41 +314,20 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .WithMany()
                         .HasForeignKey("TemplateConfigurationId");
 
-                    b.Navigation("AppBundle");
-
                     b.Navigation("ComponentDefinition");
 
                     b.Navigation("TemplateConfiguration");
                 });
 
-            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ConfigurationRequestEmail", b =>
+            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ConfigurationInstance", b =>
                 {
-                    b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "ConfigurationRequest")
-                        .WithMany()
+                    b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "Configuration")
+                        .WithMany("ConvigurationInstances")
                         .HasForeignKey("ConfigurationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ConfigurationRequest");
-                });
-
-            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ConfigurationRequestParameter", b =>
-                {
-                    b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "ConfigurationRequest")
-                        .WithMany()
-                        .HasForeignKey("ConfigurationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.ParameterDefinition", "ParameterDefinition")
-                        .WithMany()
-                        .HasForeignKey("ParameterDefinitionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ConfigurationRequest");
-
-                    b.Navigation("ParameterDefinition");
+                    b.Navigation("Configuration");
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ParameterDefinition", b =>
@@ -376,6 +359,8 @@ namespace DesignGear.ConfigManager.Core.Migrations
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.Configuration", b =>
                 {
+                    b.Navigation("ConvigurationInstances");
+
                     b.Navigation("ParameterDefinitions");
                 });
 

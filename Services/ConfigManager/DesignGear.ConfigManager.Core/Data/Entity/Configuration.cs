@@ -22,15 +22,11 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
 
         public string Comment { get; set; }
 
-        public Guid OrganizationId { get; set; }
-
-        public Guid ProductId { get; set; }
-
-        public Guid ProductVersionId { get; set; }
-
         public ModelState ModelState { get; set; }
 
         public Guid TargetFileId { get; set; }
+
+        public DateTime Created { get; set; }
 
         public Guid RootConfigurationId { get; set; }
 
@@ -44,11 +40,8 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         public Guid ComponentDefinitionId { get; set; }
         public virtual ComponentDefinition ComponentDefinition { get; set; }
 
-        public Guid AppBundleId { get; set; }
-        public virtual AppBundle AppBundle { get; set; }
-
         public virtual ICollection<ParameterDefinition> ParameterDefinitions { get; set; }
-        public DateTime Created { get; set; }
         
+        public virtual ICollection<ConfigurationInstance> ConvigurationInstances { get; set; }
     }
 }

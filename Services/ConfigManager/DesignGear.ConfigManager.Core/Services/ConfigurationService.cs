@@ -113,25 +113,25 @@ namespace DesignGear.ConfigManager.Core.Services
             /*
              *  Распаковываем пакет и кладем его в хранилище
              */
-            var model = await _configurationFileStorage.SaveConfigurationPackageAsync(new ConfigurationPackageDto {
+            /*var model = await _configurationFileStorage.SaveConfigurationPackageAsync(new ConfigurationPackageDto {
                 ProductVersionId = rootConfiguration.ProductVersionId,
                 ConfigurationId = update.ConfigurationId,
                 ConfigurationPackage = update.ConfigurationPackage,
-            });
+            });*/
 
             /*
              * todo Обновляем базу, обновляя корневую конфигурацию, добавляя дочерние кофигурации, 
              * добавляя ComponentDefinition (если такового нет), ParameterDefinition
              */
 
-            var configurations = model.MapTo<ICollection<Configuration>>(_mapper);
+            /*var configurations = model.MapTo<ICollection<Configuration>>(_mapper);
             foreach (var configuration in configurations) {
                 if (configuration.ParentConfigurationId == null) {
                     _mapper.Map(configuration, rootConfiguration);
                 } else {
                     await _dataAccessor.Editor.CreateAsync(configuration);                    
                 }
-            }
+            }*/
 
             await _dataAccessor.Editor.SaveAsync();
 

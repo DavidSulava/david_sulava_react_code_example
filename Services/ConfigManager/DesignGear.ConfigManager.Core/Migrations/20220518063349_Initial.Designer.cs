@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DesignGear.ConfigManager.Core.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220513081301_ConfigurationFile")]
-    partial class ConfigurationFile
+    [Migration("20220518063349_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,9 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -60,20 +63,37 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("AppBundleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<Guid?>("ParentComponentDefinitionId")
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductVersionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("TemplateConfigurationId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("UniqueId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentComponentDefinitionId");
+                    b.HasIndex("AppBundleId");
 
                     b.ToTable("ComponentDefinitions");
                 });
@@ -91,6 +111,14 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.Property<Guid>("ComponentDefinitionId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ErrorMessage")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
                     b.Property<int>("ModelState")
                         .HasColumnType("int");
 
@@ -99,13 +127,10 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<Guid>("OrganizationId")
+                    b.Property<Guid?>("ParentConfigurationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductVersionId")
+                    b.Property<Guid>("RootConfigurationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -117,32 +142,21 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.Property<Guid>("TargetFileId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("TemplateConfigurationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UniqueId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ComponentDefinitionId");
 
+                    b.HasIndex("TemplateConfigurationId");
+
                     b.ToTable("Configurations");
-                });
-
-            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ConfigurationFile", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ConfigurationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConfigurationId");
-
-                    b.ToTable("ConfigurationFiles");
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ConfigurationInstance", b =>
@@ -154,50 +168,46 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.Property<Guid>("ConfigurationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ParentConfigurationId")
+                    b.Property<Guid>("ParentConfigurationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("X")
-                        .HasColumnType("int");
+                    b.Property<double>("X")
+                        .HasColumnType("float");
 
-                    b.Property<int>("XX")
-                        .HasColumnType("int");
+                    b.Property<double>("XX")
+                        .HasColumnType("float");
 
-                    b.Property<int>("XY")
-                        .HasColumnType("int");
+                    b.Property<double>("XY")
+                        .HasColumnType("float");
 
-                    b.Property<int>("XZ")
-                        .HasColumnType("int");
+                    b.Property<double>("XZ")
+                        .HasColumnType("float");
 
-                    b.Property<int>("Y")
-                        .HasColumnType("int");
+                    b.Property<double>("Y")
+                        .HasColumnType("float");
 
-                    b.Property<int>("YX")
-                        .HasColumnType("int");
+                    b.Property<double>("YX")
+                        .HasColumnType("float");
 
-                    b.Property<int>("YY")
-                        .HasColumnType("int");
+                    b.Property<double>("YY")
+                        .HasColumnType("float");
 
-                    b.Property<int>("YZ")
-                        .HasColumnType("int");
+                    b.Property<double>("YZ")
+                        .HasColumnType("float");
 
-                    b.Property<int>("Z")
-                        .HasColumnType("int");
+                    b.Property<double>("Z")
+                        .HasColumnType("float");
 
-                    b.Property<int>("ZX")
-                        .HasColumnType("int");
+                    b.Property<double>("ZX")
+                        .HasColumnType("float");
 
-                    b.Property<int>("ZY")
-                        .HasColumnType("int");
+                    b.Property<double>("ZY")
+                        .HasColumnType("float");
 
-                    b.Property<int>("ZZ")
-                        .HasColumnType("int");
+                    b.Property<double>("ZZ")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ConfigurationId");
-
-                    b.HasIndex("ParentConfigurationId");
 
                     b.ToTable("ConfigurationInstances");
                 });
@@ -211,8 +221,11 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.Property<bool>("AllowCustomValues")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ComponentDefinitionId")
+                    b.Property<Guid>("ConfigurationId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -233,7 +246,17 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
+                    b.Property<string>("UniqueId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("Units")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Value")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
@@ -243,37 +266,9 @@ namespace DesignGear.ConfigManager.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComponentDefinitionId");
-
-                    b.ToTable("ParameterDefinitions");
-                });
-
-            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ParameterValue", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ConfigurationId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ParameterDefinitionId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.HasKey("Id");
-
                     b.HasIndex("ConfigurationId");
 
-                    b.HasIndex("ParameterDefinitionId");
-
-                    b.ToTable("ParameterValue");
+                    b.ToTable("ParameterDefinitions");
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ValueOption", b =>
@@ -281,6 +276,9 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("ParameterDefinitionId")
                         .HasColumnType("uniqueidentifier");
@@ -298,11 +296,13 @@ namespace DesignGear.ConfigManager.Core.Migrations
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ComponentDefinition", b =>
                 {
-                    b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.ComponentDefinition", "ParentComponentDefinition")
+                    b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.AppBundle", "AppBundle")
                         .WithMany()
-                        .HasForeignKey("ParentComponentDefinitionId");
+                        .HasForeignKey("AppBundleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("ParentComponentDefinition");
+                    b.Navigation("AppBundle");
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.Configuration", b =>
@@ -313,65 +313,24 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ComponentDefinition");
-                });
-
-            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ConfigurationFile", b =>
-                {
-                    b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "Configuration")
+                    b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "TemplateConfiguration")
                         .WithMany()
-                        .HasForeignKey("ConfigurationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TemplateConfigurationId");
 
-                    b.Navigation("Configuration");
-                });
+                    b.Navigation("ComponentDefinition");
 
-            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ConfigurationInstance", b =>
-                {
-                    b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "Configuration")
-                        .WithMany("ConfigurationInstances")
-                        .HasForeignKey("ConfigurationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "ParentConfiguration")
-                        .WithMany("ParentConfigurationInstances")
-                        .HasForeignKey("ParentConfigurationId");
-
-                    b.Navigation("Configuration");
-
-                    b.Navigation("ParentConfiguration");
+                    b.Navigation("TemplateConfiguration");
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ParameterDefinition", b =>
                 {
-                    b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.ComponentDefinition", "ComponentDefinition")
-                        .WithMany("ParameterDefinitions")
-                        .HasForeignKey("ComponentDefinitionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ComponentDefinition");
-                });
-
-            modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ParameterValue", b =>
-                {
                     b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "Configuration")
-                        .WithMany("ParameterValues")
+                        .WithMany("ParameterDefinitions")
                         .HasForeignKey("ConfigurationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.ParameterDefinition", "ParameterDefinition")
-                        .WithMany("ParameterValues")
-                        .HasForeignKey("ParameterDefinitionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Configuration");
-
-                    b.Navigation("ParameterDefinition");
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ValueOption", b =>
@@ -388,23 +347,15 @@ namespace DesignGear.ConfigManager.Core.Migrations
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ComponentDefinition", b =>
                 {
                     b.Navigation("Configurations");
-
-                    b.Navigation("ParameterDefinitions");
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.Configuration", b =>
                 {
-                    b.Navigation("ConfigurationInstances");
-
-                    b.Navigation("ParameterValues");
-
-                    b.Navigation("ParentConfigurationInstances");
+                    b.Navigation("ParameterDefinitions");
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ParameterDefinition", b =>
                 {
-                    b.Navigation("ParameterValues");
-
                     b.Navigation("ValueOptions");
                 });
 #pragma warning restore 612, 618
