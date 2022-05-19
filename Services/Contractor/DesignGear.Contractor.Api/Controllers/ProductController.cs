@@ -46,7 +46,6 @@ namespace DesignGear.Contractor.Api.Controllers
         [HttpGet]
         public async Task<DataSourceResult> GetProductItemsAsync(Guid organizationId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
-            // todo: add organizationId filter
             return await _productService.GetProductsByOrganizationKendoAsync(organizationId, query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ProductDto, VmProduct>));
         }
 

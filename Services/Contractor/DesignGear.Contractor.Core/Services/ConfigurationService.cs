@@ -86,6 +86,10 @@ namespace DesignGear.Contractor.Core.Services
         //    return await _dataAccessor.Reader.Configurations.Where(x => x.ProductVersionId == productVersionId).
         //        ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider).ToListAsync();
         //}
+        public Task<TResult> GetConfigurationItemsAsync<TResult>(Guid productVersionId, Func<IQueryable<ProductDto>, TResult> resultBuilder)
+        {
+            return null;
+        }
 
         public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
         {

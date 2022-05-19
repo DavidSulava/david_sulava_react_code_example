@@ -6,6 +6,8 @@ using DesignGear.Contracts.Models.Contractor;
 using AutoMapper;
 using DesignGear.Common.Extensions;
 using DesignGear.Contracts.Models.ConfigManager;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
@@ -46,6 +48,12 @@ namespace DesignGear.Contractor.Api.Controllers
         //{
         //    return (await _configurationService.GetConfigurationItemsAsync(productVersionId)).MapTo<ICollection<VmConfigurationItem>>(_mapper);
         //}
+
+        [HttpGet]
+        public async Task<DataSourceResult> GetConfigurationItemsAsync(Guid productVersionId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
+        {
+            return await _configurationService.GetConfigurationItemsAsync(productVersionId, query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ConfigurationDto, Contracts.Models.Contractor.VmConfigurationItem>));
+        }
 
         [HttpGet("{id}")]
         public async Task<Contracts.Models.Contractor.VmConfiguration> GetConfigurationAsync([FromRoute] Guid id)

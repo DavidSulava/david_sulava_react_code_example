@@ -51,7 +51,6 @@ namespace DesignGear.Contractor.Api.Controllers
         [HttpGet]
         public async Task<DataSourceResult> GetProductVersionItemsAsync(Guid productId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
-            // todo: add productId filter
             return await _productVersionService.GetProductVersionsByProductKendoAsync(productId, query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ProductVersionDto, VmProductVersion>));
         }
 

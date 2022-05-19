@@ -12,6 +12,7 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
         Task RemoveConfigurationAsync(Guid id);
 
         //Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId);
+        Task<TResult> GetConfigurationItemsAsync<TResult>(Guid productVersionId, Func<IQueryable<ConfigurationDto>, TResult> resultBuilder);
 
         Task<ConfigurationDto> GetConfigurationAsync(Guid id);
 
