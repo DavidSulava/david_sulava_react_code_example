@@ -5,6 +5,8 @@ using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contracts.Models.Contractor;
 using AutoMapper;
 using DesignGear.Common.Extensions;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
@@ -40,10 +42,17 @@ namespace DesignGear.Contractor.Api.Controllers
             await _productVersionService.RemoveProductVersionAsync(id);
         }
 
-        [HttpGet]
+        [HttpGet("byproduct")]
         public async Task<ICollection<VmProductVersion>> GetProductVersionItemsAsync(Guid productId)
         {
             return (await _productVersionService.GetProductVersionsByProductAsync(productId)).MapTo<ICollection<VmProductVersion>>(_mapper);
+        }
+
+        [HttpGet]
+        public async Task<DataSourceResult> GetProductVersionItemsAsync(Guid productId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
+        {
+            // todo: add productId filter
+            return await _productVersionService.GetProductVersionsByProductKendoAsync(productId, query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ProductVersionDto, VmProductVersion>));
         }
 
         [HttpGet("{id}")]

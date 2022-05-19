@@ -79,13 +79,13 @@ namespace DesignGear.Contractor.Core.Services
             return result;
         }
 
-        public async Task<TResult> GetProductsByOrganizationKendoAsync<TResult>(Func<IQueryable<ProductDto>, TResult> resultBuilder)
+        public async Task<TResult> GetProductsByOrganizationKendoAsync<TResult>(Guid organizationId, Func<IQueryable<ProductDto>, TResult> resultBuilder)
         {
             if (resultBuilder == null)
             {
                 throw new ArgumentNullException(nameof(resultBuilder));
             }
-            var query = _dataAccessor.Reader.Products.ProjectTo<ProductDto>(_mapper.ConfigurationProvider);
+            var query = _dataAccessor.Reader.Products.Where(x => x.OrganizationId == organizationId).ProjectTo<ProductDto>(_mapper.ConfigurationProvider);
             var result = resultBuilder(query);
             return await Task.FromResult(result);
         }

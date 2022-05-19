@@ -107,6 +107,17 @@ namespace DesignGear.Contractor.Core.Services
                 ProjectTo<ProductVersionDto>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
+        public async Task<TResult> GetProductVersionsByProductKendoAsync<TResult>(Guid productId, Func<IQueryable<ProductVersionDto>, TResult> resultBuilder)
+        {
+            if (resultBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(resultBuilder));
+            }
+            var query = _dataAccessor.Reader.ProductVersions.Where(x => x.ProductId == productId).ProjectTo<ProductVersionDto>(_mapper.ConfigurationProvider);
+            var result = resultBuilder(query);
+            return await Task.FromResult(result);
+        }
+
         public async Task<ProductVersionDto> GetProductVersionAsync(Guid id)
         {
             var result = await _dataAccessor.Reader.ProductVersions.ProjectTo<ProductVersionDto>(_mapper.ConfigurationProvider)
