@@ -1,25 +1,28 @@
-import { ICommonActions } from './actions';
-import { SET_ERROR } from './constants';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface ICommonState {
-  error: string,
+  error: any,
+  postReqResp: string,
 }
 
 const initialState: ICommonState = {
   error: '',
+  postReqResp: '',
 }
 
-export const commonReducer = (
-  state: ICommonState = initialState,
-  action: ICommonActions
-) => {
-  switch(action.type) {
-    case SET_ERROR:
-      return {
-        ...state,
-        error: action.payload
-      }
-    default:
-      return state
+const commonSlice = createSlice({
+  name: "common",
+  initialState: initialState,
+  reducers: {
+    setPostReqResp: (state, action: PayloadAction<string>) => {
+      state.postReqResp = action.payload
+    },
+    setError: (state, action: PayloadAction<string>) => {
+      state.error = action.payload
+    }
   }
-}
+});
+
+export const {setError, setPostReqResp} = commonSlice.actions
+
+export default commonSlice.reducer

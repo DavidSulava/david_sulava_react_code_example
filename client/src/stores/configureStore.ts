@@ -1,13 +1,12 @@
 import { all } from "redux-saga/effects";
-import { authReducer, IAuthState } from "./authentication/reducer";
+import authSlice, { IAuthState } from "./authentication/reducer";
 import authWatcher from './authentication/sagas';
 import organisationWatcher from './organisation/sagas';
 import createSagaMiddleware from "redux-saga";
-import { createStore, combineReducers, applyMiddleware, Store } from 'redux'
-import { composeWithDevTools } from 'redux-devtools-extension'
-import { commonReducer, ICommonState } from './common/reducer';
-import { IOrganisationState, organisationReducer } from './organisation/reducer';
+import commonSlice, { ICommonState } from './common/reducer';
+import organisationSlice, { IOrganisationState } from './organisation/reducer';
 import commonWatcher from './common/sagas';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 export interface IState {
   auth: IAuthState,
@@ -16,9 +15,9 @@ export interface IState {
 }
 
 const reducers = combineReducers<IState>({
-  auth: authReducer,
-  common: commonReducer,
-  organisation: organisationReducer,
+  auth: authSlice,
+  common: commonSlice,
+  organisation: organisationSlice,
 })
 
 function* sagas() {
@@ -29,9 +28,11 @@ function* sagas() {
   ])
 }
 
-export function configureStore(): Store<IState> {
-  const sagaMiddleware = createSagaMiddleware()
-  const store = createStore(reducers, composeWithDevTools(applyMiddleware(sagaMiddleware)))
-  sagaMiddleware.run(sagas)
-  return store
-}
+const sagaMiddleware = createSagaMiddleware()
+
+export const store = configureStore({
+  reducer: reducers,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({thunk: false, serializableCheck: false}).concat(sagaMiddleware)
+})
+
+sagaMiddleware.run(sagas);

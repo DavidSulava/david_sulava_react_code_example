@@ -1,11 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import useClickOutside from '../../../helpers/hooks/useClickOutside';
-import { ERoutes } from '../../../router/Routes';
 import { useDispatch } from 'react-redux';
-import { AuthenticationActions } from '../../../stores/authentication/actions';
 import { IUser, Nullable } from '../../../types/user';
 import { Button } from 'react-bootstrap';
+import { setUser } from '../../../stores/authentication/reducer';
 
 const Profile: React.FC<{user:Nullable<IUser>}> = ({user }) => {
   const dispatch = useDispatch()
@@ -17,7 +15,7 @@ const Profile: React.FC<{user:Nullable<IUser>}> = ({user }) => {
     setIsShowModal(!isShowModal)
   }
   const onLogOut = () => {
-    dispatch(AuthenticationActions.setUser(null))
+    dispatch(setUser(null))
   }
 
   return(

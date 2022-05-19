@@ -2,10 +2,13 @@ import { Field, Form, FormElement } from '@progress/kendo-react-form';
 import { Button } from 'react-bootstrap';
 import CInput from '../../components/form-components/CInput';
 import { isEmpty } from '../../components/form-components/helpers/valodation-functions';
-import { AuthenticationActions } from '../../stores/authentication/actions';
-import { ISignInData } from '../../types/LoginPage';
 import {useDispatch} from 'react-redux'
 import useAuthCheck from '../../helpers/hooks/useAuthCheck';
+import { Link } from 'react-router-dom';
+import { ERoutes } from '../../router/Routes';
+import React from 'react';
+import { signIn } from '../../stores/authentication/reducer';
+import { ISignInData } from '../../types/user';
 
 const LoginPage = () => {
   const dispatch = useDispatch()
@@ -13,7 +16,7 @@ const LoginPage = () => {
 
   const handleSubmit = (dataItem: {[p:string]: any}) => {
     const postData = {...dataItem} as ISignInData
-    dispatch(AuthenticationActions.signIn(postData))
+    dispatch(signIn(postData))
   }
 
   return (
@@ -63,8 +66,12 @@ const LoginPage = () => {
       />
       <div>Wish create an account?</div>
       <br/>
-      <Button variant="outlined" className="mb-1 btn-outline-primary">Sign Up</Button>
-      <Button variant="outlined" className="mb-1 btn-outline-primary">Forgot Password?</Button>
+      <Button variant="outlined" className="btn-outline-info mb-1"  disabled={checkingAuth}>
+        <Link to={ERoutes.SignUp}>Sign Up</Link>
+      </Button>
+      <Button variant="outlined" className="mb-1 btn-outline-info" disabled={checkingAuth}>
+        <Link to={ERoutes.ForgotPwd}>Forgot Password?</Link>
+      </Button>
     </div>
   )
 }

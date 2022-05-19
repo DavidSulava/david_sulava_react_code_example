@@ -6,12 +6,30 @@ export interface IUser {
   token: string,
 }
 
+export interface ISignInData {
+  email: string,
+  password: string,
+}
+
+export interface ISignUpData {
+  email: string,
+  password: string,
+  firstName: string,
+  lastName: string,
+  phone: string,
+  role: eUserRoles
+}
+
 export interface ITariff {
   id: string,
   name: string
 }
 
 export type Nullable<T> = T|undefined|null
-
 export const ACCESS_TOKEN_KEY = 'accessToken'
 
+export enum eUserRoles {
+  User = 0,
+  Admin = 1,
+  SuperAdmin = 2,
+}

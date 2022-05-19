@@ -1,40 +1,43 @@
 import { all, call, put, takeLatest } from 'typed-redux-saga';
-import { IGetOrganisation, IPostOrganisationAction, OrganisationActions } from './actions';
-import { CommonActions } from '../common/actions';
-import { GET_ORGANISATIONS, POST_ORGANISATION } from './constants';
 import Api from '../../services/api/api';
+import { setError } from '../common/reducer';
+import { getOrganisations, isLoadingOrganisation, postOrganisation, saveOrganisations } from './reducer';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { IPostOrganisation } from '../../types/OrganisationPage';
 
-function* getOrganisations({userId}: IGetOrganisation) {
+function* getOrganisationsSaga({payload: userId}: PayloadAction<string>) {
   try {
-    yield put(OrganisationActions.isLoadingOrganisation(true))
+    yield put(isLoadingOrganisation(true))
     const response = yield* call(Api.getOrganisations, userId)
-    yield put(OrganisationActions.saveOrganisations(response))
+    yield put(saveOrganisations(response))
   }
-  catch(e) {
-    yield put(CommonActions.setError(e as string))
-  }
-  finally {
-    yield put(OrganisationActions.isLoadingOrganisation(false))
-  }
-}
-function* postOrganisation({organisation}: IPostOrganisationAction) {
-  try {
-    yield put(OrganisationActions.isLoadingOrganisation(true))
-    yield* call(Api.postOrganisation, organisation)
-    yield put(OrganisationActions.getOrganisations(organisation.userId))
-  }
-  catch(e) {
-    yield put(CommonActions.setError(e as string))
+  catch(e: any) {
+    yield put(setError(e))
   }
   finally {
-    yield put(OrganisationActions.isLoadingOrganisation(false))
+    yield put(isLoadingOrganisation(false))
   }
 }
 
-function* organisationWatcher(){
+function* postOrganisationSaga({payload: organisation}: PayloadAction<IPostOrganisation>) {
+  try {
+    yield put(isLoadingOrganisation(true))
+    yield* call(Api.postOrganisation, organisation)
+    yield put(getOrganisations(organisation.userId))
+    put(getOrganisations(organisation.userId))
+  }
+  catch(e: any) {
+    yield put(setError(e))
+  }
+  finally {
+    yield put(isLoadingOrganisation(false))
+  }
+}
+
+function* organisationWatcher() {
   yield all([
-    takeLatest(GET_ORGANISATIONS, getOrganisations),
-    takeLatest(POST_ORGANISATION, postOrganisation)
+    takeLatest(getOrganisations.type, getOrganisationsSaga),
+    takeLatest(postOrganisation.type, postOrganisationSaga)
   ])
 }
 

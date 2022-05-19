@@ -13,6 +13,8 @@ import Publications from '../pages/DashboardPage/components/Publications';
 import CPThreshold from '../pages/DashboardPage/components/CPThreshold';
 import Users from '../pages/DashboardPage/components/Users';
 import Billing from '../pages/DashboardPage/components/Billing';
+import RegistrationPage from '../pages/RegistrationPage/RegistartionPage';
+import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
 
 const RouteList = () => {
   return (
@@ -20,6 +22,8 @@ const RouteList = () => {
       {/*Guest Routes*/}
       <Route element={<GuestRoutes/>}>
         <Route index element={<LoginPage/>}/>
+        <Route path={ERoutes.SignUp}  element={<RegistrationPage/>}/>
+        <Route path={ERoutes.ForgotPwd}  element={<ForgotPassword/>}/>
       </Route>
 
       {/*Protected Routes*/}
