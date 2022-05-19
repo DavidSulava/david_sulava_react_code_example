@@ -44,7 +44,7 @@ namespace DesignGear.Contractor.Api.Controllers
 
         
         [HttpGet]
-        public async Task<DataSourceResult> GetProductItemsAsync([DataSourceRequest] DataSourceRequest dataSourceRequest)
+        public async Task<DataSourceResult> GetProductItemsAsync([FromQuery][DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
             return await _productService.GetProductsByOrganizationKendoAsync(query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ProductDto, VmProduct>));
         }

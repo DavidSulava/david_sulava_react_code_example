@@ -27,6 +27,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.MapType<DataSourceRequest>(() => new OpenApiSchema { Type = typeof(string).Name });
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme.",
@@ -43,7 +44,6 @@ builder.Services.AddSwaggerGen(options =>
         },new List<string>()
     }
     });
-    options.MapType<DataSourceRequest>(() => new OpenApiSchema { Type = typeof(string).Name });
 });
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
