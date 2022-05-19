@@ -4,6 +4,7 @@ using DesignGear.Contractor.Api.Config;
 using DesignGear.Contractor.Core.Data;
 using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contracts.Helpers;
+using Kendo.Mvc.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -42,10 +43,12 @@ builder.Services.AddSwaggerGen(options =>
         },new List<string>()
     }
     });
+    options.MapType<DataSourceRequest>(() => new OpenApiSchema { Type = typeof(string).Name });
 });
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-builder.Services.Configure<CommunicatorSettings>(builder.Configuration.GetSection("CommunicatorSettings"));
+//builder.Services.Configure<CommunicatorSettings>(builder.Configuration.GetSection("CommunicatorSettings"));
+builder.Services.AddOptions<CommunicatorSettings>().Bind(builder.Configuration.GetSection("CommunicatorSettings")).ValidateDataAnnotations();
 
 builder.Services.AddHttpClient();
 

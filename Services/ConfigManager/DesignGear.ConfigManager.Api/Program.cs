@@ -7,7 +7,7 @@ using Hangfire;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args); 
-builder.Configuration.AddJsonFile($"appsettings.Local.json", optional: true);
+//builder.Configuration.AddJsonFile($"appsettings.Local.json", optional: true);
 
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>(

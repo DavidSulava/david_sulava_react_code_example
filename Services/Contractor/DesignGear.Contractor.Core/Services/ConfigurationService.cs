@@ -7,6 +7,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DesignGear.Common.Exceptions;
 using DesignGear.Contracts.Communicators.Interfaces;
+using DesignGear.Contracts.Models.ConfigManager;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -14,39 +15,41 @@ namespace DesignGear.Contractor.Core.Services
     {
         private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
-        private readonly IConfigManagerCommunicator _configManagerCommunicator;
+        private readonly IConfigManagerCommunicator _configManagerService;
         private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
 
-        public ConfigurationService(IMapper mapper, DataAccessor dataAccessor, IConfigManagerCommunicator configManagerCommunicator)
+        public ConfigurationService(IMapper mapper, DataAccessor dataAccessor, IConfigManagerCommunicator configManagerService)
         {
             _mapper = mapper;
             _dataAccessor = dataAccessor;
-            _configManagerCommunicator = configManagerCommunicator;
+            _configManagerService = configManagerService;
         }
 
-        //public async Task<Guid> CreateConfigurationAsync(ConfigurationCreateDto create)
-        //{
-        //    if (create == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(create));
-        //    }
+        public async Task CreateConfigurationAsync(VmConfigurationRequest create)
+        {
+            if (create == null)
+            {
+                throw new ArgumentNullException(nameof(create));
+            }
 
-        //    var templateItem = await _dataAccessor.Reader.Configurations.
-        //        Include(x => x.ParameterDefinitions).FirstOrDefaultAsync(x => x.Id == create.TemplateConfigurationId);
-        //    //compare parameter definitions
-        //    if (templateItem.ParameterDefinitions.Where(y => create.ParameterDefinitions.Any(z => z.DisplayName == y.DisplayName)).ToList().Count !=
-        //        templateItem.ParameterDefinitions.Count)
-        //    {
-        //        //throw new OperationErrorException(0, "Incorrect parameter list");
-        //    }
+            await _configManagerService.CreateConfigurationRequestAsync(create);
 
-        //    var newItem = _mapper.Map<Configuration>(create);
-        //    _dataAccessor.Editor.Create(newItem);
-        //    //await _dataAccessor.Editor.SaveAsync();
-        //    var result1 = await _configManagerCommunicator.ProcessConfigurationAsync(newItem.Id);
-        //    var result2 = await _configManagerCommunicator.GetSvfAsync(newItem.Id);
-        //    return newItem.Id;
-        //}
+            //var templateItem = await _dataAccessor.Reader.Configurations.
+            //    Include(x => x.ParameterDefinitions).FirstOrDefaultAsync(x => x.Id == create.TemplateConfigurationId);
+            ////compare parameter definitions
+            //if (templateItem.ParameterDefinitions.Where(y => create.ParameterDefinitions.Any(z => z.DisplayName == y.DisplayName)).ToList().Count !=
+            //    templateItem.ParameterDefinitions.Count)
+            //{
+            //    //throw new OperationErrorException(0, "Incorrect parameter list");
+            //}
+
+            //var newItem = _mapper.Map<Configuration>(create);
+            //_dataAccessor.Editor.Create(newItem);
+            ////await _dataAccessor.Editor.SaveAsync();
+            //var result1 = await _configManagerCommunicator.ProcessConfigurationAsync(newItem.Id);
+            //var result2 = await _configManagerCommunicator.GetSvfAsync(newItem.Id);
+            //return newItem.Id;
+        }
 
         public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update)
         {

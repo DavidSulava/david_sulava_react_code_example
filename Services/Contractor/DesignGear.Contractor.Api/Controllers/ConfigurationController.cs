@@ -5,6 +5,7 @@ using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contracts.Models.Contractor;
 using AutoMapper;
 using DesignGear.Common.Extensions;
+using DesignGear.Contracts.Models.ConfigManager;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
@@ -22,11 +23,11 @@ namespace DesignGear.Contractor.Api.Controllers
             _mapper = mapper;
         }
 
-        //[HttpPost]
-        //public async Task<Guid> CreateConfigurationAsync([FromForm] VmConfigurationCreate create)
-        //{
-        //    return await _configurationService.CreateConfigurationAsync(create.MapTo<ConfigurationCreateDto>(_mapper));
-        //}
+        [HttpPost]
+        public async Task CreateConfigurationRequestAsync([FromBody] VmConfigurationRequest request)
+        {
+            await _configurationService.CreateConfigurationAsync(request);
+        }
 
         [HttpPut]
         public async Task UpdateConfigurationAsync([FromForm] VmConfigurationUpdate update)
@@ -47,9 +48,9 @@ namespace DesignGear.Contractor.Api.Controllers
         //}
 
         [HttpGet("{id}")]
-        public async Task<VmConfiguration> GetConfigurationAsync([FromRoute] Guid id)
+        public async Task<Contracts.Models.Contractor.VmConfiguration> GetConfigurationAsync([FromRoute] Guid id)
         {
-            return (await _configurationService.GetConfigurationAsync(id)).MapTo<VmConfiguration>(_mapper);
+            return (await _configurationService.GetConfigurationAsync(id)).MapTo< Contracts.Models.Contractor.VmConfiguration>(_mapper);
         }
 
         [HttpGet]

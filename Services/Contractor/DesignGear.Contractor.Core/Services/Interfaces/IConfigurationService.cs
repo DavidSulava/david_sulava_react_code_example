@@ -1,10 +1,11 @@
 ﻿using DesignGear.Contracts.Dto;
+using DesignGear.Contracts.Models.ConfigManager;
 
 namespace DesignGear.Contractor.Core.Services.Interfaces
 {
     public interface IConfigurationService
     {
-        //Task<Guid> CreateConfigurationAsync(ConfigurationCreateDto Configuration);
+        Task CreateConfigurationAsync(VmConfigurationRequest request);
 
         Task UpdateConfigurationAsync(ConfigurationUpdateDto Configuration);
 

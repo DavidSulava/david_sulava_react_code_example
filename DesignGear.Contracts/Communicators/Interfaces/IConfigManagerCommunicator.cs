@@ -1,4 +1,5 @@
 ﻿using DesignGear.Contracts.Dto;
+using DesignGear.Contracts.Models.ConfigManager;
 
 namespace DesignGear.Contracts.Communicators.Interfaces
 {
@@ -9,6 +10,9 @@ namespace DesignGear.Contracts.Communicators.Interfaces
         Task<string> GetSvfAsync(Guid id);
 
         Task<ICollection<AppBundleDto>> GetAppBundleListAsync();
-        //Task CreateConfigurationAsync(CreateConfigurationRequest create);
+        
+        Task CreateConfigurationAsync(VmConfigurationCreate create);
+
+        Task CreateConfigurationRequestAsync(VmConfigurationRequest request);
     }
 }

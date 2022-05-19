@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using System.IO.Compression;
 using System.Data;
 using DesignGear.Contracts.Communicators.Interfaces;
+using DesignGear.Contracts.Models.ConfigManager;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -41,12 +42,17 @@ namespace DesignGear.Contractor.Core.Services
             if (modelFile != null)
             {
                 _dataAccessor.Editor.Create(modelFile.Configuration);
-            }
+            }*/
 
             _dataAccessor.Editor.Create(newItem);
             await _dataAccessor.Editor.SaveAsync();
 
-            await SaveImageFilesAsync(newItem.Id, create.ImageFiles);
+            var newConfiguration = _mapper.Map<VmConfigurationCreate>(create);
+            newConfiguration.ProductVersionId = newItem.Id;
+            newConfiguration.OrganizationId = (await _dataAccessor.Reader.Products.FirstAsync(x => x.Id == create.ProductId)).OrganizationId;
+            await _configManagerService.CreateConfigurationAsync(newConfiguration);
+
+            /*await SaveImageFilesAsync(newItem.Id, create.ImageFiles);
             if (modelFile != null)
                 await SaveModelFileAsync(newItem.Id, modelFile.Configuration.Id, create.ModelFile);*/
 
