@@ -1,0 +1,27 @@
+
+.profile-icon{
+  @include fitSize(height, $header-height, 2px);
+  @include fitSize(width, $header-height, 2px);
+  display: block;
+  border-radius: 50%;
+  background-color: $form-background-color;
+  cursor: pointer;
+}
+.profile-modal{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+  position: absolute;
+  background-color: $form-background-color;
+  padding: 5px;
+  right: 0;
+  min-height: 100px;
+  min-width: 200px;
+  border-radius: 10px;
+
+  & >:not(:nth-child(1)){
+    cursor: pointer;
+  }
+}
