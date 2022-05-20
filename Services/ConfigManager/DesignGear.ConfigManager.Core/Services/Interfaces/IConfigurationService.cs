@@ -1,4 +1,6 @@
-﻿using DesignGear.Contracts.Dto.ConfigManager;
+﻿//using DesignGear.Contracts.Dto;
+using DesignGear.Contracts.Dto;
+using DesignGear.Contracts.Dto.ConfigManager;
 
 namespace DesignGear.ConfigManager.Core.Services.Interfaces
 {
@@ -9,7 +11,17 @@ namespace DesignGear.ConfigManager.Core.Services.Interfaces
         Task CreateConfigurationFromPackageAsync(ConfigurationCreateDto create);
         Task<Stream> CreateConfigurationRequestPackageAsync(Guid configurationId);
         Task AddSvfAsync(Guid configurationId, ICollection<Stream> svfList);
-        Task<Stream> GetSvfAsync(Guid configurationId);
+        //Task<Stream> GetSvfAsync(Guid configurationId);
+
+        Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId);
+
+        Task<FileStreamDto> GetSvfAsync(Guid configurationId, string svfName);
+
+        Task<string> GetSvfRootFileNameAsync(Guid configurationId);
+
+        Task<ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId);
+
+        //todo:update (из inventor из новой модели)
 
 
 

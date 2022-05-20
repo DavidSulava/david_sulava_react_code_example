@@ -19,7 +19,9 @@ namespace DesignGear.ConfigManager.Core.Data
         }
 
         public IQueryable<AppBundle> AppBundles => _context.AppbBundles;
+        public IQueryable<ComponentDefinition> ComponentDefinitions => _context.ComponentDefinitions;
         public IQueryable<Configuration> Configurations => _context.Configurations;
+        public IQueryable<ConfigurationInstance> configurationInstances => _context.ConfigurationInstances;
         public IQueryable<ParameterDefinition> ParameterDefinitions => _context.ParameterDefinitions;
         public IQueryable<ValueOption> ValueOptions => _context.ValueOptions;
 

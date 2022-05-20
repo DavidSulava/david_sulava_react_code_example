@@ -62,12 +62,6 @@ namespace DesignGear.Contractor.Core.Services
             await _dataAccessor.Editor.SaveAsync();
         }
 
-        public async Task<ICollection<ProductDto>> GetProductsByOrganizationAsync(Guid organizationId)
-        {
-            return await _dataAccessor.Reader.Products.Where(x => x.OrganizationId == organizationId).
-                ProjectTo<ProductDto>(_mapper.ConfigurationProvider).ToListAsync();
-        }
-
         public async Task<ProductDto> GetProductAsync(Guid id)
         {
             var result = await _dataAccessor.Reader.Products.ProjectTo<ProductDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
@@ -79,7 +73,7 @@ namespace DesignGear.Contractor.Core.Services
             return result;
         }
 
-        public async Task<TResult> GetProductsByOrganizationKendoAsync<TResult>(Guid organizationId, Func<IQueryable<ProductDto>, TResult> resultBuilder)
+        public async Task<TResult> GetProductsByOrganizationAsync<TResult>(Guid organizationId, Func<IQueryable<ProductDto>, TResult> resultBuilder)
         {
             if (resultBuilder == null)
             {

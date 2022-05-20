@@ -12,6 +12,7 @@ using DesignGear.ModelPackage;
 using DesignGear.ConfigManager.Core.Storage.Interfaces;
 using DesignGear.Common.Extensions;
 using DesignGear.Contracts.Enums;
+using DesignGear.Contracts.Dto;
 
 namespace DesignGear.ConfigManager.Core.Services
 {
@@ -21,8 +22,8 @@ namespace DesignGear.ConfigManager.Core.Services
         private readonly DataAccessor _dataAccessor;
         private readonly IConfigurationFileStorage _configurationFileStorage;
 
-        public ConfigurationService(IMapper mapper, 
-            DataAccessor dataAccessor, 
+        public ConfigurationService(IMapper mapper,
+            DataAccessor dataAccessor,
             IConfigurationFileStorage configurationFileStorage)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -35,7 +36,8 @@ namespace DesignGear.ConfigManager.Core.Services
          * todo Использовать Kendo UI
          * Используется как снаружи для получения и отображения списка конфигураций, так и фоновыми задачами
          */
-        public async Task<ICollection<ConfigurationItemDto>> GetConfigurationListAsync(ConfigurationFilterDto filter) {
+        public async Task<ICollection<ConfigurationItemDto>> GetConfigurationListAsync(ConfigurationFilterDto filter)
+        {
 
             var items = await _dataAccessor.Reader.Configurations
                 .Where(x => x.ParentConfigurationId == null)
@@ -48,7 +50,8 @@ namespace DesignGear.ConfigManager.Core.Services
         /*
          * Создаем заявку на конфигурацию. Т.е. создается конфигурация со статусом InQueue
          */
-        public async Task CreateConfigurationRequestAsync(ConfigurationRequestDto request) {
+        public async Task CreateConfigurationRequestAsync(ConfigurationRequestDto request)
+        {
             var newConfiguration = _mapper.Map<Configuration>(request);
             await _dataAccessor.Editor.CreateAsync(newConfiguration);
             await _dataAccessor.Editor.SaveAsync();
@@ -59,13 +62,15 @@ namespace DesignGear.ConfigManager.Core.Services
          * Svf при этом у нас отсутствует и его нужно сформировать. Для этого присваивается соответствующий статус
          * todo - создание записи в БД и папки с файлами должно быть в рамках транзакции
          */
-        public async Task CreateConfigurationFromPackageAsync(ConfigurationCreateDto create) {
+        public async Task CreateConfigurationFromPackageAsync(ConfigurationCreateDto create)
+        {
             /*
              * Распаковываем пакет и кладем его в хранилище
              * Заранее формируем id конфигурации, т.к. хранилище должно его знать
              */
             var rootConfigurationId = Guid.NewGuid();
-            var model = await _configurationFileStorage.SaveConfigurationPackageAsync(new ConfigurationPackageDto {
+            var model = await _configurationFileStorage.SaveConfigurationPackageAsync(new ConfigurationPackageDto
+            {
                 ProductVersionId = create.ProductVersionId,
                 ConfigurationId = rootConfigurationId,
                 ConfigurationPackage = create.ConfigurationPackage
@@ -76,11 +81,13 @@ namespace DesignGear.ConfigManager.Core.Services
              * Проверять можно по UniqueId
              */
             var configurations = model.MapTo<ICollection<Configuration>>(_mapper);
-            foreach(var configuration in configurations) {
+            foreach (var configuration in configurations)
+            {
                 _mapper.Map(create, configuration);
-                if (configuration.ParentConfigurationId == null) {
+                if (configuration.ParentConfigurationId == null)
+                {
                     configuration.Id = rootConfigurationId;
-                } 
+                }
                 configuration.Status = ConfigurationStatus.Ready;
                 configuration.SvfStatus = SvfStatus.InQueue;
                 await _dataAccessor.Editor.CreateAsync(configuration);
@@ -89,7 +96,7 @@ namespace DesignGear.ConfigManager.Core.Services
             /* todo
              * Добавить в базу эмэилы для уведомления подписчиков, когда будет сформирован svf
              */
-            
+
             await _dataAccessor.Editor.SaveAsync();
         }
 
@@ -98,7 +105,8 @@ namespace DesignGear.ConfigManager.Core.Services
          * При этом учитываем, что запись корневой кофигурации была создана ранее как заявка
          * Вызывается фоновой задачей, когда получен ответ от инвентора
          */
-        public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update) {
+        public async Task UpdateConfigurationAsync(Contracts.Dto.ConfigManager.ConfigurationUpdateDto update)
+        {
             /*
              * Получаем из базы корневую конфигурацию (заявку)
              */
@@ -106,7 +114,8 @@ namespace DesignGear.ConfigManager.Core.Services
                 .Include(x => x.TemplateConfiguration)
                     .ThenInclude(x => x.ComponentDefinition)
                 .FirstOrDefaultAsync(x => x.Id == update.ConfigurationId);
-            if (rootConfiguration == null) {
+            if (rootConfiguration == null)
+            {
                 throw new EntityNotFoundException<Configuration>(update.ConfigurationId);
             }
 
@@ -144,7 +153,8 @@ namespace DesignGear.ConfigManager.Core.Services
          * Имя файла (архива), содержащего все необходимые для инвентора данные
          * Вызывается фоновой задачей, которая делает отправку кофигурации на перерасчет в инвентор
          */
-        public async Task<Stream> CreateConfigurationRequestPackageAsync(Guid configurationId) {
+        public async Task<Stream> CreateConfigurationRequestPackageAsync(Guid configurationId)
+        {
             /*
              * todo Поднять конфигурацию (запрос) с ее параметрами, поднять распакованный пакет из хранилища, 
              * заменить в json значения параметров, упаковать и вернуть архив как ответ             
@@ -156,7 +166,8 @@ namespace DesignGear.ConfigManager.Core.Services
          * Возвращает дерево параметров конфигурации
          * Вызывается снаружи
          */
-        public async Task<ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId) {
+        public async Task<ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId)
+        {
             throw new NotImplementedException();
         }
 
@@ -165,17 +176,43 @@ namespace DesignGear.ConfigManager.Core.Services
          * Вызывается фоновой задачей, когда Forge API возвращает результат
          * Файлы добавляются в хранилище через IConfigurationFileStorage
          */
-        public async Task AddSvfAsync(Guid configurationId, ICollection<Stream> svfList) {
+        public async Task AddSvfAsync(Guid configurationId, ICollection<Stream> svfList)
+        {
             throw new NotImplementedException();
         }
 
         /*
-         * Возвращает архив svf-файлов для заданной конфигурации
+         * Возвращает svf-файл для заданной конфигурации
          * Вызывается снаружи
-         * Архив svf-файлов получаем при помощи IConfigurationFileStorage
+         * svf-файлы получаем при помощи IConfigurationFileStorage
          */
-        public async Task<Stream> GetSvfAsync(Guid configurationId) {
-            throw new NotImplementedException();
+        public async Task<FileStreamDto> GetSvfAsync(Guid configurationId, string svfName)
+        {
+            var productVersionId = await _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition).
+                Where(x => x.Id == configurationId).Select(x => x.ComponentDefinition.ProductVersionId).FirstOrDefaultAsync();
+
+            return _configurationFileStorage.GetSvf(productVersionId, configurationId, svfName);
+        }
+
+        /*
+         * Возвращает корневой svf-файл для заданной конфигурации
+         * Имя svf-файла получаем при помощи IConfigurationFileStorage
+         */
+        public async Task<string> GetSvfRootFileNameAsync(Guid configurationId)
+        {
+            var productVersionId = await _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition).
+                Where(x => x.Id == configurationId).Select(x => x.ComponentDefinition.ProductVersionId).FirstOrDefaultAsync();
+
+            return _configurationFileStorage.GetSvfRootFileName(productVersionId, configurationId);
+        }
+
+
+
+        public async Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId)
+        {
+            return await _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition).
+                Where(x => x.ComponentDefinition.ProductVersionId == productVersionId).
+                ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
 
@@ -203,94 +240,88 @@ namespace DesignGear.ConfigManager.Core.Services
         //    return newItem.Id;*/
         //    return Guid.Empty;
     }
-            
-        /*public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update)
+
+    /*public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update)
+    {
+        if (update == null)
         {
-            if (update == null)
-            {
-                throw new ArgumentNullException(nameof(update));
-        }
+            throw new ArgumentNullException(nameof(update));
+    }
 
-            var item = await _dataAccessor.Editor.Configurations.FirstOrDefaultAsync(x => x.Id == update.Id);
-            if (item == null)
-            {
-                throw new EntityNotFoundException<Configuration>(update.Id);
-            }
-
-            _mapper.Map(update, item);
-            await _dataAccessor.Editor.SaveAsync();
-        }
-
-        public async Task RemoveConfigurationAsync(Guid id)
+        var item = await _dataAccessor.Editor.Configurations.FirstOrDefaultAsync(x => x.Id == update.Id);
+        if (item == null)
         {
-            var item = await _dataAccessor.Editor.Configurations.FirstOrDefaultAsync(x => x.Id == id);
-            if (item == null)
-            {
-                throw new EntityNotFoundException<Configuration>(id);
-            }
-
-            _dataAccessor.Editor.Delete(item);
-            DeleteFiles(item.ProductVersionId, item.Id);
-            await _dataAccessor.Editor.SaveAsync();
+            throw new EntityNotFoundException<Configuration>(update.Id);
         }
 
-        public async Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId)
+        _mapper.Map(update, item);
+        await _dataAccessor.Editor.SaveAsync();
+    }
+
+    public async Task RemoveConfigurationAsync(Guid id)
+    {
+        var item = await _dataAccessor.Editor.Configurations.FirstOrDefaultAsync(x => x.Id == id);
+        if (item == null)
         {
-            return await _dataAccessor.Reader.Configurations.Where(x => x.ProductVersionId == productVersionId).
-                ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider).ToListAsync();
+            throw new EntityNotFoundException<Configuration>(id);
         }
 
-        public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
+        _dataAccessor.Editor.Delete(item);
+        DeleteFiles(item.ProductVersionId, item.Id);
+        await _dataAccessor.Editor.SaveAsync();
+    }
+
+    public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
+    {
+        var result = await _dataAccessor.Reader.Configurations.ProjectTo<ConfigurationDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
+        if (result == null)
         {
-            var result = await _dataAccessor.Reader.Configurations.ProjectTo<ConfigurationDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
-            if (result == null)
-            {
-                throw new EntityNotFoundException<Configuration>(id);
-        }
+            throw new EntityNotFoundException<Configuration>(id);
+    }
 
-            result.ModelFile = GetModelFileName(result.ProductVersionId, id);
+        result.ModelFile = GetModelFileName(result.ProductVersionId, id);
 
-            return result;
-        }
+        return result;
+    }
 
-        private string GetModelFileName(Guid productVersionId, Guid id)
+    private string GetModelFileName(Guid productVersionId, Guid id)
+    {
+        var filePath = $"{_fileBucket}{productVersionId}\\{id}\\";
+        var di = new DirectoryInfo(filePath);
+        return di.Exists ? di.EnumerateFiles().FirstOrDefault()?.Name ?? string.Empty : string.Empty;
+    }
+
+    public async Task<AttachmentDto> GetModelFileAsync(Guid id)
+    {
+        var filePath = $"{_fileBucket}{id}\\model\\";
+        var di = new DirectoryInfo(filePath);
+        if (di.Exists)
         {
-            var filePath = $"{_fileBucket}{productVersionId}\\{id}\\";
-            var di = new DirectoryInfo(filePath);
-            return di.Exists ? di.EnumerateFiles().FirstOrDefault()?.Name ?? string.Empty : string.Empty;
-        }
+            var file = di.EnumerateFiles().FirstOrDefault();
+            if (file != null)
+                return await GetFileAsync(file);
+    }
 
-        public async Task<AttachmentDto> GetModelFileAsync(Guid id)
+        return null;
+    }
+
+    private async Task<AttachmentDto> GetFileAsync(FileInfo file)
+    {
+        var result = new AttachmentDto
         {
-            var filePath = $"{_fileBucket}{id}\\model\\";
-            var di = new DirectoryInfo(filePath);
-            if (di.Exists)
-            {
-                var file = di.EnumerateFiles().FirstOrDefault();
-                if (file != null)
-                    return await GetFileAsync(file);
-        }
+            FileName = file.Name,
+            Content = await File.ReadAllBytesAsync(file.FullName),
+            ContentType = "application/octet-stream"
+        };
+        result.Length = result.Content.Length;
+        return result;
+    }
 
-            return null;
-        }
-
-        private async Task<AttachmentDto> GetFileAsync(FileInfo file)
-        {
-            var result = new AttachmentDto
-            {
-                FileName = file.Name,
-                Content = await File.ReadAllBytesAsync(file.FullName),
-                ContentType = "application/octet-stream"
-            };
-            result.Length = result.Content.Length;
-            return result;
-        }
-
-        private void DeleteFiles(Guid productVersionId, Guid id)
-        {
-            var filePath = $"{_fileBucket}{productVersionId}\\{id}";
-            var di = new DirectoryInfo(filePath);
-            if (di.Exists)
-                di.Delete(true);
-        }*/
+    private void DeleteFiles(Guid productVersionId, Guid id)
+    {
+        var filePath = $"{_fileBucket}{productVersionId}\\{id}";
+        var di = new DirectoryInfo(filePath);
+        if (di.Exists)
+            di.Delete(true);
+    }*/
 }

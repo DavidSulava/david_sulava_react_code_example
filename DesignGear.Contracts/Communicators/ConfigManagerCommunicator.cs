@@ -75,5 +75,26 @@ namespace DesignGear.Contracts.Communicators
             var response = await _httpClient.PostAsync($"{_settings.ConfigManagerUrl}configuration/request", new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
         }
+
+        public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update)
+        {
+            var response = await _httpClient.PutAsync($"{_settings.ConfigManagerUrl}configuration", new StringContent(JsonConvert.SerializeObject(update), Encoding.UTF8, "application/json"));
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<FileStreamDto> GetSvfAsync(Guid configurationId, string svfName)
+        {
+            return await SendHttpRequestAsync<FileStreamDto>($"{_settings.ConfigManagerUrl}configuration/{configurationId}/svf{svfName}");
+        }
+
+        public async Task<string> GetSvfRootFileNameAsync(Guid configurationId)
+        {
+            return await SendHttpRequestAsync<string>($"{_settings.ConfigManagerUrl}configuration/{configurationId}/svf");
+        }
+
+        public async Task<Dto.ConfigManager.ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId)
+        {
+            return (await SendHttpRequestAsync<VmComponentParameterDefinitions>($"{_settings.ConfigManagerUrl}configuration/{configurationId}/parameters")).MapTo<Dto.ConfigManager.ConfigurationParametersDto>(_mapper);
+        }
     }
 }

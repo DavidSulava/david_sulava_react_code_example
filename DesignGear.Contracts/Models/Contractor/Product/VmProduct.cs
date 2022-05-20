@@ -10,6 +10,8 @@
 
         public Guid OrganizationId { get; set; }
 
+        public string CurrentVersion { get; set; }
+
         public ICollection<VmProductVersion> ProductVersions { get; set; }
     }
 }

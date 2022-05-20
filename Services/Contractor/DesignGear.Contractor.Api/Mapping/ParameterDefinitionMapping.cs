@@ -8,7 +8,7 @@ namespace DesignGear.Contractor.Api.Mapping
     {
         public ParameterDefinitionMapping()
         {
-            CreateMap<ParameterDefinitionDto, VmParameterDefinition>(MemberList.None);
+            CreateMap<ParameterDefinitionDto, VmParameter>(MemberList.None);
         }
     }
 }

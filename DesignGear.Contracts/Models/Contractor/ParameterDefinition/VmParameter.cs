@@ -2,7 +2,7 @@
 
 namespace DesignGear.Contracts.Models.Contractor
 {
-    public class VmParameterDefinition
+    public class VmParameter
     {
         public Guid Id { get; set; }
         

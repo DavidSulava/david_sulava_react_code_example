@@ -18,6 +18,6 @@ namespace DesignGear.Contracts.Models.Contractor
 
         public Guid TargetFileId { get; set; }
 
-        public ICollection<VmParameterDefinition> ParameterDefinitions { get; set; }
+        public ICollection<VmParameter> ParameterDefinitions { get; set; }
     }
 }

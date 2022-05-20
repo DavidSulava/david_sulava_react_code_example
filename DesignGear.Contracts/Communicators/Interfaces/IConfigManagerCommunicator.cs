@@ -14,5 +14,13 @@ namespace DesignGear.Contracts.Communicators.Interfaces
         Task CreateConfigurationAsync(VmConfigurationCreate create);
 
         Task CreateConfigurationRequestAsync(VmConfigurationRequest request);
+
+        Task UpdateConfigurationAsync(ConfigurationUpdateDto update);
+
+        Task<FileStreamDto> GetSvfAsync(Guid configurationId, string svfName);
+
+        Task<string> GetSvfRootFileNameAsync(Guid configurationId);
+
+        Task<Dto.ConfigManager.ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId);
     }
 }
