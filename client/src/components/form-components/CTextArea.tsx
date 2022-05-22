@@ -41,15 +41,16 @@ const CTextArea: React.FC<FieldRenderProps> = (fieldRenderProps) => {
       >
         {value}
       </TextArea>
-      {
-        max &&
-        <Hint direction={"end"} style={{ position: "absolute", right:15 }}>
-          {value?.length || 0} / {max}
-        </Hint>
-      }
+      <div className="k-d-flex-row k-justify-content-stretch" style={{width: '100%'}}>
+        {!valid && validationMessage && <Error>{validationMessage}</Error>}
+        {/*{*/}
+        {/*  max &&*/}
+        {/*  <Hint direction={"end"}>*/}
+        {/*    {value?.length || 0} / {max}*/}
+        {/*  </Hint>*/}
+        {/*}*/}
+      </div>
 
-
-      {!valid && validationMessage && <Error>{validationMessage}</Error>}
     </FieldWrapper>
   )
 }

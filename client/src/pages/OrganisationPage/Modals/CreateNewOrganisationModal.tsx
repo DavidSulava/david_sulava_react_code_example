@@ -19,9 +19,9 @@ const CreateNewOrganisationModal: React.FC<ICreateNewOrganisationModalProps> = (
   onClose,
 }) => {
   const dispatch = useDispatch()
-  const {user, tariff} = useAuthCheck()
+  const {user} = useAuthCheck()
   const formRef = useRef<Form|null>(null)
-  const refFormSubmitBtn = useRef<HTMLButtonElement|null>(null)
+  const formSubmitBtnRef = useRef<HTMLButtonElement|null>(null)
   const headerText = 'Create organisation';
   const organizationTypes = getEnumKeys(eOrganisationTypes)
   const formState = {
@@ -29,7 +29,7 @@ const CreateNewOrganisationModal: React.FC<ICreateNewOrganisationModalProps> = (
   }
   const modalButtons: IModalWrapperButton[] = [
     {buttonText: "close", onButtonClick: () => onClose()},
-    {buttonText: "save", onButtonClick: () => refFormSubmitBtn?.current?.click()}
+    {buttonText: "save", onButtonClick: () => formSubmitBtnRef?.current?.click()}
   ]
 
   const onSubmitLocal = (formData: any) => {
@@ -98,7 +98,7 @@ const CreateNewOrganisationModal: React.FC<ICreateNewOrganisationModalProps> = (
             <Button
               type="submit"
               hidden={true}
-              ref={refFormSubmitBtn}
+              ref={formSubmitBtnRef}
             >
               submit
             </Button>

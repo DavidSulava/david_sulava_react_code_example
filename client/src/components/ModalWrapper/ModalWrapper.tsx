@@ -21,7 +21,7 @@ const ModalWrapper: React.FC<IModalCommonProps> = ({
           <DialogActionsBar layout={'end'}>
             {buttons.map((b, index) => {
               return (
-                <Button variant="info" className='button' disabled={b.buttonDisabled} onClick={b.onButtonClick}>
+                <Button variant="primary" className='button' disabled={b.buttonDisabled} onClick={b.onButtonClick} key={index}>
                   {b.buttonText}
                 </Button>
               )

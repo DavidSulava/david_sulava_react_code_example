@@ -7,6 +7,8 @@ import CreateNewOrganisationModal from './Modals/CreateNewOrganisationModal';
 import { Link } from 'react-router-dom';
 import { ERoutes } from '../../router/Routes';
 import { getOrganisations } from '../../stores/organisation/reducer';
+import setPath from '../../helpers/setPath';
+import BtnLink from '../../components/BtnLink';
 
 const OrganisationPage = () => {
   const dispatch = useDispatch()
@@ -33,17 +35,15 @@ const OrganisationPage = () => {
         </div>
         <div className="organisation-rows">
           {
-            organisations.map(org => {
+            organisations.map((org, index) => {
               return (
-                <div className="organisation-single-row">
+                <div className="organisation-single-row" key={index}>
                   <div className='organisation-item-left'>
                     <h6>{org.name}</h6>
                     <div>{org.description}</div>
                   </div>
                   <div>
-                    <Button variant="info" >
-                      <Link to={ERoutes.Dashboard}> Log into space</Link>
-                    </Button>
+                    <BtnLink to={setPath(ERoutes.Dashboard, [org.id])} className='btn btn-primary'>Log into space</BtnLink>
                   </div>
                 </div>
               )
@@ -74,7 +74,7 @@ const OrganisationPage = () => {
       }
       <div>
         <br/>
-        <Button variant="info" onClick={onCreateOrganisation}>
+        <Button variant="primary" onClick={onCreateOrganisation}>
           Create new organisation
         </Button>
       </div>

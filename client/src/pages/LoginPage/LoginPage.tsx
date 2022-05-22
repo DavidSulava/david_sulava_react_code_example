@@ -9,6 +9,7 @@ import { ERoutes } from '../../router/Routes';
 import React from 'react';
 import { signIn } from '../../stores/authentication/reducer';
 import { ISignInData } from '../../types/user';
+import BtnLink from '../../components/BtnLink';
 
 const LoginPage = () => {
   const dispatch = useDispatch()
@@ -55,7 +56,7 @@ const LoginPage = () => {
             <div className="k-form-buttons k-flex k-justify-content-center k-mb-5 k-mt-2">
               <Button
                 type="submit"
-                variant="info"
+                variant="primary"
                 disabled={!formRenderProps.allowSubmit || checkingAuth}
               >
                 {checkingAuth ? 'Loading...' : 'Sign In'}
@@ -66,12 +67,9 @@ const LoginPage = () => {
       />
       <div>Wish create an account?</div>
       <br/>
-      <Button variant="outlined" className="btn-outline-info mb-1"  disabled={checkingAuth}>
-        <Link to={ERoutes.SignUp}>Sign Up</Link>
-      </Button>
-      <Button variant="outlined" className="mb-1 btn-outline-info" disabled={checkingAuth}>
-        <Link to={ERoutes.ForgotPwd}>Forgot Password?</Link>
-      </Button>
+      <BtnLink to={ERoutes.SignUp} idDisabled={checkingAuth} className='btn btn-outline-primary mb-1'>Sign Up</BtnLink>
+      <BtnLink to={ERoutes.ForgotPwd} idDisabled={checkingAuth} className='btn btn-outline-primary mb-1'>Forgot Password?</BtnLink>
+      <br/>
     </div>
   )
 }
