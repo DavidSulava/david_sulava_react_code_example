@@ -14,3 +14,17 @@ body{
 a{
   text-decoration: none;
 }
+th{
+  user-select: none;
+}
+
+.btn-nav{
+  @include setFlex(column, center, stretch);
+  padding: 0!important;
+  a{
+    padding: 0.575rem 0.75rem;
+  }
+}
+.k-grid-toolbar {
+  justify-content: end;
+}

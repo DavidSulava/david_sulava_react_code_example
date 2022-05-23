@@ -11,14 +11,15 @@
 .dash-board-navigation{
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
 
   & > *{
     margin-bottom: 1px;
   }
 }
 .dash-board-content{
-  @include setFlex();
+  @include setFlex(row, center, start);
   flex-grow: 8;
   height: calc( 100vh - #{$header-height} - 70px - 30px);
-  padding: 5px;
+  padding: 0 5px 5px 5px;
 }

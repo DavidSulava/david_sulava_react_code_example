@@ -13,6 +13,7 @@ import { signUp } from '../../stores/authentication/reducer';
 import { setPostReqResp, setError } from '../../stores/common/reducer';
 import { IState } from '../../stores/configureStore';
 import { Error } from '@progress/kendo-react-labels';
+import BtnLink from '../../components/BtnLink';
 
 const RegistrationPage = () => {
   const dispatch = useDispatch()
@@ -136,7 +137,7 @@ const RegistrationPage = () => {
                   <div className="k-form-buttons k-flex k-justify-content-center k-mb-3 k-mt-2">
                     <Button
                       type="submit"
-                      variant="info"
+                      variant="primary"
                       disabled={!formRenderProps.allowSubmit || checkingAuth}
                     >
                       {checkingAuth ? 'Loading...' : 'Sign Up'}
@@ -151,15 +152,10 @@ const RegistrationPage = () => {
         !postResp &&
         <div className="mb-2">Already have an account?</div>
       }
-      <Button variant="outlined" className="btn-outline-info mb-1">
-        <Link to={ERoutes.Root}>Sign in</Link>
-      </Button>
-
+      <BtnLink to={ERoutes.Root} className="btn btn-outline-primary mb-1" idDisabled={checkingAuth}>Sign in</BtnLink>
       {
         !postResp &&
-        <Button variant="outlined" className="mb-1 btn-outline-info">
-          <Link to={ERoutes.ForgotPwd}>Forgot Password?</Link>
-        </Button>
+        <BtnLink to={ERoutes.ForgotPwd} idDisabled={checkingAuth} className='btn btn-outline-primary mb-1'>Forgot Password?</BtnLink>
       }
     </div>
   )

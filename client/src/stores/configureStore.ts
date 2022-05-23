@@ -5,19 +5,23 @@ import organisationWatcher from './organisation/sagas';
 import createSagaMiddleware from "redux-saga";
 import commonSlice, { ICommonState } from './common/reducer';
 import organisationSlice, { IOrganisationState } from './organisation/reducer';
+import productSlice, { IProductState } from './product/reducer';
 import commonWatcher from './common/sagas';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import productWatcher from './product/sagas';
 
 export interface IState {
   auth: IAuthState,
   common: ICommonState,
   organisation: IOrganisationState,
+  product: IProductState
 }
 
 const reducers = combineReducers<IState>({
   auth: authSlice,
   common: commonSlice,
   organisation: organisationSlice,
+  product: productSlice
 })
 
 function* sagas() {
@@ -25,6 +29,7 @@ function* sagas() {
     authWatcher(),
     commonWatcher(),
     organisationWatcher(),
+    productWatcher(),
   ])
 }
 

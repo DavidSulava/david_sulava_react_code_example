@@ -17,3 +17,7 @@ export interface ICreateNewOrganisationModalProps {
   onSubmit?: <T>(data?:T) => void,
   onClose: () => void,
 }
+
+export interface ICreateNewProductModalProps extends ICreateNewOrganisationModalProps{
+  organizationId: string
+}

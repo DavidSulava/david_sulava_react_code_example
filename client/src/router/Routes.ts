@@ -1,17 +1,16 @@
-import CPThreshold from '../pages/DashboardPage/components/CPThreshold';
-
 export enum ERoutes {
   Root = '/',
 
-  SignIn = '/signin',
   SignUp = '/signup',
-  SignOut = '/signout',
   ForgotPwd = '/forgot-pwd',
   ResetPwd = '/reset-pwd',
   EmailConfirmation = '/email-confirmation',
 
   Organisations = '/organisations',
-  Dashboard = '/dashboard',
+
+  Dashboard = '/dashboard/:organizationId',
+  ProdVersion = '/dashboard/:organizationId/:productId',
+
   ManageOrganisation = 'manage-organisation',
   Products = 'products',
   Publications = 'publications',

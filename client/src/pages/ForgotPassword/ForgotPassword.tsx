@@ -1,7 +1,6 @@
-import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { ERoutes } from '../../router/Routes';
 import React from 'react';
+import BtnLink from '../../components/BtnLink';
 
 const ForgotPassword = () => {
  return(
@@ -10,12 +9,8 @@ const ForgotPassword = () => {
      <br/>
 
      <br/>
-     <Button variant="outlined" className="btn-outline-info mb-1" >
-       <Link to={ERoutes.SignUp}>Sign Up</Link>
-     </Button>
-     <Button variant="outlined" className="btn-outline-info mb-1">
-       <Link to={ERoutes.Root}>Sign in</Link>
-     </Button>
+     <BtnLink to={ERoutes.SignUp} className="btn btn-outline-primary mb-1">Sign Up</BtnLink>
+     <BtnLink to={ERoutes.Root}className="btn btn-outline-primary mb-1" >Sign in</BtnLink>
    </div>
  )
 }
