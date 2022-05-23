@@ -32,7 +32,7 @@ namespace DesignGear.ConfigManager.Core.Data
             //base.OnModelCreating(modelBuilder);
         }
 
-        public virtual DbSet<AppBundle> AppbBundles { get; set; }
+        public virtual DbSet<AppBundle> AppBundles { get; set; }
 
         public virtual DbSet<ComponentDefinition> ComponentDefinitions { get; set; }
 

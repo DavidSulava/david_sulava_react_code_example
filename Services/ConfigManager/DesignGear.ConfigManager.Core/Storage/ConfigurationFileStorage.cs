@@ -81,15 +81,19 @@ namespace DesignGear.ConfigManager.Core.Storage
         public async Task<DesignGearModelPackage> SaveConfigurationPackageAsync(ConfigurationPackageDto package)
         {
             var filePath = $"{_fileBucket}{package.ProductVersionId}\\{package.ConfigurationId}\\model\\";
+            var di = new DirectoryInfo(filePath);
+            if (!di.Exists)
+                di.Create();
             var originalFileName = Path.GetFileName(package.ConfigurationPackage.FileName);
             var uniqueFilePath = Path.Combine(filePath, originalFileName);
             using (var fileStream = File.Create(uniqueFilePath))
             {
-                await package.ConfigurationPackage.Content.CopyToAsync(fileStream);
+                await package.ConfigurationPackage.CopyToAsync(fileStream);
             }
 
-            package.ConfigurationPackage.Content.Seek(0, SeekOrigin.Begin);
-            using (var archive = new ZipArchive(package.ConfigurationPackage.Content))
+            //package.ConfigurationPackage.Content.Seek(0, SeekOrigin.Begin);
+            //using (var archive = new ZipArchive(package.ConfigurationPackage.Content))
+            using (var archive = ZipFile.OpenRead(uniqueFilePath))
             {
                 var entry = archive.Entries.FirstOrDefault(x => x.Name == _designGearPackageFileName);
                 if (entry != null)

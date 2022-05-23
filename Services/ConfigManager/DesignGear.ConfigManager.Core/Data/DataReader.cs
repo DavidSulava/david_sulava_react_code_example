@@ -19,7 +19,7 @@ namespace DesignGear.ConfigManager.Core.Data
             //_userInfo = userInfo;
         }
 
-        public IQueryable<AppBundle> AppBundles => _context.AppbBundles.AsNoTracking();
+        public IQueryable<AppBundle> AppBundles => _context.AppBundles.AsNoTracking();
         public IQueryable<ComponentDefinition> ComponentDefinitions => _context.ComponentDefinitions.AsNoTracking();
         public IQueryable<Configuration> Configurations => _context.Configurations.AsNoTracking();
         public IQueryable<ConfigurationInstance> configurationInstances => _context.ConfigurationInstances.AsNoTracking();

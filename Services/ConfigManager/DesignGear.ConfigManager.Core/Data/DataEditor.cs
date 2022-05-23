@@ -18,7 +18,7 @@ namespace DesignGear.ConfigManager.Core.Data
             //_userInfo = userInfo;
         }
 
-        public IQueryable<AppBundle> AppBundles => _context.AppbBundles;
+        public IQueryable<AppBundle> AppBundles => _context.AppBundles;
         public IQueryable<ComponentDefinition> ComponentDefinitions => _context.ComponentDefinitions;
         public IQueryable<Configuration> Configurations => _context.Configurations;
         public IQueryable<ConfigurationInstance> configurationInstances => _context.ConfigurationInstances;

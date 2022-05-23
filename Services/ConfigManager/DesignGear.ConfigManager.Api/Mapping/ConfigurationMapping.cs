@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DesignGear.Contracts.Dto;
 using DesignGear.Contracts.Dto.ConfigManager;
 using DesignGear.Contracts.Models.ConfigManager;
 
