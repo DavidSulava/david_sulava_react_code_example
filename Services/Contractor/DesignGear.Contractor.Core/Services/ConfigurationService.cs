@@ -1,13 +1,11 @@
 ﻿using DesignGear.Contractor.Core.Data;
 using DesignGear.Contracts.Dto;
 using DesignGear.Contractor.Core.Services.Interfaces;
-using DesignGear.Contractor.Core.Data.Entity;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using DesignGear.Common.Exceptions;
 using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.Contracts.Models.ConfigManager;
+using DesignGear.Contracts.Dto.ConfigManager;
+using Kendo.Mvc.UI;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -16,7 +14,6 @@ namespace DesignGear.Contractor.Core.Services
         private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
         private readonly IConfigManagerCommunicator _configManagerService;
-        private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
 
         public ConfigurationService(IMapper mapper, DataAccessor dataAccessor, IConfigManagerCommunicator configManagerService)
         {
@@ -83,13 +80,16 @@ namespace DesignGear.Contractor.Core.Services
 
         //public async Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId)
         //{
-        //    return await _dataAccessor.Reader.Configurations.Where(x => x.ProductVersionId == productVersionId).
-        //        ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider).ToListAsync();
+        //    return null;// await _configManagerService.GetConfigurationItemsAsync(productVersionId);
+
+        //    //return await _dataAccessor.Reader.Configurations.Where(x => x.ProductVersionId == productVersionId).
+        //    //    ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider).ToListAsync();
         //}
-        //public Task<TResult> GetConfigurationItemsAsync<TResult>(Guid productVersionId, Func<IQueryable<ConfigurationDto>, TResult> resultBuilder)
-        //{
-        //    return null;
-        //}
+
+        public async Task<DataSourceResult> GetConfigurationItemsAsync(string queryString)
+        {
+            return await _configManagerService.GetConfigurationItemsAsync(queryString);
+        }
 
         //public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
         //{

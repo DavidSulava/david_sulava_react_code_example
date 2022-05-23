@@ -1,5 +1,6 @@
 ﻿using DesignGear.Contracts.Dto;
 using DesignGear.Contracts.Models.ConfigManager;
+using Kendo.Mvc.UI;
 
 namespace DesignGear.Contracts.Communicators.Interfaces
 {
@@ -22,5 +23,7 @@ namespace DesignGear.Contracts.Communicators.Interfaces
         Task<string> GetSvfRootFileNameAsync(Guid configurationId);
 
         Task<Dto.ConfigManager.ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId);
+
+        Task<DataSourceResult> GetConfigurationItemsAsync(string queryString);
     }
 }

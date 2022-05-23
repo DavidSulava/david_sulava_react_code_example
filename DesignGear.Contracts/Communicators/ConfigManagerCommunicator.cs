@@ -4,6 +4,7 @@ using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.Contracts.Dto;
 using DesignGear.Contracts.Helpers;
 using DesignGear.Contracts.Models.ConfigManager;
+using Kendo.Mvc.UI;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Text;
@@ -95,6 +96,11 @@ namespace DesignGear.Contracts.Communicators
         public async Task<Dto.ConfigManager.ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId)
         {
             return (await SendHttpRequestAsync<VmComponentParameterDefinitions>($"{_settings.ConfigManagerUrl}configuration/{configurationId}/parameters")).MapTo<Dto.ConfigManager.ConfigurationParametersDto>(_mapper);
+        }
+
+        public async Task<DataSourceResult> GetConfigurationItemsAsync(string queryString)
+        {
+            return (await SendHttpRequestAsync<DataSourceResult>($"{_settings.ConfigManagerUrl}configuration{queryString}"));
         }
     }
 }

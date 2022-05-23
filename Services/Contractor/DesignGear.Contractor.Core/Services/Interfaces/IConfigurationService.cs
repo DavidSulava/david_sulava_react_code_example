@@ -1,6 +1,7 @@
 ﻿using DesignGear.Contracts.Dto;
 using DesignGear.Contracts.Dto.ConfigManager;
 using DesignGear.Contracts.Models.ConfigManager;
+using Kendo.Mvc.UI;
 
 namespace DesignGear.Contractor.Core.Services.Interfaces
 {
@@ -13,7 +14,8 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
         //Task RemoveConfigurationAsync(Guid id);
 
         //Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId);
-        //Task<TResult> GetConfigurationItemsAsync<TResult>(Guid productVersionId, Func<IQueryable<ConfigurationDto>, TResult> resultBuilder);
+
+        Task<DataSourceResult> GetConfigurationItemsAsync(string queryString);
 
         //Task<ConfigurationDto> GetConfigurationAsync(Guid id);
 

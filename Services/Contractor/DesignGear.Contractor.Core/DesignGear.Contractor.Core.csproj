@@ -28,4 +28,10 @@
     <ProjectReference Include="..\..\..\DesignGear.ModelPackage\DesignGear.ModelPackage.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Kendo.Mvc">
+      <HintPath>..\..\..\Kendo\netcoreapp3.1\Kendo.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

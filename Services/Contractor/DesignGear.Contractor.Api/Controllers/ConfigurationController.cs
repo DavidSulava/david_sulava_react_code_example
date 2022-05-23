@@ -8,11 +8,12 @@ using DesignGear.Common.Extensions;
 using DesignGear.Contracts.Models.ConfigManager;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
+using Newtonsoft.Json;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("[controller]")]
     public class ConfigurationController : ControllerBase
     {
@@ -44,16 +45,17 @@ namespace DesignGear.Contractor.Api.Controllers
         //}
 
         //[HttpGet]
-        //public async Task<ICollection<VmConfigurationItem>> GetConfigurationItemsAsync(Guid productVersionId)
+        //public async Task<ICollection<Contracts.Models.Contractor.VmConfigurationItem>> GetConfigurationItemsAsync(Guid productVersionId)
         //{
-        //    return (await _configurationService.GetConfigurationItemsAsync(productVersionId)).MapTo<ICollection<VmConfigurationItem>>(_mapper);
+        //    return (await _configurationService.GetConfigurationItemsAsync(productVersionId)).MapTo<ICollection<Contracts.Models.Contractor.VmConfigurationItem>>(_mapper);
         //}
 
-        //[HttpGet]
-        //public async Task<DataSourceResult> GetConfigurationItemsAsync(Guid productVersionId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
-        //{
-        //    return await _configurationService.GetConfigurationItemsAsync(productVersionId, query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ConfigurationDto, Contracts.Models.Contractor.VmConfigurationItem>));
-        //}
+        [HttpGet]
+        public async Task<DataSourceResult> GetConfigurationItemsAsync(Guid productVersionId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
+        {
+            var queryString = ControllerContext.HttpContext.Request.QueryString.Value;
+            return await _configurationService.GetConfigurationItemsAsync(queryString);
+        }
 
         //[HttpGet("{id}")]
         //public async Task<Contracts.Models.Contractor.VmConfiguration> GetConfigurationAsync([FromRoute] Guid id)
