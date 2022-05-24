@@ -190,22 +190,5 @@ namespace DesignGear.Contractor.Core.Services
 
             return null;
         }
-
-        private ModelFileParsed? ParseModelFile(Guid id, AttachmentDto modelFile)
-        {
-            using (var streamContent = new MemoryStream(modelFile.Content))
-            using (var archive = new ZipArchive(streamContent))
-            {
-                var entry = archive.Entries.FirstOrDefault(x => x.Name == _designGearPackageFileName);
-                if (entry != null)
-                    using (var stream = entry.Open())
-                    {
-                        string json = new StreamReader(stream).ReadToEnd();
-                        return new ModelFileParsed(id, json, _mapper);
-                    }
-            }
-
-            return null;
-        }
     }
 }

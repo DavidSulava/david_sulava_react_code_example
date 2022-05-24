@@ -155,7 +155,7 @@ namespace DesignGear.Contractor.Core.Services
             return await _configManagerService.GetSvfRootFileNameAsync(configurationId);
         }
 
-        public async Task<Contracts.Dto.ConfigManager.ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId)
+        public async Task<ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId)
         {
             return await _configManagerService.GetConfigurationParametersAsync(configurationId);
         }
