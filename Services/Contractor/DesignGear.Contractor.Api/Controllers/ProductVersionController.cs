@@ -42,16 +42,10 @@ namespace DesignGear.Contractor.Api.Controllers
             await _productVersionService.RemoveProductVersionAsync(id);
         }
 
-        [HttpGet("byproduct")]
-        public async Task<ICollection<VmProductVersion>> GetProductVersionItemsAsync(Guid productId)
-        {
-            return (await _productVersionService.GetProductVersionsByProductAsync(productId)).MapTo<ICollection<VmProductVersion>>(_mapper);
-        }
-
         [HttpGet]
         public async Task<DataSourceResult> GetProductVersionItemsAsync(Guid productId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
-            return await _productVersionService.GetProductVersionsByProductKendoAsync(productId, query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ProductVersionDto, VmProductVersion>));
+            return await _productVersionService.GetProductVersionsByProductAsync(productId, query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ProductVersionItemDto, VmProductVersionItem>));
         }
 
         [HttpGet("{id}")]

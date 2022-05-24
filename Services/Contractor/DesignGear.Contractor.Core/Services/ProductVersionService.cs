@@ -37,13 +37,6 @@ namespace DesignGear.Contractor.Core.Services
             }
 
             var newItem = _mapper.Map<ProductVersion>(create);
-
-            /*var modelFile = ParseModelFile(newItem.Id, create.ModelFile);
-            if (modelFile != null)
-            {
-                _dataAccessor.Editor.Create(modelFile.Configuration);
-            }*/
-
             _dataAccessor.Editor.Create(newItem);
             await _dataAccessor.Editor.SaveAsync();
 
@@ -51,20 +44,7 @@ namespace DesignGear.Contractor.Core.Services
             newConfiguration.ProductVersionId = newItem.Id;
             newConfiguration.OrganizationId = (await _dataAccessor.Reader.Products.FirstAsync(x => x.Id == create.ProductId)).OrganizationId;
             await _configManagerService.CreateConfigurationAsync(newConfiguration);
-
-            /*await SaveImageFilesAsync(newItem.Id, create.ImageFiles);
-            if (modelFile != null)
-                await SaveModelFileAsync(newItem.Id, modelFile.Configuration.Id, create.ModelFile);*/
-
-
-
-            //var request = _mapper.Map<CreateConfigurationRequest>(create);
-            //request.ProductVersionId = newItem.Id;
-            //var product = await _dataAccessor.Reader.Products.FirstOrDefaultAsync(x => x.Id == create.ProductId);
-            //request.OrganizationId = product?.OrganizationId ?? Guid.Empty;
-
-            //await _configManagerService.CreateConfigurationAsync(request);
-
+            
             return newItem.Id;
         }
 
@@ -101,19 +81,13 @@ namespace DesignGear.Contractor.Core.Services
             DeleteFiles(id);
         }
 
-        public async Task<ICollection<ProductVersionDto>> GetProductVersionsByProductAsync(Guid productId)
-        {
-            return await _dataAccessor.Reader.ProductVersions.Where(x => x.ProductId == productId).
-                ProjectTo<ProductVersionDto>(_mapper.ConfigurationProvider).ToListAsync();
-        }
-
-        public async Task<TResult> GetProductVersionsByProductKendoAsync<TResult>(Guid productId, Func<IQueryable<ProductVersionDto>, TResult> resultBuilder)
+        public async Task<TResult> GetProductVersionsByProductAsync<TResult>(Guid productId, Func<IQueryable<ProductVersionItemDto>, TResult> resultBuilder)
         {
             if (resultBuilder == null)
             {
                 throw new ArgumentNullException(nameof(resultBuilder));
             }
-            var query = _dataAccessor.Reader.ProductVersions.Where(x => x.ProductId == productId).ProjectTo<ProductVersionDto>(_mapper.ConfigurationProvider);
+            var query = _dataAccessor.Reader.ProductVersions.Where(x => x.ProductId == productId).ProjectTo<ProductVersionItemDto>(_mapper.ConfigurationProvider);
             var result = resultBuilder(query);
             return await Task.FromResult(result);
         }

@@ -11,6 +11,7 @@ namespace DesignGear.Contractor.Api.Mapping
             CreateMap<VmProductVersionCreate, ProductVersionCreateDto>(MemberList.None);
             CreateMap<VmProductVersionUpdate, ProductVersionUpdateDto>(MemberList.None);
             CreateMap<ProductVersionDto, VmProductVersion>(MemberList.None);
+            CreateMap<ProductVersionItemDto, VmProductVersionItem>(MemberList.None);
         }
     }
 }
