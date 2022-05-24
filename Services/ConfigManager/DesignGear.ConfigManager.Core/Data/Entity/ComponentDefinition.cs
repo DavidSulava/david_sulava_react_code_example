@@ -25,5 +25,8 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
 
         public Guid AppBundleId { get; set; }
         public virtual AppBundle AppBundle { get; set; }
+
+        [NotMapped]
+        public int TemplateConfigurationIdInternal { get; set; }
     }
 }

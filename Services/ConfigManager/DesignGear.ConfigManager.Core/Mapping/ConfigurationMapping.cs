@@ -15,11 +15,15 @@ namespace DesignGear.ConfigManager.Core.Mapping {
                 .ForMember(x => x.ConfigurationName, m => m.MapFrom(x => x.Name))
                 .ForMember(x => x.ComponentName, m => m.MapFrom(x => x.ComponentDefinition.Name));
             CreateMap<ConfigurationRequestDto, Configuration>(MemberList.None)
+                .ForMember(x => x.UniqueId, m => m.MapFrom(z => Guid.Empty))
+                .ForMember(x => x.ErrorMessage, m => m.MapFrom(z => string.Empty))
+                .ForMember(x => x.TemplateConfigurationId, m => m.MapFrom(x => x.BaseConfigurationId))
                 .ForMember(x => x.Status, m => m.MapFrom(x => ConfigurationStatus.InQueue))
                 .ForMember(x => x.SvfStatus, m => m.MapFrom(x => ConfigurationStatus.InQueue));
             CreateMap<ConfigurationCreateDto, Configuration>(MemberList.None)
                 .ForMember(x => x.Status, m => m.MapFrom(x => ConfigurationStatus.Ready))
                 .ForMember(x => x.SvfStatus, m => m.MapFrom(x => ConfigurationStatus.InQueue));
+            CreateMap<ConfigurationCreateDto, ComponentDefinition>(MemberList.None);
             CreateMap<ConfigurationUpdateDto, Configuration>(MemberList.None);
         }
     }

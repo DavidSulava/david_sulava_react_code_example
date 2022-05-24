@@ -11,6 +11,8 @@ namespace DesignGear.ConfigManager.Core.Mapping {
     public class ParameterMapping : Profile {
         public ParameterMapping() {
             //CreateMap<ParameterValueDto, ParameterValue>(MemberList.None);
+            CreateMap<ParameterDefinition, ParameterDefinitionDto>(MemberList.None);
+            CreateMap<ValueOption, ValueOptionDto>(MemberList.None);
         }
     }
 }

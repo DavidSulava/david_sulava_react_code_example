@@ -36,12 +36,18 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         public Guid? TemplateConfigurationId { get; set; }
         public virtual Configuration TemplateConfiguration { get; set; }
 
-        [ForeignKey("ComponentDefinition")]
-        public Guid ComponentDefinitionId { get; set; }
+        //[ForeignKey("ComponentDefinition")]
+        public Guid? ComponentDefinitionId { get; set; }
         public virtual ComponentDefinition ComponentDefinition { get; set; }
 
         public virtual ICollection<ParameterDefinition> ParameterDefinitions { get; set; }
         
         public virtual ICollection<ConfigurationInstance> ConvigurationInstances { get; set; }
+
+        [NotMapped]
+        public int ComponentDefinitionIdInternal { get; set; }
+
+        [NotMapped]
+        public int ConfigurationId { get; set; }
     }
 }

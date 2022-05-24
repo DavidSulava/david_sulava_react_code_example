@@ -5,7 +5,7 @@
     {
         public Guid ComponentId { get; set; }
         public string ComponentName { get; set; }
-        public ICollection<VmParameterDefinition> ParameterDefinitions { get; set; }
-        public ICollection<VmComponentParameterDefinitions> ChildComponents { get; set; }
+        public ICollection<VmParameterDefinition> Parameters { get; set; }
+        public ICollection<VmComponentParameterDefinitions> Childs { get; set; }
     }
 }

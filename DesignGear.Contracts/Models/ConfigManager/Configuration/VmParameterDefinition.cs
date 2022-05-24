@@ -26,5 +26,7 @@ namespace DesignGear.Contracts.Models.ConfigManager
         public bool AllowCustomValues { get; set; }
 
         public string Value { get; set; }
+
+        public virtual ICollection<VmValueOption> ValueOptions { get; set; }
     }
 }

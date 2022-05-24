@@ -24,5 +24,7 @@ namespace DesignGear.Contracts.Dto.ConfigManager {
         public bool AllowCustomValues { get; set; }
         
         public string Value { get; set; }
+
+        public virtual ICollection<ValueOptionDto> ValueOptions { get; set; }
     }
 }

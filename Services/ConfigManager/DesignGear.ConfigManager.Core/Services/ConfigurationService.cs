@@ -13,6 +13,7 @@ using DesignGear.ConfigManager.Core.Storage.Interfaces;
 using DesignGear.Common.Extensions;
 using DesignGear.Contracts.Enums;
 using DesignGear.Contracts.Dto;
+using ParameterDefinitionDto = DesignGear.Contracts.Dto.ConfigManager.ParameterDefinitionDto;
 
 namespace DesignGear.ConfigManager.Core.Services
 {
@@ -84,12 +85,14 @@ namespace DesignGear.ConfigManager.Core.Services
             foreach (var configuration in configurations)
             {
                 _mapper.Map(create, configuration);
+                _mapper.Map(create, configuration.ComponentDefinition);
                 if (configuration.ParentConfigurationId == null)
                 {
                     configuration.Id = rootConfigurationId;
                 }
                 configuration.Status = ConfigurationStatus.Ready;
                 configuration.SvfStatus = SvfStatus.InQueue;
+                configuration.ComponentDefinition.AppBundleId = create.AppBundleId;
                 await _dataAccessor.Editor.CreateAsync(configuration);
             }
 
@@ -168,7 +171,16 @@ namespace DesignGear.ConfigManager.Core.Services
          */
         public async Task<ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId)
         {
-            throw new NotImplementedException();
+            var names = await _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition).FirstOrDefaultAsync(x => x.Id == configurationId);
+
+            return new ConfigurationParametersDto()
+            {
+                ConfigurationId = configurationId,
+                ConfigurationName = names.Name,
+                ComponentName = names.ComponentDefinition.Name,
+                Parameters = await _dataAccessor.Reader.ParameterDefinitions.Include(x => x.ValueOptions).Where(x => x.ConfigurationId == configurationId).
+                    ProjectTo<ParameterDefinitionDto>(_mapper.ConfigurationProvider).ToListAsync()
+            };
         }
 
         /*
