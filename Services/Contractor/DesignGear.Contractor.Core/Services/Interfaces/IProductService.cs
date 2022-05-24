@@ -10,7 +10,7 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 
         Task RemoveProductAsync(Guid id);
 
-        Task<TResult> GetProductsByOrganizationAsync<TResult>(Guid organizationId, Func<IQueryable<ProductDto>, TResult> resultBuilder);
+        Task<TResult> GetProductsByOrganizationAsync<TResult>(Guid organizationId, Func<IQueryable<ProductItemDto>, TResult> resultBuilder);
 
         Task<ProductDto> GetProductAsync(Guid id);
     }

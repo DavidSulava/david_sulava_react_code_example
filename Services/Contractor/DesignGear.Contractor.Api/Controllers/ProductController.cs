@@ -45,7 +45,7 @@ namespace DesignGear.Contractor.Api.Controllers
         [HttpGet]
         public async Task<DataSourceResult> GetProductItemsAsync(Guid organizationId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
-            return await _productService.GetProductsByOrganizationAsync(organizationId, query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ProductDto, VmProduct>));
+            return await _productService.GetProductsByOrganizationAsync(organizationId, query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ProductItemDto, VmProductItem>));
         }
 
         [HttpGet("{id}")]
