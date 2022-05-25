@@ -6,6 +6,6 @@
 
         public string Description { get; set; }
 
-        public Guid OrganizationId { get; set; }
+        //public Guid OrganizationId { get; set; }
     }
 }

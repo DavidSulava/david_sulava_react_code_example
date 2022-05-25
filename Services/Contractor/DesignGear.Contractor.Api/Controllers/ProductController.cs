@@ -25,9 +25,11 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> CreateProductAsync(VmProductCreate product)
+        public async Task<Guid> CreateProductAsync(VmProductCreate create)
         {
-            return await _productService.CreateProductAsync(product.MapTo<ProductCreateDto>(_mapper));
+            var product = create.MapTo<ProductCreateDto>(_mapper);
+            product.OrganizationId = (Guid)HttpContext.Items["OrganizationId"];
+            return await _productService.CreateProductAsync(product);
         }
 
         [HttpPut]
