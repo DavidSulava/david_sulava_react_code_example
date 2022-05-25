@@ -15,7 +15,8 @@ namespace DesignGear.Contractor.Core.Mapping
                 .ForMember(x => x.Id, m => m.MapFrom(z => Guid.NewGuid()));
             CreateMap<ProductVersionUpdateDto, ProductVersion>(MemberList.None);
             // CreateMap<ProductVersionCreateDto, CreateConfigurationRequest>(MemberList.None);
-            CreateMap<ProductVersionCreateDto, VmConfigurationCreate>(MemberList.None);
+            CreateMap<ProductVersionCreateDto, VmConfigurationCreate>(MemberList.None)
+                .ForMember(x => x.ConfigurationPackage, m => m.MapFrom(z => z.ModelFile));
         }
     }
 }

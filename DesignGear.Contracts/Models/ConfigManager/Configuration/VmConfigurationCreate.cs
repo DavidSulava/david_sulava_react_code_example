@@ -11,7 +11,7 @@ namespace DesignGear.Contracts.Models.ConfigManager {
         public Guid ProductId { get; set; }
         public Guid ProductVersionId { get; set; }
         public Guid AppBundleId { get; set; }
-        public ICollection<string> Emails { get; set; }
+        //public ICollection<string> Emails { get; set; }
         public IFormFile ConfigurationPackage { get; set; }
     }
 }
