@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
-    //[Authorize]
+    [Authorize]
     [Route("[controller]")]
     public class ConfigurationController : ControllerBase
     {

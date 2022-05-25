@@ -67,7 +67,14 @@ namespace DesignGear.Contracts.Communicators
 
         public async Task CreateConfigurationAsync(VmConfigurationCreate create)
         {
-            var response = await _httpClient.PostAsync($"{_settings.ConfigManagerUrl}configuration", new StringContent(JsonConvert.SerializeObject(create), Encoding.UTF8, "application/json"));
+            var content = new MultipartFormDataContent();
+            content.Add(new StringContent(create.OrganizationId.ToString()), "\"OrganizationId\"");
+            content.Add(new StringContent(create.ProductId.ToString()), "\"ProductId\"");
+            content.Add(new StringContent(create.ProductVersionId.ToString()), "\"ProductVersionId\"");
+            content.Add(new StringContent(create.AppBundleId.ToString()), "\"AppBundleId\"");
+            content.Add(new StreamContent(create.ConfigurationPackage.OpenReadStream()), "\"ConfigurationPackage\"", create.ConfigurationPackage.FileName);
+
+            var response = await _httpClient.PostAsync($"{_settings.ConfigManagerUrl}configuration", content);
             response.EnsureSuccessStatusCode();
         }
 
