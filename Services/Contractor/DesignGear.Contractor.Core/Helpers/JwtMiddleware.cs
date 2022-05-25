@@ -46,6 +46,11 @@ namespace DesignGear.Contractor.Core.Helpers
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "UserId").Value);
+                var claim = jwtToken.Claims.FirstOrDefault(x => x.Type == "OrganizationId");
+                if (claim != null)
+                {
+                    context.Items["OrganizationId"] = Guid.Parse(claim.Value);
+                }
 
                 // attach user to context on successful jwt validation
                 context.Items["User"] = await userService.GetByIdAsync(userId);

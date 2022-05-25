@@ -46,6 +46,12 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddAuthorization(opts => {
+    opts.AddPolicy("OrganizationSelected", policy => {
+        policy.RequireClaim("OrganizationId");
+    });
+});
+
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 //builder.Services.Configure<CommunicatorSettings>(builder.Configuration.GetSection("CommunicatorSettings"));
 builder.Services.AddOptions<CommunicatorSettings>().Bind(builder.Configuration.GetSection("CommunicatorSettings")).ValidateDataAnnotations();

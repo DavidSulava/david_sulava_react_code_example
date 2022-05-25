@@ -11,7 +11,7 @@ using Kendo.Mvc.Extensions;
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = "OrganizationSelected")]
     [Route("[controller]")]
     public class ProductController : ControllerBase
     {
@@ -43,8 +43,9 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<DataSourceResult> GetProductItemsAsync(Guid organizationId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
+        public async Task<DataSourceResult> GetProductItemsAsync([DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
+            Guid organizationId = (Guid)HttpContext.Items["OrganizationId"];
             return await _productService.GetProductsByOrganizationAsync(organizationId, query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ProductItemDto, VmProductItem>));
         }
 

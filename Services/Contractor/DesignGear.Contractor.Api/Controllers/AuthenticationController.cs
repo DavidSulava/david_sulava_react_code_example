@@ -5,6 +5,7 @@ using DesignGear.Contracts.Models.Contractor;
 using DesignGear.Contracts.Dto;
 using Microsoft.AspNetCore.Mvc;
 using DesignGear.Contractor.Core.Helpers;
+using DesignGear.Contractor.Core.Data.Entity;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
@@ -38,7 +39,8 @@ namespace DesignGear.Contractor.Api.Controllers
         [HttpPost("organization")]
         public async Task<IActionResult> SetOrganizationAsync(Guid organizationId)
         {
-            var response = await _authenticationService.SetOrganizationAsync(organizationId);
+            var user = (User)HttpContext.Items["User"];
+            var response = await _authenticationService.SetOrganizationAsync(user.Id, organizationId);
 
             return Ok(response.MapTo<VmAuthenticateResponse>(_mapper));
         }

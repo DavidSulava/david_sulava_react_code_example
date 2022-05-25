@@ -10,7 +10,7 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 
         Task RemoveProductVersionAsync(Guid id);
 
-        Task<TResult> GetProductVersionsByProductAsync<TResult>(Guid organizationId, Func<IQueryable<ProductVersionItemDto>, TResult> resultBuilder);
+        Task<TResult> GetProductVersionsByProductAsync<TResult>(Guid productId, Func<IQueryable<ProductVersionItemDto>, TResult> resultBuilder);
 
         Task<ProductVersionDto> GetProductVersionAsync(Guid id);
 
