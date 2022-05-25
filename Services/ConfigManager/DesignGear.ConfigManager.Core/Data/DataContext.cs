@@ -40,6 +40,8 @@ namespace DesignGear.ConfigManager.Core.Data
 
         public virtual DbSet<ConfigurationInstance> ConfigurationInstances { get; set; }
 
+        public virtual DbSet<FileItem> FileItems { get; set; }
+
         public virtual DbSet<ParameterDefinition> ParameterDefinitions { get; set; }
 
         public virtual DbSet<ValueOption> ValueOptions { get; set; }        

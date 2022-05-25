@@ -14,6 +14,8 @@ namespace DesignGear.ConfigManager.Core.Mapping.Converters
             {
                 config.ComponentDefinition = context.Mapper.Map<ComponentDefinition>(source.ComponentDefinition.FirstOrDefault(x => x.Id == config.ComponentDefinitionIdInternal));
                 config.ConvigurationInstances = context.Mapper.Map<ICollection<ConfigurationInstance>>(source.ConfigurationInstance.Where(x => x.ConfigurationId == config.ConfigurationId));
+                config.FileItems = context.Mapper.Map<ICollection<FileItem>>(source.File.Where(x => x.ConfigurationId == config.ConfigurationId));
+                config.TargetFileId = config.FileItems.First(x => x.FileId == config.TargetFileIdInternal).Id;
                 config.ParameterDefinitions = context.Mapper.Map<ICollection<ParameterDefinition>>(source.Parameter.Where(x => x.ConfigurationId == config.ConfigurationId));
                 foreach (var param in config.ParameterDefinitions)
                 {

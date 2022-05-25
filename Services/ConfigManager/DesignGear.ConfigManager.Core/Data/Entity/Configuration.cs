@@ -44,8 +44,13 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         
         public virtual ICollection<ConfigurationInstance> ConvigurationInstances { get; set; }
 
+        public virtual ICollection<FileItem> FileItems { get; set; }
+
         [NotMapped]
         public int ComponentDefinitionIdInternal { get; set; }
+
+        [NotMapped]
+        public int TargetFileIdInternal { get; set; }
 
         [NotMapped]
         public int ConfigurationId { get; set; }

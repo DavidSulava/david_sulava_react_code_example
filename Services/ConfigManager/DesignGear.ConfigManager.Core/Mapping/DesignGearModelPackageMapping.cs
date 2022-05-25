@@ -29,6 +29,7 @@ namespace DesignGear.ConfigManager.Core.Mapping
             CreateMap<DesignGearModelPackage.ConfigurationRow, Configuration>(MemberList.None)
                 .ForMember(x => x.Id, m => m.MapFrom(z => Guid.NewGuid()))
                 .ForMember(x => x.ConfigurationId, m => m.MapFrom(z => z.Id))
+                .ForMember(x => x.TargetFileIdInternal, m => m.MapFrom(z => z.TargetFileId))
                 .ForMember(x => x.TargetFileId, m => m.Ignore())
                 .ForMember(x => x.ComponentDefinitionIdInternal, m => m.MapFrom(z => z.ComponentDefinitionId))
                 .ForMember(x => x.ComponentDefinitionId, m => m.Ignore())
@@ -41,6 +42,12 @@ namespace DesignGear.ConfigManager.Core.Mapping
 
             CreateMap<DesignGearModelPackage.ConfigurationInstanceRow, ConfigurationInstance>(MemberList.None)
                 .ForMember(x => x.Id, m => m.MapFrom(z => Guid.NewGuid()));
+
+            CreateMap<DesignGearModelPackage.FileRow, FileItem>(MemberList.None)
+                .ForMember(x => x.Id, m => m.MapFrom(z => Guid.NewGuid()))
+                .ForMember(x => x.FileId, m => m.MapFrom(z => z.Id))
+                .ForMember(x => x.ConfigurationId, m => m.Ignore());
+
 
 
             CreateMap<ICollection<Configuration>, DesignGearModelPackage>(MemberList.None);
