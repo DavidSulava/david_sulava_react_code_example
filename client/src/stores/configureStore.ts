@@ -11,6 +11,8 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import productWatcher from './product/sagas';
 import prodVersionSlice, { IProdVersionState } from './productVersion/reducer';
 import prodVersionWatcher from './productVersion/sagas';
+import configurationsSlice, { IConfigurationsState } from './productConfigurations/reducer';
+import configurationsWatcher from './productConfigurations/sagas';
 
 export interface IState {
   auth: IAuthState,
@@ -18,6 +20,7 @@ export interface IState {
   organisation: IOrganisationState,
   product: IProductState,
   prodVersion: IProdVersionState,
+  configurations: IConfigurationsState
 }
 
 const reducers = combineReducers<IState>({
@@ -26,6 +29,7 @@ const reducers = combineReducers<IState>({
   organisation: organisationSlice,
   product: productSlice,
   prodVersion: prodVersionSlice,
+  configurations: configurationsSlice,
 })
 
 function* sagas() {
@@ -35,6 +39,7 @@ function* sagas() {
     organisationWatcher(),
     productWatcher(),
     prodVersionWatcher(),
+    configurationsWatcher(),
   ])
 }
 

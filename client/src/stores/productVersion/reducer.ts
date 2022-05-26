@@ -4,13 +4,15 @@ import { IGetProductVersion, IPostProductVersion, IProductVersion } from '../../
 
 export interface IProdVersionState {
   isProdVersionLoading: boolean,
-  prodVersions: Nullable<IGetProductVersion>,
+  prodVersionList: Nullable<IGetProductVersion>,
+  prodVersion: Nullable<IProductVersion>,
   dataState: IGridDataStateFilter,
 }
 
 export const initialProdVerState: IProdVersionState = {
   isProdVersionLoading: false,
-  prodVersions: null,
+  prodVersionList: null,
+  prodVersion: null,
   dataState: {
     filter: {
       filters: [] as IGridFilterSetting[],
@@ -27,7 +29,11 @@ const prodVersionSlice = createSlice({
   name: "prodVersion",
   initialState: initialProdVerState,
   reducers: {
-    getProdVerByProdId: (state, action: PayloadAction<string>) => {
+    getProdVersionList: (state, action: PayloadAction<string>) => {
+    },
+    getProdVersion: (state, action: PayloadAction<string>) => {
+    },
+    getConfigurations: (state, action: PayloadAction<string>) => {
     },
     postProdVerByProdId: (state, action: PayloadAction<IPostProductVersion>) => {
     },
@@ -35,8 +41,11 @@ const prodVersionSlice = createSlice({
     },
     delProdVer: (state, action: PayloadAction<IProductVersion>) => {
     },
-    setProdVersions: (state, action: PayloadAction<IGetProductVersion>) => {
-      state.prodVersions = action.payload
+    setProdVersionList: (state, action: PayloadAction<IGetProductVersion>) => {
+      state.prodVersionList = action.payload
+    },
+    setProdVersion: (state, action: PayloadAction<IProductVersion>) => {
+      state.prodVersion = action.payload
     },
     setProdVersionLoading: (state, action: PayloadAction<boolean>) => {
       state.isProdVersionLoading = action.payload
@@ -48,11 +57,13 @@ const prodVersionSlice = createSlice({
 });
 
 export const {
-  getProdVerByProdId,
+  getProdVersionList,
+  getProdVersion,
   postProdVerByProdId,
   delProdVer,
   putProdVer,
-  setProdVersions,
+  setProdVersionList,
+  setProdVersion,
   setProdVersionLoading,
   setProdVersionDataState
 } = prodVersionSlice.actions

@@ -9,7 +9,7 @@ const useUserFromToken = () => {
     Email, Phone, Role, token
   } = useJwtData()
 
-  if(!isExpired && FirstName){
+  if(!isExpired && FirstName) {
     store.dispatch(setUser({
       id: UserId,
       firstName: FirstName,

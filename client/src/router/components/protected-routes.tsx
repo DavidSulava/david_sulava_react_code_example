@@ -14,10 +14,10 @@ const ProtectedRoutes: React.FC<controlledRouteProps> = ({
   redirectPath = ERoutes.Root,
   children,
 }) => {
-  const {authenticated, checkingAuth} = useAuthCheck()
+  const {authenticated, authLoading} = useAuthCheck()
   const location = useLocation();
 
-  if(!authenticated && !checkingAuth) {
+  if(!authenticated && !authLoading) {
     return <Navigate to={redirectPath} state={{from: location}} replace/>;
   }
 

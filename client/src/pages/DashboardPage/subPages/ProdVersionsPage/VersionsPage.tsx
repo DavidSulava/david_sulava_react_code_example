@@ -1,7 +1,7 @@
 import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import React, { createContext, useEffect, useState } from 'react';
-import { delProdVer, getProdVerByProdId, setProdVersionDataState } from '../../../../stores/productVersion/reducer';
+import { delProdVer, getProdVersionList, setProdVersionDataState } from '../../../../stores/productVersion/reducer';
 import { Button } from 'react-bootstrap';
 import { Grid, GridColumn, GridDataStateChangeEvent, GridItemChangeEvent, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
 import CreateVersion from './modals/CreateVersion';
@@ -11,29 +11,30 @@ import { IProductVersion } from '../../../../types/productVersion';
 import { DateCell } from '../../../../components/grid-components/DateCell';
 import NoRecords from '../../../../components/grid-components/NoRecords';
 import { IProduct } from '../../../../types/product';
-import ActionCell from './components/ActionCell';
+import VersionsActionCell from './components/VersionsActionCell';
 
 export const ProdVersionContext = createContext<{
+  productId: string| undefined,
   onEdit: (dataItem: IProductVersion) => void,
   onDelete: (dataItem: IProductVersion) => void,
 }>({} as any);
-const VersionPage = () => {
+const VersionsPage = () => {
   const dispatch = useDispatch()
   const {productId} = useParams();
   const {state} = useLocation();
   const product = state as IProduct
 
-  const {prodVersions, dataState, isProdVersionLoading} = useProdVersion()
+  const {prodVersionList, dataState, isProdVersionLoading} = useProdVersion()
   const [isShowCreateVersionModal, setIsShowCreateVersionModal] = useState(false)
   const [dataToUpdate, setDataToUpdate] = useState<IProductVersion>()
   const [gridData, setGridData] = useState<IProductVersion[]>([])
 
   useEffect(() => {
-    dispatch(getProdVerByProdId(productId ?? ''))
+    dispatch(getProdVersionList(productId ?? ''))
   }, [])
   useEffect(() => {
-    setGridData(prodVersions?.data ?? [])
-  }, [prodVersions])
+    setGridData(prodVersionList?.data ?? [])
+  }, [prodVersionList])
 
   const onCreateVersionClick = () => {
     setIsShowCreateVersionModal(!isShowCreateVersionModal)
@@ -41,7 +42,7 @@ const VersionPage = () => {
   }
   const onDataStateChange = (e: GridDataStateChangeEvent) => {
     dispatch(setProdVersionDataState(e.dataState as any))
-    dispatch(getProdVerByProdId(productId ?? ''))
+    dispatch(getProdVersionList(productId ?? ''))
   }
   const itemChange = (event: GridItemChangeEvent) => {
     const field = event.field || '';
@@ -65,12 +66,12 @@ const VersionPage = () => {
         <h6>Product Description: {product?.description}</h6>
       </div>
       <div className="version-table">
-        <ProdVersionContext.Provider value={{onDelete, onEdit}}>
+        <ProdVersionContext.Provider value={{productId, onDelete, onEdit}}>
           <Grid
             className="version-grid"
             data={gridData}
             {...(dataState as IGridDataState)}
-            total={prodVersions?.total}
+            total={prodVersionList?.total}
             pageable={true}
             sortable={true}
             onItemChange={itemChange}
@@ -90,7 +91,7 @@ const VersionPage = () => {
             <GridColumn field="inventorVersion" title="Inventor Version"/>
             <GridColumn field="designGearVersion" title="DesignGear Version"/>
             <GridColumn field="created" title="Date created" cell={DateCell}/>
-            <GridColumn fild="action" title="Action" className="action-cell" cell={ActionCell} sortable={false}/>
+            <GridColumn fild="action" title="Action" className="action-cell" cell={VersionsActionCell} sortable={false}/>
           </Grid>
         </ProdVersionContext.Provider>
       </div>
@@ -102,4 +103,4 @@ const VersionPage = () => {
   )
 }
 
-export default VersionPage
+export default VersionsPage

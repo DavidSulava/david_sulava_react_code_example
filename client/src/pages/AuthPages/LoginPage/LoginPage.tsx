@@ -1,21 +1,21 @@
 import { Field, Form, FormElement } from '@progress/kendo-react-form';
 import { Button } from 'react-bootstrap';
-import CInput from '../../components/form-components/CInput';
-import { isEmpty } from '../../components/form-components/helpers/valodation-functions';
+import CInput from '../../../components/form-components/CInput';
+import { isEmpty } from '../../../components/form-components/helpers/valodation-functions';
 import { useDispatch, useSelector } from 'react-redux'
-import useAuthCheck from '../../helpers/hooks/useAuthCheck';
-import { ERoutes } from '../../router/Routes';
+import useAuthCheck from '../../../helpers/hooks/useAuthCheck';
+import { ERoutes } from '../../../router/Routes';
 import React, { useEffect } from 'react';
-import { signIn } from '../../stores/authentication/reducer';
-import { ISignInData } from '../../types/user';
-import BtnLink from '../../components/BtnLink';
-import { IState } from '../../stores/configureStore';
+import { signIn } from '../../../stores/authentication/reducer';
+import { ISignInData } from '../../../types/user';
+import BtnLink from '../../../components/BtnLink';
+import { IState } from '../../../stores/configureStore';
 import { Error } from '@progress/kendo-react-labels';
-import { setError } from '../../stores/common/reducer';
+import { setError } from '../../../stores/common/reducer';
 
 const LoginPage = () => {
   const dispatch = useDispatch()
-  const {checkingAuth} = useAuthCheck()
+  const {authLoading} = useAuthCheck()
   const error = useSelector((state: IState) => state.common.error)
 
   useEffect(()=>{
@@ -47,6 +47,7 @@ const LoginPage = () => {
                   component={CInput}
                   label={"Email"}
                   // validator={emailValidator}
+                  maxLength={300}
                   validator={isEmpty}
                 />
               </div>
@@ -69,18 +70,18 @@ const LoginPage = () => {
               <Button
                 type="submit"
                 variant="primary"
-                disabled={!formRenderProps.allowSubmit || checkingAuth}
+                disabled={!formRenderProps.allowSubmit || authLoading}
               >
-                {checkingAuth ? 'Loading...' : 'Sign In'}
+                {authLoading ? 'Loading...' : 'Sign In'}
               </Button>
             </div>
           </FormElement>
         )}
       />
-      <div>Would you like to create an account</div>
+      <div>Would you like to create an account?</div>
       <br/>
-      <BtnLink to={ERoutes.SignUp} idDisabled={checkingAuth} className='btn btn-outline-primary mb-1'>Sign Up</BtnLink>
-      <BtnLink to={ERoutes.ForgotPwd} idDisabled={checkingAuth} className='btn btn-outline-primary mb-1'>Forgot Password?</BtnLink>
+      <BtnLink to={ERoutes.SignUp} idDisabled={authLoading} className='btn btn-outline-primary mb-1'>Sign Up</BtnLink>
+      <BtnLink to={ERoutes.ForgotPwd} idDisabled={authLoading} className='btn btn-outline-primary mb-1'>Forgot Password?</BtnLink>
       <br/>
     </div>
   )

@@ -1,7 +1,7 @@
 
 .profile-icon{
-  @include fitSize(height, $header-height, 2px);
-  @include fitSize(width, $header-height, 2px);
+  @include fitSize(height, $header-height, 10px);
+  @include fitSize(width, $header-height, 10px);
   display: block;
   border-radius: 50%;
   background-color: $form-background-color;

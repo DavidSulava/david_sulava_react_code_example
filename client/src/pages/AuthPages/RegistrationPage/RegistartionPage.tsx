@@ -1,22 +1,22 @@
 import { useDispatch, useSelector } from 'react-redux';
-import useAuthCheck from '../../helpers/hooks/useAuthCheck';
+import useAuthCheck from '../../../helpers/hooks/useAuthCheck';
 import { Field, Form, FormElement } from '@progress/kendo-react-form';
-import CInput from '../../components/form-components/CInput';
-import { emailValidator, isEmpty } from '../../components/form-components/helpers/valodation-functions';
+import CInput from '../../../components/form-components/CInput';
+import { emailValidator, isEmpty } from '../../../components/form-components/helpers/valodation-functions';
 import { Button } from 'react-bootstrap';
 import React, { useEffect, useRef } from 'react';
-import { ERoutes } from '../../router/Routes';
-import { eUserRoles, ISignUpData } from '../../types/user';
+import { ERoutes } from '../../../router/Routes';
+import { EUserRoles, ISignUpData } from '../../../types/user';
 import { getter } from '@progress/kendo-data-query';
-import { signUp } from '../../stores/authentication/reducer';
-import { setPostReqResp, setError } from '../../stores/common/reducer';
-import { IState } from '../../stores/configureStore';
+import { signUp } from '../../../stores/authentication/reducer';
+import { setPostReqResp, setError } from '../../../stores/common/reducer';
+import { IState } from '../../../stores/configureStore';
 import { Error } from '@progress/kendo-react-labels';
-import BtnLink from '../../components/BtnLink';
+import BtnLink from '../../../components/BtnLink';
 
 const RegistrationPage = () => {
   const dispatch = useDispatch()
-  const {checkingAuth} = useAuthCheck()
+  const {authLoading} = useAuthCheck()
   const postResp = useSelector((state: IState) => state.common.postReqResp)
   const error = useSelector((state: IState) => state.common.error)
 
@@ -34,7 +34,7 @@ const RegistrationPage = () => {
     const postData = {...dataItem}
     delete postData?.confirmPassword
     postData.phone = ''
-    postData.role = eUserRoles.User
+    postData.role = EUserRoles.User
 
     dispatch(signUp(postData as ISignUpData))
   }
@@ -90,6 +90,7 @@ const RegistrationPage = () => {
                         type={"email"}
                         component={CInput}
                         label={"Email"}
+                        maxLength={300}
                         validator={emailValidator}
                       />
                       {
@@ -137,9 +138,9 @@ const RegistrationPage = () => {
                     <Button
                       type="submit"
                       variant="primary"
-                      disabled={!formRenderProps.allowSubmit || checkingAuth}
+                      disabled={!formRenderProps.allowSubmit || authLoading}
                     >
-                      {checkingAuth ? 'Loading...' : 'Sign Up'}
+                      {authLoading ? 'Loading...' : 'Sign Up'}
                     </Button>
                   </div>
                 </FormElement>
@@ -151,10 +152,10 @@ const RegistrationPage = () => {
         !postResp &&
         <div className="mb-2">Already have an account?</div>
       }
-      <BtnLink to={ERoutes.Root} className="btn btn-outline-primary mb-1" idDisabled={checkingAuth}>Sign in</BtnLink>
+      <BtnLink to={ERoutes.Root} className="btn btn-outline-primary mb-1" idDisabled={authLoading}>Sign in</BtnLink>
       {
         !postResp &&
-        <BtnLink to={ERoutes.ForgotPwd} idDisabled={checkingAuth} className='btn btn-outline-primary mb-1'>Forgot Password?</BtnLink>
+        <BtnLink to={ERoutes.ForgotPwd} idDisabled={authLoading} className='btn btn-outline-primary mb-1'>Forgot Password?</BtnLink>
       }
     </div>
   )

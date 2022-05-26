@@ -28,6 +28,8 @@ const CInput: React.FC<FieldRenderProps> = (fieldRenderProps) => {
     step,
     locale,
     onChange,
+    maxLength=100,
+    ...others
   } = fieldRenderProps
 
   const inputErrorClass = valid ? "" : "input-error"
@@ -46,6 +48,7 @@ const CInput: React.FC<FieldRenderProps> = (fieldRenderProps) => {
             name={name}
             valid={valid}
             type={type ?? 'text'}
+            maxLength={maxLength}
             multiple={multiple ?? false}
             value={value ?? presetValue}
             placeholder={placeholder ?? ""}
@@ -53,6 +56,7 @@ const CInput: React.FC<FieldRenderProps> = (fieldRenderProps) => {
             className={`${className} ${inputErrorClass} ${hiddenClass} ${disabledInputClass} input-ordinary`}
             disabled={disabled}
             readOnly={readOnly ?? false}
+            {...others}
           />
           :
           <LocalizationProvider language={locale}>

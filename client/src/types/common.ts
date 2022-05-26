@@ -56,3 +56,10 @@ export interface ICommonModalProps {
   onSubmit?: <T>(data?: T) => void,
   onClose: () => void,
 }
+export interface ICommonObject {
+  [p: string]: any
+}
+
+export interface IStdEnum {
+  [key: string|number]: string|number
+}

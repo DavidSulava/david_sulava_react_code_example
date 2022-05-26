@@ -12,7 +12,6 @@ import { useDispatch } from 'react-redux';
 
 const AddNewProduct: React.FC<ICreateNewProductModalProps> = ({
   isOpen,
-  organizationId,
   onSubmit,
   onClose,
 }) => {

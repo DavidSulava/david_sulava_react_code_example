@@ -18,7 +18,7 @@
   }
 }
 .dash-board-content{
-  @include setFlex(row, center, start);
+  @include setFlex(column, start, stretch);
   flex-grow: 8;
   height: calc( 100vh - #{$header-height} - 70px - 30px);
   padding: 0 5px 5px 5px;

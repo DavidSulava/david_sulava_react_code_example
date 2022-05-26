@@ -2,19 +2,41 @@ import { all, call, put, select, takeLatest } from 'typed-redux-saga';
 import { setError } from '../common/reducer';
 import Api from '../../services/api/api';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { getProdVerByProdId, setProdVersions, setProdVersionLoading, postProdVerByProdId, delProdVer, putProdVer } from './reducer';
+import {
+  delProdVer,
+  getProdVersion,
+  getProdVersionList,
+  postProdVerByProdId,
+  putProdVer,
+  setProdVersion,
+  setProdVersionList,
+  setProdVersionLoading
+} from './reducer';
 import { IState } from '../configureStore';
 import { toDataSourceRequestString } from '@progress/kendo-data-query';
 import { IPostProductVersion, IProductVersion } from '../../types/productVersion';
 
-function* getProdVersionSaga({payload: id}: PayloadAction<string>):any {
+function* getProdVersionListSaga({payload: id}: PayloadAction<string>):any {
   try {
     const dataState = yield select((state: IState) => state.prodVersion.dataState)
     const dataString: string = toDataSourceRequestString({...dataState})
     const idParam = `&productId=${id}`
     yield put(setProdVersionLoading(true))
-    const response = yield* call(Api.getProdVersion,  dataString + idParam)
-    yield put(setProdVersions(response))
+    const response = yield* call(Api.getProdVersionList,  dataString + idParam)
+    yield put(setProdVersionList(response))
+  }
+  catch(e: any) {
+    yield put(setError(e))
+  }
+  finally {
+    yield put(setProdVersionLoading(false))
+  }
+}
+function* getProdVersionSaga({payload: id}: PayloadAction<string>):any {
+  try {
+    yield put(setProdVersionLoading(true))
+    const response = yield* call(Api.getProdVersion,  id)
+    yield put(setProdVersion(response))
   }
   catch(e: any) {
     yield put(setError(e))
@@ -28,7 +50,7 @@ function* postProdVersionSaga({payload: formData}: PayloadAction<IPostProductVer
   try {
     yield* call(Api.postProdVersion,  formData)
     const productId = formData.get('ProductId')
-    yield* put(getProdVerByProdId(productId as string))
+    yield* put(getProdVersionList(productId as string))
   }
   catch(e: any) {
     yield put(setError(e))
@@ -39,7 +61,7 @@ function* puttProdVersionSaga({payload: formData}: PayloadAction<IPostProductVer
   try {
     yield* call(Api.putProdVersion,  formData)
     const productId = formData.get('ProductId')
-    yield* put(getProdVerByProdId(productId as string))
+    yield* put(getProdVersionList(productId as string))
   }
   catch(e: any) {
     yield put(setError(e))
@@ -51,7 +73,7 @@ function* delProdVersionSaga({payload: product}: PayloadAction<IProductVersion>)
     const param = `id=${product.id}`
     yield* call(Api.delProductVersion,  param)
 
-    yield* put(getProdVerByProdId(product.productId))
+    yield* put(getProdVersionList(product.productId))
   }
   catch(e: any) {
     yield put(setError(e))
@@ -60,10 +82,11 @@ function* delProdVersionSaga({payload: product}: PayloadAction<IProductVersion>)
 
 function* prodVersionWatcher() {
   yield all([
-    takeLatest(getProdVerByProdId.type, getProdVersionSaga),
+    takeLatest(getProdVersionList.type, getProdVersionListSaga),
     takeLatest(postProdVerByProdId.type, postProdVersionSaga),
     takeLatest(putProdVer.type, puttProdVersionSaga),
     takeLatest(delProdVer.type, delProdVersionSaga),
+    takeLatest(getProdVersion.type, getProdVersionSaga),
   ])
 }
 
