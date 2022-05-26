@@ -15,7 +15,7 @@ import UsersPage from '../pages/DashboardPage/subPages/UsersPage';
 import BillingPage from '../pages/DashboardPage/subPages/BillingPage';
 import RegistrationPage from '../pages/RegistrationPage/RegistartionPage';
 import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
-import VersionPage from '../pages/DashboardPage/subPages/ProductsPage/VersionPage';
+import VersionPage from '../pages/DashboardPage/subPages/ProdVersionPage/VersionPage';
 
 const RouteList = () => {
   return (

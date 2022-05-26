@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
 import useClickOutside from '../../../helpers/hooks/useClickOutside';
 import { useDispatch } from 'react-redux';
-import { IUser, Nullable } from '../../../types/user';
+import { IUser} from '../../../types/user';
 import { Button } from 'react-bootstrap';
 import { setUser } from '../../../stores/authentication/reducer';
+import { Nullable } from '../../../types/common';
 
 const Profile: React.FC<{user:Nullable<IUser>}> = ({user }) => {
   const dispatch = useDispatch()

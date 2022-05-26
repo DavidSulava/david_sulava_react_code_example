@@ -25,7 +25,6 @@ export interface ITariff {
   name: string
 }
 
-export type Nullable<T> = T|undefined|null
 export const ACCESS_TOKEN_KEY = 'accessToken'
 
 export enum eUserRoles {

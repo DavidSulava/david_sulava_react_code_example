@@ -9,7 +9,7 @@ export enum ERoutes {
   Organisations = '/organisations',
 
   Dashboard = '/dashboard/:organizationId',
-  ProdVersion = '/dashboard/:organizationId/:productId',
+  ProdVersion = '/dashboard/:organizationId/:productId/products',
 
   ManageOrganisation = 'manage-organisation',
   Products = 'products',

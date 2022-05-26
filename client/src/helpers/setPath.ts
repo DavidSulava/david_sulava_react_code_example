@@ -1,5 +1,5 @@
 const setPath = (path: string, parameter: (string|number|undefined)[] = []) => {
-  const paramReg = new RegExp(':.*(?=[\\/])|:.*(?=$)');
+  const paramReg = new RegExp(':.*?(?=\\/)|:.*(?=$)');
   let newPath = path
   parameter.forEach(param => {
     newPath = newPath.replace(paramReg, param?.toString()||'')

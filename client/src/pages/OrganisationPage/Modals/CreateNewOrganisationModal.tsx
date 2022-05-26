@@ -1,19 +1,20 @@
 import ModalWrapper from '../../../components/ModalWrapper/ModalWrapper';
 import React, { useRef } from 'react';
-import { ICreateNewOrganisationModalProps, IModalWrapperButton } from '../../../types/Modal';
+import { IModalWrapperButton } from '../../../types/modal';
 import { Field, FieldWrapper, Form, FormElement } from '@progress/kendo-react-form';
 import CInput from '../../../components/form-components/CInput';
 import { isEmpty } from '../../../components/form-components/helpers/valodation-functions';
 import { Button } from 'react-bootstrap';
 import CTextArea from '../../../components/form-components/CTextArea';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
-import { eOrganisationTypes, IPostOrganisation } from '../../../types/OrganisationPage';
+import { eOrganisationTypes, IPostOrganisation } from '../../../types/organisationPage';
 import getEnumKeys from '../../../helpers/getEnumKeys';
 import { useDispatch } from 'react-redux';
 import useAuthCheck from '../../../helpers/hooks/useAuthCheck';
 import { postOrganisation } from '../../../stores/organisation/reducer';
+import { ICommonModalProps } from '../../../types/common';
 
-const CreateNewOrganisationModal: React.FC<ICreateNewOrganisationModalProps> = ({
+const CreateNewOrganisationModal: React.FC<ICommonModalProps> = ({
   isOpen,
   onSubmit,
   onClose,

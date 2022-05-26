@@ -7,15 +7,14 @@ import { toDataSourceRequestString } from '@progress/kendo-data-query';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { IDelProduct, IPostProduct, IPutProduct } from '../../types/product';
 
-function* getProductSaga({payload: organizationId}: PayloadAction<string>): any {
+function* getProductSaga(): any {
   try {
     const dataState = yield select((state: IState) => state.product.dataState)
     const dataString: string = toDataSourceRequestString({...dataState})
-    const orgId = `&organizationId=${organizationId}`
 
     yield put(setIsProductLoading(true))
     yield* call(delay, 300);
-    const productArray = yield* call(Api.getProduct, dataString + orgId)
+    const productArray = yield* call(Api.getProduct, dataString)
     yield put(setProduct(productArray))
   }
   catch(e: any) {
@@ -29,7 +28,7 @@ function* getProductSaga({payload: organizationId}: PayloadAction<string>): any 
 function* postProductSaga({payload: formData}: PayloadAction<IPostProduct>) {
   try {
     yield* call(Api.postProduct, formData)
-    yield put(getProduct(formData.organizationId))
+    yield put(getProduct())
   }
   catch(e: any) {
     yield put(setError(e))
@@ -39,7 +38,7 @@ function* postProductSaga({payload: formData}: PayloadAction<IPostProduct>) {
 function* putProductSaga({payload: formData}: PayloadAction<IPutProduct>) {
   try {
     yield* call(Api.putProduct, formData)
-    yield put(getProduct(formData.organizationId))
+    yield put(getProduct())
   }
   catch(e: any) {
     yield put(setError(e))
@@ -51,7 +50,7 @@ function* delProductSaga({payload: {prodId, organisationId}}: PayloadAction<IDel
     const param = `productId=${prodId}`
     yield* call(Api.delProduct, param)
     if(organisationId)
-      yield put(getProduct(organisationId))
+      yield put(getProduct())
   }
   catch(e: any) {
     yield put(setError(e))

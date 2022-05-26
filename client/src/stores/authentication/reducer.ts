@@ -1,5 +1,6 @@
-import { ISignInData, ISignUpData, ITariff, IUser, Nullable } from "../../types/user";
+import { ISignInData, ISignUpData, ITariff, IUser} from "../../types/user";
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Nullable } from '../../types/common';
 
 export interface IAuthState {
   user: Nullable<IUser>,
@@ -21,6 +22,8 @@ const authSlice = createSlice({
     },
     signUp: (state, action: PayloadAction<ISignUpData>) => {
     },
+    authOrg: (state, action: PayloadAction<string>) => {
+    },
     getTariff: (state, action: PayloadAction) => {
     },
     setUser: (state, action: PayloadAction<Nullable<IUser>>) => {
@@ -35,6 +38,6 @@ const authSlice = createSlice({
   }
 });
 
-export const {setUser, setIsUserLoading, setTariff, signIn, signUp, getTariff} = authSlice.actions
+export const {setUser, setIsUserLoading, setTariff, signIn, signUp, authOrg, getTariff} = authSlice.actions
 
 export default authSlice.reducer

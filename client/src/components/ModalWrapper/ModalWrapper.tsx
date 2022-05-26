@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from "react-bootstrap";
-import { IModalCommonProps } from "../../types/Modal"
+import { IModalCommonProps } from "../../types/modal"
 import { DialogActionsBar } from '@progress/kendo-react-dialogs/dist/es/DialogActionsBar';
 import { Dialog } from '@progress/kendo-react-dialogs/dist/es/Dialog';
 
@@ -16,7 +16,7 @@ const ModalWrapper: React.FC<IModalCommonProps> = ({
     <>
       {
         isOpen &&
-        <Dialog title={headerText} closeIcon={false}>
+        <Dialog title={headerText} closeIcon={false} className={className}>
           {children}
           <DialogActionsBar layout={'end'}>
             {buttons.map((b, index) => {

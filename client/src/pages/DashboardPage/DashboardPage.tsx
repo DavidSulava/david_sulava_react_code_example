@@ -1,15 +1,26 @@
 import { Link, Outlet, NavLink, useLocation, useParams } from 'react-router-dom';
 import { ERoutes } from '../../router/Routes';
 import { Button } from 'react-bootstrap';
-import React from 'react';
+import React, { useEffect } from 'react';
 import useAuthCheck from '../../helpers/hooks/useAuthCheck';
 import setPath from '../../helpers/setPath';
 import BtnLink from '../../components/BtnLink';
+import { authOrg } from '../../stores/authentication/reducer';
+import { useDispatch } from 'react-redux';
+import { initialProdVerState, setProdVersionDataState } from '../../stores/productVersion/reducer';
 
 const DashboardPage = () => {
+  const dispatch = useDispatch()
   const location = useLocation();
   const { organizationId } = useParams();
   const {user} = useAuthCheck()
+
+  useEffect(()=>{
+    dispatch(authOrg(organizationId ?? ''))
+    return () => {
+      dispatch(setProdVersionDataState(initialProdVerState.dataState))
+    }
+  },[dispatch])
 
   const isNavLikActive = (route: string = ""): boolean => {
     return location.pathname.endsWith(route)
@@ -23,9 +34,6 @@ const DashboardPage = () => {
           <h6>Your id: {user?.id}</h6>
         </div>
         <div>
-          {/*<Button variant="outlined" className="btn-outline-info btn-nav">*/}
-          {/*  <Link to={ERoutes.Root}>Return</Link>*/}
-          {/*</Button>*/}
           <BtnLink to={ERoutes.Root} className='btn btn-outline-primary'>Return</BtnLink>
         </div>
 
