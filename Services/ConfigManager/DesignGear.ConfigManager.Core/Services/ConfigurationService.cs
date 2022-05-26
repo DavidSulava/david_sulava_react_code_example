@@ -218,13 +218,24 @@ namespace DesignGear.ConfigManager.Core.Services
             return _configurationFileStorage.GetSvfRootFileName(productVersionId, configurationId);
         }
 
+        //public async Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId)
+        //{
+        //    return await _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition).
+        //        Where(x => x.ComponentDefinition.ProductVersionId == productVersionId && x.ParentConfigurationId == null).
+        //        ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider).ToListAsync();
+        //}
 
-
-        public async Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId)
+        public async Task<TResult> GetConfigurationItemsAsync<TResult>(Guid productVersionId, Func<IQueryable<ConfigurationItemDto>, TResult> resultBuilder)
         {
-            return await _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition).
+            if (resultBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(resultBuilder));
+            }
+            var query = _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition).
                 Where(x => x.ComponentDefinition.ProductVersionId == productVersionId && x.ParentConfigurationId == null).
-                ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider).ToListAsync();
+                ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider);
+            var result = resultBuilder(query);
+            return await Task.FromResult(result);
         }
 
 

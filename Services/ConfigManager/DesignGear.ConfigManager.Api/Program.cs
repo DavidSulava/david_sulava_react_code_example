@@ -4,7 +4,9 @@ using DesignGear.ConfigManager.Api.Config;
 using DesignGear.ConfigManager.Core.Data;
 using DesignGear.ConfigManager.Core.Jobs;
 using Hangfire;
+using Kendo.Mvc.UI;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args); 
 //builder.Configuration.AddJsonFile($"appsettings.Local.json", optional: true);
@@ -26,7 +28,10 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.MapType<DataSourceRequest>(() => new OpenApiSchema { Type = typeof(string).Name });
+});
 
 //RecurringJob.AddOrUpdate<ConfigurationPushingJob>("Pushing configurations to inventor", (x) => x.Do(), "0 */1 * ? * *");
 //RecurringJob.AddOrUpdate<ConfigurationPullingJob>("Pulling configurations from inventor", (x) => x.Do(), "0 */1 * ? * *");

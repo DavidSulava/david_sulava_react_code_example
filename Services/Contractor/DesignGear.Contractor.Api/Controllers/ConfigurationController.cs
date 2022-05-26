@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
-    [Authorize(Policy = "OrganizationSelected")]
+//    [Authorize(Policy = "OrganizationSelected")]
     [Route("[controller]")]
     public class ConfigurationController : ControllerBase
     {
@@ -53,7 +53,7 @@ namespace DesignGear.Contractor.Api.Controllers
         [HttpGet]
         public async Task<DataSourceResult> GetConfigurationItemsAsync(Guid productVersionId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
-            var queryString = ControllerContext.HttpContext.Request.QueryString.Value;
+            var queryString = this.Request.QueryString.Value;
             return await _configurationService.GetConfigurationItemsAsync(queryString);
         }
 

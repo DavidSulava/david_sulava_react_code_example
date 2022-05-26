@@ -5,6 +5,9 @@ using AutoMapper;
 using DesignGear.Contracts.Dto;
 using DesignGear.Contracts.Dto.ConfigManager;
 using DesignGear.Common.Extensions;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
+using Newtonsoft.Json;
 
 namespace DesignGear.ConfigManager.Api.Controllers
 {
@@ -34,10 +37,18 @@ namespace DesignGear.ConfigManager.Api.Controllers
             await _configurationService.CreateConfigurationRequestAsync(request.MapTo<ConfigurationRequestDto>(_mapper));
         }
 
+        //[HttpGet]
+        //public async Task<ICollection<VmConfigurationItem>> GetConfigurationItemsAsync(Guid productVersionId)
+        //{
+        //    return (await _configurationService.GetConfigurationItemsAsync(productVersionId)).MapTo<ICollection<VmConfigurationItem>>(_mapper);
+        //}
+
         [HttpGet]
-        public async Task<ICollection<VmConfigurationItem>> GetConfigurationItemsAsync(Guid productVersionId)
+        public async Task<IActionResult> GetConfigurationItemsAsync(Guid productVersionId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
-            return (await _configurationService.GetConfigurationItemsAsync(productVersionId)).MapTo<ICollection<VmConfigurationItem>>(_mapper);
+            var result = await _configurationService.GetConfigurationItemsAsync(productVersionId, query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ConfigurationItemDto, VmConfigurationItem>));
+            var json = JsonConvert.SerializeObject(result, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
+            return Ok(json);
         }
 
         [HttpGet("{configurationId}/svf")]

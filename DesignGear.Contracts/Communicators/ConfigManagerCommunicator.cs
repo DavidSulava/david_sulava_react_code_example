@@ -40,6 +40,14 @@ namespace DesignGear.Contracts.Communicators
             return JsonConvert.DeserializeObject<T>(await message.Content.ReadAsStringAsync());
         }
 
+        private async Task<T> SendHttpRequestJsonAsync<T>(string url)
+        {
+            var message = await _httpClient.GetAsync(url);
+            message.EnsureSuccessStatusCode();
+            var result = await message.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(result, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
+        }
+
         private async Task<string> SendHttpRequestAsync(string url)
         {
             var message = await _httpClient.GetAsync(url);
@@ -94,7 +102,7 @@ namespace DesignGear.Contracts.Communicators
 
         public async Task<DataSourceResult> GetConfigurationItemsAsync(string queryString)
         {
-            return (await SendHttpRequestAsync<DataSourceResult>($"{_settings.ConfigManagerUrl}configuration{queryString}"));
+            return (await SendHttpRequestJsonAsync<DataSourceResult>($"{_settings.ConfigManagerUrl}configuration{queryString}"));
         }
     }
 }
