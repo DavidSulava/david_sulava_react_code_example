@@ -1,3 +1,5 @@
+import { ICommonModalProps } from './common';
+
 export interface IModalCommonProps{
   headerText: string,
   isOpen: boolean,
@@ -12,12 +14,7 @@ export interface IModalWrapperButton {
   onButtonClick: () => void
 }
 
-export interface ICreateNewOrganisationModalProps {
-  isOpen: boolean
-  onSubmit?: <T>(data?:T) => void,
-  onClose: () => void,
-}
-
-export interface ICreateNewProductModalProps extends ICreateNewOrganisationModalProps{
+export interface ICreateNewProductModalProps extends ICommonModalProps{
   organizationId: string
 }
+

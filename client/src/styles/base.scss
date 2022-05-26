@@ -17,7 +17,6 @@ a{
 th{
   user-select: none;
 }
-
 .btn-nav{
   @include setFlex(column, center, stretch);
   padding: 0!important;

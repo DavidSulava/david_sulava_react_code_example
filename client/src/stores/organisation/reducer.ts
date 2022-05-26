@@ -1,4 +1,4 @@
-import { IOrganisation, IPostOrganisation } from '../../types/OrganisationPage';
+import { IOrganisation, IPostOrganisation } from '../../types/organisationPage';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface IOrganisationState {

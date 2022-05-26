@@ -3,7 +3,7 @@ import Api from '../../services/api/api';
 import { setError } from '../common/reducer';
 import { getOrganisations, isLoadingOrganisation, postOrganisation, saveOrganisations } from './reducer';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { IPostOrganisation } from '../../types/OrganisationPage';
+import { IPostOrganisation } from '../../types/organisationPage';
 
 function* getOrganisationsSaga({payload: userId}: PayloadAction<string>) {
   try {

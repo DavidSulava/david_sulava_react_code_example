@@ -1,22 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  IDelProduct,
-  IGridDataFilter,
-  IGridDataStateFilter,
-  IGridFilterSetting,
+  IDelProduct, IGetProdResp,
   IPostProduct,
-  IProduct,
   IPutProduct
 } from '../../types/product';
+import { IGridDataFilter, IGridDataStateFilter, IGridFilterSetting, Nullable } from '../../types/common';
 
 export interface IProductState {
   dataState: IGridDataStateFilter,
-  product: IProduct[],
+  product: Nullable<IGetProdResp>,
   isProductLoading: boolean,
 }
 
 const initialState: IProductState = {
-  product: [],
+  product: null,
   isProductLoading: false,
   dataState: {
     filter: {
@@ -34,7 +31,7 @@ const productSlice = createSlice({
   name: "product",
   initialState: initialState,
   reducers: {
-    getProduct: (state, action: PayloadAction<string>) => {
+    getProduct: (state, action: PayloadAction) => {
     },
     postProduct: (state, action: PayloadAction<IPostProduct>) => {
     },
@@ -48,7 +45,7 @@ const productSlice = createSlice({
     setFilter: (state, action: PayloadAction<IGridDataStateFilter>) => {
       state.dataState = action.payload
     },
-    setProduct: (state, action) => {
+    setProduct: (state, action: PayloadAction<Nullable<IGetProdResp>>) => {
       state.product = action.payload
     }
   }

@@ -3,7 +3,7 @@ import Api from '../../services/api/api';
 import { setLocalStorage } from '../../helpers/localStorage';
 import { ACCESS_TOKEN_KEY, ISignInData, ISignUpData } from '../../types/user';
 import { setError, setPostReqResp } from '../common/reducer';
-import { getTariff, setIsUserLoading, setTariff, setUser, signIn, signUp } from './reducer';
+import { authOrg, getTariff, setIsUserLoading, setTariff, setUser, signIn, signUp } from './reducer';
 import { PayloadAction } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 
@@ -46,6 +46,16 @@ function* signUpSaga({payload:formData}: PayloadAction<ISignUpData>) {
   }
 }
 
+function* authOrgSaga({payload:orgId}: PayloadAction<string>) {
+  try {
+    const response = yield* call(Api.authOrg, orgId)
+    setLocalStorage(ACCESS_TOKEN_KEY, response.token)
+  }
+  catch(e: any) {
+    yield put(setError(e))
+  }
+}
+
 function* getTariffSaga() {
   try {
     const response = yield* call(Api.getTariff)
@@ -60,6 +70,7 @@ function* authWatcher() {
   yield all([
     takeLatest(signIn.type, signInSaga),
     takeLatest(signUp.type, signUpSaga),
+    takeLatest(authOrg.type, authOrgSaga),
     takeLatest(getTariff.type, getTariffSaga),
   ])
 }

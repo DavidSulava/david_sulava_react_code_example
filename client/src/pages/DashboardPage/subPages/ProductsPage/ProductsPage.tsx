@@ -3,7 +3,7 @@ import {
   GridCellProps,
   GridColumn,
   GridDataStateChangeEvent,
-  GridItemChangeEvent,
+  GridItemChangeEvent, GridNoRecords,
   GridRowProps,
   GridToolbar
 } from '@progress/kendo-react-grid';
@@ -11,19 +11,22 @@ import React, { createContext, ReactElement, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { delProduct, getProduct, putProduct, setFilter, setProduct } from '../../../../stores/product/reducer';
 import useProduct from '../../../../helpers/hooks/useProduct';
-import { IGridDataState, IProduct, IPutProduct } from '../../../../types/product';
+import { IGetProdResp, IProduct, IPutProduct } from '../../../../types/product';
 import { Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import AddNewProduct from './modals/AddNewPeoduct';
 import { MyEditCell } from './components/MyEditCell';
 import { GridInlineFormRow } from './components/GridInlineFormRow';
 import { FormCell, IFormCellProps } from './components/FormCell';
+import { IGridDataState } from '../../../../types/common';
+import { authOrg } from '../../../../stores/authentication/reducer';
+import NoRecords from '../../../../components/grid-components/NoRecords';
 
 export const GridEditContext = createContext<{
-  cancel: (dataItem: IGridState) => void,
-  enterEdit: (dataItem: IGridState) => void,
-  update: (dataItem: IGridState) => void,
-  onDelete: (dataItem: IGridState) => void,
+  cancel: (dataItem: IGridProductData) => void,
+  enterEdit: (dataItem: IGridProductData) => void,
+  update: (dataItem: IGridProductData) => void,
+  onDelete: (dataItem: IGridProductData) => void,
 }>({} as any);
 
 const ActionCell = (props: GridCellProps) => {
@@ -37,24 +40,23 @@ const RowRender = (row: ReactElement<HTMLTableRowElement>, props: GridRowProps) 
   return (<GridInlineFormRow dataItem={props.dataItem}>{row}</GridInlineFormRow>);
 };
 
-export interface IGridState extends IProduct {
+export interface IGridProductData extends IProduct{
   inEdit?: boolean
 }
 const ProductsPage = () => {
   const dispatch = useDispatch()
   const {organizationId} = useParams();
-  const {product, productFilters} = useProduct()
-  const editField = "inEdit";
+  const {product, productFilters, isProductLoading} = useProduct()
   const [isShowAddProductModal, setIsShowAddProductModal] = useState(false)
-  const [dataState, setDataState] = useState<IGridState[]>([]);
+  const [dataState, setDataState] = useState<IGridProductData[]>([]);
 
   useEffect(() => {
-    dispatch(setProduct([]))
-    dispatch(getProduct(organizationId ?? ''))
-    setDataState(product)
+    dispatch(setProduct(null))
+    dispatch(getProduct())
+    setDataState(product?.data ?? [])
   }, [dispatch])
   useEffect(() => {
-    setDataState(product)
+    setDataState(product?.data ?? [])
   }, [product])
 
   const onAddProdClick = () => {
@@ -62,17 +64,26 @@ const ProductsPage = () => {
   }
   const onDataStateChange = (e: GridDataStateChangeEvent) => {
     dispatch(setFilter(e.dataState as any))
-    dispatch(getProduct(organizationId ?? ''))
+    dispatch(getProduct())
   }
+  const itemChange = (event: GridItemChangeEvent) => {
+    const field = event.field || '';
+    const newData = dataState.map(item =>
+      item.id === event.dataItem.id
+        ? {...item, [field]: event.value}
+        : item
+    );
+    setDataState(newData)
+  };
   // modify the data in the store, db etc
-  const onDelete = (dataItem: IGridState) => {
+  const onDelete = (dataItem: IGridProductData) => {
     const sendData = {
       prodId: dataItem.id,
       organisationId: dataItem.organizationId
     }
     dispatch(delProduct(sendData))
   };
-  const update = (dataItem: IGridState) => {
+  const update = (dataItem: IGridProductData) => {
     cancel(dataItem)
     const updatedData = {
       id: dataItem.id,
@@ -84,8 +95,8 @@ const ProductsPage = () => {
       dispatch(putProduct(updatedData as IPutProduct))
   };
   // Local state operations
-  const cancel = (dataItem: IGridState) => {
-    const originalItem = product.find(
+  const cancel = (dataItem: IGridProductData) => {
+    const originalItem = product?.data.find(
       p => p.id === dataItem.id
     );
     setDataState((prev) => {
@@ -96,20 +107,11 @@ const ProductsPage = () => {
       })
     });
   };
-  const enterEdit = (dataItem: IGridState) => {
+  const enterEdit = (dataItem: IGridProductData) => {
     let newData = dataState.map(item =>
       item.id === dataItem.id ? {...item, inEdit: true} : item
     )
     setDataState(newData);
-  };
-  const itemChange = (event: GridItemChangeEvent) => {
-    const field = event.field || '';
-    const newData = dataState.map(item =>
-      item.id === event.dataItem.id
-        ? {...item, [field]: event.value}
-        : item
-    );
-    setDataState(newData)
   };
 
   return (
@@ -119,10 +121,9 @@ const ProductsPage = () => {
           className="product-grid"
           data={dataState}
           {...(productFilters as IGridDataState)}
-          total={dataState.length}
+          total={product?.total}
           pageable={true}
           sortable={true}
-          editField={editField}
           onItemChange={itemChange}
           onDataStateChange={onDataStateChange}
           rowRender={RowRender}
@@ -132,6 +133,9 @@ const ProductsPage = () => {
               ADD
             </Button>
           </GridToolbar>
+          <GridNoRecords>
+            <NoRecords isLoading={isProductLoading}/>
+          </GridNoRecords>
           <GridColumn field="name" title="Product name" className="grid-cell-form" cell={FormCell}/>
           <GridColumn
             field="description"
@@ -146,7 +150,7 @@ const ProductsPage = () => {
             sortable={false}
             editable={false}
           />
-          <GridColumn fild="action" title="Action" cell={ActionCell}/>
+          <GridColumn fild="action" title="Action"  cell={ActionCell}/>
         </Grid>
       </GridEditContext.Provider>
       {
