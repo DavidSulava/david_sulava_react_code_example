@@ -20,7 +20,7 @@ namespace DesignGear.ServerManager.Api.Controllers
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get([FromRoute] Guid id)
 		{
-			var urn = await _serverManagerService.GetSvfAsync(@"D:\Suspension.zip");
+			var urn = await _serverManagerService.GetSvfAsync(@"D:\Suspension.zip", "Suspension.iam");
 			return new ObjectResult(urn);
 		}
 	}

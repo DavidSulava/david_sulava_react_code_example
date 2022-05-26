@@ -223,7 +223,7 @@ namespace DesignGear.ConfigManager.Core.Services
         public async Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId)
         {
             return await _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition).
-                Where(x => x.ComponentDefinition.ProductVersionId == productVersionId).
+                Where(x => x.ComponentDefinition.ProductVersionId == productVersionId && x.ParentConfigurationId == null).
                 ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider).ToListAsync();
         }
 

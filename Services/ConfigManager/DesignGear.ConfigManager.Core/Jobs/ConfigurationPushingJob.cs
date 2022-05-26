@@ -18,23 +18,29 @@ namespace DesignGear.ConfigManager.Core.Jobs {
             _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
         }
 
-        public void Do() {
+        public void Do()
+        {
             /*
              * Получаем список конфигураций со статусом InQueue или ServiceUnavailableError
              */
-            var configurations = _configurationService.GetConfigurationListAsync(new ConfigurationFilterDto {
+            var configurations = _configurationService.GetConfigurationListAsync(new ConfigurationFilterDto
+            {
                 Status = ConfigurationStatus.InQueue | ConfigurationStatus.ServiceUnavailableError
             }).Result;
 
             /*
              * Для каждой конфигурации формируем пакет вместе с пакетом AppBundle и отправляем в инвентор
              */
-            foreach (var configuration in configurations) {
-                try {
+            foreach (var configuration in configurations)
+            {
+                try
+                {
                     /*
                      * Здесь выполняем отправку в инвентор и меняем статус конфигурации на InProcess
                      */
-                } catch(Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     /*
                      * Здесь анализируем ошибку и в зависимости от ее типа устанавливаем статус конфигурации
                      * в ServiceUnavailableError или IncorrectRequestError. Также заполняем поле ErrorMessage,
@@ -46,6 +52,14 @@ namespace DesignGear.ConfigManager.Core.Jobs {
             /*
              * В таком же русле необходимо сделать отправку запроса на формирование svf
              */
+            configurations = _configurationService.GetConfigurationListAsync(new ConfigurationFilterDto
+            {
+                SvfStatus = SvfStatus.InQueue | SvfStatus.ServiceUnavailableError
+            }).Result;
+
+            foreach (var configuration in configurations)
+            {
+            }
         }
     }
 }

@@ -17,13 +17,13 @@ namespace DesignGear.ServerManager.Core.Services
 			_forgeSettings = forgeSettings.Value;
 		}
 
-		public async Task<string> GetSvfAsync(string filePath)
+		public async Task<string> GetSvfAsync(string filePath, string rootFileName)
 		{
 			var api = new Derivative(_forgeSettings);
 			await api.Authenticate();
 			var bucketKey = await api.CreateBucket(bucketName);
 			var objInfo = await api.UploadZip(bucketKey, filePath);
-			var urn = await api.Translate(Base64(objInfo.ObjectId));
+			var urn = await api.Translate(Base64(objInfo.ObjectId), rootFileName);
 			await api.DownloadSvf(urn, svfPath);
 			return urn;
 		}
