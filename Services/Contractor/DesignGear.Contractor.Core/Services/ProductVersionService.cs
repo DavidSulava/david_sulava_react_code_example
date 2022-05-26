@@ -38,6 +38,11 @@ namespace DesignGear.Contractor.Core.Services
 
             var newItem = _mapper.Map<ProductVersion>(create);
             _dataAccessor.Editor.Create(newItem);
+            if (create.IsCurrent)
+            {
+                var product = await _dataAccessor.Editor.Products.FirstOrDefaultAsync(x => x.Id == create.ProductId);
+                product.CurrentVersionId = newItem.Id;
+            }
             await _dataAccessor.Editor.SaveAsync();
 
             var newConfiguration = _mapper.Map<VmConfigurationCreate>(create);
@@ -59,6 +64,12 @@ namespace DesignGear.Contractor.Core.Services
             if (item == null)
             {
                 throw new EntityNotFoundException<ProductVersion>(update.Id);
+            }
+
+            if (update.IsCurrent)
+            {
+                var product = await _dataAccessor.Editor.Products.FirstOrDefaultAsync(x => x.Id == update.ProductId);
+                product.CurrentVersionId = update.Id;
             }
 
             _mapper.Map(update, item);

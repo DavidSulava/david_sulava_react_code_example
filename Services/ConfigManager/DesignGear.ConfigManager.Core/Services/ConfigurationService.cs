@@ -171,6 +171,22 @@ namespace DesignGear.ConfigManager.Core.Services
          */
         public async Task<ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId)
         {
+            //var rootConfigurationId = (await _dataAccessor.Reader.Configurations.FirstOrDefaultAsync(x => x.Id == configurationId)).RootConfigurationId;
+            //var configurations = _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition)
+            //    .Where(x => x.RootConfigurationId == rootConfigurationId);
+
+            //var names = await configurations.FirstOrDefaultAsync(x => x.Id == configurationId);
+
+            //var config = new ConfigurationParametersDto()
+            //{
+            //    ConfigurationId = configurationId,
+            //    ConfigurationName = names.Name,
+            //    ComponentName = names.ComponentDefinition.Name,
+            //    Parameters = await _dataAccessor.Reader.ParameterDefinitions.Include(x => x.ValueOptions).Where(x => x.ConfigurationId == configurationId).
+            //        ProjectTo<ParameterDefinitionDto>(_mapper.ConfigurationProvider).ToListAsync()
+            //};
+
+
             var names = await _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition).FirstOrDefaultAsync(x => x.Id == configurationId);
 
             return new ConfigurationParametersDto()
@@ -181,6 +197,17 @@ namespace DesignGear.ConfigManager.Core.Services
                 Parameters = await _dataAccessor.Reader.ParameterDefinitions.Include(x => x.ValueOptions).Where(x => x.ConfigurationId == configurationId).
                     ProjectTo<ParameterDefinitionDto>(_mapper.ConfigurationProvider).ToListAsync()
             };
+        }
+
+        private async void ChildConfigurations(ConfigurationParametersDto tree, Guid parentConfigurationId)
+        {
+            var configurations = await _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition)
+                .Where(x => x.ParentConfigurationId == parentConfigurationId).ToListAsync();
+            foreach(var configuration in configurations)
+            {
+
+            }
+
         }
 
         /*

@@ -33,6 +33,11 @@ namespace DesignGear.Contractor.Core.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Product>()
+                .HasOne(x => x.CurrentProductVersion)
+                .WithOne(y => y.Product)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
         }
 

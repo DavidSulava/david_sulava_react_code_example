@@ -12,5 +12,6 @@
         public Guid ProductId { get; set; }
         public Guid AppBundleId { get; set; }
         public ICollection<AttachmentDto> ImageFiles { get; set; }
+        public bool IsCurrent { get; set; }
     }
 }

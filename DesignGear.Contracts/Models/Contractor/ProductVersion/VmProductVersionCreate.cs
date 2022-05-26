@@ -13,5 +13,6 @@ namespace DesignGear.Contracts.Models.Contractor
         public Guid AppBundleId { get; set; }
         public IFormFile ModelFile { get; set; }
         public ICollection<IFormFile> ImageFiles { get; set; }
+        public bool IsCurrent { get; set; }
     }
 }

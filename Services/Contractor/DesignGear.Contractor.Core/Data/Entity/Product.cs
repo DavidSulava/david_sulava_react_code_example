@@ -19,5 +19,9 @@ namespace DesignGear.Contractor.Core.Data.Entity
         public virtual Organization Organization { get; set; }
 
         public virtual ICollection<ProductVersion> ProductVersions { get; set; }
+
+        [ForeignKey("CurrentProductVersion")]
+        public Guid? CurrentVersionId { get; set; }
+        public virtual ProductVersion CurrentProductVersion { get; set; }
     }
 }
