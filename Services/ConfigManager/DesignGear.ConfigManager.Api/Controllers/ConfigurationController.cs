@@ -37,12 +37,6 @@ namespace DesignGear.ConfigManager.Api.Controllers
             await _configurationService.CreateConfigurationRequestAsync(request.MapTo<ConfigurationRequestDto>(_mapper));
         }
 
-        //[HttpGet]
-        //public async Task<ICollection<VmConfigurationItem>> GetConfigurationItemsAsync(Guid productVersionId)
-        //{
-        //    return (await _configurationService.GetConfigurationItemsAsync(productVersionId)).MapTo<ICollection<VmConfigurationItem>>(_mapper);
-        //}
-
         [HttpGet]
         public async Task<IActionResult> GetConfigurationItemsAsync(Guid productVersionId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
         {

@@ -13,8 +13,6 @@ namespace DesignGear.ConfigManager.Core.Services.Interfaces
         Task AddSvfAsync(Guid configurationId, ICollection<Stream> svfList);
         //Task<Stream> GetSvfAsync(Guid configurationId);
 
-        //Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId);
-
         Task<TResult> GetConfigurationItemsAsync<TResult>(Guid productVersionId, Func<IQueryable<ConfigurationItemDto>, TResult> resultBuilder);
 
         Task<FileStreamDto> GetSvfAsync(Guid configurationId, string svfName);
