@@ -5,7 +5,7 @@ import { isEmpty } from '../../../../../components/form-components/helpers/valod
 import CTextArea from '../../../../../components/form-components/CTextArea';
 import { Button } from 'react-bootstrap';
 import React, { useRef } from 'react';
-import { ICreateNewProductModalProps, IModalWrapperButton } from '../../../../../types/modal';
+import { ICreateNewProductModalProps, IModalWrapperButton } from '../../../../../types/Modal';
 import { IPostProduct } from '../../../../../types/product';
 import { postProduct } from '../../../../../stores/product/reducer';
 import { useDispatch } from 'react-redux';

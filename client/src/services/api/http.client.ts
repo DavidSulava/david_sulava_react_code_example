@@ -13,9 +13,9 @@ const client = axios.create({
   headers: {Authorization: getAuthHeaderString(token)}
 });
 
-axios.interceptors.request.use(async(req) => {
+client.interceptors.request.use(async(req) => {
   store.dispatch(setError(''))
-  if(req?.headers?.Authorization && !token) {
+  if(req?.headers?.Authorization) {
     const token = getLocalStorage(ACCESS_TOKEN_KEY);
     req.headers.Authorization = getAuthHeaderString(token)
   }
