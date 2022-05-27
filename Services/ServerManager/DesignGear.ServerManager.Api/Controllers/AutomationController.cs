@@ -17,10 +17,11 @@ namespace DesignGear.ServerManager.Api.Controllers
 			_serverManagerService = serverManagerService;
 		}
 
-		[HttpGet("{id}")]
-		public async Task<IActionResult> Get([FromRoute] Guid id)
+		[HttpPost]
+		public async Task<IActionResult> Get(IFormFile packageFile)
 		{
-			var url = await _serverManagerService.ProcessModelAsync(@"D:\blocks_and_tables_-_imperial.dwg");
+			var url = await _serverManagerService.ProcessModelAsync(packageFile);
+			//var url = await _serverManagerService.ProcessModelAsync(@"D:\blocks_and_tables_-_imperial.dwg");
 			return new ObjectResult(url);
 			/*var filePath = $"{_fileBucket}{id}\\model\\";
 			var di = new DirectoryInfo(filePath);

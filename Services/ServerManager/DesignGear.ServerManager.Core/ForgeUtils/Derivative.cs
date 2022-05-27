@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using RestSharp;
 using DesignGear.ServerManager.Core.Helpers;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http;
 
 namespace DesignGear.ServerManager.Core.ForgeUtils
 {
@@ -56,30 +57,26 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
             }
         }
 
-        public async Task<ObjectDetails> UploadZip(string bucketKey, string filePath)
+        public async Task<ObjectDetails> UploadZip(string bucketKey, IFormFile filePackage)
         {
             ObjectsApi objects = new ObjectsApi();
             objects.Configuration.AccessToken = _accessToken;
-            string objectKey = Path.GetFileName(filePath);
+            string objectKey = filePackage.FileName;
             ObjectDetails uploadedObj;
-
-            using (StreamReader streamReader = new StreamReader(filePath))
+            using (var stream = new MemoryStream())
             {
-                /*uploadedObj = (await objects.UploadObjectAsync(bucketKey,
-                       objectKey, (int)streamReader.BaseStream.Length, streamReader.BaseStream,
-                       "application/octet-stream")).ToObject<ObjectDetails>();*/
-                uploadedObj = await UploadZip(bucketKey, objectKey, streamReader.BaseStream, (int)streamReader.BaseStream.Length);
+                filePackage.CopyTo(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                using (StreamReader streamReader = new StreamReader(stream))
+                {
+                    uploadedObj = (await objects.UploadObjectAsync(bucketKey,
+                           objectKey, (int)streamReader.BaseStream.Length, streamReader.BaseStream,
+                           "application/octet-stream")).ToObject<ObjectDetails>();
+                }
             }
 
             return uploadedObj;
-            
-        }
-
-        public async Task<ObjectDetails> UploadZip(string bucketKey, string objectKey, Stream fileStream, int contentLength)
-        {
-            ObjectsApi objects = new ObjectsApi();
-            objects.Configuration.AccessToken = _accessToken;
-            return (await objects.UploadObjectAsync(bucketKey, objectKey, contentLength, fileStream, "application/octet-stream")).ToObject<ObjectDetails>();
         }
 
         public async Task<PostObjectSigned> CreateSignedResource(string bucketKey, string objectKey)
@@ -93,8 +90,6 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
 
         public async Task<dynamic> Translate(string urn, string rootFileName)
         {
-            //var urn = bucket.BucketKey;
-
             // prepare a SVF translation
             List<JobPayloadItem> outputs = new List<JobPayloadItem>()
             {

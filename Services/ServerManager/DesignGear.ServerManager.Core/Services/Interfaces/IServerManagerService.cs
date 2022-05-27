@@ -1,9 +1,11 @@
-﻿namespace DesignGear.ServerManager.Core.Services.Interfaces
+﻿using Microsoft.AspNetCore.Http;
+
+namespace DesignGear.ServerManager.Core.Services.Interfaces
 {
     public interface IServerManagerService
 	{
-		Task<string> GetSvfAsync(string filePath, string rootFileName);
+		Task<string> GetSvfAsync(IFormFile packageFile, string rootFileName);
 
-		Task<string> ProcessModelAsync(string filePath);
+		Task<string> ProcessModelAsync(IFormFile packageFile);
 	}
 }

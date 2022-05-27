@@ -1,6 +1,7 @@
 ﻿using DesignGear.ServerManager.Core.ForgeUtils;
 using DesignGear.ServerManager.Core.Helpers;
 using DesignGear.ServerManager.Core.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
 namespace DesignGear.ServerManager.Core.Services
@@ -17,18 +18,18 @@ namespace DesignGear.ServerManager.Core.Services
 			_forgeSettings = forgeSettings.Value;
 		}
 
-		public async Task<string> GetSvfAsync(string filePath, string rootFileName)
+		public async Task<string> GetSvfAsync(IFormFile packageFile, string rootFileName)
 		{
 			var api = new Derivative(_forgeSettings);
 			await api.Authenticate();
 			var bucketKey = await api.CreateBucket(bucketName);
-			var objInfo = await api.UploadZip(bucketKey, filePath);
+			var objInfo = await api.UploadZip(bucketKey, packageFile);
 			var urn = await api.Translate(Base64(objInfo.ObjectId), rootFileName);
 			await api.DownloadSvf(urn, svfPath);
 			return urn;
 		}
 
-		public async Task<string> ProcessModelAsync(string filePath)
+		public async Task<string> ProcessModelAsync(IFormFile packageFile)
 		{
 			var inventor = new Automation();
 			await inventor.SetupOwnerAsync();
@@ -39,7 +40,7 @@ namespace DesignGear.ServerManager.Core.Services
 			await api.Authenticate();
 			var bucketKey = await api.CreateBucket(bucketName);
 			//upload input file
-			var objInfo = await api.UploadZip(bucketKey, filePath);
+			var objInfo = await api.UploadZip(bucketKey, packageFile);
 			//create input file URL
 			var inputFile = await api.CreateSignedResource(bucketKey, objInfo.ObjectKey);
 			//create output file temp URL

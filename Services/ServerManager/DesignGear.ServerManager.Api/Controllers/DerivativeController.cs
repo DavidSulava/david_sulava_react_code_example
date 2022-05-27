@@ -17,10 +17,11 @@ namespace DesignGear.ServerManager.Api.Controllers
 			_serverManagerService = serverManagerService;
 		}
 
-		[HttpGet("{id}")]
-		public async Task<IActionResult> Get([FromRoute] Guid id)
+		[HttpPost]
+		public async Task<IActionResult> Get(IFormFile packageFile, string rootFileName)
 		{
-			var urn = await _serverManagerService.GetSvfAsync(@"D:\Suspension.zip", "Suspension.iam");
+			//var urn = await _serverManagerService.GetSvfAsync(@"D:\Suspension.zip", "Suspension.iam");
+			var urn = await _serverManagerService.GetSvfAsync(packageFile, rootFileName);
 			return new ObjectResult(urn);
 		}
 	}
