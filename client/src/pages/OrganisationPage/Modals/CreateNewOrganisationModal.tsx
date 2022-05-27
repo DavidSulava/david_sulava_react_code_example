@@ -1,6 +1,6 @@
 import ModalWrapper from '../../../components/ModalWrapper/ModalWrapper';
 import React, { useRef } from 'react';
-import { IModalWrapperButton } from '../../../types/Modal';
+import { IModalWrapperButton } from '../../../types/modal';
 import { Field, FieldWrapper, Form, FormElement } from '@progress/kendo-react-form';
 import CInput from '../../../components/form-components/CInput';
 import { isEmpty } from '../../../components/form-components/helpers/valodation-functions';
