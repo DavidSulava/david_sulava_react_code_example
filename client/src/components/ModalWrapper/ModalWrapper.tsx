@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from "react-bootstrap";
-import { IModalCommonProps } from "../../types/modal"
+import { IModalCommonProps } from '../../types/Modal';
 import { DialogActionsBar } from '@progress/kendo-react-dialogs/dist/es/DialogActionsBar';
 import { Dialog } from '@progress/kendo-react-dialogs/dist/es/Dialog';
 

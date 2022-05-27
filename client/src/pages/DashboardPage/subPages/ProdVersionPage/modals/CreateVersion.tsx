@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { Field, FieldWrapper, Form, FormElement } from '@progress/kendo-react-form';
-import { IModalWrapperButton } from '../../../../../types/modal';
+import { IModalWrapperButton } from '../../../../../types/Modal';
 import ModalWrapper from '../../../../../components/ModalWrapper/ModalWrapper';
 import CInput from '../../../../../components/form-components/CInput';
 import { isEmpty, isEmptyNoMsg } from '../../../../../components/form-components/helpers/valodation-functions';
