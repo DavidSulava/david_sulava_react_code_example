@@ -171,43 +171,36 @@ namespace DesignGear.ConfigManager.Core.Services
          */
         public async Task<ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId)
         {
-            //var rootConfigurationId = (await _dataAccessor.Reader.Configurations.FirstOrDefaultAsync(x => x.Id == configurationId)).RootConfigurationId;
-            //var configurations = _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition)
-            //    .Where(x => x.RootConfigurationId == rootConfigurationId);
+            var rootConfigurationId = (await _dataAccessor.Reader.Configurations.FirstOrDefaultAsync(x => x.Id == configurationId)).RootConfigurationId;
+            var allConfigurations = await _dataAccessor.Reader.Configurations
+                .Include(x => x.ComponentDefinition)
+                .Include(x => x.ParameterDefinitions)
+                .ThenInclude(x => x.ValueOptions)
+                .Where(x => x.RootConfigurationId == rootConfigurationId).ToListAsync();
 
-            //var names = await configurations.FirstOrDefaultAsync(x => x.Id == configurationId);
-
-            //var config = new ConfigurationParametersDto()
-            //{
-            //    ConfigurationId = configurationId,
-            //    ConfigurationName = names.Name,
-            //    ComponentName = names.ComponentDefinition.Name,
-            //    Parameters = await _dataAccessor.Reader.ParameterDefinitions.Include(x => x.ValueOptions).Where(x => x.ConfigurationId == configurationId).
-            //        ProjectTo<ParameterDefinitionDto>(_mapper.ConfigurationProvider).ToListAsync()
-            //};
-
-
-            var names = await _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition).FirstOrDefaultAsync(x => x.Id == configurationId);
-
-            return new ConfigurationParametersDto()
-            {
-                ConfigurationId = configurationId,
-                ConfigurationName = names.Name,
-                ComponentName = names.ComponentDefinition.Name,
-                Parameters = await _dataAccessor.Reader.ParameterDefinitions.Include(x => x.ValueOptions).Where(x => x.ConfigurationId == configurationId).
-                    ProjectTo<ParameterDefinitionDto>(_mapper.ConfigurationProvider).ToListAsync()
-            };
+            return BuildTree(allConfigurations, configurationId);
         }
 
-        private async void ChildConfigurations(ConfigurationParametersDto tree, Guid parentConfigurationId)
+        private ConfigurationParametersDto BuildTree(ICollection<Configuration> allConfigurations, Guid id)
         {
-            var configurations = await _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition)
-                .Where(x => x.ParentConfigurationId == parentConfigurationId).ToListAsync();
-            foreach(var configuration in configurations)
+            var configuration = allConfigurations.FirstOrDefault(x => x.Id == id);
+            var result = new ConfigurationParametersDto()
             {
+                ConfigurationId = configuration.Id,
+                ConfigurationName = configuration.Name,
+                ComponentName = configuration.ComponentDefinition.Name,
+                Parameters = configuration.ParameterDefinitions.MapTo<ICollection<ParameterDefinitionDto>>(_mapper),
+            };
 
+            var childConfigurations = allConfigurations.Where(x => x.ParentConfigurationId == id).Select(x => x.Id).ToList();
+            if (childConfigurations.Count > 0)
+            {
+                result.Childs = new List<ConfigurationParametersDto>();
+
+                foreach (var childId in childConfigurations)
+                    result.Childs.Add(BuildTree(allConfigurations, childId));
             }
-
+            return result;
         }
 
         /*
