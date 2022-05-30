@@ -35,6 +35,9 @@ namespace DesignGear.Contractor.Core.Services
             }
 
             var newItem = _mapper.Map<ProductVersion>(create);
+            //newItem.
+                        
+
             _dataAccessor.Editor.Create(newItem);
             if (create.IsCurrent)
             {

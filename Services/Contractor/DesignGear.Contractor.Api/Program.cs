@@ -65,8 +65,9 @@ builder.Services.AddCors(options => {
             "http://localhost:3000",
             "https://localhost:3000",
             "http://localhost:3000/",
-            "https://localhost:3000/");
-
+            "https://localhost:3000/",
+            "http://95.170.154.243:8055",
+            "http://evraz-auth1:8055");
 
         builder.WithExposedHeaders("Content-Disposition");
         builder.AllowAnyHeader();
