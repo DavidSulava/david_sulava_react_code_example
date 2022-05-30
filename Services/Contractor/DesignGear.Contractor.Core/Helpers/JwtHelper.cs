@@ -1,4 +1,5 @@
-﻿using DesignGear.Contractor.Core.Data.Entity;
+﻿using DesignGear.Common.Enums;
+using DesignGear.Contractor.Core.Data.Entity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,6 +16,12 @@ namespace DesignGear.Contractor.Core.Helpers
             var key = Encoding.UTF8.GetBytes(secretPhrase);
             var claims = new List<Claim>();
             claims.Add(new Claim("UserId", user.Id.ToString()));
+            claims.Add(new Claim("Email", user.Email));
+            claims.Add(new Claim("FirstName", user.FirstName));
+            claims.Add(new Claim("LastName", user.LastName));
+            claims.Add(new Claim("Phone", user.Phone));
+            claims.Add(new Claim("Created", user.Created.ToString()));
+            claims.Add(new Claim("Role", Enum.GetName(typeof(UserRole), user.Role)));
             if (organizationId != null)
             {
                 claims.Add(new Claim("OrganizationId", organizationId.ToString()));
