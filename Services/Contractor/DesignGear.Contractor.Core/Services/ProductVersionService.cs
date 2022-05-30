@@ -7,7 +7,6 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DesignGear.Common.Exceptions;
 using Microsoft.AspNetCore.StaticFiles;
-using System.IO.Compression;
 using System.Data;
 using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.Contracts.Models.ConfigManager;
@@ -20,7 +19,6 @@ namespace DesignGear.Contractor.Core.Services
         private readonly DataAccessor _dataAccessor;
         private readonly IConfigManagerCommunicator _configManagerService;
         private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
-        private readonly string _designGearPackageFileName = "DesignGearPackageContents.json";
 
         public ProductVersionService(IMapper mapper, DataAccessor dataAccessor, IConfigManagerCommunicator configManagerService)
         {
@@ -81,15 +79,20 @@ namespace DesignGear.Contractor.Core.Services
 
         public async Task RemoveProductVersionAsync(Guid id)
         {
-            var item = await _dataAccessor.Editor.ProductVersions.FirstOrDefaultAsync(x => x.Id == id);
+            var item = await _dataAccessor.Editor.ProductVersions./*Include(x => x.Product).*/FirstOrDefaultAsync(x => x.Id == id);
             if (item == null)
             {
                 throw new EntityNotFoundException<ProductVersion>(id);
             }
+            var product = await _dataAccessor.Editor.Products.FirstOrDefaultAsync(x => x.Id == item.ProductId);
+
+            if (product != null && product.CurrentVersionId == item.Id)
+                product.CurrentVersionId = null;
 
             _dataAccessor.Editor.Delete(item);
             await _dataAccessor.Editor.SaveAsync();
-            DeleteFiles(id);
+            //DeleteFiles(id);
+            // todo - delete all configurations
         }
 
         public async Task<TResult> GetProductVersionsByProductAsync<TResult>(Guid productId, Func<IQueryable<ProductVersionItemDto>, TResult> resultBuilder)
