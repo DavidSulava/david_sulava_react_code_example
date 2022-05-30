@@ -3,7 +3,9 @@ export interface IUser {
   firstName: string,
   lastName: string,
   email: string,
+  phone: string,
   token: string,
+  role?: string
 }
 
 export interface ISignInData {

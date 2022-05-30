@@ -2,19 +2,27 @@ import { Field, Form, FormElement } from '@progress/kendo-react-form';
 import { Button } from 'react-bootstrap';
 import CInput from '../../components/form-components/CInput';
 import { isEmpty } from '../../components/form-components/helpers/valodation-functions';
-import {useDispatch} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import useAuthCheck from '../../helpers/hooks/useAuthCheck';
-import { Link } from 'react-router-dom';
 import { ERoutes } from '../../router/Routes';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { signIn } from '../../stores/authentication/reducer';
 import { ISignInData } from '../../types/user';
 import BtnLink from '../../components/BtnLink';
+import { IState } from '../../stores/configureStore';
+import { Error } from '@progress/kendo-react-labels';
+import { setError } from '../../stores/common/reducer';
 
 const LoginPage = () => {
   const dispatch = useDispatch()
   const {checkingAuth} = useAuthCheck()
+  const error = useSelector((state: IState) => state.common.error)
 
+  useEffect(()=>{
+    return ()=>{
+      dispatch(setError(''))
+    }
+  },[])
   const handleSubmit = (dataItem: {[p:string]: any}) => {
     const postData = {...dataItem} as ISignInData
     dispatch(signIn(postData))
@@ -52,6 +60,10 @@ const LoginPage = () => {
                   validator={isEmpty}
                 />
               </div>
+              {
+                !!error && formRenderProps.valid &&
+                  <div className="k-d-flex k-justify-content-center"><Error>{error}</Error></div>
+              }
             </fieldset>
             <div className="k-form-buttons k-flex k-justify-content-center k-mb-5 k-mt-2">
               <Button
@@ -65,7 +77,7 @@ const LoginPage = () => {
           </FormElement>
         )}
       />
-      <div>Wish create an account?</div>
+      <div>Would you like to create an account</div>
       <br/>
       <BtnLink to={ERoutes.SignUp} idDisabled={checkingAuth} className='btn btn-outline-primary mb-1'>Sign Up</BtnLink>
       <BtnLink to={ERoutes.ForgotPwd} idDisabled={checkingAuth} className='btn btn-outline-primary mb-1'>Forgot Password?</BtnLink>

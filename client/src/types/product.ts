@@ -17,7 +17,6 @@ export type  IProduct = {
 export interface IPostProduct {
   name: string,
   description: string,
-  organizationId: string
 }
 
 export interface IPutProduct extends IPostProduct {

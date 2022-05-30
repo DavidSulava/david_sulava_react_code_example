@@ -21,9 +21,7 @@ const AddNewProduct: React.FC<ICreateNewProductModalProps> = ({
   const formSubmitBtnRef = useRef<HTMLButtonElement|null>(null)
 
   const headerText = 'Add product';
-  const formState = {
-    "organizationId": organizationId,
-  }
+  const formState = {}
   const modalButtons: IModalWrapperButton[] = [
     {buttonText: "close", onButtonClick: () => onClose()},
     {buttonText: "save", onButtonClick: () => formSubmitBtnRef?.current?.click()}

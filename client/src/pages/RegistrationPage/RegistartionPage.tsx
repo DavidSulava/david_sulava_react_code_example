@@ -5,7 +5,6 @@ import CInput from '../../components/form-components/CInput';
 import { emailValidator, isEmpty } from '../../components/form-components/helpers/valodation-functions';
 import { Button } from 'react-bootstrap';
 import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { ERoutes } from '../../router/Routes';
 import { eUserRoles, ISignUpData } from '../../types/user';
 import { getter } from '@progress/kendo-data-query';
@@ -66,7 +65,7 @@ const RegistrationPage = () => {
         postResp ?
           <>
             <div>
-              The User successfully crated, please log in!
+              The User successfully created, please log in!
             </div>
             <br/>
           </>
