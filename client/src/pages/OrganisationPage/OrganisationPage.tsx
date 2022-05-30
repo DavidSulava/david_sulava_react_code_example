@@ -4,7 +4,6 @@ import { IState } from '../../stores/configureStore';
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import CreateNewOrganisationModal from './Modals/CreateNewOrganisationModal';
-import { Link } from 'react-router-dom';
 import { ERoutes } from '../../router/Routes';
 import { getOrganisations } from '../../stores/organisation/reducer';
 import setPath from '../../helpers/setPath';

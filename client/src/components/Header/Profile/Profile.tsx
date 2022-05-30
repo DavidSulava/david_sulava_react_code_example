@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react';
 import useClickOutside from '../../../helpers/hooks/useClickOutside';
 import { useDispatch } from 'react-redux';
-import { IUser} from '../../../types/user';
+import { ACCESS_TOKEN_KEY, IUser } from '../../../types/user';
 import { Button } from 'react-bootstrap';
 import { setUser } from '../../../stores/authentication/reducer';
 import { Nullable } from '../../../types/common';
+import { setLocalStorage } from '../../../helpers/localStorage';
 
 const Profile: React.FC<{user:Nullable<IUser>}> = ({user }) => {
   const dispatch = useDispatch()
@@ -16,6 +17,7 @@ const Profile: React.FC<{user:Nullable<IUser>}> = ({user }) => {
     setIsShowModal(!isShowModal)
   }
   const onLogOut = () => {
+    setLocalStorage(ACCESS_TOKEN_KEY, '')
     dispatch(setUser(null))
   }
 

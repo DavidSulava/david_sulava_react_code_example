@@ -17,7 +17,14 @@ function* signInSaga({payload:formData}: PayloadAction<ISignInData>) {
     yield put(getTariff())
   }
   catch(e: any) {
-    yield put(setError(e))
+    if (axios.isAxiosError(e)){
+      const error = e as AxiosError
+      let msg =  error.response?.data as any
+      yield put(setError(msg?.message || error.message))
+      return
+    }
+
+    yield put(setError(e?.message))
   }
   finally {
     yield put(setIsUserLoading(false))

@@ -42,7 +42,13 @@ export interface IAppBundle {
 
 export interface IAppJwtPayload extends JwtPayload{
   OrganisationId: string,
-  UserId: string
+  UserId: string,
+  Email: string,
+  FirstName: string,
+  LastName: string,
+  Phone: string,
+  Created: string,
+  Role: string,
 }
 
 export interface ICommonModalProps {
