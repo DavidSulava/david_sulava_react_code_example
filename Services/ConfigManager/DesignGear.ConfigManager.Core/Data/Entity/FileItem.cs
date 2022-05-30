@@ -10,6 +10,7 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         public Guid Id { get; set; }
 
         public Guid ConfigurationId { get; set; }
+        //public Configuration Configuration { get; set; }
 
         [StringLength(500)]
         public string FilePath { get; set; }

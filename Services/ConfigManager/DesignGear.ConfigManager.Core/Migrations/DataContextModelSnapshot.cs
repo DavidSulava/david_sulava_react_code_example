@@ -52,7 +52,7 @@ namespace DesignGear.ConfigManager.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppBundles");
+                    b.ToTable("AppBundles", (string)null);
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ComponentDefinition", b =>
@@ -93,7 +93,7 @@ namespace DesignGear.ConfigManager.Core.Migrations
 
                     b.HasIndex("AppBundleId");
 
-                    b.ToTable("ComponentDefinitions");
+                    b.ToTable("ComponentDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.Configuration", b =>
@@ -154,7 +154,7 @@ namespace DesignGear.ConfigManager.Core.Migrations
 
                     b.HasIndex("TemplateConfigurationId");
 
-                    b.ToTable("Configurations");
+                    b.ToTable("Configurations", (string)null);
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ConfigurationInstance", b =>
@@ -206,7 +206,7 @@ namespace DesignGear.ConfigManager.Core.Migrations
 
                     b.HasIndex("ConfigurationId");
 
-                    b.ToTable("ConfigurationInstances");
+                    b.ToTable("ConfigurationInstances", (string)null);
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.FileItem", b =>
@@ -230,7 +230,7 @@ namespace DesignGear.ConfigManager.Core.Migrations
 
                     b.HasIndex("ConfigurationId");
 
-                    b.ToTable("FileItems");
+                    b.ToTable("FileItems", (string)null);
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ParameterDefinition", b =>
@@ -289,7 +289,7 @@ namespace DesignGear.ConfigManager.Core.Migrations
 
                     b.HasIndex("ConfigurationId");
 
-                    b.ToTable("ParameterDefinitions");
+                    b.ToTable("ParameterDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ValueOption", b =>
@@ -312,7 +312,7 @@ namespace DesignGear.ConfigManager.Core.Migrations
 
                     b.HasIndex("ParameterDefinitionId");
 
-                    b.ToTable("ValueOptions");
+                    b.ToTable("ValueOptions", (string)null);
                 });
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.ComponentDefinition", b =>

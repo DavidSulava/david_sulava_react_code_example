@@ -37,12 +37,12 @@ namespace DesignGear.ConfigManager.Core.Services
          * todo Использовать Kendo UI
          * Используется как снаружи для получения и отображения списка конфигураций, так и фоновыми задачами
          */
-        public async Task<ICollection<ConfigurationItemDto>> GetConfigurationListAsync(ConfigurationFilterDto filter)
+        public async Task<ICollection<ConfigurationItemExDto>> GetConfigurationListAsync(ConfigurationFilterDto filter)
         {
 
             var items = await _dataAccessor.Reader.Configurations
                 .Where(x => x.ParentConfigurationId == null)
-                .ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<ConfigurationItemExDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return items;

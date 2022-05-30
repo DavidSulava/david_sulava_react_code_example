@@ -79,15 +79,14 @@ namespace DesignGear.Contractor.Core.Services
 
         public async Task RemoveProductVersionAsync(Guid id)
         {
-            var item = await _dataAccessor.Editor.ProductVersions./*Include(x => x.Product).*/FirstOrDefaultAsync(x => x.Id == id);
+            var item = await _dataAccessor.Editor.ProductVersions.Include(x => x.Product).FirstOrDefaultAsync(x => x.Id == id);
             if (item == null)
             {
                 throw new EntityNotFoundException<ProductVersion>(id);
             }
-            var product = await _dataAccessor.Editor.Products.FirstOrDefaultAsync(x => x.Id == item.ProductId);
 
-            if (product != null && product.CurrentVersionId == item.Id)
-                product.CurrentVersionId = null;
+            if (item.Product.CurrentVersionId == item.Id)
+                item.Product.CurrentVersionId = null;
 
             _dataAccessor.Editor.Delete(item);
             await _dataAccessor.Editor.SaveAsync();

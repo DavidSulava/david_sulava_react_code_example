@@ -60,11 +60,9 @@ namespace DesignGear.ConfigManager.Core.Jobs
 
             foreach (var configuration in configurations)
             {
-                // получить значения:
-                Guid productversionid = Guid.Empty;//configuration.ProductVersionId
-                string rootFileName = string.Empty;//configuration.TargetFile.Path
-                var packageFile = _configurationFileStorage.GetZipArchive(productversionid, configuration.Id);
-                _serverManagerService.GetSvfAsync(packageFile, rootFileName);
+                var packageFile = _configurationFileStorage.GetZipArchive(configuration.ProductVersionId, configuration.Id);
+                var urn = _serverManagerService.GetSvfAsync(packageFile, configuration.RootFileName);
+
             }
         }
     }

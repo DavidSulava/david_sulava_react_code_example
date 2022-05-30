@@ -6,7 +6,7 @@ namespace DesignGear.ConfigManager.Core.Services.Interfaces
 {
     public interface IConfigurationService
     {
-        Task<ICollection<ConfigurationItemDto>> GetConfigurationListAsync(ConfigurationFilterDto filter);
+        Task<ICollection<ConfigurationItemExDto>> GetConfigurationListAsync(ConfigurationFilterDto filter);
         Task CreateConfigurationRequestAsync(ConfigurationRequestDto request);
         Task CreateConfigurationFromPackageAsync(ConfigurationCreateDto create);
         Task<Stream> CreateConfigurationRequestPackageAsync(Guid configurationId);

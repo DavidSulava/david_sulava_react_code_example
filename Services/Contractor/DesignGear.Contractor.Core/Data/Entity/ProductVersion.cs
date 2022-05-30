@@ -29,6 +29,9 @@ namespace DesignGear.Contractor.Core.Data.Entity
         public Guid ProductId { get; set; }
         public virtual Product Product { get; set; }
 
+        //[InverseProperty("CurrentProductVersion")]
+        public virtual Product CurrentVersionProduct { get; set; }
+
         //[ForeignKey("AppBundle")]
         //public Guid AppBundleId { get; set; }
         //public virtual AppBundle AppBundle { get; set; }

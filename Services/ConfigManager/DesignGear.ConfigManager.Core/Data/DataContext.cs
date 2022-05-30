@@ -29,7 +29,12 @@ namespace DesignGear.ConfigManager.Core.Data
                 .WithMany(y => y.ParameterDefinitions)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //base.OnModelCreating(modelBuilder);
+            //modelBuilder.Entity<Configuration>()
+            //    .HasOne(x => x.TargetFileItem)
+            //    .WithOne(y => y.Configuration)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            base.OnModelCreating(modelBuilder);
         }
 
         public virtual DbSet<AppBundle> AppBundles { get; set; }
