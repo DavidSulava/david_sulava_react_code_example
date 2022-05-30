@@ -1,20 +1,21 @@
 ﻿using DesignGear.ConfigManager.Core.Jobs.Interfaces;
 using DesignGear.ConfigManager.Core.Services.Interfaces;
 using DesignGear.ConfigManager.Core.Storage.Interfaces;
+using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.Contracts.Dto.ConfigManager;
 using DesignGear.Contracts.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DesignGear.ConfigManager.Core.Jobs {
-    public class ConfigurationPushingJob : IJob {
+namespace DesignGear.ConfigManager.Core.Jobs
+{
+    public class ConfigurationPushingJob : IJob
+    {
         private readonly IConfigurationService _configurationService;
-        
+        private readonly IServerManagerCommunicator _serverManagerService;
+        private readonly IConfigurationFileStorage _configurationFileStorage;
 
-        public ConfigurationPushingJob(IConfigurationService configurationService) {
+
+        public ConfigurationPushingJob(IConfigurationService configurationService)
+        {
             _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
         }
 
@@ -59,6 +60,11 @@ namespace DesignGear.ConfigManager.Core.Jobs {
 
             foreach (var configuration in configurations)
             {
+                // получить значения:
+                Guid productversionid = Guid.Empty;//configuration.ProductVersionId
+                string rootFileName = string.Empty;//configuration.TargetFile.Path
+                var packageFile = _configurationFileStorage.GetZipArchive(productversionid, configuration.Id);
+                _serverManagerService.GetSvfAsync(packageFile, rootFileName);
             }
         }
     }

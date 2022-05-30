@@ -23,15 +23,6 @@ namespace DesignGear.Contracts.Communicators
             _httpClient = clientFactory.CreateClient();
             _settings = settings.Value;
         }
-        public async Task<string> ProcessConfigurationAsync(Guid id)
-        {
-            return await SendHttpRequestAsync(string.Format($"{_settings.ConfigManagerUrl}automation/{0}", id));
-        }
-
-        public async Task<string> GetSvfAsync(Guid id)
-        {
-            return await SendHttpRequestAsync(string.Format($"{_settings.ConfigManagerUrl}derivative/{0}", id));
-        }
 
         private async Task<T> SendHttpRequestAsync<T>(string url)
         {
