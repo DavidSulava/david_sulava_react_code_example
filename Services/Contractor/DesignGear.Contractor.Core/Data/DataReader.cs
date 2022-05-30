@@ -25,5 +25,6 @@ namespace DesignGear.Contractor.Core.Data
         public IQueryable<Tariff> Tariffs => _context.Tariffs.AsNoTracking();
         public IQueryable<User> Users => _context.Users.AsNoTracking();
         public IQueryable<UserAssignment> UserAssignments => _context.UserAssignments.AsNoTracking();
+        public IQueryable<ProductVersionPreview> ProductVersionPreviews => _context.ProductVersionPreviews.AsNoTracking();
     }
 }
