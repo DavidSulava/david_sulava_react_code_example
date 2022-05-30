@@ -35,7 +35,6 @@ namespace DesignGear.Contractor.Core.Services
             }
 
             var newItem = _mapper.Map<ProductVersion>(create);
-            //newItem.
                         
 
             _dataAccessor.Editor.Create(newItem);
@@ -61,7 +60,9 @@ namespace DesignGear.Contractor.Core.Services
                 throw new ArgumentNullException(nameof(update));
             }
 
-            var item = await _dataAccessor.Editor.ProductVersions.FirstOrDefaultAsync(x => x.Id == update.Id);
+            var item = await _dataAccessor.Editor.ProductVersions
+                .Include(x => x.ProductVersionPreviews)
+                .FirstOrDefaultAsync(x => x.Id == update.Id);
             if (item == null)
             {
                 throw new EntityNotFoundException<ProductVersion>(update.Id);
@@ -75,7 +76,7 @@ namespace DesignGear.Contractor.Core.Services
 
             _mapper.Map(update, item);
 
-            await SaveImageFilesAsync(update.Id, update.ImageFiles);
+            //await SaveImageFilesAsync(update.Id, update.ImageFiles);
 
             await _dataAccessor.Editor.SaveAsync();
         }
