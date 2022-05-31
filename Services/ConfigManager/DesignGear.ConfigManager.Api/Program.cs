@@ -4,11 +4,12 @@ using DesignGear.ConfigManager.Api.Config;
 using DesignGear.ConfigManager.Core.Data;
 using DesignGear.ConfigManager.Core.Jobs;
 using Hangfire;
+using Hangfire.SqlServer;
 using Kendo.Mvc.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
-var builder = WebApplication.CreateBuilder(args); 
+var builder = WebApplication.CreateBuilder(args);
 //builder.Configuration.AddJsonFile($"appsettings.Local.json", optional: true);
 
 // Add services to the container.
@@ -33,17 +34,34 @@ builder.Services.AddSwaggerGen(options =>
     options.MapType<DataSourceRequest>(() => new OpenApiSchema { Type = typeof(string).Name });
 });
 
-//RecurringJob.AddOrUpdate<ConfigurationPushingJob>("Pushing configurations to inventor", (x) => x.Do(), "0 */1 * ? * *");
-//RecurringJob.AddOrUpdate<ConfigurationPullingJob>("Pulling configurations from inventor", (x) => x.Do(), "0 */1 * ? * *");
+builder.Services.AddHangfire(c => c
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings());
+builder.Services.AddHangfireServer();
 
-builder.Services.AddCors(options => {
-    options.AddDefaultPolicy(builder => {
+JobStorage.Current = new SqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
+{
+    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+    QueuePollInterval = TimeSpan.Zero,
+    UseRecommendedIsolationLevel = true,
+    DisableGlobalLocks = true
+});
+
+RecurringJob.AddOrUpdate<ConfigurationPushingJob>("Pushing data to Forge", (x) => x.Do(), "0 */1 * ? * *");
+//RecurringJob.AddOrUpdate<ConfigurationPullingJob>("Pulling data from Forge", (x) => x.Do(), "0 */1 * ? * *");
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
         builder.WithOrigins(
             "http://localhost:3000",
             "https://localhost:3000",
             "http://localhost:3000/",
             "https://localhost:3000/");
-        
+
 
         builder.WithExposedHeaders("Content-Disposition");
         builder.AllowAnyHeader();
@@ -55,7 +73,8 @@ builder.Services.AddCors(options => {
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) {
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
 }
