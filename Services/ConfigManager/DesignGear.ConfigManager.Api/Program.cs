@@ -49,7 +49,7 @@ JobStorage.Current = new SqlServerStorage(builder.Configuration.GetConnectionStr
     DisableGlobalLocks = true
 });
 
-RecurringJob.AddOrUpdate<ConfigurationPushingJob>("Pushing data to Forge", (x) => x.Do(), "0 */1 * ? * *");
+//RecurringJob.AddOrUpdate<ConfigurationPushingJob>("Pushing data to Forge", (x) => x.Do(), Cron.Minutely());//, "0 */1 * ? * *");
 //RecurringJob.AddOrUpdate<ConfigurationPullingJob>("Pulling data from Forge", (x) => x.Do(), "0 */1 * ? * *");
 
 builder.Services.AddCors(options =>

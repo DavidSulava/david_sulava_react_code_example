@@ -6,5 +6,7 @@
         public Guid ProductVersionId { get; set; }
         public Guid TargetFileId { get; set; }
         public string RootFileName { get; set; }
+
+        public string URN { get; set; }
     }
 }

@@ -48,6 +48,9 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
 
         public virtual ICollection<FileItem> FileItems { get; set; }
 
+        [StringLength(300)]
+        public string? URN { get; set; }
+
         [NotMapped]
         public int ComponentDefinitionIdInternal { get; set; }
 

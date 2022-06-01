@@ -30,6 +30,7 @@ namespace DesignGear.ConfigManager.Core.Mapping {
                 .ForMember(x => x.SvfStatus, m => m.MapFrom(x => ConfigurationStatus.InQueue));
             CreateMap<ConfigurationCreateDto, ComponentDefinition>(MemberList.None);
             CreateMap<ConfigurationUpdateDto, Configuration>(MemberList.None);
+            CreateMap<ConfigurationUpdateSvfDto, Configuration>(MemberList.None);
         }
     }
 }

@@ -35,5 +35,7 @@ namespace DesignGear.Contracts.Communicators
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<string>(await response.Content.ReadAsStringAsync());
         }
+
+
     }
 }

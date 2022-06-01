@@ -41,7 +41,7 @@ namespace DesignGear.ConfigManager.Core.Services
         {
 
             var items = await _dataAccessor.Reader.Configurations
-                .Where(x => x.ParentConfigurationId == null)
+                .Where(x => x.ParentConfigurationId == null && ((filter.Status != null && x.Status == filter.Status) || (filter.SvfStatus != null && x.SvfStatus == filter.SvfStatus)))
                 .ProjectTo<ConfigurationItemExDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -249,6 +249,18 @@ namespace DesignGear.ConfigManager.Core.Services
                 ProjectTo<ConfigurationItemDto>(_mapper.ConfigurationProvider);
             var result = resultBuilder(query);
             return await Task.FromResult(result);
+        }
+
+        public async Task UpdateSvfStatusAsync(ConfigurationUpdateSvfDto update)
+        {
+            var item = await _dataAccessor.Editor.Configurations.FirstOrDefaultAsync(x => x.Id == update.ConfigurationId);
+            if (item== null)
+            {
+                throw new EntityNotFoundException<Configuration>(update.ConfigurationId);
+            }
+
+            _mapper.Map(update, item);
+            await _dataAccessor.Editor.SaveAsync();
         }
 
 

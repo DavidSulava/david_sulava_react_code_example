@@ -18,15 +18,30 @@ namespace DesignGear.ServerManager.Core.Services
 			_forgeSettings = forgeSettings.Value;
 		}
 
-		public async Task<string> GetSvfAsync(IFormFile packageFile, string rootFileName)
+		public async Task<string> TranslateSvfAsync(IFormFile packageFile, string rootFileName)
 		{
 			var api = new Derivative(_forgeSettings);
 			await api.Authenticate();
 			var bucketKey = await api.CreateBucket(bucketName);
 			var objInfo = await api.UploadZip(bucketKey, packageFile);
-			var urn = await api.Translate(Base64(objInfo.ObjectId), rootFileName);
-			await api.DownloadSvf(urn, svfPath);
-			return urn;
+			return await api.Translate(Base64(objInfo.ObjectId), rootFileName);
+		}
+
+		public async Task<string> CheckStatusJobAsync(string urn)
+        {
+			var api = new Derivative(_forgeSettings);
+			await api.Authenticate();
+			var manifest = await api.CheckStatusJob(urn);
+			if (manifest.progress == "complete")
+            {
+				var status = manifest.derivatives?[0].status;
+				if (status == "success")
+					if (await api.DownloadSvf(urn, svfPath)) //todo -> use fileStorage
+						return "success";
+
+				return "error";
+			}
+			return "inprocess";
 		}
 
 		public async Task<string> ProcessModelAsync(IFormFile packageFile)

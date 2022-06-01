@@ -14,9 +14,11 @@ namespace DesignGear.ConfigManager.Core.Jobs
         private readonly IConfigurationFileStorage _configurationFileStorage;
 
 
-        public ConfigurationPushingJob(IConfigurationService configurationService)
+        public ConfigurationPushingJob(IConfigurationService configurationService, IServerManagerCommunicator serverManagerService, IConfigurationFileStorage configurationFileStorage)
         {
             _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
+            _serverManagerService = serverManagerService ?? throw new ArgumentNullException(nameof(serverManagerService));
+            _configurationFileStorage = configurationFileStorage ?? throw new ArgumentNullException(nameof(configurationFileStorage));
         }
 
         public void Do()
@@ -26,7 +28,7 @@ namespace DesignGear.ConfigManager.Core.Jobs
              */
             var configurations = _configurationService.GetConfigurationListAsync(new ConfigurationFilterDto
             {
-                Status = ConfigurationStatus.InQueue | ConfigurationStatus.ServiceUnavailableError
+                Status = ConfigurationStatus.InQueue// | ConfigurationStatus.ServiceUnavailableError
             }).Result;
 
             /*
@@ -55,14 +57,22 @@ namespace DesignGear.ConfigManager.Core.Jobs
              */
             configurations = _configurationService.GetConfigurationListAsync(new ConfigurationFilterDto
             {
-                SvfStatus = SvfStatus.InQueue | SvfStatus.ServiceUnavailableError
+                SvfStatus = SvfStatus.InQueue// | SvfStatus.ServiceUnavailableError
             }).Result;
 
             foreach (var configuration in configurations)
             {
                 var packageFile = _configurationFileStorage.GetZipArchive(configuration.ProductVersionId, configuration.Id);
-                var urn = _serverManagerService.GetSvfAsync(packageFile, configuration.RootFileName);
-
+                if (packageFile != null)
+                {
+                    var urn = _serverManagerService.GetSvfAsync(packageFile, configuration.RootFileName).Result;
+                    _configurationService.UpdateSvfStatusAsync(new ConfigurationUpdateSvfDto
+                    {
+                        ConfigurationId = configuration.Id,
+                        SvfStatus = SvfStatus.InProcess,
+                        URN = urn
+                    });
+                }
             }
         }
     }

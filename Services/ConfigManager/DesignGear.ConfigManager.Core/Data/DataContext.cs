@@ -29,10 +29,10 @@ namespace DesignGear.ConfigManager.Core.Data
                 .WithMany(y => y.ParameterDefinitions)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //modelBuilder.Entity<Configuration>()
-            //    .HasOne(x => x.TargetFileItem)
-            //    .WithOne(y => y.Configuration)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Configuration>()
+                .HasOne(x => x.TargetFileItem)
+                .WithOne(y => y.Configuration)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

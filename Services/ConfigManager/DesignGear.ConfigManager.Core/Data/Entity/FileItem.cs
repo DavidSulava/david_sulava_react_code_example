@@ -9,8 +9,9 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
+        //[ForeignKey("Configuration")]
         public Guid ConfigurationId { get; set; }
-        //public Configuration Configuration { get; set; }
+        public virtual Configuration Configuration { get; set; }
 
         [StringLength(500)]
         public string FilePath { get; set; }

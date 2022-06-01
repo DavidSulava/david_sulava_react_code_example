@@ -108,18 +108,26 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
             DerivativesApi derivative = new DerivativesApi();
             derivative.Configuration.AccessToken = _accessToken;
             dynamic jobPosted = await derivative.TranslateAsync(job, true);
+            return jobPosted.urn;
 
-            var progress = string.Empty;
-            dynamic manifest = null;
-            while (progress != "complete")
-            {
-                manifest = await derivative.GetManifestAsync(urn);
-                progress = manifest.progress;
-            }
-            var status = manifest.derivatives?[0].status;
-            if (status == "failed")
-                return null;
-            return manifest.urn;
+            //var progress = string.Empty;
+            //dynamic manifest = null;
+            //while (progress != "complete")
+            //{
+            //    manifest = await derivative.GetManifestAsync(urn);
+            //    progress = manifest.progress;
+            //}
+            //var status = manifest.derivatives?[0].status;
+            //if (status == "failed")
+            //    return null;
+            //return manifest.urn;
+        }
+
+        public async Task<dynamic> CheckStatusJob(string urn)
+        {
+            DerivativesApi derivative = new DerivativesApi();
+            derivative.Configuration.AccessToken = _accessToken;
+            return await derivative.GetManifestAsync(urn);
         }
 
         public async Task<bool> DownloadSvf(string urn, string localPath)
