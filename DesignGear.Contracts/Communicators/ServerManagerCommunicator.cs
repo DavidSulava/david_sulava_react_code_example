@@ -28,14 +28,16 @@ namespace DesignGear.Contracts.Communicators
         public async Task<string> GetSvfAsync(FileStreamDto packageFile, string rootFileName)
         {
             var content = new MultipartFormDataContent();
+            using (var memoryStream = new MemoryStream())
+            {
+                await packageFile.Content.CopyToAsync(memoryStream);
+                content.Add(new ByteArrayContent(memoryStream.ToArray()), "\"packageFile\"", packageFile.FileName);
+            }
             content.Add(new StringContent(rootFileName), "\"rootFileName\"");
-            content.Add(new StreamContent(packageFile.Content), "\"packageFile\"", packageFile.FileName);
 
             var response = await _httpClient.PostAsync($"{_settings.ServerManagerUrl}derivative", content);
             response.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<string>(await response.Content.ReadAsStringAsync());
+            return await response.Content.ReadAsStringAsync();
         }
-
-
     }
 }

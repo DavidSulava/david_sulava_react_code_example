@@ -66,12 +66,15 @@ namespace DesignGear.ConfigManager.Core.Jobs
                 if (packageFile != null)
                 {
                     var urn = _serverManagerService.GetSvfAsync(packageFile, configuration.RootFileName).Result;
-                    _configurationService.UpdateSvfStatusAsync(new ConfigurationUpdateSvfDto
+                    if (urn != null)
                     {
-                        ConfigurationId = configuration.Id,
-                        SvfStatus = SvfStatus.InProcess,
-                        URN = urn
-                    });
+                        _configurationService.UpdateSvfStatusAsync(new ConfigurationUpdateSvfDto
+                        {
+                            ConfigurationId = configuration.Id,
+                            SvfStatus = SvfStatus.InProcess,
+                            URN = urn
+                        });
+                    }
                 }
             }
         }

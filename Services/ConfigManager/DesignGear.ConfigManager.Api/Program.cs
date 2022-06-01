@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using DesignGear.ConfigManager.Api.Config;
 using DesignGear.ConfigManager.Core.Data;
 using DesignGear.ConfigManager.Core.Jobs;
+using DesignGear.Contracts.Helpers;
 using Hangfire;
 using Hangfire.SqlServer;
 using Kendo.Mvc.UI;
@@ -24,6 +25,10 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddOptions<CommunicatorSettings>().Bind(builder.Configuration.GetSection("CommunicatorSettings")).ValidateDataAnnotations();
+
+builder.Services.AddHttpClient();
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -37,19 +42,28 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddHangfire(c => c
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
     .UseSimpleAssemblyNameTypeSerializer()
-    .UseRecommendedSerializerSettings());
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
+    {
+        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+        QueuePollInterval = TimeSpan.Zero,
+        UseRecommendedIsolationLevel = true,
+        DisableGlobalLocks = true
+    }));
 builder.Services.AddHangfireServer();
 
-JobStorage.Current = new SqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
-{
-    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-    QueuePollInterval = TimeSpan.Zero,
-    UseRecommendedIsolationLevel = true,
-    DisableGlobalLocks = true
-});
+//JobStorage.Current = new SqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
+//{
+//    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+//    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+//    QueuePollInterval = TimeSpan.Zero,
+//    UseRecommendedIsolationLevel = true,
+//    DisableGlobalLocks = true
+//});
 
-//RecurringJob.AddOrUpdate<ConfigurationPushingJob>("Pushing data to Forge", (x) => x.Do(), Cron.Minutely());//, "0 */1 * ? * *");
+//RecurringJob.AddOrUpdate<ConfigurationPushingJob>("Pushing data to Forge", (x) => x.Do(), "0 */1 * ? * *");
+//RecurringJob.AddOrUpdate<ConfigurationPushingJob>(x => x.Do(), Cron.Hourly);
 //RecurringJob.AddOrUpdate<ConfigurationPullingJob>("Pulling data from Forge", (x) => x.Do(), "0 */1 * ? * *");
 
 builder.Services.AddCors(options =>
@@ -72,6 +86,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+//RecurringJob.AddOrUpdate<ConfigurationPushingJob>(x => x.Do(), Cron.Hourly);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -85,6 +101,10 @@ app.UseCors();
 
 app.UseAuthorization();
 
+app.UseHangfireDashboard();
+
 app.MapControllers();
 
 app.Run();
+
+RecurringJob.AddOrUpdate<ConfigurationPushingJob>(x => x.Do(), Cron.Hourly);

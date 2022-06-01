@@ -18,7 +18,7 @@ namespace DesignGear.ServerManager.Api.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> TranslateSvf(IFormFile packageFile, string rootFileName)
+		public async Task<IActionResult> TranslateSvf([FromForm] IFormFile packageFile, [FromForm] string rootFileName)
 		{
 			var urn = await _serverManagerService.TranslateSvfAsync(packageFile, rootFileName);
 			return new ObjectResult(urn);
