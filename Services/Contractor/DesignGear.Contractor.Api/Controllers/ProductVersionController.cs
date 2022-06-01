@@ -56,14 +56,9 @@ namespace DesignGear.Contractor.Api.Controllers
 
         [HttpGet]
         [Route("{id}/Images/{fileName}")]
-        public async Task<ActionResult> Images([FromRoute] Guid id, [FromRoute] string fileName)
-        {
-            var image = await _productVersionService.GetImageFileAsync(id, fileName);
-            if (image == null || image.Content == null)
-            {
-                return Ok();
-            }
-            return File(image.Content, image.ContentType, image.FileName);
+        public async Task<ActionResult> Images([FromRoute] Guid id, [FromRoute] string fileName) {
+            var preview = await _productVersionService.GetPreviewImageAsync(id, fileName);
+            return File(preview.Content, preview.ContentType, preview.FileName);
         }
 
     }

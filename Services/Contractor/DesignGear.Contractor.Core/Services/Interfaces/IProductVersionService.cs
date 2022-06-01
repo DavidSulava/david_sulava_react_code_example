@@ -14,6 +14,6 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 
         Task<ProductVersionDto> GetProductVersionAsync(Guid id);
 
-        Task<AttachmentDto> GetImageFileAsync(Guid id, string imageFileName);
+        Task<ProductVersionPreviewDto> GetPreviewImageAsync(Guid id, string fileName);
     }
 }

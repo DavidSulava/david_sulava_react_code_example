@@ -11,6 +11,8 @@ namespace DesignGear.Contractor.Core.Data.Entity {
         public Guid Id { get; set; }
         [StringLength(300)]
         public string FileName { get; set; }
+        [StringLength(100)]
+        public string ContentType { get; set; }
         public byte[] Content { get; set; }
         public Guid ProductVersionId { get; set; }
         public virtual ProductVersion ProductVersion { get; set; }

@@ -195,18 +195,18 @@ namespace DesignGear.Contractor.Core.Services
             return result;
         }
 
-        public async Task<AttachmentDto> GetImageFileAsync(Guid id, string fileName)
+        public async Task<ProductVersionPreviewDto> GetPreviewImageAsync(Guid id, string fileName)
         {
-            var filePath = $"{_fileBucket}{id}\\images\\";
-            var di = new DirectoryInfo(filePath);
-            if (di.Exists)
-            {
-                var file = di.EnumerateFiles().FirstOrDefault(x => x.Name == fileName);
-                if (file != null)
-                    return await GetFileAsync(file);
+            var preview = await _dataAccessor.Reader.ProductVersionPreviews
+                .Where(x => x.ProductVersionId == id && x.FileName == fileName)
+                .ProjectTo<ProductVersionPreviewDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+
+            if (preview == null) {
+                throw new EntityNotFoundException<ProductVersionPreviewDto>($"Id: {id}, FileName: {fileName}");
             }
 
-            return null;
+            return preview;       
         }
     }
 }

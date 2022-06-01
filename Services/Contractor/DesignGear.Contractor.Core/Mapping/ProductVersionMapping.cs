@@ -15,6 +15,8 @@ namespace DesignGear.Contractor.Core.Mapping
                 .ForMember(x => x.FileName, m => m.MapFrom(x => x.FileName))
                 .ForMember(x => x.Content, m => m.MapFrom(x => x.OpenReadStream().ToByteArray()));
 
+            CreateMap<ProductVersionPreview, ProductVersionPreviewDto>(MemberList.None);
+
             CreateMap<ProductVersion, ProductVersionDto>(MemberList.None)
                 .ForMember(x => x.IsCurrent, m => m.MapFrom(z => z.Product.CurrentVersionId == z.Id));
             CreateMap<ProductVersion, ProductVersionItemDto>(MemberList.None);
