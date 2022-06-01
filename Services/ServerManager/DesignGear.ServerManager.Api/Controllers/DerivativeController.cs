@@ -18,14 +18,14 @@ namespace DesignGear.ServerManager.Api.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> TranslateSvf([FromForm] IFormFile packageFile, [FromForm] string rootFileName)
+		public async Task<IActionResult> TranslateSvfAsync([FromForm] IFormFile packageFile, [FromForm] string rootFileName)
 		{
 			var urn = await _serverManagerService.TranslateSvfAsync(packageFile, rootFileName);
 			return new ObjectResult(urn);
 		}
 
-		[HttpGet("urn")]
-		public async Task<IActionResult> CheckStatusJob([FromRoute] string urn)
+		[HttpGet("{urn}")]
+		public async Task<IActionResult> CheckStatusJobAsync([FromRoute] string urn)
 		{
 			var result = await _serverManagerService.CheckStatusJobAsync(urn);
 			return new ObjectResult(result);

@@ -62,10 +62,6 @@ builder.Services.AddHangfireServer();
 //    DisableGlobalLocks = true
 //});
 
-//RecurringJob.AddOrUpdate<ConfigurationPushingJob>("Pushing data to Forge", (x) => x.Do(), "0 */1 * ? * *");
-//RecurringJob.AddOrUpdate<ConfigurationPushingJob>(x => x.Do(), Cron.Hourly);
-//RecurringJob.AddOrUpdate<ConfigurationPullingJob>("Pulling data from Forge", (x) => x.Do(), "0 */1 * ? * *");
-
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
@@ -86,8 +82,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-//RecurringJob.AddOrUpdate<ConfigurationPushingJob>(x => x.Do(), Cron.Hourly);
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -105,6 +99,7 @@ app.UseHangfireDashboard();
 
 app.MapControllers();
 
-app.Run();
+RecurringJob.AddOrUpdate<ConfigurationPushingJob>("Pushing data to Forge", (x) => x.Do(), "0 */1 * ? * *");
+RecurringJob.AddOrUpdate<ConfigurationPullingJob>("Pulling data from Forge", (x) => x.Do(), "0 */1 * ? * *");
 
-RecurringJob.AddOrUpdate<ConfigurationPushingJob>(x => x.Do(), Cron.Hourly);
+app.Run();

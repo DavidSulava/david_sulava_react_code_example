@@ -25,6 +25,13 @@ namespace DesignGear.Contracts.Communicators
         //    return await SendHttpRequestAsync(string.Format($"{_settings.ConfigManagerUrl}automation/{0}", id));
         //}
 
+        private async Task<T> SendHttpRequestAsync<T>(string url)
+        {
+            var message = await _httpClient.GetAsync(url);
+            message.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<T>(await message.Content.ReadAsStringAsync());
+        }
+
         public async Task<string> GetSvfAsync(FileStreamDto packageFile, string rootFileName)
         {
             var content = new MultipartFormDataContent();
@@ -38,6 +45,13 @@ namespace DesignGear.Contracts.Communicators
             var response = await _httpClient.PostAsync($"{_settings.ServerManagerUrl}derivative", content);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<string> CheckStatusJobAsync(string urn)
+        {
+            var message = await _httpClient.GetAsync($"{_settings.ServerManagerUrl}derivative/{urn}");
+            message.EnsureSuccessStatusCode();
+            return await message.Content.ReadAsStringAsync();
         }
     }
 }

@@ -12,8 +12,13 @@ namespace DesignGear.ConfigManager.Core.Jobs
         private readonly IServerManagerCommunicator _serverManagerService;
         private readonly IConfigurationFileStorage _configurationFileStorage;
 
-        public ConfigurationPullingJob(IConfigurationService configurationService) {
+        public ConfigurationPullingJob(IConfigurationService configurationService,
+            IServerManagerCommunicator serverManagerService,
+            IConfigurationFileStorage configurationFileStorage)
+        {
             _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
+            _serverManagerService = serverManagerService ?? throw new ArgumentNullException(nameof(serverManagerService));
+            _configurationFileStorage = configurationFileStorage ?? throw new ArgumentNullException(nameof(configurationFileStorage));
         }
 
         public void Do() {
@@ -42,10 +47,12 @@ namespace DesignGear.ConfigManager.Core.Jobs
 
             foreach (var configuration in configurations)
             {
-                //var status = _serverManagerService.CheckStatusJobAsync(configuration.URN);
-                //if (status == "success")
-                //var files = _serverManagerService.GetSvfFiles(configuration.URN);
-                //var packageFile = _configurationFileStorage.SaveSvfAsync(configuration.ProductVersionId, configuration.Id, files[...]);
+                var status = _serverManagerService.CheckStatusJobAsync(configuration.URN).Result;
+                if (status == "success")
+                {
+                    //var files = _serverManagerService.GetSvfFiles(configuration.URN);
+                    //var packageFile = _configurationFileStorage.SaveSvfAsync(configuration.ProductVersionId, configuration.Id, files[...]);
+                }
             }
         }
     }
