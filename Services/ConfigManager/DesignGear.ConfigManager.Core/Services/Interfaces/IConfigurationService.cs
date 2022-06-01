@@ -21,7 +21,7 @@ namespace DesignGear.ConfigManager.Core.Services.Interfaces
 
         Task<ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId);
 
-        Task UpdateSvfStatusAsync(ConfigurationUpdateSvfDto update);
+        void UpdateSvfStatus(ConfigurationUpdateSvfDto update);
 
         //todo:update (из inventor из новой модели)
 

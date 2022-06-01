@@ -14,7 +14,9 @@ namespace DesignGear.ConfigManager.Core.Jobs
         private readonly IConfigurationFileStorage _configurationFileStorage;
 
 
-        public ConfigurationPushingJob(IConfigurationService configurationService, IServerManagerCommunicator serverManagerService, IConfigurationFileStorage configurationFileStorage)
+        public ConfigurationPushingJob(IConfigurationService configurationService,
+            IServerManagerCommunicator serverManagerService,
+            IConfigurationFileStorage configurationFileStorage)
         {
             _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
             _serverManagerService = serverManagerService ?? throw new ArgumentNullException(nameof(serverManagerService));
@@ -68,7 +70,7 @@ namespace DesignGear.ConfigManager.Core.Jobs
                     var urn = _serverManagerService.GetSvfAsync(packageFile, configuration.RootFileName).Result;
                     if (urn != null)
                     {
-                        _configurationService.UpdateSvfStatusAsync(new ConfigurationUpdateSvfDto
+                        _configurationService.UpdateSvfStatus(new ConfigurationUpdateSvfDto
                         {
                             ConfigurationId = configuration.Id,
                             SvfStatus = SvfStatus.InProcess,

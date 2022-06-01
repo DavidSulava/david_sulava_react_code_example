@@ -251,25 +251,16 @@ namespace DesignGear.ConfigManager.Core.Services
             return await Task.FromResult(result);
         }
 
-        public async Task UpdateSvfStatusAsync(ConfigurationUpdateSvfDto update)
+        public void UpdateSvfStatus(ConfigurationUpdateSvfDto update)
         {
-            try
+            var item = _dataAccessor.Editor.Configurations.FirstOrDefault(x => x.Id == update.ConfigurationId);
+            if (item == null)
             {
-                await Task.Delay(5000);
-                var item = await _dataAccessor.Reader.Configurations.FirstOrDefaultAsync(x => x.Id == update.ConfigurationId);
-                //var item = await _dataAccessor.Editor.Configurations.FirstOrDefaultAsync(x => x.Id == update.ConfigurationId);
-                if (item == null)
-                {
-                    throw new EntityNotFoundException<Configuration>(update.ConfigurationId);
-                }
+                throw new EntityNotFoundException<Configuration>(update.ConfigurationId);
+            }
 
-                _mapper.Map(update, item);
-                await _dataAccessor.Editor.SaveAsync();
-            }
-            catch (Exception ex)
-            {
-                int a = 1;
-            }
+            _mapper.Map(update, item);
+            _dataAccessor.Editor.Save();
         }
 
 
