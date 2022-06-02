@@ -3,6 +3,6 @@
     public class SvfStatusJobDto
     {
         public string Status { get; set; }
-        public Stream SvfFiles { get; set; }
+        public byte[] SvfFiles { get; set; }
     }
 }

@@ -169,42 +169,61 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
             return result;
         }
 
-        public async Task<Stream> DownloadSvf2(string urn)
+        public async Task<byte[]> DownloadSvf2(string urn)
         {
             // get the list of resources to download
             var resourcesToDownload = await ExtractSvf.ExtractSVFAsync(urn, _accessToken);
 
             var client = new RestClient("https://developer.api.autodesk.com/");
 
-            var memoryStream = new MemoryStream();
-            using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+            var filelist = new List<FileStreamDto>();
+
+            foreach (ExtractSvf.Resource resource in resourcesToDownload)
             {
-                foreach (ExtractSvf.Resource resource in resourcesToDownload)
+                // prepare the GET to download the file
+                RestRequest request = new RestRequest(resource.RemotePath, Method.GET);
+                request.AddHeader("Authorization", "Bearer " + _accessToken);
+                request.AddHeader("Accept-Encoding", "gzip, deflate");
+                IRestResponse response = await client.ExecuteAsync(request);
+
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    // prepare the GET to download the file
-                    RestRequest request = new RestRequest(resource.RemotePath, Method.GET);
-                    request.AddHeader("Authorization", "Bearer " + _accessToken);
-                    request.AddHeader("Accept-Encoding", "gzip, deflate");
-                    IRestResponse response = await client.ExecuteAsync(request);
-
-                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                    return null;
+                }
+                else
+                {
+                    filelist.Add(new FileStreamDto()
                     {
-                        return null;
-                    }
-                    else
-                    {
-                        var inputFile = archive.CreateEntry(resource.LocalPath);
-
-                        using (var entryStream = inputFile.Open())
-                        using (var streamWriter = new StreamWriter(entryStream))
-                        {
-                            streamWriter.Write(response.RawBytes);
-                        }
-                    }
+                        Content = new MemoryStream(response.RawBytes),
+                        FileName = resource.LocalPath,
+                        ContentType = response.ContentType,
+                        Length = response.ContentLength
+                    });
                 }
             }
 
-            return memoryStream;
+
+            using (var compressedFileStream = new MemoryStream())
+            {
+                //Create an archive and store the stream in memory.
+                using (var zipArchive = new ZipArchive(compressedFileStream, ZipArchiveMode.Create, false))
+                {
+                    foreach (var caseAttachmentModel in filelist)
+                    {
+                        //Create a zip entry for each attachment
+                        var zipEntry = zipArchive.CreateEntry(caseAttachmentModel.FileName);
+
+                        //Get the stream of the attachment
+                        //using (var originalFileStream = new MemoryStream(caseAttachmentModel.Content))
+                        using (var zipEntryStream = zipEntry.Open())
+                        {
+                            //Copy the attachment stream to the zip entry stream
+                            caseAttachmentModel.Content.CopyTo(zipEntryStream);
+                        }
+                    }
+                }
+                return compressedFileStream.ToArray();
+            }
         }
     }
 }
