@@ -6,6 +6,8 @@ using DesignGear.Contracts.Dto;
 using Microsoft.EntityFrameworkCore;
 using DesignGear.Common.Extensions;
 using AutoMapper;
+using DesignGear.Common.Exceptions;
+using DesignGear.Contractor.Core.Data.Entity;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -51,6 +53,40 @@ namespace DesignGear.Contractor.Core.Services
             result.Token = JwtHelper.generateJwtToken(user, organizationId, _appSettings.Secret);
 
             return result;
+        }
+
+        public async Task SendPasswordRecoveryRequestAsync(PasswordRecoveryRequestDto request) {
+            var user = await _dataAccessor.Editor.Users.Where(x => x.Email == request.Email).FirstOrDefaultAsync();
+            if (user == null) {
+                throw new EntityNotFoundException<User>(request.Email);
+            }
+
+            user.PasswordRecoveryKey = Guid.NewGuid();
+            user.PasswordRecoveryKeyCreated = DateTimeOffset.Now;
+
+            await _dataAccessor.Editor.SaveAsync();
+
+            //todo Send email 
+        }
+
+        public async Task ChangePasswordAsync(PasswordRecoveryCommitDto commit) {
+            if (!string.Equals(commit.NewPassword, commit.ConfirmPassword)) {
+                throw new InvalidDataException("Passwords are not equal");
+            }
+
+            var user = await _dataAccessor.Editor.Users
+                .Where(x => x.Email == commit.Email 
+                    && x.PasswordRecoveryKey == commit.PasswordRecoveryKey 
+                    && x.PasswordRecoveryKeyCreated <= DateTimeOffset.Now.AddMinutes(15))
+                .FirstOrDefaultAsync();
+            if (user == null) {
+                throw new EntityNotFoundException<User>("User is not founded by email or invalid recovery key or recovery key is expired");
+            }
+
+            user.Password = commit.NewPassword;
+            user.PasswordChanged = DateTimeOffset.Now;
+
+            await _dataAccessor.Editor.SaveAsync();
         }
     }
 }

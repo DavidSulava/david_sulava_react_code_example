@@ -28,5 +28,11 @@ namespace DesignGear.Contractor.Core.Data.Entity
         public DateTime Created { get; set; }
 
         public UserRole Role { get; set; }
+
+        public Guid? PasswordRecoveryKey { get; set; }
+
+        public DateTimeOffset? PasswordRecoveryKeyCreated { get; set; }
+
+        public DateTimeOffset? PasswordChanged { get; set; }
     }
 }

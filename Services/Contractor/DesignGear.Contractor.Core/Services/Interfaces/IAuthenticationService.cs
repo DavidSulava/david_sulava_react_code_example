@@ -7,5 +7,9 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
         Task<AuthenticateResponseDto> AuthenticateAsync(AuthenticateRequestDto model);
 
         Task<AuthenticateResponseDto> SetOrganizationAsync(Guid userId, Guid organizationId);
+
+        Task SendPasswordRecoveryRequestAsync(PasswordRecoveryRequestDto request);
+
+        Task ChangePasswordAsync(PasswordRecoveryCommitDto commit);
     }
 }
