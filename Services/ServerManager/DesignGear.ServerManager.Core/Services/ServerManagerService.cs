@@ -38,7 +38,7 @@ namespace DesignGear.ServerManager.Core.Services
                 var status = manifest.derivatives?[0].status;
                 if (status == "success")
                 {
-                    var files = await api.DownloadSvf(urn, svfPath);
+                    var files = await api.DownloadSvf2(urn);
                     if (files != null)
                         return new SvfStatusJobDto()
                         {

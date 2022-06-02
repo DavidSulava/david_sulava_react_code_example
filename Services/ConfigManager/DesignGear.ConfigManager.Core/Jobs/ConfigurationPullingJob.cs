@@ -50,10 +50,10 @@ namespace DesignGear.ConfigManager.Core.Jobs
                 var result = _serverManagerService.CheckStatusJobAsync(configuration.URN).Result;
                 if (result.Status == "success")
                 {
-                    foreach(var file in result.SvfFiles)
-                    {
-                        _configurationFileStorage.SaveSvfAsync(configuration.ProductVersionId, configuration.Id, file);
-                    }
+                    //foreach(var file in result.SvfFiles)
+                    //{
+                    //    _configurationFileStorage.SaveSvfAsync(configuration.ProductVersionId, configuration.Id, file);
+                    //}
                 }
             }
         }

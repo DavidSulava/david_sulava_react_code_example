@@ -4,6 +4,7 @@ using RestSharp;
 using DesignGear.ServerManager.Core.Helpers;
 using Microsoft.AspNetCore.Http;
 using DesignGear.Contracts.Dto;
+using System.IO.Compression;
 
 namespace DesignGear.ServerManager.Core.ForgeUtils
 {
@@ -128,6 +129,7 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
 
         public async Task<IEnumerable<FileStreamDto>> DownloadSvf(string urn, string localPath)
         {
+
             var result = new List<FileStreamDto>();
             // get the list of resources to download
             var resourcesToDownload = await ExtractSvf.ExtractSVFAsync(urn, _accessToken);
@@ -165,6 +167,44 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
             }
 
             return result;
+        }
+
+        public async Task<Stream> DownloadSvf2(string urn)
+        {
+            // get the list of resources to download
+            var resourcesToDownload = await ExtractSvf.ExtractSVFAsync(urn, _accessToken);
+
+            var client = new RestClient("https://developer.api.autodesk.com/");
+
+            var memoryStream = new MemoryStream();
+            using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+            {
+                foreach (ExtractSvf.Resource resource in resourcesToDownload)
+                {
+                    // prepare the GET to download the file
+                    RestRequest request = new RestRequest(resource.RemotePath, Method.GET);
+                    request.AddHeader("Authorization", "Bearer " + _accessToken);
+                    request.AddHeader("Accept-Encoding", "gzip, deflate");
+                    IRestResponse response = await client.ExecuteAsync(request);
+
+                    if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        var inputFile = archive.CreateEntry(resource.LocalPath);
+
+                        using (var entryStream = inputFile.Open())
+                        using (var streamWriter = new StreamWriter(entryStream))
+                        {
+                            streamWriter.Write(response.RawBytes);
+                        }
+                    }
+                }
+            }
+
+            return memoryStream;
         }
     }
 }

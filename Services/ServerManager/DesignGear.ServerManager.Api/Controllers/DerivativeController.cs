@@ -1,4 +1,5 @@
-﻿using DesignGear.ServerManager.Core;
+﻿using DesignGear.Contracts.Dto.ServerManager.Derivative;
+using DesignGear.ServerManager.Core;
 using DesignGear.ServerManager.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +29,10 @@ namespace DesignGear.ServerManager.Api.Controllers
 		public async Task<IActionResult> CheckStatusJobAsync([FromRoute] string urn)
 		{
 			var result = await _serverManagerService.CheckStatusJobAsync(urn);
-			return new ObjectResult(result);
+			if (result.Status == "success")
+				return File(result.SvfFiles, "application/octet-stream");
+			else
+				return Ok(result.Status);
 		}
 	}
 }
