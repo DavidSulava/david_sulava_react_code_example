@@ -95,6 +95,7 @@ namespace DesignGear.ConfigManager.Core.Services
                     {
                         configuration.Id = rootConfigurationId;
                     }
+                    configuration.RootConfigurationId = rootConfigurationId;
                     //configuration.Status = ConfigurationStatus.Ready;
                     //configuration.SvfStatus = SvfStatus.InQueue;
                     //configuration.ComponentDefinition.AppBundleId = create.AppBundleId;
