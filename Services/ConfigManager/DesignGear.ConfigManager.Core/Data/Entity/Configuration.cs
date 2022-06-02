@@ -25,7 +25,7 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         public ModelState ModelState { get; set; }
 
         [ForeignKey("TargetFileItem")]
-        public Guid TargetFileId { get; set; }
+        public Guid? TargetFileId { get; set; }
         public virtual FileItem TargetFileItem { get; set; }
 
         public DateTime Created { get; set; }
