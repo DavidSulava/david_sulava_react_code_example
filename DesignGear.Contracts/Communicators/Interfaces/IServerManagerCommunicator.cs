@@ -1,4 +1,5 @@
 ﻿using DesignGear.Contracts.Dto;
+using DesignGear.Contracts.Dto.ServerManager.Derivative;
 
 namespace DesignGear.Contracts.Communicators.Interfaces
 {
@@ -6,6 +7,6 @@ namespace DesignGear.Contracts.Communicators.Interfaces
     {
         Task<string> GetSvfAsync(FileStreamDto packageFile, string rootFileName);
 
-        Task<string> CheckStatusJobAsync(string urn);
+        Task<SvfStatusJobDto> CheckStatusJobAsync(string urn);
     }
 }

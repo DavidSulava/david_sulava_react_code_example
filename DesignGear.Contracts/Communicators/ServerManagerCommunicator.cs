@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.Contracts.Dto;
+using DesignGear.Contracts.Dto.ServerManager.Derivative;
 using DesignGear.Contracts.Helpers;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -48,11 +49,9 @@ namespace DesignGear.Contracts.Communicators
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<string> CheckStatusJobAsync(string urn)
+        public async Task<SvfStatusJobDto> CheckStatusJobAsync(string urn)
         {
-            var message = await _httpClient.GetAsync($"{_settings.ServerManagerUrl}derivative/{urn}");
-            message.EnsureSuccessStatusCode();
-            return await message.Content.ReadAsStringAsync();
+            return await SendHttpRequestAsync<SvfStatusJobDto>($"{_settings.ServerManagerUrl}derivative/{urn}");
         }
     }
 }

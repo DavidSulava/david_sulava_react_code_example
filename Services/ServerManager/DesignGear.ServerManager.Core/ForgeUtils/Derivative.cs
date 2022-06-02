@@ -1,13 +1,9 @@
 ﻿using Autodesk.Forge;
 using Autodesk.Forge.Model;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 using RestSharp;
 using DesignGear.ServerManager.Core.Helpers;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
+using DesignGear.Contracts.Dto;
 
 namespace DesignGear.ServerManager.Core.ForgeUtils
 {
@@ -130,8 +126,9 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
             return await derivative.GetManifestAsync(urn);
         }
 
-        public async Task<bool> DownloadSvf(string urn, string localPath)
+        public async Task<IEnumerable<FileStreamDto>> DownloadSvf(string urn, string localPath)
         {
+            var result = new List<FileStreamDto>();
             // get the list of resources to download
             var resourcesToDownload = await ExtractSvf.ExtractSVFAsync(urn, _accessToken);
 
@@ -146,20 +143,28 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
 
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    return false;
+                    return null;
                 }
                 else
                 {
-                    // combine with selected local path
-                    string pathToSave = Path.Combine(localPath, resource.LocalPath);
-                    // ensure local dir exists
-                    Directory.CreateDirectory(Path.GetDirectoryName(pathToSave));
-                    // save file
-                    File.WriteAllBytes(pathToSave, response.RawBytes);
+                    //// combine with selected local path
+                    //string pathToSave = Path.Combine(localPath, resource.LocalPath);
+                    //// ensure local dir exists
+                    //Directory.CreateDirectory(Path.GetDirectoryName(pathToSave));
+                    //// save file
+                    //File.WriteAllBytes(pathToSave, response.RawBytes);
+
+                    result.Add(new FileStreamDto()
+                    {
+                        FileName = resource.LocalPath,
+                        Content = new MemoryStream(response.RawBytes),
+                        Length = response.ContentLength,
+                        ContentType = response.ContentType
+                    });
                 }
             }
 
-            return true;
+            return result;
         }
     }
 }
