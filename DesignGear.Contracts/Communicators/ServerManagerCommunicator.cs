@@ -51,7 +51,12 @@ namespace DesignGear.Contracts.Communicators
 
         public async Task<SvfStatusJobDto> CheckStatusJobAsync(string urn)
         {
-            return await SendHttpRequestAsync<SvfStatusJobDto>($"{_settings.ServerManagerUrl}derivative/{urn}");
+            var message = await _httpClient.GetAsync($"{_settings.ServerManagerUrl}derivative/{urn}");
+            message.EnsureSuccessStatusCode();
+            return new SvfStatusJobDto()
+            {
+                SvfFiles = await message.Content.ReadAsByteArrayAsync()
+            };
         }
     }
 }
