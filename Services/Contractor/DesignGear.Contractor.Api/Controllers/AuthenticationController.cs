@@ -45,12 +45,12 @@ namespace DesignGear.Contractor.Api.Controllers
             return Ok(response.MapTo<VmAuthenticateResponse>(_mapper));
         }
 
-        [HttpPost("PasswordRecoveryRequest")]
+        [HttpPost("PasswordRecovery")]
         public async Task SendPasswordRecoveryRequestAsync(VmPasswordRecoveryRequest request) {
             await _authenticationService.SendPasswordRecoveryRequestAsync(request.MapTo<PasswordRecoveryRequestDto>(_mapper));
         }
 
-        [HttpPost("RecoverPassword")]
+        [HttpPost("PasswordRecoveryConfirm")]
         public async Task RecoverPasswordAsync(VmPasswordRecoveryCommit commit) {
             await _authenticationService.ChangePasswordAsync(commit.MapTo<PasswordRecoveryCommitDto>(_mapper));
         }

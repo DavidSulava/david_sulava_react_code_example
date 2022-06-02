@@ -61,6 +61,7 @@ builder.Services.AddOptions<NotificationOptions>().Bind(builder.Configuration.Ge
 builder.Services.AddOptions<SecurityOptions>().Bind(builder.Configuration.GetSection("Security")).ValidateDataAnnotations();
 
 builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(builder => {
