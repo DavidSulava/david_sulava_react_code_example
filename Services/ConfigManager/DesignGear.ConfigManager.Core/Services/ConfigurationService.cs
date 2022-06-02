@@ -55,7 +55,21 @@ namespace DesignGear.ConfigManager.Core.Services
         public async Task CreateConfigurationRequestAsync(ConfigurationRequestDto request)
         {
             var newConfiguration = _mapper.Map<Configuration>(request);
+            newConfiguration.RootConfigurationId = newConfiguration.Id = Guid.NewGuid();
             newConfiguration.ComponentDefinitionId = (await _dataAccessor.Reader.Configurations.FirstOrDefaultAsync(x => x.Id == request.BaseConfigurationId)).ComponentDefinitionId;
+
+            //var parameterList = request.ParameterValues.Select(x => x.ParameterDefinitionId);
+            var parameters = await _dataAccessor.Reader.ParameterDefinitions.Where(x => x.ConfigurationId == request.BaseConfigurationId).ToListAsync();
+            newConfiguration.ParameterDefinitions = new List<ParameterDefinition>();
+            foreach (var parameter in parameters)
+            {
+                var newValue = request.ParameterValues.FirstOrDefault(x => x.ParameterDefinitionId == parameter.Id);
+                if (newValue != null)
+                    parameter.Value = newValue.Value;
+                parameter.Id = Guid.NewGuid();
+                newConfiguration.ParameterDefinitions.Add(parameter);
+            }
+
             await _dataAccessor.Editor.CreateAsync(newConfiguration);
             await _dataAccessor.Editor.SaveAsync();
         }
