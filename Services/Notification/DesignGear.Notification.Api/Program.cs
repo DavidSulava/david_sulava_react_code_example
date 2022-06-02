@@ -1,5 +1,5 @@
+using DesignGear.Contracts.Models.Notification;
 using DesignGear.Notification.Api.Communicators;
-using DesignGear.Notification.Api.Models;
 using DesignGear.Notification.Api.Options;
 
 var builder = WebApplication.CreateBuilder(args);

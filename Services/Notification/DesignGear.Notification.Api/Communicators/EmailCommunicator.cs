@@ -1,4 +1,4 @@
-﻿using DesignGear.Notification.Api.Models;
+﻿using DesignGear.Contracts.Models.Notification;
 using DesignGear.Notification.Api.Options;
 using Microsoft.Extensions.Options;
 using System.Net;
