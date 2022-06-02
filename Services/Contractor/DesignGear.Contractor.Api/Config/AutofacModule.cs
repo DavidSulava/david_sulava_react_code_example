@@ -18,6 +18,7 @@ namespace DesignGear.Contractor.Api.Config
 
             //communicators
             builder.RegisterType<ConfigManagerCommunicator>().As<IConfigManagerCommunicator>().InstancePerLifetimeScope();
+            builder.RegisterType<NotificationCommunicator>().As<INotificationCommunicator>().InstancePerLifetimeScope();
 
             //services
             builder.RegisterType<AppBundleService>().As<IAppBundleService>().InstancePerLifetimeScope();

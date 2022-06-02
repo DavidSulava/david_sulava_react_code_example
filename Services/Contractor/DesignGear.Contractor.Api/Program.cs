@@ -4,6 +4,7 @@ using DesignGear.Contractor.Api.Config;
 using DesignGear.Contractor.Core.Data;
 using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contracts.Helpers;
+using DesignGear.Contracts.Options;
 using Kendo.Mvc.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -56,6 +57,8 @@ builder.Services.AddAuthorization(opts => {
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 //builder.Services.Configure<CommunicatorSettings>(builder.Configuration.GetSection("CommunicatorSettings"));
 builder.Services.AddOptions<CommunicatorSettings>().Bind(builder.Configuration.GetSection("CommunicatorSettings")).ValidateDataAnnotations();
+builder.Services.AddOptions<NotificationOptions>().Bind(builder.Configuration.GetSection("Notifications")).ValidateDataAnnotations();
+builder.Services.AddOptions<SecurityOptions>().Bind(builder.Configuration.GetSection("Security")).ValidateDataAnnotations();
 
 builder.Services.AddHttpClient();
 

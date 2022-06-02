@@ -8,6 +8,9 @@ using DesignGear.Common.Extensions;
 using AutoMapper;
 using DesignGear.Common.Exceptions;
 using DesignGear.Contractor.Core.Data.Entity;
+using DesignGear.Contracts.Communicators.Interfaces;
+using DesignGear.Contracts.Models.Notification;
+using DesignGear.Contracts.Options;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -16,12 +19,20 @@ namespace DesignGear.Contractor.Core.Services
         private readonly DataAccessor _dataAccessor;
         private readonly AppSettings _appSettings;
         private IMapper _mapper;
+        private readonly INotificationCommunicator _notificationCommunicator;
+        private readonly SecurityOptions _securityOptions;
 
-        public AuthenticationService(DataAccessor dataAccessor, IOptions<AppSettings> appSettings, IMapper mapper)
+        public AuthenticationService(DataAccessor dataAccessor, 
+            IOptions<AppSettings> appSettings, 
+            IOptions<SecurityOptions> securityOptions,
+            IMapper mapper,
+            INotificationCommunicator notificationCommunicator)
         {
             _dataAccessor = dataAccessor;
             _appSettings = appSettings.Value;
             _mapper = mapper;
+            _notificationCommunicator = notificationCommunicator;
+            _securityOptions = securityOptions.Value;
         }
 
         public async Task<AuthenticateResponseDto> AuthenticateAsync(AuthenticateRequestDto model)
@@ -66,7 +77,12 @@ namespace DesignGear.Contractor.Core.Services
 
             await _dataAccessor.Editor.SaveAsync();
 
-            //todo Send email 
+            await _notificationCommunicator.SendEmailAsync(new EmailRequestModel {
+                TargetAddress = user.Email,
+                Topic = "Design Gear Cloud password recovery",
+                Message = $"Your link for recovery: {_securityOptions.PasswordRecoveryUrl}/passwordrecovery/{user.PasswordRecoveryKey}",
+                IsBodyHtml = false
+            });
         }
 
         public async Task ChangePasswordAsync(PasswordRecoveryCommitDto commit) {
@@ -77,7 +93,7 @@ namespace DesignGear.Contractor.Core.Services
             var user = await _dataAccessor.Editor.Users
                 .Where(x => x.Email == commit.Email 
                     && x.PasswordRecoveryKey == commit.PasswordRecoveryKey 
-                    && x.PasswordRecoveryKeyCreated <= DateTimeOffset.Now.AddMinutes(15))
+                    && x.PasswordRecoveryKeyCreated <= DateTimeOffset.Now.AddSeconds(_securityOptions.RecoveryTokenLifeTimeInSeconds))
                 .FirstOrDefaultAsync();
             if (user == null) {
                 throw new EntityNotFoundException<User>("User is not founded by email or invalid recovery key or recovery key is expired");

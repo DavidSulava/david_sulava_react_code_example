@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesignGear.Contractor.Core.Options {
+namespace DesignGear.Contracts.Options {
     public class NotificationOptions {
         public string ServiceUrl { get; set; }
     }
