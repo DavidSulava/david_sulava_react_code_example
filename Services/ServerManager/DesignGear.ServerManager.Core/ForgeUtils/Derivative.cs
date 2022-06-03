@@ -169,7 +169,7 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
             return result;
         }
 
-        public async Task<byte[]> DownloadSvf2(string urn)
+        public async Task<byte[]> DownloadSvfAsync(string urn)
         {
             // get the list of resources to download
             var resourcesToDownload = await ExtractSvf.ExtractSVFAsync(urn, _accessToken);

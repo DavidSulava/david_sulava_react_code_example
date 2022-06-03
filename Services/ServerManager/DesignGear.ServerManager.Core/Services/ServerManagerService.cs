@@ -1,4 +1,5 @@
 ﻿using DesignGear.Contracts.Dto.ServerManager.Derivative;
+using DesignGear.Contracts.Enums;
 using DesignGear.ServerManager.Core.ForgeUtils;
 using DesignGear.ServerManager.Core.Helpers;
 using DesignGear.ServerManager.Core.Services.Interfaces;
@@ -28,7 +29,7 @@ namespace DesignGear.ServerManager.Core.Services
             return await api.Translate(Base64(objInfo.ObjectId), rootFileName);
         }
 
-        public async Task<SvfStatusJobDto> CheckStatusJobAsync(string urn)
+        public async Task<SvfStatus> CheckStatusJobAsync(string urn)
         {
             var api = new Derivative(_forgeSettings);
             await api.Authenticate();
@@ -38,24 +39,19 @@ namespace DesignGear.ServerManager.Core.Services
                 var status = manifest.derivatives?[0].status;
                 if (status == "success")
                 {
-                    var files = await api.DownloadSvf2(urn);
-                    if (files != null)
-                        return new SvfStatusJobDto()
-                        {
-                            Status = "success",
-                            SvfFiles = files
-                        };
+                    return SvfStatus.Ready;
                 }
 
-                return new SvfStatusJobDto()
-                {
-                    Status = "error"
-                };
+                return SvfStatus.IncorrectRequestError;
             }
-            return new SvfStatusJobDto()
-            {
-                Status = "inprocess"
-            };
+            return SvfStatus.InProcess;
+        }
+
+        public async Task<byte[]> DownloadSvfAsync(string urn)
+        {
+            var api = new Derivative(_forgeSettings);
+            await api.Authenticate();
+            return await api.DownloadSvfAsync(urn);
         }
 
         public async Task<string> ProcessModelAsync(IFormFile packageFile)

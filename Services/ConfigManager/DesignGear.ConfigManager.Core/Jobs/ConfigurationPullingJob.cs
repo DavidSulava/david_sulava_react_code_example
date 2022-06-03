@@ -48,12 +48,19 @@ namespace DesignGear.ConfigManager.Core.Jobs
             foreach (var configuration in configurations)
             {
                 var result = _serverManagerService.CheckStatusJobAsync(configuration.URN).Result;
-                if (result.Status == "success")
+                if (result == SvfStatus.Ready)
                 {
-                    //foreach(var file in result.SvfFiles)
-                    //{
-                    //    _configurationFileStorage.SaveSvfAsync(configuration.ProductVersionId, configuration.Id, file);
-                    //}
+                    var file = _serverManagerService.DownloadSvfAsync(configuration.URN).Result;
+                    if (file != null)
+                    {
+                        _configurationFileStorage.SaveSvfAsync(configuration.ProductVersionId, configuration.Id, file).Wait();
+                        _configurationService.UpdateSvfStatus(new ConfigurationUpdateSvfDto
+                        {
+                            ConfigurationId = configuration.Id,
+                            SvfStatus = SvfStatus.Ready,
+                            URN = configuration.URN
+                        });
+                    }
                 }
             }
         }

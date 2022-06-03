@@ -2,6 +2,7 @@
 using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.Contracts.Dto;
 using DesignGear.Contracts.Dto.ServerManager.Derivative;
+using DesignGear.Contracts.Enums;
 using DesignGear.Contracts.Helpers;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -49,14 +50,16 @@ namespace DesignGear.Contracts.Communicators
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<SvfStatusJobDto> CheckStatusJobAsync(string urn)
+        public async Task<SvfStatus> CheckStatusJobAsync(string urn)
+        {
+            return await SendHttpRequestAsync<SvfStatus>($"{_settings.ServerManagerUrl}derivative/{urn}/status");
+        }
+
+        public async Task<byte[]> DownloadSvfAsync(string urn)
         {
             var message = await _httpClient.GetAsync($"{_settings.ServerManagerUrl}derivative/{urn}");
             message.EnsureSuccessStatusCode();
-            return new SvfStatusJobDto()
-            {
-                SvfFiles = await message.Content.ReadAsByteArrayAsync()
-            };
+            return await message.Content.ReadAsByteArrayAsync();
         }
     }
 }

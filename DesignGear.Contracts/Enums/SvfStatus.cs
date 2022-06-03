@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace DesignGear.Contracts.Enums {
     [Flags]
     public enum SvfStatus {
-        InQueue,
-        InProcess,
-        ServiceUnavailableError,
-        IncorrectRequestError,
-        Ready
+        InQueue = 1,
+        InProcess = 2,
+        ServiceUnavailableError = 4,
+        IncorrectRequestError = 8,
+        Ready = 16
     }
 }

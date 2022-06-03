@@ -100,6 +100,6 @@ app.UseHangfireDashboard();
 app.MapControllers();
 
 //RecurringJob.AddOrUpdate<ConfigurationPushingJob>("Pushing data to Forge", (x) => x.Do(), "0 */1 * ? * *");
-//RecurringJob.AddOrUpdate<ConfigurationPullingJob>("Pulling data from Forge", (x) => x.Do(), "0 */1 * ? * *");
+//RecurringJob.AddOrUpdate<ConfigurationPullingJob>("Pulling data from Forge", (x) => x.Do(), Cron.Hourly());// "0 */1 * ? * *");
 
 app.Run();

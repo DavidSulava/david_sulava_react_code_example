@@ -51,10 +51,11 @@ namespace DesignGear.ConfigManager.Api.Controllers
             return await _configurationService.GetSvfRootFileNameAsync(configurationId);
         }
 
-        [HttpGet("{configurationId}/svf/{svfName}")]
+        [HttpGet("{configurationId}/svf/{*svfName}")]
         public async Task<IActionResult> GetSvfAsync([FromRoute] Guid configurationId, [FromRoute] string svfName)
         {
-            return Ok((await _configurationService.GetSvfAsync(configurationId, svfName)).Content);
+            var result = await _configurationService.GetSvfAsync(configurationId, svfName);
+            return File(result.Content, result.ContentType, result.FileName);
         }
 
         [HttpGet("{configurationId}/parameters")]

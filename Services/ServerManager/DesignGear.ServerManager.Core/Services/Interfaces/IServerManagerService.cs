@@ -1,4 +1,5 @@
 ﻿using DesignGear.Contracts.Dto.ServerManager.Derivative;
+using DesignGear.Contracts.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace DesignGear.ServerManager.Core.Services.Interfaces
@@ -7,7 +8,9 @@ namespace DesignGear.ServerManager.Core.Services.Interfaces
 	{
 		Task<string> TranslateSvfAsync(IFormFile packageFile, string rootFileName);
 
-		Task<SvfStatusJobDto> CheckStatusJobAsync(string urn);
+		Task<SvfStatus> CheckStatusJobAsync(string urn);
+
+		Task<byte[]> DownloadSvfAsync(string urn);
 
 		Task<string> ProcessModelAsync(IFormFile packageFile);
 	}

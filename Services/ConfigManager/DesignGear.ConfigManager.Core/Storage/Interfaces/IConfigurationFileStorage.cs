@@ -19,6 +19,8 @@ namespace DesignGear.ConfigManager.Core.Storage.Interfaces {
         //Сохранение файлов для SVF
         Task SaveSvfAsync(Guid productVersionId, Guid configurationId, FileStreamDto svf);
 
+        Task SaveSvfAsync(Guid productVersionId, Guid configurationId, byte[] svf);
+
         //Получение архива с моделью
         FileStreamDto GetZipArchive(Guid productVersionId, Guid configurationId);
     }
