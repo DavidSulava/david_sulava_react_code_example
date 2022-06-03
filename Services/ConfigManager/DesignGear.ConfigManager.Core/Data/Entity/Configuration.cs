@@ -24,7 +24,9 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
 
         public ModelState ModelState { get; set; }
 
-        public Guid TargetFileId { get; set; }
+        [ForeignKey("TargetFileItem")]
+        public Guid? TargetFileId { get; set; }
+        public virtual FileItem TargetFileItem { get; set; }
 
         public DateTime Created { get; set; }
 
@@ -45,6 +47,9 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         public virtual ICollection<ConfigurationInstance> ConvigurationInstances { get; set; }
 
         public virtual ICollection<FileItem> FileItems { get; set; }
+
+        [StringLength(300)]
+        public string? URN { get; set; }
 
         [NotMapped]
         public int ComponentDefinitionIdInternal { get; set; }

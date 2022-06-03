@@ -6,7 +6,7 @@ namespace DesignGear.ConfigManager.Core.Services.Interfaces
 {
     public interface IConfigurationService
     {
-        Task<ICollection<ConfigurationItemDto>> GetConfigurationListAsync(ConfigurationFilterDto filter);
+        Task<ICollection<ConfigurationItemExDto>> GetConfigurationListAsync(ConfigurationFilterDto filter);
         Task CreateConfigurationRequestAsync(ConfigurationRequestDto request);
         Task CreateConfigurationFromPackageAsync(ConfigurationCreateDto create);
         Task<Stream> CreateConfigurationRequestPackageAsync(Guid configurationId);
@@ -20,6 +20,8 @@ namespace DesignGear.ConfigManager.Core.Services.Interfaces
         Task<string> GetSvfRootFileNameAsync(Guid configurationId);
 
         Task<ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId);
+
+        void UpdateSvfStatus(ConfigurationUpdateSvfDto update);
 
         //todo:update (из inventor из новой модели)
 

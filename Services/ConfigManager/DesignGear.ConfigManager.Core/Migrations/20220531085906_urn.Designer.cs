@@ -4,6 +4,7 @@ using DesignGear.ConfigManager.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DesignGear.ConfigManager.Core.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220531085906_urn")]
+    partial class urn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,7 +139,7 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.Property<int>("SvfStatus")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("TargetFileId")
+                    b.Property<Guid>("TargetFileId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("TemplateConfigurationId")
@@ -157,8 +159,7 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.HasIndex("ComponentDefinitionId");
 
                     b.HasIndex("TargetFileId")
-                        .IsUnique()
-                        .HasFilter("[TargetFileId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("TemplateConfigurationId");
 
@@ -343,7 +344,8 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.FileItem", "TargetFileItem")
                         .WithOne("Configuration")
                         .HasForeignKey("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "TargetFileId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "TemplateConfiguration")
                         .WithMany()

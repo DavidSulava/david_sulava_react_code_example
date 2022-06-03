@@ -1,19 +1,24 @@
 ﻿using DesignGear.ConfigManager.Core.Jobs.Interfaces;
 using DesignGear.ConfigManager.Core.Services.Interfaces;
+using DesignGear.ConfigManager.Core.Storage.Interfaces;
+using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.Contracts.Dto.ConfigManager;
 using DesignGear.Contracts.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DesignGear.ConfigManager.Core.Jobs {
+namespace DesignGear.ConfigManager.Core.Jobs
+{
     public class ConfigurationPullingJob : IJob {
         private readonly IConfigurationService _configurationService;
+        private readonly IServerManagerCommunicator _serverManagerService;
+        private readonly IConfigurationFileStorage _configurationFileStorage;
 
-        public ConfigurationPullingJob(IConfigurationService configurationService) {
+        public ConfigurationPullingJob(IConfigurationService configurationService,
+            IServerManagerCommunicator serverManagerService,
+            IConfigurationFileStorage configurationFileStorage)
+        {
             _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
+            _serverManagerService = serverManagerService ?? throw new ArgumentNullException(nameof(serverManagerService));
+            _configurationFileStorage = configurationFileStorage ?? throw new ArgumentNullException(nameof(configurationFileStorage));
         }
 
         public void Do() {
@@ -35,6 +40,22 @@ namespace DesignGear.ConfigManager.Core.Jobs {
             /*
              * В таком же русле необходимо сделать проверку запроса и получение результата по svf
              */
+            configurations = _configurationService.GetConfigurationListAsync(new ConfigurationFilterDto
+            {
+                SvfStatus = SvfStatus.InProcess
+            }).Result;
+
+            foreach (var configuration in configurations)
+            {
+                var result = _serverManagerService.CheckStatusJobAsync(configuration.URN).Result;
+                if (result.Status == "success")
+                {
+                    //foreach(var file in result.SvfFiles)
+                    //{
+                    //    _configurationFileStorage.SaveSvfAsync(configuration.ProductVersionId, configuration.Id, file);
+                    //}
+                }
+            }
         }
     }
 }

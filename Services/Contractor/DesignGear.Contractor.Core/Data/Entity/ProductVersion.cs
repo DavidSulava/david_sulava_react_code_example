@@ -31,6 +31,9 @@ namespace DesignGear.Contractor.Core.Data.Entity
 
         public virtual ICollection<ProductVersionPreview> ProductVersionPreviews { get; set; }
 
+        //[InverseProperty("CurrentProductVersion")]
+        public virtual Product CurrentVersionProduct { get; set; }
+
         //[ForeignKey("AppBundle")]
         //public Guid AppBundleId { get; set; }
         //public virtual AppBundle AppBundle { get; set; }

@@ -21,7 +21,7 @@ namespace DesignGear.Contractor.Core.Helpers
             claims.Add(new Claim("LastName", user.LastName));
             claims.Add(new Claim("Phone", user.Phone));
             claims.Add(new Claim("Created", user.Created.ToString()));
-            claims.Add(new Claim("Role", Enum.GetName(typeof(UserRole), user.Role)));
+            claims.Add(new Claim("Role", ((int)user.Role).ToString()));
             if (organizationId != null)
             {
                 claims.Add(new Claim("OrganizationId", organizationId.ToString()));

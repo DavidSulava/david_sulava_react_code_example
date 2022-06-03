@@ -1,13 +1,10 @@
 ﻿using Autodesk.Forge;
 using Autodesk.Forge.Model;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 using RestSharp;
 using DesignGear.ServerManager.Core.Helpers;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
+using DesignGear.Contracts.Dto;
+using System.IO.Compression;
 
 namespace DesignGear.ServerManager.Core.ForgeUtils
 {
@@ -108,22 +105,32 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
             DerivativesApi derivative = new DerivativesApi();
             derivative.Configuration.AccessToken = _accessToken;
             dynamic jobPosted = await derivative.TranslateAsync(job, true);
+            return jobPosted.urn;
 
-            var progress = string.Empty;
-            dynamic manifest = null;
-            while (progress != "complete")
-            {
-                manifest = await derivative.GetManifestAsync(urn);
-                progress = manifest.progress;
-            }
-            var status = manifest.derivatives?[0].status;
-            if (status == "failed")
-                return null;
-            return manifest.urn;
+            //var progress = string.Empty;
+            //dynamic manifest = null;
+            //while (progress != "complete")
+            //{
+            //    manifest = await derivative.GetManifestAsync(urn);
+            //    progress = manifest.progress;
+            //}
+            //var status = manifest.derivatives?[0].status;
+            //if (status == "failed")
+            //    return null;
+            //return manifest.urn;
         }
 
-        public async Task<bool> DownloadSvf(string urn, string localPath)
+        public async Task<dynamic> CheckStatusJob(string urn)
         {
+            DerivativesApi derivative = new DerivativesApi();
+            derivative.Configuration.AccessToken = _accessToken;
+            return await derivative.GetManifestAsync(urn);
+        }
+
+        public async Task<IEnumerable<FileStreamDto>> DownloadSvf(string urn, string localPath)
+        {
+
+            var result = new List<FileStreamDto>();
             // get the list of resources to download
             var resourcesToDownload = await ExtractSvf.ExtractSVFAsync(urn, _accessToken);
 
@@ -138,20 +145,85 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
 
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    return false;
+                    return null;
                 }
                 else
                 {
-                    // combine with selected local path
-                    string pathToSave = Path.Combine(localPath, resource.LocalPath);
-                    // ensure local dir exists
-                    Directory.CreateDirectory(Path.GetDirectoryName(pathToSave));
-                    // save file
-                    File.WriteAllBytes(pathToSave, response.RawBytes);
+                    //// combine with selected local path
+                    //string pathToSave = Path.Combine(localPath, resource.LocalPath);
+                    //// ensure local dir exists
+                    //Directory.CreateDirectory(Path.GetDirectoryName(pathToSave));
+                    //// save file
+                    //File.WriteAllBytes(pathToSave, response.RawBytes);
+
+                    result.Add(new FileStreamDto()
+                    {
+                        FileName = resource.LocalPath,
+                        Content = new MemoryStream(response.RawBytes),
+                        Length = response.ContentLength,
+                        ContentType = response.ContentType
+                    });
                 }
             }
 
-            return true;
+            return result;
+        }
+
+        public async Task<byte[]> DownloadSvf2(string urn)
+        {
+            // get the list of resources to download
+            var resourcesToDownload = await ExtractSvf.ExtractSVFAsync(urn, _accessToken);
+
+            var client = new RestClient("https://developer.api.autodesk.com/");
+
+            var filelist = new List<FileStreamDto>();
+
+            foreach (ExtractSvf.Resource resource in resourcesToDownload)
+            {
+                // prepare the GET to download the file
+                RestRequest request = new RestRequest(resource.RemotePath, Method.GET);
+                request.AddHeader("Authorization", "Bearer " + _accessToken);
+                request.AddHeader("Accept-Encoding", "gzip, deflate");
+                IRestResponse response = await client.ExecuteAsync(request);
+
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    return null;
+                }
+                else
+                {
+                    filelist.Add(new FileStreamDto()
+                    {
+                        Content = new MemoryStream(response.RawBytes),
+                        FileName = resource.LocalPath,
+                        ContentType = response.ContentType,
+                        Length = response.ContentLength
+                    });
+                }
+            }
+
+
+            using (var compressedFileStream = new MemoryStream())
+            {
+                //Create an archive and store the stream in memory.
+                using (var zipArchive = new ZipArchive(compressedFileStream, ZipArchiveMode.Create, false))
+                {
+                    foreach (var caseAttachmentModel in filelist)
+                    {
+                        //Create a zip entry for each attachment
+                        var zipEntry = zipArchive.CreateEntry(caseAttachmentModel.FileName);
+
+                        //Get the stream of the attachment
+                        //using (var originalFileStream = new MemoryStream(caseAttachmentModel.Content))
+                        using (var zipEntryStream = zipEntry.Open())
+                        {
+                            //Copy the attachment stream to the zip entry stream
+                            caseAttachmentModel.Content.CopyTo(zipEntryStream);
+                        }
+                    }
+                }
+                return compressedFileStream.ToArray();
+            }
         }
     }
 }

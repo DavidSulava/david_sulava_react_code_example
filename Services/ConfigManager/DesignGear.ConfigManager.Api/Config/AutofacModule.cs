@@ -20,7 +20,7 @@ namespace DesignGear.ConfigManager.Api.Config
             builder.RegisterType<DataAccessor>().AsSelf().InstancePerLifetimeScope();
 
             //communicators
-            //builder.RegisterType<ConfigManagerCommunicator>().As<IConfigManagerCommunicator>().InstancePerLifetimeScope();
+            builder.RegisterType<ServerManagerCommunicator>().As<IServerManagerCommunicator>().InstancePerLifetimeScope();
 
             //file storage
             builder.RegisterType<ConfigurationFileStorage>().As<IConfigurationFileStorage>().InstancePerLifetimeScope();
