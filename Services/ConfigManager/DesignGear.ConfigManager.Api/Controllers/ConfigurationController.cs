@@ -55,7 +55,9 @@ namespace DesignGear.ConfigManager.Api.Controllers
         public async Task<IActionResult> GetSvfAsync([FromRoute] Guid configurationId, [FromRoute] string svfName)
         {
             var result = await _configurationService.GetSvfAsync(configurationId, svfName);
-            return File(result.Content, result.ContentType, result.FileName);
+            if(result != null)
+                return File(result.Content, result.ContentType, result.FileName);
+            return Ok();
         }
 
         [HttpGet("{configurationId}/parameters")]
