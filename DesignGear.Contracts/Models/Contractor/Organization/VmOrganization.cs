@@ -8,7 +8,7 @@ namespace DesignGear.Contracts.Models.Contractor
         public string Name { get; set; }
         public string Description { get; set; }
         public OrganizationType OrgType { get; set; }
-        public Guid TariffId { get; set; }
+        public Guid? TariffId { get; set; }
     }
 }
 

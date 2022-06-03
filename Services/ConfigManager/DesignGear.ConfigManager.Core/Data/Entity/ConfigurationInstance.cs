@@ -9,29 +9,23 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        [ForeignKey(nameof(Configuration))]
         public Guid ConfigurationId { get; set; }
         public virtual Configuration Configuration { get; set; }
 
-        [ForeignKey(nameof(ParentConfiguration))]
-        public Guid? ParentConfigurationId { get; set; }
-        public virtual Configuration? ParentConfiguration { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
 
-        //todo Anton - Координаты и повороты имеют тип float
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
+        public double XX { get; set; }
+        public double YY { get; set; }
+        public double ZZ { get; set; }
 
-        public int XX { get; set; }
-        public int YY { get; set; }
-        public int ZZ { get; set; }
+        public double XY { get; set; }
+        public double YX { get; set; }
+        public double XZ { get; set; }
 
-        public int XY { get; set; }
-        public int YX { get; set; }
-        public int XZ { get; set; }
-
-        public int ZX { get; set; }
-        public int YZ { get; set; }
-        public int ZY { get; set; }
+        public double ZX { get; set; }
+        public double YZ { get; set; }
+        public double ZY { get; set; }
     }
 }

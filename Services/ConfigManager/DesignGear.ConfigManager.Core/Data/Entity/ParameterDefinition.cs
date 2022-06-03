@@ -5,11 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesignGear.ConfigManager.Core.Data.Entity
 {
-    public class ParameterDefinition : IGenerateUid
+    public class ParameterDefinition : IGenerateUid, ICreated
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        
+        [StringLength(200)]
+        public string UniqueId { get; set; }
+
         public int DisplayPriority { get; set; }
         
         [StringLength(300)]
@@ -23,22 +25,21 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         [StringLength(300)]
         public string Units { get; set; }
 
-        [ForeignKey("ComponentDefinition")]
-        public Guid ComponentDefinitionId { get; set; }
-        public virtual ComponentDefinition ComponentDefinition { get; set; }
-
         public bool IsReadOnly { get; set; }
         
         public bool IsHidden { get; set; }
         
         public bool AllowCustomValues { get; set; }
+
+        public Guid ConfigurationId { get; set; }
+        public virtual Configuration Configuration { get; set; }
         
-        /*[StringLength(300)]
-        public string Value { get; set; }*/
+        [StringLength(300)]
+        public string Value { get; set; }
         
         public virtual ICollection<ValueOption> ValueOptions { get; set; }
 
-        public virtual ICollection<ParameterValue> ParameterValues { get; set; }
+        public DateTime Created { get; set; }
 
         [NotMapped]
         public int ParameterId { get; set; }

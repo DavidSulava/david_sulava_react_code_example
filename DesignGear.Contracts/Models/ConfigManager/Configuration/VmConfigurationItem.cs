@@ -6,13 +6,13 @@ namespace DesignGear.Contracts.Models.ConfigManager
     public class VmConfigurationItem
     {
         public Guid Id { get; set; }
-
+        public Guid? ParentId { get; set; }
         public string ConfigurationName { get; set; }
         public string ComponentName { get; set; }
         public ConfigurationStatus Status { get; set; }
         public SvfStatus SvfStatus { get; set; }
         public DateTime Created { get; set; }
 
-        public ICollection<VmConfigurationItem> Childs { get; set; }
+        //public ICollection<VmConfigurationItem> Childs { get; set; }
     }
 }

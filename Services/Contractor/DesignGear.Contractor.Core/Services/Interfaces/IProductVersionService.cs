@@ -10,10 +10,10 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 
         Task RemoveProductVersionAsync(Guid id);
 
-        Task<ICollection<ProductVersionDto>> GetProductVersionsByProductAsync(Guid productId);
+        Task<TResult> GetProductVersionsByProductAsync<TResult>(Guid productId, Func<IQueryable<ProductVersionItemDto>, TResult> resultBuilder);
 
         Task<ProductVersionDto> GetProductVersionAsync(Guid id);
 
-        Task<AttachmentDto> GetImageFileAsync(Guid id, string imageFileName);
+        Task<ProductVersionPreviewDto> GetPreviewImageAsync(Guid id, string fileName);
     }
 }

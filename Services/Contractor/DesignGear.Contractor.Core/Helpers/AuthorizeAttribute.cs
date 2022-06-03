@@ -8,10 +8,18 @@ namespace DesignGear.Contractor.Core.Helpers
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     {
+        public string? Policy;
+
+        //public AuthorizeAttribute(string policy)
+        //{
+        //    Policy = policy;
+        //}
+
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var user = (User)context.HttpContext.Items["User"];
-            if (user == null)
+            var organizationId = context.HttpContext.Items["OrganizationId"];
+            if (user == null || (organizationId == null && Policy == "OrganizationSelected"))
             {
                 // not logged in
                 context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };

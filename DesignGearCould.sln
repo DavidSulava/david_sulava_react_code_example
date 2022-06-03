@@ -39,6 +39,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignGear.ServerManager.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesignGear.ModelPackage", "DesignGear.ModelPackage\DesignGear.ModelPackage.csproj", "{7424A46B-7708-45E3-8449-8AD2CF9A8331}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notification", "Notification", "{0EEB750D-C8B2-4A74-B045-83C7C400D345}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DesignGear.Notification.Api", "Services\Notification\DesignGear.Notification.Api\DesignGear.Notification.Api.csproj", "{453550A4-9B94-4C10-84BA-0D51AD88F872}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +101,10 @@ Global
 		{7424A46B-7708-45E3-8449-8AD2CF9A8331}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7424A46B-7708-45E3-8449-8AD2CF9A8331}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7424A46B-7708-45E3-8449-8AD2CF9A8331}.Release|Any CPU.Build.0 = Release|Any CPU
+		{453550A4-9B94-4C10-84BA-0D51AD88F872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{453550A4-9B94-4C10-84BA-0D51AD88F872}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{453550A4-9B94-4C10-84BA-0D51AD88F872}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{453550A4-9B94-4C10-84BA-0D51AD88F872}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,6 +120,7 @@ Global
 		{D1856949-5960-4F71-BDF0-E11406DE1BF4} = {13D95225-477C-4498-B829-EA990D6462F9}
 		{5B8284C8-F129-4352-A458-5FCBCAB57AE6} = {6BD07A9F-4CD1-4CE3-98C1-F7A641D58835}
 		{A9DC5B1F-0399-43BE-BFB3-FDCE7FC8AA19} = {6BD07A9F-4CD1-4CE3-98C1-F7A641D58835}
+		{453550A4-9B94-4C10-84BA-0D51AD88F872} = {0EEB750D-C8B2-4A74-B045-83C7C400D345}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C665017-84A2-457F-9D08-914C9DEBA8F5}

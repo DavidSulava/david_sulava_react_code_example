@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using DesignGear.Contractor.Core.Data.Entity;
-using DesignGear.Contracts.Dto;
-using DesignGear.ModelPackage;
+using DesignGear.Contracts.Dto.ConfigManager;
+using DesignGear.Contracts.Models.ConfigManager;
 
 namespace DesignGear.Contractor.Core.Mapping
 {
@@ -9,12 +8,12 @@ namespace DesignGear.Contractor.Core.Mapping
     {
         public ConfigurationMapping()
         {
-            CreateMap<Configuration, ConfigurationDto>(MemberList.None);
-           // CreateMap<ConfigurationCreateDto, Configuration>(MemberList.None);
-            CreateMap<ConfigurationUpdateDto, Configuration>(MemberList.None);
-            CreateMap<DesignGearModelPackage.ConfigurationRow, Configuration>(MemberList.None)
-                .ForMember(x => x.Id, m => m.MapFrom(z => Guid.NewGuid()))
-                .ForMember(x => x.TargetFileId, m => m.Ignore());
+            CreateMap<VmComponentParameterDefinitions, ConfigurationParametersDto>(MemberList.None);
+            CreateMap<VmParameterDefinition, ParameterDefinitionDto>(MemberList.None);
+            CreateMap<VmValueOption, ValueOptionDto>(MemberList.None);
+            CreateMap<ConfigurationParametersDto, VmComponentParameterDefinitions>(MemberList.None);
+            CreateMap<ParameterDefinitionDto, VmParameterDefinition>(MemberList.None);
+            CreateMap<ValueOptionDto, VmValueOption>(MemberList.None);
         }
     }
 }

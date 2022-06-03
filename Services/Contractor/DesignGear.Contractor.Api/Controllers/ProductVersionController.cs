@@ -5,11 +5,13 @@ using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contracts.Models.Contractor;
 using AutoMapper;
 using DesignGear.Common.Extensions;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
-    [Authorize]
+    //[Authorize(Policy = "OrganizationSelected")]
     [Route("[controller]")]
     public class ProductVersionController : ControllerBase
     {
@@ -41,9 +43,9 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ICollection<VmProductVersion>> GetProductVersionItemsAsync(Guid productId)
+        public async Task<DataSourceResult> GetProductVersionItemsAsync(Guid productId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
-            return (await _productVersionService.GetProductVersionsByProductAsync(productId)).MapTo<ICollection<VmProductVersion>>(_mapper);
+            return await _productVersionService.GetProductVersionsByProductAsync(productId, query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ProductVersionItemDto, VmProductVersionItem>));
         }
 
         [HttpGet("{id}")]
@@ -54,14 +56,9 @@ namespace DesignGear.Contractor.Api.Controllers
 
         [HttpGet]
         [Route("{id}/Images/{fileName}")]
-        public async Task<ActionResult> Images([FromRoute] Guid id, [FromRoute] string fileName)
-        {
-            var image = await _productVersionService.GetImageFileAsync(id, fileName);
-            if (image == null || image.Content == null)
-            {
-                return Ok();
-            }
-            return File(image.Content, image.ContentType, image.FileName);
+        public async Task<ActionResult> Images([FromRoute] Guid id, [FromRoute] string fileName) {
+            var preview = await _productVersionService.GetPreviewImageAsync(id, fileName);
+            return File(preview.Content, preview.ContentType, preview.FileName);
         }
 
     }

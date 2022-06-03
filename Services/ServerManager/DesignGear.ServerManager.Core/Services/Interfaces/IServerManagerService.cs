@@ -1,9 +1,14 @@
-﻿namespace DesignGear.ServerManager.Core.Services.Interfaces
+﻿using DesignGear.Contracts.Dto.ServerManager.Derivative;
+using Microsoft.AspNetCore.Http;
+
+namespace DesignGear.ServerManager.Core.Services.Interfaces
 {
     public interface IServerManagerService
 	{
-		Task<string> GetSvfAsync(string filePath);
+		Task<string> TranslateSvfAsync(IFormFile packageFile, string rootFileName);
 
-		Task<string> ProcessModelAsync(string filePath);
+		Task<SvfStatusJobDto> CheckStatusJobAsync(string urn);
+
+		Task<string> ProcessModelAsync(IFormFile packageFile);
 	}
 }

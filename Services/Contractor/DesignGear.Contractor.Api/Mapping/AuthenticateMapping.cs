@@ -10,6 +10,8 @@ namespace DesignGear.Contractor.Api.Mapping
         {
             CreateMap<VmAuthenticateRequest, AuthenticateRequestDto>(MemberList.None);
             CreateMap<AuthenticateResponseDto, VmAuthenticateResponse>(MemberList.None);
+            CreateMap<VmPasswordRecoveryRequest, PasswordRecoveryRequestDto>(MemberList.None);
+            CreateMap<VmPasswordRecoveryCommit, PasswordRecoveryCommitDto>(MemberList.None);
         }
     }
 }

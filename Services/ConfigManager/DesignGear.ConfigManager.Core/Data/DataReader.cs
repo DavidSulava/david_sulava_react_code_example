@@ -19,8 +19,11 @@ namespace DesignGear.ConfigManager.Core.Data
             //_userInfo = userInfo;
         }
 
-        public IQueryable<AppBundle> AppBundles => _context.AppbBundles.AsNoTracking();
+        public IQueryable<AppBundle> AppBundles => _context.AppBundles.AsNoTracking();
+        public IQueryable<ComponentDefinition> ComponentDefinitions => _context.ComponentDefinitions.AsNoTracking();
         public IQueryable<Configuration> Configurations => _context.Configurations.AsNoTracking();
+        public IQueryable<ConfigurationInstance> ConfigurationInstances => _context.ConfigurationInstances.AsNoTracking();
+        public IQueryable<FileItem> FileItems => _context.FileItems.AsNoTracking();
         public IQueryable<ParameterDefinition> ParameterDefinitions => _context.ParameterDefinitions.AsNoTracking();
         public IQueryable<ValueOption> ValueOptions => _context.ValueOptions.AsNoTracking();
     }

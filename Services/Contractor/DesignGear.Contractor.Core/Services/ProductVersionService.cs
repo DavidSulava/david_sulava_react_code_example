@@ -7,9 +7,9 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DesignGear.Common.Exceptions;
 using Microsoft.AspNetCore.StaticFiles;
-using System.IO.Compression;
 using System.Data;
 using DesignGear.Contracts.Communicators.Interfaces;
+using DesignGear.Contracts.Models.ConfigManager;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -19,7 +19,6 @@ namespace DesignGear.Contractor.Core.Services
         private readonly DataAccessor _dataAccessor;
         private readonly IConfigManagerCommunicator _configManagerService;
         private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
-        private readonly string _designGearPackageFileName = "DesignGearPackageContents.json";
 
         public ProductVersionService(IMapper mapper, DataAccessor dataAccessor, IConfigManagerCommunicator configManagerService)
         {
@@ -36,29 +35,21 @@ namespace DesignGear.Contractor.Core.Services
             }
 
             var newItem = _mapper.Map<ProductVersion>(create);
-
-            /*var modelFile = ParseModelFile(newItem.Id, create.ModelFile);
-            if (modelFile != null)
-            {
-                _dataAccessor.Editor.Create(modelFile.Configuration);
-            }
+                        
 
             _dataAccessor.Editor.Create(newItem);
+            if (create.IsCurrent)
+            {
+                var product = await _dataAccessor.Editor.Products.FirstOrDefaultAsync(x => x.Id == create.ProductId);
+                product.CurrentVersionId = newItem.Id;
+            }
             await _dataAccessor.Editor.SaveAsync();
 
-            await SaveImageFilesAsync(newItem.Id, create.ImageFiles);
-            if (modelFile != null)
-                await SaveModelFileAsync(newItem.Id, modelFile.Configuration.Id, create.ModelFile);*/
-
-
-
-            //var request = _mapper.Map<CreateConfigurationRequest>(create);
-            //request.ProductVersionId = newItem.Id;
-            //var product = await _dataAccessor.Reader.Products.FirstOrDefaultAsync(x => x.Id == create.ProductId);
-            //request.OrganizationId = product?.OrganizationId ?? Guid.Empty;
-
-            //await _configManagerService.CreateConfigurationAsync(request);
-
+            var newConfiguration = _mapper.Map<VmConfigurationCreate>(create);
+            newConfiguration.ProductVersionId = newItem.Id;
+            newConfiguration.OrganizationId = (await _dataAccessor.Reader.Products.FirstAsync(x => x.Id == create.ProductId)).OrganizationId;
+            await _configManagerService.CreateConfigurationAsync(newConfiguration);
+            
             return newItem.Id;
         }
 
@@ -69,36 +60,53 @@ namespace DesignGear.Contractor.Core.Services
                 throw new ArgumentNullException(nameof(update));
             }
 
-            var item = await _dataAccessor.Editor.ProductVersions.FirstOrDefaultAsync(x => x.Id == update.Id);
+            var item = await _dataAccessor.Editor.ProductVersions
+                .Include(x => x.ProductVersionPreviews)
+                .FirstOrDefaultAsync(x => x.Id == update.Id);
             if (item == null)
             {
                 throw new EntityNotFoundException<ProductVersion>(update.Id);
             }
 
+            if (update.IsCurrent)
+            {
+                var product = await _dataAccessor.Editor.Products.FirstOrDefaultAsync(x => x.Id == update.ProductId);
+                product.CurrentVersionId = update.Id;
+            }
+
             _mapper.Map(update, item);
 
-            await SaveImageFilesAsync(update.Id, update.ImageFiles);
+            //await SaveImageFilesAsync(update.Id, update.ImageFiles);
 
             await _dataAccessor.Editor.SaveAsync();
         }
 
         public async Task RemoveProductVersionAsync(Guid id)
         {
-            var item = await _dataAccessor.Editor.ProductVersions.FirstOrDefaultAsync(x => x.Id == id);
+            var item = await _dataAccessor.Editor.ProductVersions.Include(x => x.Product).FirstOrDefaultAsync(x => x.Id == id);
             if (item == null)
             {
                 throw new EntityNotFoundException<ProductVersion>(id);
             }
 
+            if (item.Product.CurrentVersionId == item.Id)
+                item.Product.CurrentVersionId = null;
+
             _dataAccessor.Editor.Delete(item);
             await _dataAccessor.Editor.SaveAsync();
-            DeleteFiles(id);
+            //DeleteFiles(id);
+            // todo - delete all configurations
         }
 
-        public async Task<ICollection<ProductVersionDto>> GetProductVersionsByProductAsync(Guid productId)
+        public async Task<TResult> GetProductVersionsByProductAsync<TResult>(Guid productId, Func<IQueryable<ProductVersionItemDto>, TResult> resultBuilder)
         {
-            return await _dataAccessor.Reader.ProductVersions.Where(x => x.ProductId == productId).
-                ProjectTo<ProductVersionDto>(_mapper.ConfigurationProvider).ToListAsync();
+            if (resultBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(resultBuilder));
+            }
+            var query = _dataAccessor.Reader.ProductVersions.Where(x => x.ProductId == productId).ProjectTo<ProductVersionItemDto>(_mapper.ConfigurationProvider);
+            var result = resultBuilder(query);
+            return await Task.FromResult(result);
         }
 
         public async Task<ProductVersionDto> GetProductVersionAsync(Guid id)
@@ -186,35 +194,18 @@ namespace DesignGear.Contractor.Core.Services
             return result;
         }
 
-        public async Task<AttachmentDto> GetImageFileAsync(Guid id, string fileName)
+        public async Task<ProductVersionPreviewDto> GetPreviewImageAsync(Guid id, string fileName)
         {
-            var filePath = $"{_fileBucket}{id}\\images\\";
-            var di = new DirectoryInfo(filePath);
-            if (di.Exists)
-            {
-                var file = di.EnumerateFiles().FirstOrDefault(x => x.Name == fileName);
-                if (file != null)
-                    return await GetFileAsync(file);
+            var preview = await _dataAccessor.Reader.ProductVersionPreviews
+                .Where(x => x.ProductVersionId == id && x.FileName == fileName)
+                .ProjectTo<ProductVersionPreviewDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+
+            if (preview == null) {
+                throw new EntityNotFoundException<ProductVersionPreviewDto>($"Id: {id}, FileName: {fileName}");
             }
 
-            return null;
-        }
-
-        private ModelFileParsed? ParseModelFile(Guid id, AttachmentDto modelFile)
-        {
-            using (var streamContent = new MemoryStream(modelFile.Content))
-            using (var archive = new ZipArchive(streamContent))
-            {
-                var entry = archive.Entries.FirstOrDefault(x => x.Name == _designGearPackageFileName);
-                if (entry != null)
-                    using (var stream = entry.Open())
-                    {
-                        string json = new StreamReader(stream).ReadToEnd();
-                        return new ModelFileParsed(id, json, _mapper);
-                    }
-            }
-
-            return null;
+            return preview;       
         }
     }
 }

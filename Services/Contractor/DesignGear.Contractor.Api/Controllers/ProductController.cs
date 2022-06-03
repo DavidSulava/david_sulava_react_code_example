@@ -5,11 +5,13 @@ using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contracts.Models.Contractor;
 using AutoMapper;
 using DesignGear.Common.Extensions;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
-    [Authorize]
+    [Authorize(Policy = "OrganizationSelected")]
     [Route("[controller]")]
     public class ProductController : ControllerBase
     {
@@ -23,9 +25,11 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> CreateProductAsync(VmProductCreate product)
+        public async Task<Guid> CreateProductAsync(VmProductCreate create)
         {
-            return await _productService.CreateProductAsync(product.MapTo<ProductCreateDto>(_mapper));
+            var product = create.MapTo<ProductCreateDto>(_mapper);
+            product.OrganizationId = (Guid)HttpContext.Items["OrganizationId"];
+            return await _productService.CreateProductAsync(product);
         }
 
         [HttpPut]
@@ -41,9 +45,10 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ICollection<VmProduct>> GetProductItemsAsync(Guid organizationId)
+        public async Task<DataSourceResult> GetProductItemsAsync([DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
-            return (await _productService.GetProductsByOrganizationAsync(organizationId)).MapTo<ICollection<VmProduct>>(_mapper);
+            Guid organizationId = (Guid)HttpContext.Items["OrganizationId"];
+            return await _productService.GetProductsByOrganizationAsync(organizationId, query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<ProductItemDto, VmProductItem>));
         }
 
         [HttpGet("{id}")]

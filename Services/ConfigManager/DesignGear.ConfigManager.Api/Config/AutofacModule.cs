@@ -3,6 +3,8 @@ using DesignGear.ConfigManager.Core.Data;
 using DesignGear.ConfigManager.Core.Jobs;
 using DesignGear.ConfigManager.Core.Services;
 using DesignGear.ConfigManager.Core.Services.Interfaces;
+using DesignGear.ConfigManager.Core.Storage;
+using DesignGear.ConfigManager.Core.Storage.Interfaces;
 using DesignGear.Contracts.Communicators;
 using DesignGear.Contracts.Communicators.Interfaces;
 
@@ -18,7 +20,10 @@ namespace DesignGear.ConfigManager.Api.Config
             builder.RegisterType<DataAccessor>().AsSelf().InstancePerLifetimeScope();
 
             //communicators
-            //builder.RegisterType<ConfigManagerCommunicator>().As<IConfigManagerCommunicator>().InstancePerLifetimeScope();
+            builder.RegisterType<ServerManagerCommunicator>().As<IServerManagerCommunicator>().InstancePerLifetimeScope();
+
+            //file storage
+            builder.RegisterType<ConfigurationFileStorage>().As<IConfigurationFileStorage>().InstancePerLifetimeScope();
 
             //services
             builder.RegisterType<AppBundleService>().As<IAppBundleService>().InstancePerLifetimeScope();

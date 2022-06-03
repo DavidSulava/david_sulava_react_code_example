@@ -18,8 +18,11 @@ namespace DesignGear.ConfigManager.Core.Data
             //_userInfo = userInfo;
         }
 
-        public IQueryable<AppBundle> AppBundles => _context.AppbBundles;
+        public IQueryable<AppBundle> AppBundles => _context.AppBundles;
+        public IQueryable<ComponentDefinition> ComponentDefinitions => _context.ComponentDefinitions;
         public IQueryable<Configuration> Configurations => _context.Configurations;
+        public IQueryable<ConfigurationInstance> ConfigurationInstances => _context.ConfigurationInstances;
+        public IQueryable<FileItem> FileItems => _context.FileItems;
         public IQueryable<ParameterDefinition> ParameterDefinitions => _context.ParameterDefinitions;
         public IQueryable<ValueOption> ValueOptions => _context.ValueOptions;
 
@@ -27,6 +30,11 @@ namespace DesignGear.ConfigManager.Core.Data
         {
             _context.Set<T>().Add(entity);
         }
+
+        public async Task CreateAsync<T>(T entity) where T : class {
+            await _context.Set<T>().AddAsync(entity);
+        }
+
 
         public void Delete<T>(T entity)
         {

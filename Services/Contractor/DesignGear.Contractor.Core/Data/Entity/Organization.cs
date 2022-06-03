@@ -23,8 +23,8 @@ namespace DesignGear.Contractor.Core.Data.Entity
 
         public OrganizationType OrgType { get; set; }
         
-        [ForeignKey("Tariff")]
-        public Guid TariffId { get; set; }
+        //[ForeignKey("Tariff")]
+        public Guid? TariffId { get; set; }
         public virtual Tariff Tariff { get; set; }
 
         public virtual ICollection<UserAssignment> UserAssignments { get; set; }

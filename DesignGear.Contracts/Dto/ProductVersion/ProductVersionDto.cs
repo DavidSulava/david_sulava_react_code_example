@@ -23,5 +23,7 @@
         public ICollection<string> ImageFiles { get; set; }
 
         public ICollection<ConfigurationDto> Configurations { get; set; }
+
+        public bool IsCurrent { get; set; }
     }
 }

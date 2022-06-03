@@ -1,4 +1,5 @@
-﻿using DesignGear.ServerManager.Core;
+﻿using DesignGear.Contracts.Dto.ServerManager.Derivative;
+using DesignGear.ServerManager.Core;
 using DesignGear.ServerManager.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,11 +18,21 @@ namespace DesignGear.ServerManager.Api.Controllers
 			_serverManagerService = serverManagerService;
 		}
 
-		[HttpGet("{id}")]
-		public async Task<IActionResult> Get([FromRoute] Guid id)
+		[HttpPost]
+		public async Task<IActionResult> TranslateSvfAsync([FromForm] IFormFile packageFile, [FromForm] string rootFileName)
 		{
-			var urn = await _serverManagerService.GetSvfAsync(@"D:\Suspension.zip");
+			var urn = await _serverManagerService.TranslateSvfAsync(packageFile, rootFileName);
 			return new ObjectResult(urn);
+		}
+
+		[HttpGet("{urn}")]
+		public async Task<IActionResult> CheckStatusJobAsync([FromRoute] string urn)
+		{
+			var result = await _serverManagerService.CheckStatusJobAsync(urn);
+			if (result.Status == "success")
+				return File(result.SvfFiles, "application/octet-stream");
+			else
+				return Ok(result.Status);
 		}
 	}
 }

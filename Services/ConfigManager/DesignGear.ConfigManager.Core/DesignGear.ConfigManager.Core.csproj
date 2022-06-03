@@ -18,6 +18,17 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\DesignGear.Common\DesignGear.Common.csproj" />
     <ProjectReference Include="..\..\..\DesignGear.Contracts\DesignGear.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\DesignGear.ModelPackage\DesignGear.ModelPackage.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Kendo.Mvc">
+      <HintPath>..\..\..\Kendo\netcoreapp3.1\Kendo.Mvc.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

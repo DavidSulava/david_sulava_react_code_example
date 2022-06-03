@@ -24,20 +24,20 @@ namespace DesignGear.ConfigManager.Core.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ParameterValue>()
+            modelBuilder.Entity<ParameterDefinition>()
                 .HasOne(x => x.Configuration)
-                .WithMany(y => y.ParameterValues)
+                .WithMany(y => y.ParameterDefinitions)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<ParameterValue>()
-                .HasOne(x => x.ParameterDefinition)
-                .WithMany(y => y.ParameterValues)
+            modelBuilder.Entity<Configuration>()
+                .HasOne(x => x.TargetFileItem)
+                .WithOne(y => y.Configuration)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
         }
 
-        public virtual DbSet<AppBundle> AppbBundles { get; set; }
+        public virtual DbSet<AppBundle> AppBundles { get; set; }
 
         public virtual DbSet<ComponentDefinition> ComponentDefinitions { get; set; }
 
@@ -45,13 +45,11 @@ namespace DesignGear.ConfigManager.Core.Data
 
         public virtual DbSet<ConfigurationInstance> ConfigurationInstances { get; set; }
 
+        public virtual DbSet<FileItem> FileItems { get; set; }
+
         public virtual DbSet<ParameterDefinition> ParameterDefinitions { get; set; }
 
-        public virtual DbSet<ParameterValue> ParameterValue { get; set; }
-
-        public virtual DbSet<ValueOption> ValueOptions { get; set; }
-
-        public virtual DbSet<ConfigurationFile> ConfigurationFiles { get; set; }
+        public virtual DbSet<ValueOption> ValueOptions { get; set; }        
 
         private void BeforeSaveChanges()
         {

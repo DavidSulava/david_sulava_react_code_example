@@ -6,12 +6,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DesignGear.ConfigManager.Core.Data.Entity
 {
-    public class Configuration : IGenerateUid
+    public class Configuration : IGenerateUid, ICreated
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Guid Id { get; set; }
+        [StringLength(200)]
+        public string UniqueId { get; set; }
         public ConfigurationStatus Status { get; set; }
         public SvfStatus SvfStatus { get; set; }
+        [StringLength(2000)]
+        public string ErrorMessage { get; set; }
 
         [StringLength(300)]
         public string Name { get; set; }
@@ -20,28 +24,40 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
 
         public ModelState ModelState { get; set; }
 
-        public Guid TargetFileId { get; set; }
+        [ForeignKey("TargetFileItem")]
+        public Guid? TargetFileId { get; set; }
+        public virtual FileItem TargetFileItem { get; set; }
 
-        public Guid OrganizationId { get; set; }
+        public DateTime Created { get; set; }
 
-        public Guid ProductId { get; set; }
+        public Guid RootConfigurationId { get; set; }
 
-        public Guid ProductVersionId { get; set; }
+        public Guid? ParentConfigurationId { get; set; }
 
         [ForeignKey("TemplateConfiguration")]
         public Guid? TemplateConfigurationId { get; set; }
         public virtual Configuration TemplateConfiguration { get; set; }
 
-        [ForeignKey("ComponentDefinition")]
-        public Guid ComponentDefinitionId { get; set; }
+        //[ForeignKey("ComponentDefinition")]
+        public Guid? ComponentDefinitionId { get; set; }
         public virtual ComponentDefinition ComponentDefinition { get; set; }
 
-        public virtual ICollection<ParameterValue> ParameterValues { get; set; }
+        public virtual ICollection<ParameterDefinition> ParameterDefinitions { get; set; }
+        
+        public virtual ICollection<ConfigurationInstance> ConvigurationInstances { get; set; }
 
-        [InverseProperty(nameof(ConfigurationInstance.Configuration))]
-        public virtual ICollection<ConfigurationInstance> ConfigurationInstances { get; set; }
+        public virtual ICollection<FileItem> FileItems { get; set; }
 
-        [InverseProperty(nameof(ConfigurationInstance.ParentConfiguration))]
-        public virtual ICollection<ConfigurationInstance> ParentConfigurationInstances { get; set; }
+        [StringLength(300)]
+        public string? URN { get; set; }
+
+        [NotMapped]
+        public int ComponentDefinitionIdInternal { get; set; }
+
+        [NotMapped]
+        public int TargetFileIdInternal { get; set; }
+
+        [NotMapped]
+        public int ConfigurationId { get; set; }
     }
 }

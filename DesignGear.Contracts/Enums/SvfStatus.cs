@@ -5,10 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DesignGear.Contracts.Enums {
+    [Flags]
     public enum SvfStatus {
         InQueue,
         InProcess,
-        Error,
+        ServiceUnavailableError,
+        IncorrectRequestError,
         Ready
     }
 }
