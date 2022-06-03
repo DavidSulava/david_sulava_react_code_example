@@ -13,10 +13,10 @@ const GuestRoutes: React.FC<propsGuest> = ({
   redirectPath = ERoutes.Organisations,
   children,
 }) => {
-  const {authenticated, checkingAuth} = useAuthCheck()
+  const {authenticated, authLoading} = useAuthCheck()
   const location = useLocation();
 
-  if(authenticated && !checkingAuth) {
+  if(authenticated && !authLoading) {
     return <Navigate to={redirectPath} state={{from: location}} replace/>;
   }
 

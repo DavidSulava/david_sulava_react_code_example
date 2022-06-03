@@ -1,6 +1,6 @@
-import { ERoutes } from '../../router/Routes';
+import { ERoutes } from '../../../router/Routes';
 import React from 'react';
-import BtnLink from '../../components/BtnLink';
+import BtnLink from '../../../components/BtnLink';
 
 const ForgotPassword = () => {
  return(

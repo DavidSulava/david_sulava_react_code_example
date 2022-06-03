@@ -11,15 +11,13 @@ import React, { createContext, ReactElement, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { delProduct, getProduct, putProduct, setFilter, setProduct } from '../../../../stores/product/reducer';
 import useProduct from '../../../../helpers/hooks/useProduct';
-import { IGetProdResp, IProduct, IPutProduct } from '../../../../types/product';
+import { IProduct, IPutProduct } from '../../../../types/product';
 import { Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
 import AddNewProduct from './modals/AddNewPeoduct';
-import { MyEditCell } from './components/MyEditCell';
+import { ProductsActionCell } from './components/ProductsActionCell';
 import { GridInlineFormRow } from './components/GridInlineFormRow';
 import { FormCell, IFormCellProps } from './components/FormCell';
 import { IGridDataState } from '../../../../types/common';
-import { authOrg } from '../../../../stores/authentication/reducer';
 import NoRecords from '../../../../components/grid-components/NoRecords';
 
 export const GridEditContext = createContext<{
@@ -31,7 +29,7 @@ export const GridEditContext = createContext<{
 
 const ActionCell = (props: GridCellProps) => {
   return (
-    <MyEditCell
+    <ProductsActionCell
       {...props}
     />
   )
@@ -45,7 +43,6 @@ export interface IGridProductData extends IProduct{
 }
 const ProductsPage = () => {
   const dispatch = useDispatch()
-  const {organizationId} = useParams();
   const {product, productFilters, isProductLoading} = useProduct()
   const [isShowAddProductModal, setIsShowAddProductModal] = useState(false)
   const [dataState, setDataState] = useState<IGridProductData[]>([]);
@@ -88,8 +85,7 @@ const ProductsPage = () => {
     const updatedData = {
       id: dataItem.id,
       name: dataItem.name,
-      description: dataItem.description,
-      organizationId: dataItem.organizationId
+      description: dataItem.description
     }
     if(updatedData.name && updatedData.description)
       dispatch(putProduct(updatedData as IPutProduct))
@@ -157,7 +153,6 @@ const ProductsPage = () => {
         isShowAddProductModal &&
         <AddNewProduct
           isOpen={isShowAddProductModal}
-          organizationId={organizationId ?? ''}
           onClose={onAddProdClick}
         />
       }

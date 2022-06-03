@@ -5,6 +5,7 @@ import { IOrganisation, IPostOrganisation } from '../../types/organisationPage';
 import { IGetProdResp, IPostProduct, IProduct, IPutProduct } from '../../types/product';
 import { IGetProductVersion, IPostProductVersion, IProductVersion } from '../../types/productVersion';
 import { IAppBundle } from '../../types/common';
+import { IConfigurationParamData, IGetConfigurations } from '../../types/producVersionConfigurations';
 
 export default class Api {
   public static async signIn(formData: ISignInData): Promise<IUser> {
@@ -57,8 +58,20 @@ export default class Api {
     return response.data
   }
 
-  public static async getProdVersion(params: string): Promise<IGetProductVersion> {
+  public static async getProdVersionList(params: string): Promise<IGetProductVersion> {
     const response = await client.get(apiRoutes.productVersion.root(params))
+    return response.data
+  }
+  public static async getProdVersion(id: string): Promise<IProductVersion> {
+    const response = await client.get(apiRoutes.productVersion.item(id))
+    return response.data
+  }
+  public static async getConfigurations(params: string): Promise<IGetConfigurations> {
+    const response = await client.get(apiRoutes.configurations.root(params))
+    return response.data
+  }
+  public static async getConfigParams(configurationId: string): Promise<IConfigurationParamData> {
+    const response = await client.get(apiRoutes.configurations.params(configurationId))
     return response.data
   }
   public static async postProdVersion(formData: IPostProductVersion): Promise<string> {

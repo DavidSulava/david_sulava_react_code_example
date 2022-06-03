@@ -24,6 +24,13 @@ th{
     padding: 0.575rem 0.75rem;
   }
 }
+.btn-with-link{
+  padding: 0;
+  &>*{
+    width: inherit;
+    padding-inline: 12px;
+  }
+}
 .k-grid-toolbar {
   justify-content: end;
 }

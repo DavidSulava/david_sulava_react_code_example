@@ -8,7 +8,7 @@ import setPath from '../../../../../helpers/setPath';
 import { ERoutes } from '../../../../../router/Routes';
 import { IProduct } from '../../../../../types/product';
 
-export const MyEditCell = (props: GridCellProps) => {
+export const ProductsActionCell = (props: GridCellProps) => {
   const onSubmit = useContext(FormSubmitContext);
   const {enterEdit, cancel, onDelete} = useContext(GridEditContext);
   const {organizationId} = useParams();
@@ -44,8 +44,8 @@ export const MyEditCell = (props: GridCellProps) => {
             </>
             :
             <>
-              <Button variant="outline-secondary" className='k-m-1 pt-0 pb-0'>
-                <Link to={setPath(ERoutes.ProdVersion, [organizationId, dataItem.id])} state={{...dataItem as IProduct}}>Show</Link>
+              <Button variant="outline-secondary" className='k-m-1 pt-0 pb-0 btn-with-link'>
+                <Link to={setPath(ERoutes.ProdVersions, [organizationId, dataItem.id])} state={{...dataItem as IProduct}}>Show</Link>
               </Button>
               <Button variant="outline-secondary" className='k-m-1 pt-0 pb-0' onClick={onEditClick}>
                 Edit

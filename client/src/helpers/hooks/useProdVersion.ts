@@ -4,12 +4,14 @@ import { useEffect } from 'react';
 
 const useProdVersion= () => {
   const dataState = useSelector((state: IState) => state.prodVersion.dataState)
-  const prodVersions = useSelector((state: IState) => state.prodVersion.prodVersions)
+  const prodVersionList = useSelector((state: IState) => state.prodVersion.prodVersionList)
+  const prodVersion = useSelector((state: IState) => state.prodVersion.prodVersion)
   const isProdVersionLoading = useSelector((state: IState) => state.prodVersion.isProdVersionLoading)
 
   return {
     dataState,
-    prodVersions,
+    prodVersionList,
+    prodVersion,
     isProdVersionLoading
   }
 }

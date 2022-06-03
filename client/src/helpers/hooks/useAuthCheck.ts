@@ -9,7 +9,7 @@ const useAuthCheck = () => {
   return {
     user: user,
     authenticated: !!user,
-    checkingAuth: isUserLoading,
+    authLoading: isUserLoading,
     tariff
   }
 }

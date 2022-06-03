@@ -1,0 +1,23 @@
+$button-bar-height: 56px;
+
+.version-info-section{
+  @include setFlex(column, start, end);
+  gap: 1px;
+  height: $button-bar-height;
+  margin-bottom: 10px;
+}
+.version-grid{
+  td{
+    text-align: center;
+    justify-content: center;
+  }
+  th{
+    justify-content: center;
+  }
+  .action-cell{
+    @include setFlex(column);
+    & >*{
+      max-width: 120px;
+    }
+  }
+}

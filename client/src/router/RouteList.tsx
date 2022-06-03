@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { ERoutes } from './Routes';
 import ProtectedRoutes from './components/protected-routes';
-import LoginPage from '../pages/LoginPage/LoginPage';
+import LoginPage from '../pages/AuthPages/LoginPage/LoginPage';
 import OrganisationPage from '../pages/OrganisationPage/OrganisationPage';
 import React from 'react';
 import GuestRoutes from './components/guest-routes';
@@ -13,9 +13,10 @@ import PublicationsPage from '../pages/DashboardPage/subPages/PublicationsPage';
 import CPThresholdPage from '../pages/DashboardPage/subPages/CPThresholdPage';
 import UsersPage from '../pages/DashboardPage/subPages/UsersPage';
 import BillingPage from '../pages/DashboardPage/subPages/BillingPage';
-import RegistrationPage from '../pages/RegistrationPage/RegistartionPage';
-import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
-import VersionPage from '../pages/DashboardPage/subPages/ProdVersionPage/VersionPage';
+import RegistrationPage from '../pages/AuthPages/RegistrationPage/RegistartionPage';
+import ForgotPassword from '../pages/AuthPages/ForgotPassword/ForgotPassword';
+import VersionsPage from '../pages/DashboardPage/subPages/ProdVersionsPage/VersionsPage';
+import ProdVersionPage from '../pages/DashboardPage/subPages/ProdVersionPage/ProdVersionPage';
 
 const RouteList = () => {
   return (
@@ -34,7 +35,8 @@ const RouteList = () => {
           <Route index element={<StatisticsPage/>}/>
           <Route path={ERoutes.ManageOrganisation} element={<ManageOrganisationPage/>}/>
           <Route path={ERoutes.Products} element={<ProductsPage/>}/>
-          <Route path={ERoutes.ProdVersion} element={<VersionPage/>}/>
+          <Route path={ERoutes.ProdVersions} element={<VersionsPage/>}/>
+          <Route path={ERoutes.ProdVersion} element={<ProdVersionPage/>}/>
           <Route path={ERoutes.Publications} element={<PublicationsPage/>}/>
           <Route path={ERoutes.CPThreshold} element={<CPThresholdPage/>}/>
           <Route path={ERoutes.Users} element={<UsersPage/>}/>

@@ -4,7 +4,13 @@ import { Field, FieldWrapper, Form, FormElement } from '@progress/kendo-react-fo
 import { IModalWrapperButton } from '../../../../../types/modal';
 import ModalWrapper from '../../../../../components/ModalWrapper/ModalWrapper';
 import CInput from '../../../../../components/form-components/CInput';
-import { isEmpty, isEmptyNoMsg } from '../../../../../components/form-components/helpers/valodation-functions';
+import {
+  isEmpty,
+  isEmptyNoMsg,
+  isImage,
+  isNumberErrorMsg,
+  isZip
+} from '../../../../../components/form-components/helpers/valodation-functions';
 import { Button } from 'react-bootstrap';
 import { getAppBundle } from '../../../../../stores/common/reducer';
 import { IState } from '../../../../../stores/configureStore';
@@ -68,6 +74,7 @@ const CreateVersion: FC<ICreateVerProps> = ({
       // AppBundleId: dataToUpdate.appBundleId,
     })
   }, [dataToUpdate])
+
   const onSubmitLocal = (formData: any) => {
     if(!formRef?.current?.isValid()) return
 
@@ -81,7 +88,8 @@ const CreateVersion: FC<ICreateVerProps> = ({
     // data.append('InventorVersion', formData.AppBundleId.inventorVersion)
     data.append('ProductId', formData.ProductId)
     data.append('AppBundleId', formData.AppBundleId.id)
-    data.append('ModelFile', chosenModelFiles[0])
+    if(chosenModelFiles[0])
+      data.append('ModelFile', chosenModelFiles[0])
     chosenImgFiles.forEach(item => data.append('ImageFiles', item))
 
     if(!dataToUpdate)
@@ -130,7 +138,8 @@ const CreateVersion: FC<ICreateVerProps> = ({
                   name={"SequenceNumber"}
                   component={CInput}
                   label={"Sequence Number"}
-                  validator={isEmpty}
+                  validator={isNumberErrorMsg}
+                  maxLength={10}
                 />
               </div>
               <div className="mb-3">
@@ -146,7 +155,8 @@ const CreateVersion: FC<ICreateVerProps> = ({
                   name={"Version"}
                   component={CInput}
                   label={"Version"}
-                  validator={isEmpty}
+                  validator={isNumberErrorMsg}
+                  maxLength={10}
                 />
               </div>
               <div className="mb-3">
@@ -154,7 +164,8 @@ const CreateVersion: FC<ICreateVerProps> = ({
                   name={"DesignGearVersion"}
                   component={CInput}
                   label={"Design gear version"}
-                  validator={isEmpty}
+                  validator={isNumberErrorMsg}
+                  maxLength={10}
                 />
               </div>
               <div className="mb-3">
@@ -162,7 +173,8 @@ const CreateVersion: FC<ICreateVerProps> = ({
                   name={"InventorVersion"}
                   component={CInput}
                   label={"Inventor version"}
-                  validator={isEmpty}
+                  validator={isNumberErrorMsg}
+                  maxLength={10}
                 />
               </div>
               <div className="mb-3">
@@ -193,7 +205,7 @@ const CreateVersion: FC<ICreateVerProps> = ({
                   chosenFiles={chosenImgFiles}
                   onFileSelect={onFileSelect}
                   onChange={onFileChange}
-                  validator={isEmptyNoMsg}
+                  validator={isImage}
                 />
               </div>
               <div className="mb-3">
@@ -207,7 +219,7 @@ const CreateVersion: FC<ICreateVerProps> = ({
                   chosenFiles={chosenModelFiles}
                   onFileSelect={onModelSelect}
                   onChange={onModelChange}
-                  validator={isEmptyNoMsg}
+                  validator={isZip}
                 />
               </div>
             </fieldset>

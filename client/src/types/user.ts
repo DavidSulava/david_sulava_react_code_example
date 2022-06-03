@@ -19,7 +19,7 @@ export interface ISignUpData {
   firstName: string,
   lastName: string,
   phone: string,
-  role: eUserRoles
+  role: EUserRoles
 }
 
 export interface ITariff {
@@ -29,7 +29,7 @@ export interface ITariff {
 
 export const ACCESS_TOKEN_KEY = 'accessToken'
 
-export enum eUserRoles {
+export enum EUserRoles {
   User = 0,
   Admin = 1,
   SuperAdmin = 2,

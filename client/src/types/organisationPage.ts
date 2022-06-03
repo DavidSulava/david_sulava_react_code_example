@@ -2,18 +2,18 @@ export interface IOrganisation{
   id: string,
   name: string,
   description: string,
-  orgType: eOrganisationTypes,
+  orgType: EOrganisationTypes,
   tariffId: string
 }
 export interface IPostOrganisation{
   name: string,
   description: string,
-  orgType: eOrganisationTypes,
+  orgType: EOrganisationTypes,
   userId: string,
   tariffId?: string
 }
 
-export enum eOrganisationTypes {
+export enum EOrganisationTypes {
   Design = 0,
   Manufacturing = 1,
   Sales = 2,

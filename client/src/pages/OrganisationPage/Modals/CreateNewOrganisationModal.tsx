@@ -7,8 +7,8 @@ import { isEmpty } from '../../../components/form-components/helpers/valodation-
 import { Button } from 'react-bootstrap';
 import CTextArea from '../../../components/form-components/CTextArea';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
-import { eOrganisationTypes, IPostOrganisation } from '../../../types/organisationPage';
-import getEnumKeys from '../../../helpers/getEnumKeys';
+import { EOrganisationTypes, IPostOrganisation } from '../../../types/organisationPage';
+import { enumGetKeys } from '../../../helpers/enumFunctions';
 import { useDispatch } from 'react-redux';
 import useAuthCheck from '../../../helpers/hooks/useAuthCheck';
 import { postOrganisation } from '../../../stores/organisation/reducer';
@@ -24,7 +24,7 @@ const CreateNewOrganisationModal: React.FC<ICommonModalProps> = ({
   const formRef = useRef<Form|null>(null)
   const formSubmitBtnRef = useRef<HTMLButtonElement|null>(null)
   const headerText = 'Create organisation';
-  const organizationTypes = getEnumKeys(eOrganisationTypes)
+  const organizationTypes = enumGetKeys(EOrganisationTypes)
   const formState = {
     "orgType": organizationTypes[0],
   }
@@ -37,7 +37,7 @@ const CreateNewOrganisationModal: React.FC<ICommonModalProps> = ({
     if(!formRef?.current?.isValid()) return
 
     const sendData = formData
-    sendData.orgType = eOrganisationTypes[sendData.orgType]
+    sendData.orgType = EOrganisationTypes[sendData.orgType]
     sendData.userId = user?.id
 
     dispatch(postOrganisation(sendData as IPostOrganisation))
