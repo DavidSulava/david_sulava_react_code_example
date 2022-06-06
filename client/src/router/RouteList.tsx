@@ -6,17 +6,17 @@ import OrganisationPage from '../pages/OrganisationPage/OrganisationPage';
 import React from 'react';
 import GuestRoutes from './components/guest-routes';
 import DashboardPage from '../pages/DashboardPage/DashboardPage';
-import StatisticsPage from '../pages/DashboardPage/subPages/StatisticsPage';
-import ManageOrganisationPage from '../pages/DashboardPage/subPages/ManageOrganisationPage';
-import ProductsPage from '../pages/DashboardPage/subPages/ProductsPage/ProductsPage';
-import PublicationsPage from '../pages/DashboardPage/subPages/PublicationsPage';
-import CPThresholdPage from '../pages/DashboardPage/subPages/CPThresholdPage';
-import UsersPage from '../pages/DashboardPage/subPages/UsersPage';
-import BillingPage from '../pages/DashboardPage/subPages/BillingPage';
+import StatisticsPage from '../pages/DashboardPage/pages/StatisticsPage';
+import ManageOrganisationPage from '../pages/DashboardPage/pages/ManageOrganisationPage';
+import ProductsPage from '../pages/DashboardPage/pages/ProductsPage/ProductsPage';
+import PublicationsPage from '../pages/DashboardPage/pages/PublicationsPage';
+import CPThresholdPage from '../pages/DashboardPage/pages/CPThresholdPage';
+import UsersPage from '../pages/DashboardPage/pages/UsersPage';
+import BillingPage from '../pages/DashboardPage/pages/BillingPage';
 import RegistrationPage from '../pages/AuthPages/RegistrationPage/RegistartionPage';
 import ForgotPassword from '../pages/AuthPages/ForgotPassword/ForgotPassword';
-import VersionsPage from '../pages/DashboardPage/subPages/ProdVersionsPage/VersionsPage';
-import ProdVersionPage from '../pages/DashboardPage/subPages/ProdVersionPage/ProdVersionPage';
+import VersionsPage from '../pages/DashboardPage/pages/ProdVersionsPage/VersionsPage';
+import ProdVersionPage from '../pages/DashboardPage/pages/ProdVersionPage/ProdVersionPage';
 
 const RouteList = () => {
   return (

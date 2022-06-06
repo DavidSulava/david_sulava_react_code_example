@@ -1,0 +1,1 @@
+var API_URL = 'http://evraz-auth1:8056/contractor'

@@ -6,13 +6,13 @@ import Api from '../../services/api/api';
 import { setError } from '../common/reducer';
 import {
   getConfigParams,
-  getConfigurations,
+  getConfigurations, postConfig,
   searchConfiguration,
   setConfigParams,
   setConfigurationsList,
   setIsConfigLoading, setSearchedConfigList
 } from './reducer';
-import { ISearchConfigPayload } from '../../types/producVersionConfigurations';
+import { IPostConfigurations, ISearchConfigPayload } from '../../types/producVersionConfigurations';
 import { IGridFilterSetting } from '../../types/common';
 
 function* getConfigurationsSaga({payload: productVersionId}: PayloadAction<string>): any {
@@ -65,12 +65,22 @@ function* getConfigParamsSaga({payload: productVersionId}: PayloadAction<string>
     yield put(setError(e))
   }
 }
+function* postConfigSaga({payload: formData}: PayloadAction<IPostConfigurations>) {
+  try {
+    yield* call(Api.postConfig,  formData)
+    yield put(getConfigurations(formData.productVersionId))
+  }
+  catch(e: any) {
+    yield put(setError(e))
+  }
+}
 
 function* configurationsWatcher() {
   yield all([
     takeLatest(getConfigurations.type, getConfigurationsSaga),
     takeLatest(getConfigParams.type, getConfigParamsSaga),
-    throttle(1000, searchConfiguration.type, searchConfigurationsSaga)
+    throttle(1000, searchConfiguration.type, searchConfigurationsSaga),
+    takeLatest(postConfig.type, postConfigSaga),
   ])
 }
 

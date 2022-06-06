@@ -102,6 +102,7 @@ const ProdVersionPage = () => {
               textField="name"
               dataItemKey="id"
               defaultValue={appBundle[0]}
+              loading={!appBundle.length}
               // onChange={val => formRef?.current?.valueSetter("AppBundleId", val.target.value)}
               disabled={true}
             />

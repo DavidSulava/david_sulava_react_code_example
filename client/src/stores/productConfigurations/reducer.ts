@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IGridDataFilter, IGridDataStateFilter, IGridFilterSetting, Nullable } from '../../types/common';
-import { IConfigurationParamData, IGetConfigurations, ISearchConfigPayload } from '../../types/producVersionConfigurations';
+import {
+  IConfigurationParamData,
+  IGetConfigurations,
+  IPostConfigurations,
+  ISearchConfigPayload
+} from '../../types/producVersionConfigurations';
 
 export interface IConfigurationsState {
   isConfigLoading: boolean,
@@ -21,7 +26,7 @@ export const initialConfigurationsState: IConfigurationsState = {
       logic: ''
     } as IGridDataFilter,
     group: '',
-    take: 4,
+    take: 5,
     skip: 0,
     sort: [{field: 'created', dir: 'desc'}]
   }
@@ -36,6 +41,8 @@ const configurationsSlice = createSlice({
     searchConfiguration: (state, action: PayloadAction<ISearchConfigPayload>) => {
     },
     getConfigParams: (state, action: PayloadAction<string>) => {
+    },
+    postConfig: (state, action: PayloadAction<IPostConfigurations>) => {
     },
     setConfigParams: (state, action: PayloadAction<IConfigurationParamData>) => {
       state.configParams = action.payload
@@ -59,6 +66,7 @@ export const {
   getConfigurations,
   getConfigParams,
   searchConfiguration,
+  postConfig,
   setConfigParams,
   setIsConfigLoading,
   setConfigurationsList,
