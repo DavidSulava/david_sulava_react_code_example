@@ -4,7 +4,6 @@ using DesignGear.Contracts.Models.ConfigManager;
 using Microsoft.AspNetCore.Mvc;
 using DesignGear.Common.Extensions;
 using DesignGear.Contracts.Dto;
-using DesignGear.Contracts.Models.Contractor;
 
 namespace DesignGear.ConfigManager.Api.Controllers
 {
@@ -46,9 +45,9 @@ namespace DesignGear.ConfigManager.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<VmAppBundle> GetAppBundleAsync([FromRoute] Guid id)
+        public async Task<VmAppBundleItem> GetAppBundleAsync([FromRoute] Guid id)
         {
-            return (await _appBundleService.GetAppBundleAsync(id)).MapTo<VmAppBundle>(_mapper);
+            return (await _appBundleService.GetAppBundleAsync(id)).MapTo<VmAppBundleItem>(_mapper);
         }
     }
 }

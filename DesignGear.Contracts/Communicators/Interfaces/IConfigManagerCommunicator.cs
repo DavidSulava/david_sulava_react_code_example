@@ -6,8 +6,17 @@ namespace DesignGear.Contracts.Communicators.Interfaces
 {
     public interface IConfigManagerCommunicator
     {
-        Task<ICollection<AppBundleDto>> GetAppBundleListAsync();
+        Task<Guid> CreateAppBundleAsync(CreateAppBundleDto create);
+
+        Task UpdateAppBundleAsync(UpdateAppBundleDto update);
         
+        Task RemoveAppBundleAsync(Guid id);
+
+        Task<ICollection<AppBundleDto>> GetAppBundleListAsync();
+
+        Task<AppBundleDto> GetAppBundleAsync(Guid id);
+
+
         Task CreateConfigurationAsync(VmConfigurationCreate create);
 
         Task CreateConfigurationRequestAsync(VmConfigurationRequest request);

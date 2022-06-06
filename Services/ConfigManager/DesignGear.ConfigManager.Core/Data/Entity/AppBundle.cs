@@ -19,6 +19,12 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
 
         [StringLength(300)]
         public string InventorVersion { get; set; }
+        
         public DateTime Created { get; set; }
+        
+        [StringLength(300)]
+        public string FileName { get; set; }
+        
+        public byte[] Content { get; set; }
     }
 }

@@ -46,9 +46,49 @@ namespace DesignGear.Contracts.Communicators
             return await message.Content.ReadAsStringAsync();
         }
 
+        public async Task<Guid> CreateAppBundleAsync(CreateAppBundleDto create)
+        {
+            var content = new MultipartFormDataContent();
+            content.Add(new StringContent(create.Name), "\"Name\"");
+            content.Add(new StringContent(create.Description), "\"Description\"");
+            content.Add(new StringContent(create.DesignGearVersion), "\"DesignGearVersion\"");
+            content.Add(new StringContent(create.InventorVersion), "\"InventorVersion\"");
+            content.Add(new StreamContent(create.File.OpenReadStream()), "\"File\"", create.File.FileName);
+
+            var response = await _httpClient.PostAsync($"{_settings.ConfigManagerUrl}appbundle", content);
+            response.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<Guid>(await response.Content.ReadAsStringAsync());
+        }
+
+        public async Task UpdateAppBundleAsync(UpdateAppBundleDto update)
+        {
+            var content = new MultipartFormDataContent();
+            content.Add(new StringContent(update.Id.ToString()), "\"Id\"");
+            content.Add(new StringContent(update.Name), "\"Name\"");
+            content.Add(new StringContent(update.Description), "\"Description\"");
+            content.Add(new StringContent(update.DesignGearVersion), "\"DesignGearVersion\"");
+            content.Add(new StringContent(update.InventorVersion), "\"InventorVersion\"");
+            if (update.File != null)
+                content.Add(new StreamContent(update.File.OpenReadStream()), "\"File\"", update.File.FileName);
+
+            var response = await _httpClient.PutAsync($"{_settings.ConfigManagerUrl}appbundle", content);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task RemoveAppBundleAsync(Guid id)
+        {
+            var message = await _httpClient.DeleteAsync($"{_settings.ConfigManagerUrl}appbundle?id={id}");
+            message.EnsureSuccessStatusCode();
+        }
+
         public async Task<ICollection<AppBundleDto>> GetAppBundleListAsync()
         {
             return (await SendHttpRequestAsync<ICollection<VmAppBundleItem>>($"{_settings.ConfigManagerUrl}appbundle")).MapTo<ICollection<AppBundleDto>>(_mapper);
+        }
+
+        public async Task<AppBundleDto> GetAppBundleAsync(Guid id)
+        {
+            return (await SendHttpRequestAsync<VmAppBundleItem>($"{_settings.ConfigManagerUrl}appbundle/{id}")).MapTo<AppBundleDto>(_mapper);
         }
 
         public async Task CreateConfigurationAsync(VmConfigurationCreate create)

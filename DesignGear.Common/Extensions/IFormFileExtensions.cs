@@ -1,4 +1,6 @@
-﻿namespace DesignGear.Contractor.Api.Extensions
+﻿using Microsoft.AspNetCore.Http;
+
+namespace DesignGear.Common.Extensions
 {
     public static class IFormFileExtensions
     {

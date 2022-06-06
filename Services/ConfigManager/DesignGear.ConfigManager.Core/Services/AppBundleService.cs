@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DesignGear.Common.Exceptions;
+using DesignGear.Common.Extensions;
 using DesignGear.ConfigManager.Core.Data;
 using DesignGear.ConfigManager.Core.Data.Entity;
 using DesignGear.ConfigManager.Core.Services.Interfaces;
 using DesignGear.Contracts.Dto;
-using DesignGear.Contracts.Models.Contractor;
 using Microsoft.EntityFrameworkCore;
 
 namespace DesignGear.ConfigManager.Core.Services
@@ -48,6 +48,11 @@ namespace DesignGear.ConfigManager.Core.Services
             }
 
             _mapper.Map(update, item);
+            if (update.File != null)
+            {
+                item.Content = update.File.ToArray();
+                item.FileName = update.File.FileName;
+            }
             await _dataAccessor.Editor.SaveAsync();
         }
 

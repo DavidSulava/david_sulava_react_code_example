@@ -1,4 +1,6 @@
-﻿namespace DesignGear.Contracts.Dto
+﻿using Microsoft.AspNetCore.Http;
+
+namespace DesignGear.Contracts.Dto
 {
     public class CreateAppBundleDto
     {
@@ -6,6 +8,6 @@
         public string Description { get; set; }
         public string DesignGearVersion { get; set; }
         public string InventorVersion { get; set; }
-        public AttachmentDto File { get; set; }
+        public IFormFile File { get; set; }
     }
 }
