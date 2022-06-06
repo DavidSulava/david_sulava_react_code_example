@@ -27,7 +27,7 @@ namespace DesignGear.Contractor.Core.Data
         {
             if (!options.IsConfigured)
             {
-                options.UseSqlServer("Server=DATABASE3\\DEV2019;Database=DesignGearCloud;Trusted_Connection=True;");
+                options.UseSqlServer("Server=DESKTOP-04NOTM8\\MSSQLSERVER01;Database=DesignGearCloud;Trusted_Connection=True;");
             }
         }
 
@@ -52,6 +52,8 @@ namespace DesignGear.Contractor.Core.Data
         public virtual DbSet<User> Users { get; set; }
 
         public virtual DbSet<UserAssignment> UserAssignments { get; set; }
+
+        public virtual DbSet<ProductVersionPreview> ProductVersionPreviews { get; set; }
 
         private void BeforeSaveChanges()
         {

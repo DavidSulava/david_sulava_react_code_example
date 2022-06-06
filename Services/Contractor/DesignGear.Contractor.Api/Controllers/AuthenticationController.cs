@@ -22,7 +22,7 @@ namespace DesignGear.Contractor.Api.Controllers
             _mapper = mapper;
         }
 
-        //todo Anton тут можно указать сваггеру какие типы (AuthenticateResponseModel) может возвращать метод,
+        //todo тут можно указать сваггеру какие типы (AuthenticateResponseModel) может возвращать метод,
         //чтобы сваггер это задокументировал и фронтдендер видел эту информацию. Вроде есть како-йто атрибут для этого
         [HttpPost]
         public async Task<IActionResult> AuthenticateAsync(VmAuthenticateRequest model)
@@ -43,6 +43,16 @@ namespace DesignGear.Contractor.Api.Controllers
             var response = await _authenticationService.SetOrganizationAsync(user.Id, organizationId);
 
             return Ok(response.MapTo<VmAuthenticateResponse>(_mapper));
+        }
+
+        [HttpPost("PasswordRecovery")]
+        public async Task SendPasswordRecoveryRequestAsync(VmPasswordRecoveryRequest request) {
+            await _authenticationService.SendPasswordRecoveryRequestAsync(request.MapTo<PasswordRecoveryRequestDto>(_mapper));
+        }
+
+        [HttpPost("PasswordRecoveryConfirm")]
+        public async Task RecoverPasswordAsync(VmPasswordRecoveryCommit commit) {
+            await _authenticationService.ChangePasswordAsync(commit.MapTo<PasswordRecoveryCommitDto>(_mapper));
         }
 
     }

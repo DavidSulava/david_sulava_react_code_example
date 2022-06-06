@@ -1,0 +1,13 @@
+.input-error{
+  color: red;
+}
+
+.upload-component{
+  @include setFlex(column, center, flex-start);
+  .chosen-files-container{
+    @include setFlex(row, flex-start);
+    white-space: nowrap;
+    overflow-x: auto;
+    font-size: 13px;
+  }
+}

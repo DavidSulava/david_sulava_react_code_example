@@ -1,0 +1,62 @@
+.organisations-page {
+  @include setFlex(column);
+  margin-top: 50px;
+  width: 100vw;
+
+  & > * {
+    text-align: center;
+  }
+}
+
+.org-list-wrapper {
+  @include setFlex(column);
+  width: inherit;
+
+  .organisations-list {
+    width: 60%;
+  }
+}
+
+.org-list-header {
+  @include setFlex(column);
+  height: 40px;
+  background-color: #f3f1f1;
+  margin-bottom: 0;
+
+  & > * {
+    display: block;
+  }
+}
+
+.organisation-rows {
+  max-height: 40vh;
+  overflow: auto;
+
+  & > :not(:last-child) {
+    margin-bottom: 1px;
+  }
+
+  .organisation-single-row {
+    @include setFlex(row, space-between);
+    padding: 10px;
+    background-color: #d3d1d1;
+
+    .organisation-item-left {
+      text-align: left;
+    }
+  }
+}
+
+.org-list-footer {
+  @include setFlex(column);
+  border-style: solid solid solid solid;
+  border-color: #d3d1d1;
+  cursor: pointer;
+  color: blue;
+  user-select: none;
+  height: 40px;
+
+  &:active {
+    background-color: #f1efef;
+  }
+}

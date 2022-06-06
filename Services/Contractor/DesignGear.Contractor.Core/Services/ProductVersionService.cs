@@ -35,6 +35,8 @@ namespace DesignGear.Contractor.Core.Services
             }
 
             var newItem = _mapper.Map<ProductVersion>(create);
+                        
+
             _dataAccessor.Editor.Create(newItem);
             if (create.IsCurrent)
             {
@@ -58,7 +60,9 @@ namespace DesignGear.Contractor.Core.Services
                 throw new ArgumentNullException(nameof(update));
             }
 
-            var item = await _dataAccessor.Editor.ProductVersions.FirstOrDefaultAsync(x => x.Id == update.Id);
+            var item = await _dataAccessor.Editor.ProductVersions
+                .Include(x => x.ProductVersionPreviews)
+                .FirstOrDefaultAsync(x => x.Id == update.Id);
             if (item == null)
             {
                 throw new EntityNotFoundException<ProductVersion>(update.Id);
@@ -72,7 +76,7 @@ namespace DesignGear.Contractor.Core.Services
 
             _mapper.Map(update, item);
 
-            await SaveImageFilesAsync(update.Id, update.ImageFiles);
+            //await SaveImageFilesAsync(update.Id, update.ImageFiles);
 
             await _dataAccessor.Editor.SaveAsync();
         }
@@ -190,18 +194,18 @@ namespace DesignGear.Contractor.Core.Services
             return result;
         }
 
-        public async Task<AttachmentDto> GetImageFileAsync(Guid id, string fileName)
+        public async Task<ProductVersionPreviewDto> GetPreviewImageAsync(Guid id, string fileName)
         {
-            var filePath = $"{_fileBucket}{id}\\images\\";
-            var di = new DirectoryInfo(filePath);
-            if (di.Exists)
-            {
-                var file = di.EnumerateFiles().FirstOrDefault(x => x.Name == fileName);
-                if (file != null)
-                    return await GetFileAsync(file);
+            var preview = await _dataAccessor.Reader.ProductVersionPreviews
+                .Where(x => x.ProductVersionId == id && x.FileName == fileName)
+                .ProjectTo<ProductVersionPreviewDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+
+            if (preview == null) {
+                throw new EntityNotFoundException<ProductVersionPreviewDto>($"Id: {id}, FileName: {fileName}");
             }
 
-            return null;
+            return preview;       
         }
     }
 }

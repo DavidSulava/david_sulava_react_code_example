@@ -4,11 +4,13 @@ using DesignGear.Contractor.Api.Config;
 using DesignGear.Contractor.Core.Data;
 using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contracts.Helpers;
+using DesignGear.Contracts.Options;
 using Kendo.Mvc.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile($"appsettings.Local.json", optional: true);
 
 // Add services to the container.
 builder.Services.AddDbContext<DataContext>(
@@ -55,8 +57,11 @@ builder.Services.AddAuthorization(opts => {
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 //builder.Services.Configure<CommunicatorSettings>(builder.Configuration.GetSection("CommunicatorSettings"));
 builder.Services.AddOptions<CommunicatorSettings>().Bind(builder.Configuration.GetSection("CommunicatorSettings")).ValidateDataAnnotations();
+builder.Services.AddOptions<NotificationOptions>().Bind(builder.Configuration.GetSection("Notifications")).ValidateDataAnnotations();
+builder.Services.AddOptions<SecurityOptions>().Bind(builder.Configuration.GetSection("Security")).ValidateDataAnnotations();
 
 builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(builder => {
@@ -64,8 +69,9 @@ builder.Services.AddCors(options => {
             "http://localhost:3000",
             "https://localhost:3000",
             "http://localhost:3000/",
-            "https://localhost:3000/");
-
+            "https://localhost:3000/",
+            "http://95.170.154.243:8055",
+            "http://evraz-auth1:8055");
 
         builder.WithExposedHeaders("Content-Disposition");
         builder.AllowAnyHeader();
@@ -76,9 +82,15 @@ builder.Services.AddCors(options => {
 
 var app = builder.Build();
 
+//Do migration
+using (var scope = app.Services.CreateScope()) {
+    var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+    dataContext.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment()) {
-    app.UseSwagger();
+app.UseSwagger();
     app.UseSwaggerUI();
 //}
 

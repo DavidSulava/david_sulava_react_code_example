@@ -132,6 +132,39 @@ namespace DesignGear.Contractor.Core.Migrations
                     b.ToTable("ProductVersions");
                 });
 
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.ProductVersionPreview", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<Guid>("ProductVersionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductVersionId");
+
+                    b.ToTable("ProductVersionPreviews");
+                });
+
             modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.Tariff", b =>
                 {
                     b.Property<Guid>("Id")
@@ -174,6 +207,15 @@ namespace DesignGear.Contractor.Core.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTimeOffset?>("PasswordChanged")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("PasswordRecoveryKey")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("PasswordRecoveryKeyCreated")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(100)
@@ -248,6 +290,17 @@ namespace DesignGear.Contractor.Core.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.ProductVersionPreview", b =>
+                {
+                    b.HasOne("DesignGear.Contractor.Core.Data.Entity.ProductVersion", "ProductVersion")
+                        .WithMany("ProductVersionPreviews")
+                        .HasForeignKey("ProductVersionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductVersion");
+                });
+
             modelBuilder.Entity("DesignGear.Contractor.Core.Data.Entity.UserAssignment", b =>
                 {
                     b.HasOne("DesignGear.Contractor.Core.Data.Entity.Organization", "Organization")
@@ -281,6 +334,8 @@ namespace DesignGear.Contractor.Core.Migrations
                 {
                     b.Navigation("CurrentVersionProduct")
                         .IsRequired();
+
+                    b.Navigation("ProductVersionPreviews");
                 });
 #pragma warning restore 612, 618
         }

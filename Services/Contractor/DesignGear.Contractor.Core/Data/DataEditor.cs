@@ -24,6 +24,7 @@ namespace DesignGear.Contractor.Core.Data
         public IQueryable<Tariff> Tariffs => _context.Tariffs;
         public IQueryable<User> Users => _context.Users;
         public IQueryable<UserAssignment> UserAssignments => _context.UserAssignments;
+        public IQueryable<ProductVersionPreview> ProductVersionPreviews => _context.ProductVersionPreviews;
 
         public void Create<T>(T entity) where T : class
         {

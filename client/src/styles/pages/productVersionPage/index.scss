@@ -1,0 +1,30 @@
+.version-page{
+  @include setFlex(column, center, stretch);
+  &>:not(:nth-child(1)){
+    margin-top: 15px;
+  }
+}
+.version-info{
+  background-color: $form-background-color;
+  border-radius: 5px;
+  padding: 10px;
+
+  .version-info-body{
+    @include setFlex(row, start, start);
+    gap: 5rem;
+  }
+  .body-row{
+    @include setFlex(row, start, start);
+
+    span{
+      font-weight: 500;
+    }
+    div{
+      margin-left: 5px;
+    }
+  }
+}
+.version-info-button-bar{
+  @include setFlex(row, start, start);
+  gap: 10px;
+}

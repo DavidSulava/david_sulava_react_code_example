@@ -1,0 +1,36 @@
+@import "~@progress/kendo-theme-bootstrap/dist/all.scss";
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import "constants/constants";
+@import "constants/mix-ins";
+@import "components/header";
+@import "components/profile";
+@import "components/forms";
+@import "pages";
+
+body{
+  padding: 0;
+  margin: 0;
+}
+a{
+  text-decoration: none;
+}
+th{
+  user-select: none;
+}
+.btn-nav{
+  @include setFlex(column, center, stretch);
+  padding: 0!important;
+  a{
+    padding: 0.575rem 0.75rem;
+  }
+}
+.btn-with-link{
+  padding: 0;
+  &>*{
+    width: inherit;
+    padding-inline: 12px;
+  }
+}
+.k-grid-toolbar {
+  justify-content: end;
+}

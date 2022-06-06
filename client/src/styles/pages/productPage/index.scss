@@ -1,0 +1,24 @@
+
+$gridHeight: calc(100vh - (#{$header-height} + 100px));
+.product-page{
+  @include setFlex(column, right, end);
+}
+.product-grid{
+  height: $gridHeight;
+  td{
+    text-align: center;
+  }
+  th{
+    justify-content: center;
+  }
+}
+.product-actions-cell, .product-version-cell{
+  @include setFlex(column);
+}
+.grid-cell-form{
+  box-sizing: border-box;
+  height: 90px;
+  .k-form-error{
+    position: absolute;
+  }
+}
