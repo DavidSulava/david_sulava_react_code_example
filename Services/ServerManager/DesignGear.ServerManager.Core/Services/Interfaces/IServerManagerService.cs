@@ -1,5 +1,7 @@
-﻿using DesignGear.Contracts.Dto.ServerManager.Derivative;
+﻿using Autodesk.Forge.DesignAutomation.Model;
+using DesignGear.Contracts.Dto.ServerManager.Derivative;
 using DesignGear.Contracts.Enums;
+using DesignGear.Contracts.Models.ServerManager.Derivative;
 using Microsoft.AspNetCore.Http;
 
 namespace DesignGear.ServerManager.Core.Services.Interfaces
@@ -12,6 +14,8 @@ namespace DesignGear.ServerManager.Core.Services.Interfaces
 
 		Task<byte[]> DownloadSvfAsync(string urn);
 
-		Task<string> ProcessModelAsync(IFormFile packageFile);
+		Task<VmWorkItem> ProcessModelAsync(IFormFile appBundleFile, IFormFile packageFile);
+
+		Task<Status> CheckStatusAsync(string id);
 	}
 }

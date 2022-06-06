@@ -18,11 +18,12 @@ namespace DesignGear.ServerManager.Api.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Get(IFormFile packageFile)
+		public async Task<IActionResult> ProcessModelAsync(IFormFile appBundleFile, IFormFile packageFile)
 		{
-			var url = await _serverManagerService.ProcessModelAsync(packageFile);
+			var result = await _serverManagerService.ProcessModelAsync(appBundleFile, packageFile);
+			return new ObjectResult(result);
+
 			//var url = await _serverManagerService.ProcessModelAsync(@"D:\blocks_and_tables_-_imperial.dwg");
-			return new ObjectResult(url);
 			/*var filePath = $"{_fileBucket}{id}\\model\\";
 			var di = new DirectoryInfo(filePath);
 			if (di.Exists)
@@ -37,5 +38,21 @@ namespace DesignGear.ServerManager.Api.Controllers
 
 			return new NotFoundObjectResult(filePath);*/
 		}
+
+		[HttpGet("{id}")]
+		public async Task<IActionResult> CheckWorkItemStatusJobAsync([FromRoute] string id)
+		{
+			return Ok(await _serverManagerService.CheckStatusAsync(id));
+		}
+
+		//[HttpGet("{url}")]
+		//public async Task<IActionResult> DownloadSvfAsync([FromRoute] string url)
+		//{
+		//	var result = new byte[0];// await _serverManagerService.DownloadSvfAsync(urn);
+		//	if (result != null)
+		//		return File(result, "application/octet-stream");
+		//	else
+		//		return Ok();
+		//}
 	}
 }
