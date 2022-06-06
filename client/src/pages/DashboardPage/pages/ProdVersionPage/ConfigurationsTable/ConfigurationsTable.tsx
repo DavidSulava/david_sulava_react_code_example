@@ -82,7 +82,7 @@ const ConfigurationsTable = () => {
         onDataStateChange={onDataStateChange}
       >
         <GridToolbar>
-          <Button variant="primary" onClick={onPressCreate}  disabled={true}>
+          <Button variant="primary" onClick={onPressCreate}  disabled={false}>
             Create Configuration
           </Button>
           <Button variant="primary" disabled={true}>

@@ -21,6 +21,9 @@ const useUserFromToken = () => {
     }))
     store.dispatch(getTariff())
   }
+  else {
+    store.dispatch(setUser(null))
+  }
 }
 
 export default useUserFromToken

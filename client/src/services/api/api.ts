@@ -5,7 +5,7 @@ import { IOrganisation, IPostOrganisation } from '../../types/organisationPage';
 import { IGetProdResp, IPostProduct, IProduct, IPutProduct } from '../../types/product';
 import { IGetProductVersion, IPostProductVersion, IProductVersion } from '../../types/productVersion';
 import { IAppBundle } from '../../types/common';
-import { IConfigurationParamData, IGetConfigurations } from '../../types/producVersionConfigurations';
+import { IConfigurationParamData, IGetConfigurations, IPostConfigurations } from '../../types/producVersionConfigurations';
 
 export default class Api {
   public static async signIn(formData: ISignInData): Promise<IUser> {
@@ -72,6 +72,10 @@ export default class Api {
   }
   public static async getConfigParams(configurationId: string): Promise<IConfigurationParamData> {
     const response = await client.get(apiRoutes.configurations.params(configurationId))
+    return response.data
+  }
+  public static async postConfig(formData: IPostConfigurations): Promise<IConfigurationParamData> {
+    const response = await client.post(apiRoutes.configurations.root(), formData)
     return response.data
   }
   public static async postProdVersion(formData: IPostProductVersion): Promise<string> {

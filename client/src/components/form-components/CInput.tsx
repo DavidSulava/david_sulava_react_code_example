@@ -13,6 +13,7 @@ const CInput: React.FC<FieldRenderProps> = (fieldRenderProps) => {
     type,
     multiple,
     className,
+    wrapperClassName,
     labelClassName,
     disabled,
     valid,
@@ -37,7 +38,7 @@ const CInput: React.FC<FieldRenderProps> = (fieldRenderProps) => {
   const disabledInputClass = disabled ? "disabled-input" : ""
 
   return (
-    <FieldWrapper>
+    <FieldWrapper className={wrapperClassName}>
       {label && (
         <label className={`${labelClassName ?? ""} ${inputErrorClass}`}>{label}</label>
       )}

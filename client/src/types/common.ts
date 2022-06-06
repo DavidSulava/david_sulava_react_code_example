@@ -1,6 +1,12 @@
 import { SortDescriptor } from '@progress/kendo-data-query';
 import { JwtPayload } from 'jwt-decode';
 
+declare global {
+  interface Window {
+    API_URL: string;
+  }
+}
+
 export type Nullable<T> = T|undefined|null
 
 export interface IKendoResp {

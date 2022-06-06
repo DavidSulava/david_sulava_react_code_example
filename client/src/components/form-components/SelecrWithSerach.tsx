@@ -46,15 +46,14 @@ const CSelectWithSearch: FC<ISelectWithSearchProps> = ({
     setDataInner(data)
   }, [data])
   useEffect(() => {
-    onRequestData(0, selectLengthInner, filter);
+    // onRequestData(0, selectLengthInner, filter);
   }, [filter]);
 
   const onFilterChange = useCallback((event: DropDownListFilterChangeEvent) => {
     const filter = event.filter.value;
     onRequestData(0, selectLengthInner, filter);
-
     setFilter(filter);
-  }, [onRequestData]);
+  }, []);
 
   const onChangeInner = useCallback((event: DropDownListChangeEvent) => {
     const value = event.target.value;
