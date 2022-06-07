@@ -1,6 +1,7 @@
 ﻿using DesignGear.Contracts.Dto;
 using DesignGear.Contracts.Dto.ServerManager.Derivative;
 using DesignGear.Contracts.Enums;
+using DesignGear.Contracts.Models.ServerManager.Derivative;
 
 namespace DesignGear.Contracts.Communicators.Interfaces
 {
@@ -11,5 +12,7 @@ namespace DesignGear.Contracts.Communicators.Interfaces
         Task<SvfStatus> CheckStatusJobAsync(string urn);
 
         Task<byte[]> DownloadSvfAsync(string urn);
+
+        Task<VmWorkItem> ProcessModelAsync(byte[] appBundleFile, FileStreamDto packageFile);
     }
 }

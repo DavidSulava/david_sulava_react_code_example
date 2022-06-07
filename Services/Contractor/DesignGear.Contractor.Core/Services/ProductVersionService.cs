@@ -18,7 +18,6 @@ namespace DesignGear.Contractor.Core.Services
         private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
         private readonly IConfigManagerCommunicator _configManagerService;
-        private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
 
         public ProductVersionService(IMapper mapper, DataAccessor dataAccessor, IConfigManagerCommunicator configManagerService)
         {

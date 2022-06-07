@@ -4,6 +4,7 @@ using DesignGear.ConfigManager.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DesignGear.ConfigManager.Core.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220607043455_configuration_update")]
+    partial class configuration_update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,6 +113,9 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("AppBundleId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -170,6 +175,8 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .HasColumnType("nvarchar(300)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppBundleId");
 
                     b.HasIndex("ComponentDefinitionId");
 
@@ -353,6 +360,12 @@ namespace DesignGear.ConfigManager.Core.Migrations
 
             modelBuilder.Entity("DesignGear.ConfigManager.Core.Data.Entity.Configuration", b =>
                 {
+                    b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.AppBundle", "AppBundle")
+                        .WithMany()
+                        .HasForeignKey("AppBundleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.ComponentDefinition", "ComponentDefinition")
                         .WithMany("Configurations")
                         .HasForeignKey("ComponentDefinitionId");
@@ -365,6 +378,8 @@ namespace DesignGear.ConfigManager.Core.Migrations
                     b.HasOne("DesignGear.ConfigManager.Core.Data.Entity.Configuration", "TemplateConfiguration")
                         .WithMany()
                         .HasForeignKey("TemplateConfigurationId");
+
+                    b.Navigation("AppBundle");
 
                     b.Navigation("ComponentDefinition");
 

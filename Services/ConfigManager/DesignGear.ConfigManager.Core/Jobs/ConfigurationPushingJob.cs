@@ -9,15 +9,18 @@ namespace DesignGear.ConfigManager.Core.Jobs
 {
     public class ConfigurationPushingJob : IJob
     {
+        private readonly IAppBundleService _appBundleService;
         private readonly IConfigurationService _configurationService;
         private readonly IServerManagerCommunicator _serverManagerService;
         private readonly IConfigurationFileStorage _configurationFileStorage;
 
 
-        public ConfigurationPushingJob(IConfigurationService configurationService,
+        public ConfigurationPushingJob(IAppBundleService appBundleService,
+            IConfigurationService configurationService,
             IServerManagerCommunicator serverManagerService,
             IConfigurationFileStorage configurationFileStorage)
         {
+            _appBundleService = appBundleService ?? throw new ArgumentNullException(nameof(appBundleService));
             _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
             _serverManagerService = serverManagerService ?? throw new ArgumentNullException(nameof(serverManagerService));
             _configurationFileStorage = configurationFileStorage ?? throw new ArgumentNullException(nameof(configurationFileStorage));
@@ -43,6 +46,14 @@ namespace DesignGear.ConfigManager.Core.Jobs
                     /*
                      * Здесь выполняем отправку в инвентор и меняем статус конфигурации на InProcess
                      */
+                    var packageFile = _configurationFileStorage.GetZipArchive(configuration.ProductVersionId, configuration.Id);
+                    var appBundleFile = _appBundleService.GetAppBundleAsync(configuration.AppBundleId);
+                    if (packageFile != null && appBundleFile != null)
+                    {
+                        //var urn = _serverManagerService.ProcessModelAsync(appBundleFile.Content, packageFile);
+
+
+                    }
                 }
                 catch (Exception ex)
                 {

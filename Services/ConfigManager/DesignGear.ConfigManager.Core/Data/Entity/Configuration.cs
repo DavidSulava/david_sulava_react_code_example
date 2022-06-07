@@ -51,6 +51,12 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         [StringLength(300)]
         public string? URN { get; set; }
 
+        [StringLength(100)]
+        public string? WorkItemId { get; set; }
+
+        [StringLength(300)]
+        public string? WorkItemUrl { get; set; }
+
         [NotMapped]
         public int ComponentDefinitionIdInternal { get; set; }
 

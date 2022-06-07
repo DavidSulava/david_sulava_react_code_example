@@ -1,5 +1,4 @@
-﻿using DesignGear.ServerManager.Core.Services;
-using DesignGear.ServerManager.Core.Services.Interfaces;
+﻿using DesignGear.ServerManager.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesignGear.ServerManager.Api.Controllers
@@ -22,21 +21,6 @@ namespace DesignGear.ServerManager.Api.Controllers
 		{
 			var result = await _serverManagerService.ProcessModelAsync(appBundleFile, packageFile);
 			return new ObjectResult(result);
-
-			//var url = await _serverManagerService.ProcessModelAsync(@"D:\blocks_and_tables_-_imperial.dwg");
-			/*var filePath = $"{_fileBucket}{id}\\model\\";
-			var di = new DirectoryInfo(filePath);
-			if (di.Exists)
-			{
-				var fullName = di.EnumerateFiles().FirstOrDefault()?.FullName;
-				if (!string.IsNullOrEmpty(fullName))
-				{
-					var url = await new ServerManager().ProcessModelAsync(fullName);
-					return new ObjectResult(url);
-				}
-			}
-
-			return new NotFoundObjectResult(filePath);*/
 		}
 
 		[HttpGet("{id}")]

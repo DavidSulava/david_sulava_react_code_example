@@ -4,6 +4,7 @@ using DesignGear.Contracts.Dto;
 using DesignGear.Contracts.Dto.ServerManager.Derivative;
 using DesignGear.Contracts.Enums;
 using DesignGear.Contracts.Helpers;
+using DesignGear.Contracts.Models.ServerManager.Derivative;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -38,11 +39,6 @@ namespace DesignGear.Contracts.Communicators
         {
             var content = new MultipartFormDataContent();
             content.Add(new StreamContent(packageFile.Content), "\"packageFile\"", packageFile.FileName);
-            /*using (var memoryStream = new MemoryStream())
-            {
-                await packageFile.Content.CopyToAsync(memoryStream);
-                content.Add(new ByteArrayContent(memoryStream.ToArray()), "\"packageFile\"", packageFile.FileName);
-            }*/
             content.Add(new StringContent(rootFileName), "\"rootFileName\"");
 
             var response = await _httpClient.PostAsync($"{_settings.ServerManagerUrl}derivative", content);
@@ -60,6 +56,17 @@ namespace DesignGear.Contracts.Communicators
             var message = await _httpClient.GetAsync($"{_settings.ServerManagerUrl}derivative/{urn}");
             message.EnsureSuccessStatusCode();
             return await message.Content.ReadAsByteArrayAsync();
+        }
+
+        public async Task<VmWorkItem> ProcessModelAsync(byte[] appBundleFile, FileStreamDto packageFile)
+        {
+            var content = new MultipartFormDataContent();
+            content.Add(new ByteArrayContent(appBundleFile), "\"appBundleFile\"");
+            content.Add(new StreamContent(packageFile.Content), "\"packageFile\"", packageFile.FileName);
+
+            var response = await _httpClient.PostAsync($"{_settings.ServerManagerUrl}automation", content);
+            response.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<VmWorkItem>(await response.Content.ReadAsStringAsync());
         }
     }
 }
