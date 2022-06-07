@@ -1,5 +1,5 @@
 import { IKendoResp } from './common';
-import { IConfigurations } from './producVersionConfigurations';
+import { IConfigurationListItem } from './producVersionConfigurations';
 
 export interface IGetProductVersionList extends IKendoResp {
   data: IProductVersionList[],
@@ -33,7 +33,7 @@ export interface IProductVersion {
   productId: string,
   isCurrent: boolean,
   imageFiles: string[],
-  configurations: IConfigurations[],
+  configurations: IConfigurationListItem[],
 }
 
 export interface IProductVersionList {

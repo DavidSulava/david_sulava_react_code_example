@@ -1,8 +1,8 @@
-import { IConfigParam, IConfigurationParamData } from '../../../../../../types/producVersionConfigurations';
+import { IConfigParam, IConfigurationParamData } from '../../../../../../../types/producVersionConfigurations';
 import React, { FC, RefObject, useEffect, useState } from 'react';
 import { Field, Form } from '@progress/kendo-react-form';
-import CInput from '../../../../../../components/form-components/CInput';
-import { isEmpty } from '../../../../../../components/form-components/helpers/valodation-functions';
+import CInput from '../../../../../../../components/form-components/CInput';
+import { isEmpty } from '../../../../../../../components/form-components/helpers/valodation-functions';
 import { DropDownList, DropDownListChangeEvent } from '@progress/kendo-react-dropdowns';
 import NavPanel from './NavPannelParams';
 
@@ -24,9 +24,11 @@ export interface IConfigItem {
 interface IParamProps {
   configs: IConfigurationParamData
   formRef: RefObject<Form>
+  title: string,
+  isDisabled?: boolean,
 }
 
-const Parameters: FC<IParamProps> = ({configs, formRef}) => {
+const Parameters: FC<IParamProps> = ({configs, formRef, title, isDisabled= false}) => {
   const ARRAY_INPUT_NAME_C_PARAMS = 'parameterValues'
   const [configItems, setConfigItems] = useState<IConfigItem>()
   const [parameterItems, setParameterItems] = useState<IParamItemInner[]>([])
@@ -129,7 +131,7 @@ const Parameters: FC<IParamProps> = ({configs, formRef}) => {
   return (
     <>
       <legend className="k-form-legend">
-        Please set configuration parameters:
+        {title}
       </legend>
       <div className="config-parameters-container">
         <div className="conf-param-navigation">
@@ -157,7 +159,7 @@ const Parameters: FC<IParamProps> = ({configs, formRef}) => {
                             defaultValue={getDefaultValOptions(param)}
                             onChange={(e) => onParamChange(e, param)}
                             required={true}
-                            disabled={param.isReadOnly}
+                            disabled={param.isReadOnly ||  isDisabled}
                           />
                         </div>
                         :
@@ -178,8 +180,6 @@ const Parameters: FC<IParamProps> = ({configs, formRef}) => {
           }
         </div>
       </div>
-      <legend className="k-form-legend">
-      </legend>
     </>
   )
 }

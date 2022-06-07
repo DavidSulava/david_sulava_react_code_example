@@ -11,6 +11,7 @@ export enum ERoutes {
   Dashboard = '/dashboard/:organizationId',
   ProdVersions = '/dashboard/:organizationId/:productId/products',
   ProdVersion = '/dashboard/:organizationId/:productId/:versionId/products',
+  ProdVersionConfig = '/dashboard/:organizationId/:productId/:versionId/:configId/products',
 
   ManageOrganisation = 'manage-organisation',
   Products = 'products',

@@ -1,10 +1,10 @@
+$product-grid-height: calc(100vh - (#{$header-height} + #{$dash-board-header-height}) - 15px);
 
-$gridHeight: calc(100vh - (#{$header-height} + 100px));
 .product-page{
   @include setFlex(column, right, end);
 }
 .product-grid{
-  height: $gridHeight;
+  max-height: $product-grid-height;
   td{
     text-align: center;
   }

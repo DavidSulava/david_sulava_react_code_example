@@ -7,22 +7,37 @@ import CreateNewOrganisationModal from './Modals/CreateNewOrganisationModal';
 import { ERoutes } from '../../router/Routes';
 import { getOrganisations } from '../../stores/organisation/reducer';
 import setPath from '../../helpers/setPath';
-import BtnLink from '../../components/BtnLink';
+import { authOrg } from '../../stores/authentication/reducer';
+import { useNavigate } from 'react-router-dom';
+import { setPostReqResp } from '../../stores/common/reducer';
 
 const OrganisationPage = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate();
   const organisations = useSelector((store: IState) => store.organisation.organisations)
-  const {user} = useAuthCheck()
+  const postResp = useSelector((state: IState) => state.common.postReqResp)
+  const {user, authLoading} = useAuthCheck()
 
   const [isShowCreateOrgModal, setShowCreateOrgModal] = useState(false)
+  const [pressedOrgId, setPressedOrgId] = useState('')
 
   useEffect(() => {
     if(user)
       dispatch(getOrganisations(user?.id))
   }, [dispatch])
+  useEffect(()=>{
+    if(postResp && pressedOrgId){
+      navigate(setPath(ERoutes.Dashboard, [pressedOrgId]))
+      dispatch(setPostReqResp(''))
+    }
+  },[postResp])
 
   const onCreateOrganisation = () => setShowCreateOrgModal(true)
   const onCreateOrganisationClose = () => setShowCreateOrgModal(false)
+  const onLoginSpacePress = (id:string) => {
+    setPressedOrgId(id)
+    dispatch(authOrg(id))
+  }
 
   const organisationsList = () => {
     return (
@@ -42,7 +57,7 @@ const OrganisationPage = () => {
                     <div>{org.description}</div>
                   </div>
                   <div>
-                    <BtnLink to={setPath(ERoutes.Dashboard, [org.id])} className='btn btn-primary'>Log into space</BtnLink>
+                    <Button onClick={()=>onLoginSpacePress(org.id)} disabled={authLoading}>Log into space</Button>
                   </div>
                 </div>
               )

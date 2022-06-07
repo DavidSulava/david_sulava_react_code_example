@@ -3,3 +3,9 @@
 @import "productPage";
 @import "productVersionsPage";
 @import "productVersionPage";
+@import "productConfigurationPage";
+
+.page-body{
+  height: calc( 100vh - (#{$header-height}));
+  overflow-y: auto;
+}

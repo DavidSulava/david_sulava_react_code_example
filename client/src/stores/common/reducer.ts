@@ -3,7 +3,7 @@ import { IAppBundle } from '../../types/appBundle';
 
 export interface ICommonState {
   error: any,
-  postReqResp: string,
+  postReqResp: any,
   appBundle: IAppBundle[],
 }
 
@@ -17,7 +17,7 @@ const commonSlice = createSlice({
   name: "common",
   initialState: initialState,
   reducers: {
-    setPostReqResp: (state, action: PayloadAction<string>) => {
+    setPostReqResp: (state, action: PayloadAction<any>) => {
       state.postReqResp = action.payload
     },
     setError: (state, action: PayloadAction<string>) => {

@@ -20,6 +20,7 @@ export const apiRoutes = {
   },
   configurations: {
     root: (dataString: string = '') => `${BASE_URL}/Configuration${dataString ? '?' + dataString : ''}`,
+    item: (id: string) => `${BASE_URL}/Configuration/${id}`,
     params: (configurationId: string) => `${BASE_URL}/Configuration/${configurationId}/parameters`,
   },
   appBundle: `${BASE_URL}/AppBundle`,

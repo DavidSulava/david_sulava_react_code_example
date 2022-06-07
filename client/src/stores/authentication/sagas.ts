@@ -55,11 +55,16 @@ function* signUpSaga({payload:formData}: PayloadAction<ISignUpData>) {
 
 function* authOrgSaga({payload:orgId}: PayloadAction<string>) {
   try {
+    yield put(setIsUserLoading(true))
     const response = yield* call(Api.authOrg, orgId)
     setLocalStorage(ACCESS_TOKEN_KEY, response.token)
+    yield put(setPostReqResp(response.token))
   }
   catch(e: any) {
     yield put(setError(e))
+  }
+  finally {
+    yield put(setIsUserLoading(false))
   }
 }
 
