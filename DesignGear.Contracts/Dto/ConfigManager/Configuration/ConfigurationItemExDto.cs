@@ -9,5 +9,6 @@
         public string URN { get; set; }
         public string WorkItemId { get; set; }
         public string WorkItemUrl { get; set; }
+        public Guid AppBundleId { get; set; }
     }
 }

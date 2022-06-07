@@ -18,6 +18,7 @@ namespace DesignGear.ConfigManager.Core.Mapping {
                 .ForMember(x => x.ConfigurationName, m => m.MapFrom(x => x.Name))
                 .ForMember(x => x.ComponentName, m => m.MapFrom(x => x.ComponentDefinition.Name))
                 .ForMember(x => x.ProductVersionId, m => m.MapFrom(x => x.ComponentDefinition.ProductVersionId))
+                .ForMember(x => x.AppBundleId, m => m.MapFrom(x => x.ComponentDefinition.AppBundleId))
                 .ForMember(x => x.RootFileName, m => m.MapFrom(x => x.TargetFileItem.FilePath));
             CreateMap<ConfigurationRequestDto, Configuration>(MemberList.None)
                 .ForMember(x => x.UniqueId, m => m.MapFrom(z => Guid.Empty))

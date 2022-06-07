@@ -10,7 +10,6 @@ namespace DesignGear.Contracts.Dto.ConfigManager
         public ConfigurationStatus Status { get; set; }
         public SvfStatus SvfStatus { get; set; }
         public DateTime Created { get; set; }
-        public Guid AppBundleId { get; set; }
         public ICollection<ConfigurationItemDto> Childs { get; set; }
     }
 }

@@ -61,7 +61,7 @@ namespace DesignGear.Contracts.Communicators
         public async Task<VmWorkItem> ProcessModelAsync(byte[] appBundleFile, FileStreamDto packageFile)
         {
             var content = new MultipartFormDataContent();
-            content.Add(new ByteArrayContent(appBundleFile), "\"appBundleFile\"");
+            content.Add(new ByteArrayContent(appBundleFile), "\"appBundleFile\"", "appbundle");
             content.Add(new StreamContent(packageFile.Content), "\"packageFile\"", packageFile.FileName);
 
             var response = await _httpClient.PostAsync($"{_settings.ServerManagerUrl}automation", content);

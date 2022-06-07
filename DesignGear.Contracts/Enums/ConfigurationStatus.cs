@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DesignGear.Contracts.Enums {
+﻿namespace DesignGear.Contracts.Enums
+{
+    [Flags]
     public enum ConfigurationStatus {
-        InQueue,
-        InProcess,
+        InQueue = 1,
+        InProcess = 2,
         /*Ограничить кол-во запросов для заявок на конфигурацию с данным статусом (или прекратить делать запросы совсем или увеличивать интревал между запросами)*/
-        ServiceUnavailableError,
-        IncorrectRequestError,
-        InvalidConfiguration,
-        Ready
+        ServiceUnavailableError = 4,
+        IncorrectRequestError = 8,
+        InvalidConfiguration = 16,
+        Ready = 32
     }
 }
