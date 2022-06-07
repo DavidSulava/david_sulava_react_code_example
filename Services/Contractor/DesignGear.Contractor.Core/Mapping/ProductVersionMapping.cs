@@ -18,7 +18,10 @@ namespace DesignGear.Contractor.Core.Mapping
             CreateMap<ProductVersionPreview, ProductVersionPreviewDto>(MemberList.None);
 
             CreateMap<ProductVersion, ProductVersionDto>(MemberList.None)
-                .ForMember(x => x.IsCurrent, m => m.MapFrom(z => z.Product.CurrentVersionId == z.Id));
+                .ForMember(x => x.IsCurrent, m => m.MapFrom(z => z.Product.CurrentVersionId == z.Id))
+                .ForMember(x => x.ImageFiles, m => m.MapFrom(z => z.ProductVersionPreviews));
+            CreateMap<ProductVersionPreview, string>(MemberList.None)
+                .ConvertUsing(x => x.FileName);
             CreateMap<ProductVersion, ProductVersionItemDto>(MemberList.None);
             CreateMap<ProductVersionCreateDto, ProductVersion>(MemberList.None)
                 .ForMember(x => x.Id, m => m.MapFrom(z => Guid.NewGuid()))
