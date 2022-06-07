@@ -15,6 +15,10 @@ export interface IKendoResp {
   errors: any,
   total: number
 }
+export interface IKendoOnChangeEvent {
+  target?: any,
+  value?: any
+}
 
 export interface  IGridFilterSetting {
   value: string,
@@ -36,14 +40,6 @@ export interface IGridDataState {
   take: number,
   skip: number,
   sort: SortDescriptor[]
-}
-
-export interface IAppBundle {
-  id: string,
-  name: string,
-  description: string,
-  designGearVersion: string,
-  inventorVersion: string,
 }
 
 export interface IAppJwtPayload extends JwtPayload{

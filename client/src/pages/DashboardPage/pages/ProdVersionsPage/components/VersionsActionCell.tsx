@@ -22,7 +22,7 @@ const VersionsActionCell = (props: GridCellProps) => {
       <Button variant="outline-secondary" className='k-m-1 pt-0 pb-0 btn-with-link'>
         <Link to={setPath(ERoutes.ProdVersion, [productId, dataItem.productId, dataItem.id])} state={{...dataItem as IProduct}}>Show</Link>
       </Button>
-      <Button variant="outline-secondary" className='k-m-1 pt-0 pb-0' disabled={true} onClick={() => onEdit(dataItem)}>
+      <Button variant="outline-secondary" className='k-m-1 pt-0 pb-0' onClick={() => onEdit(dataItem)}>
         Edit
       </Button>
       <Button
