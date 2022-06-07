@@ -75,8 +75,6 @@ namespace DesignGear.Contractor.Core.Services
 
             _mapper.Map(update, item);
 
-            //await SaveImageFilesAsync(update.Id, update.ImageFiles);
-
             await _dataAccessor.Editor.SaveAsync();
         }
 
