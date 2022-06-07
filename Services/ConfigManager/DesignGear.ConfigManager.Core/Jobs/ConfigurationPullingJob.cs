@@ -34,7 +34,13 @@ namespace DesignGear.ConfigManager.Core.Jobs
              * через IConfigurationService. Фиксируем статус Ready для тех конфигураций, который в итоге пересчитаны
              */
             foreach (var configuration in configurations) {
-            
+                var result = _serverManagerService.CheckStatusJobAsync(configuration.WorkItemId).Result;
+                if (result == ConfigurationStatus.Ready)
+                {
+                    //download
+                    //save
+                    //update status
+                }
             }
 
             /*
@@ -47,7 +53,7 @@ namespace DesignGear.ConfigManager.Core.Jobs
 
             foreach (var configuration in configurations)
             {
-                var result = _serverManagerService.CheckStatusJobAsync(configuration.URN).Result;
+                var result = _serverManagerService.CheckSvfStatusJobAsync(configuration.URN).Result;
                 if (result == SvfStatus.Ready)
                 {
                     var file = _serverManagerService.DownloadSvfAsync(configuration.URN).Result;

@@ -16,6 +16,6 @@ namespace DesignGear.ServerManager.Core.Services.Interfaces
 
 		Task<VmWorkItem> ProcessModelAsync(IFormFile appBundleFile, IFormFile packageFile);
 
-		Task<Status> CheckStatusAsync(string id);
+		Task<ConfigurationStatus> CheckStatusAsync(string id);
 	}
 }

@@ -23,7 +23,7 @@ namespace DesignGear.ServerManager.Api.Controllers
 			return new ObjectResult(result);
 		}
 
-		[HttpGet("{id}")]
+		[HttpGet("{id}/status")]
 		public async Task<IActionResult> CheckWorkItemStatusJobAsync([FromRoute] string id)
 		{
 			return Ok(await _serverManagerService.CheckStatusAsync(id));

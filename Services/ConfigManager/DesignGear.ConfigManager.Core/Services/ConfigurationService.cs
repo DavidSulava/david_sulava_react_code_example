@@ -293,6 +293,18 @@ namespace DesignGear.ConfigManager.Core.Services
             _dataAccessor.Editor.Save();
         }
 
+        public void UpdateModelStatus(ConfigurationUpdateModelDto update)
+        {
+            var item = _dataAccessor.Editor.Configurations.FirstOrDefault(x => x.Id == update.ConfigurationId);
+            if (item == null)
+            {
+                throw new EntityNotFoundException<Configuration>(update.ConfigurationId);
+            }
+
+            _mapper.Map(update, item);
+            _dataAccessor.Editor.Save();
+        }
+
 
         //public async Task<Guid> CreateConfigurationAsync(ConfigurationCreateDto create)
         //{

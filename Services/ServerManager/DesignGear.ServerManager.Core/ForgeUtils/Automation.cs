@@ -47,14 +47,15 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
 
         public async Task<Status> CheckStatusAsync(string id)
         {
-            WorkItemStatus workItemStatus;
-            do
-            {
-                await Task.Delay(TimeSpan.FromSeconds(2));
-                workItemStatus = await api.GetWorkitemStatusAsync(id);
-            }
-            while (!workItemStatus.Status.IsDone());
-            return workItemStatus.Status;
+            return (await api.GetWorkitemStatusAsync(id)).Status;
+            //WorkItemStatus workItemStatus;
+            //do
+            //{
+            //    await Task.Delay(TimeSpan.FromSeconds(2));
+            //    workItemStatus = await api.GetWorkitemStatusAsync(id);
+            //}
+            //while (!workItemStatus.Status.IsDone());
+            //return workItemStatus.Status;
         }
 
         public async Task<string> SetupActivityAsync(string myApp)

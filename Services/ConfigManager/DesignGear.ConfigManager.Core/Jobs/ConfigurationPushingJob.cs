@@ -53,13 +53,13 @@ namespace DesignGear.ConfigManager.Core.Jobs
                         var result = _serverManagerService.ProcessModelAsync(appBundleFile.Content, packageFile).Result;
                         if (result != null)
                         {
-                            //_configurationService.UpdateModelStatus(new ConfigurationUpdateModelDto
-                            //{
-                            //    ConfigurationId = configuration.Id,
-                            //    Status = Status.InProcess,
-                            //      WorkItemId = result.Id
-                            //      WorkItemUrl = result.Url
-                            //});
+                            _configurationService.UpdateModelStatus(new ConfigurationUpdateModelDto
+                            {
+                                ConfigurationId = configuration.Id,
+                                Status = ConfigurationStatus.InProcess,
+                                WorkItemId = result.Id,
+                                WorkItemUrl = result.Url
+                            });
                         }
                     }
                 }

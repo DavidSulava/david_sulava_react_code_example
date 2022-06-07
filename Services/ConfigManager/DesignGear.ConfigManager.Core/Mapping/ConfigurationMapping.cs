@@ -33,6 +33,8 @@ namespace DesignGear.ConfigManager.Core.Mapping {
             CreateMap<ConfigurationUpdateDto, Configuration>(MemberList.None);
             CreateMap<ConfigurationUpdateSvfDto, Configuration>(MemberList.None)
                 .ForMember(x => x.ConfigurationId, m => m.Ignore());
+            CreateMap<ConfigurationUpdateModelDto, Configuration>(MemberList.None)
+                .ForMember(x => x.ConfigurationId, m => m.Ignore());
         }
     }
 }

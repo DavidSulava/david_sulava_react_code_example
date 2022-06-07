@@ -9,10 +9,12 @@ namespace DesignGear.Contracts.Communicators.Interfaces
     {
         Task<string> GetSvfAsync(FileStreamDto packageFile, string rootFileName);
 
-        Task<SvfStatus> CheckStatusJobAsync(string urn);
+        Task<SvfStatus> CheckSvfStatusJobAsync(string urn);
 
         Task<byte[]> DownloadSvfAsync(string urn);
 
         Task<VmWorkItem> ProcessModelAsync(byte[] appBundleFile, FileStreamDto packageFile);
+
+        Task<ConfigurationStatus> CheckStatusJobAsync(string workItemId);
     }
 }

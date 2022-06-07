@@ -81,10 +81,20 @@ namespace DesignGear.ServerManager.Core.Services
             };
         }
 
-        public async Task<Status> CheckStatusAsync(string id)
+        public async Task<ConfigurationStatus> CheckStatusAsync(string id)
         {
             var inventor = new Automation();
-            return await inventor.CheckStatusAsync(id);
+            var status = await inventor.CheckStatusAsync(id);
+
+            if (status.IsDone())
+            {
+                if (status == Status.Success)
+                    return ConfigurationStatus.Ready;
+
+                return ConfigurationStatus.IncorrectRequestError;
+
+            }
+            return ConfigurationStatus.InProcess;
         }
 
         private static string Base64(string input)

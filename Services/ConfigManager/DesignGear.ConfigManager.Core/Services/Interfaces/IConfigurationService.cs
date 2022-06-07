@@ -23,6 +23,8 @@ namespace DesignGear.ConfigManager.Core.Services.Interfaces
 
         void UpdateSvfStatus(ConfigurationUpdateSvfDto update);
 
+        void UpdateModelStatus(ConfigurationUpdateModelDto update);
+
         //todo:update (из inventor из новой модели)
 
 

@@ -46,7 +46,7 @@ namespace DesignGear.Contracts.Communicators
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<SvfStatus> CheckStatusJobAsync(string urn)
+        public async Task<SvfStatus> CheckSvfStatusJobAsync(string urn)
         {
             return await SendHttpRequestAsync<SvfStatus>($"{_settings.ServerManagerUrl}derivative/{urn}/status");
         }
@@ -67,6 +67,11 @@ namespace DesignGear.Contracts.Communicators
             var response = await _httpClient.PostAsync($"{_settings.ServerManagerUrl}automation", content);
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<VmWorkItem>(await response.Content.ReadAsStringAsync());
+        }
+
+        public async Task<ConfigurationStatus> CheckStatusJobAsync(string workItemId)
+        {
+            return await SendHttpRequestAsync<ConfigurationStatus>($"{_settings.ServerManagerUrl}automation/{workItemId}/status");
         }
     }
 }
