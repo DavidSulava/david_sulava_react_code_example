@@ -16,5 +16,7 @@ namespace DesignGear.Contracts.Communicators.Interfaces
         Task<VmWorkItem> ProcessModelAsync(byte[] appBundleFile, FileStreamDto packageFile);
 
         Task<ConfigurationStatus> CheckStatusJobAsync(string workItemId);
+
+        Task<FileStreamDto> DownloadModelAsync(string url);
     }
 }

@@ -73,5 +73,17 @@ namespace DesignGear.Contracts.Communicators
         {
             return await SendHttpRequestAsync<ConfigurationStatus>($"{_settings.ServerManagerUrl}automation/{workItemId}/status");
         }
+
+        public async Task<FileStreamDto> DownloadModelAsync(string url)
+        {
+            var content = (await _httpClient.GetAsync(url)).Content;
+            return new FileStreamDto()
+            {
+                Content = await content.ReadAsStreamAsync(),
+                Length = content.Headers.ContentLength.Value,
+                ContentType = content.Headers.ContentType.ToString(),
+                FileName = content.Headers.ContentDisposition?.FileName.Trim('"')
+            };
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace DesignGear.ConfigManager.Core.Services.Interfaces
         Task<ICollection<ConfigurationItemExDto>> GetConfigurationListAsync(ConfigurationFilterDto filter);
         Task CreateConfigurationRequestAsync(ConfigurationRequestDto request);
         Task CreateConfigurationFromPackageAsync(ConfigurationCreateDto create);
-        Task<Stream> CreateConfigurationRequestPackageAsync(Guid configurationId);
+        Task<FileStreamDto> CreateConfigurationRequestPackageAsync(Guid configurationId);
         Task AddSvfAsync(Guid configurationId, ICollection<Stream> svfList);
         //Task<Stream> GetSvfAsync(Guid configurationId);
 
@@ -25,13 +25,9 @@ namespace DesignGear.ConfigManager.Core.Services.Interfaces
 
         void UpdateModelStatus(ConfigurationUpdateModelDto update);
 
-        //todo:update (из inventor из новой модели)
+        Task UpdateConfigurationAsync(Contracts.Dto.ConfigManager.ConfigurationUpdateDto Configuration);
 
-
-
-        /*Task UpdateConfigurationAsync(ConfigurationUpdateDto Configuration);
-
-        Task RemoveConfigurationAsync(Guid id);
+        /*Task RemoveConfigurationAsync(Guid id);
 
         Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId);
 

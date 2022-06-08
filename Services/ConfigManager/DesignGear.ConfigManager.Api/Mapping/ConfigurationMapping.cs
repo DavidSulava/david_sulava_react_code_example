@@ -20,6 +20,8 @@ namespace DesignGear.ConfigManager.Api.Mapping
             CreateMap<ConfigurationParametersDto, VmComponentParameterDefinitions>(MemberList.None);
             CreateMap<ParameterDefinitionDto, VmParameterDefinition>(MemberList.None);
             CreateMap<ValueOptionDto, VmValueOption>(MemberList.None);
+            CreateMap<IFormFile, FileStreamDto>(MemberList.None)
+                .ForMember(x => x.Content, m => m.MapFrom(x => x.OpenReadStream()));
         }
     }
 }

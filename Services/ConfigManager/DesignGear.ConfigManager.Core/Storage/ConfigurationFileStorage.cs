@@ -124,11 +124,15 @@ namespace DesignGear.ConfigManager.Core.Storage
             var di = new DirectoryInfo(filePath);
             if (!di.Exists)
                 di.Create();
+            else
+            {
+                //todo - delete all files inside the folder
+            }
             var originalFileName = Path.GetFileName(package.ConfigurationPackage.FileName);
             var uniqueFilePath = Path.Combine(filePath, originalFileName);
             using (var fileStream = File.Create(uniqueFilePath))
             {
-                await package.ConfigurationPackage.CopyToAsync(fileStream);
+                await package.ConfigurationPackage.Content.CopyToAsync(fileStream);
             }
 
             //package.ConfigurationPackage.Content.Seek(0, SeekOrigin.Begin);

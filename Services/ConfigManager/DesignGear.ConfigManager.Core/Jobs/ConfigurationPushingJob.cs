@@ -46,7 +46,10 @@ namespace DesignGear.ConfigManager.Core.Jobs
                     /*
                      * Здесь выполняем отправку в инвентор и меняем статус конфигурации на InProcess
                      */
-                    var packageFile = _configurationFileStorage.GetZipArchive(configuration.ProductVersionId, configuration.Id);
+                    
+                    var packageFile = _configurationService.CreateConfigurationRequestPackageAsync(configuration.Id).Result;
+                    //var packageFile = _configurationFileStorage.GetZipArchive(configuration.ProductVersionId, configuration.Id);
+                    
                     var appBundleFile = _appBundleService.GetAppBundleAsync(configuration.AppBundleId).Result;
                     if (packageFile != null && appBundleFile != null)
                     {
