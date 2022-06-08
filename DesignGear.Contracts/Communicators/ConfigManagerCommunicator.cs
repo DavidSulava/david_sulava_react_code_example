@@ -104,10 +104,11 @@ namespace DesignGear.Contracts.Communicators
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task CreateConfigurationRequestAsync(VmConfigurationRequest request)
+        public async Task<Guid> CreateConfigurationRequestAsync(VmConfigurationRequest request)
         {
             var response = await _httpClient.PostAsync($"{_settings.ConfigManagerUrl}configuration/request", new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<Guid>(await response.Content.ReadAsStringAsync());
         }
 
         public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update)

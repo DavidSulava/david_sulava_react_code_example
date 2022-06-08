@@ -1,14 +1,10 @@
-﻿using DesignGear.Contracts.Dto;
-using DesignGear.Contractor.Core.Services.Interfaces;
+﻿using AutoMapper;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
-using DesignGear.Contractor.Core.Helpers;
-using DesignGear.Contracts.Models.Contractor;
-using AutoMapper;
 using DesignGear.Common.Extensions;
 using DesignGear.Contracts.Models.ConfigManager;
-using Kendo.Mvc.UI;
-using Kendo.Mvc.Extensions;
-using Newtonsoft.Json;
+using DesignGear.Contractor.Core.Helpers;
+using DesignGear.Contractor.Core.Services.Interfaces;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
@@ -27,28 +23,14 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpPost]
-        public async Task CreateConfigurationRequestAsync([FromBody] VmConfigurationRequest request)
+        public async Task<IActionResult> CreateConfigurationRequestAsync([FromBody] VmConfigurationRequest request)
         {
-            await _configurationService.CreateConfigurationRequestAsync(request);
+            var result = await _configurationService.CreateConfigurationRequestAsync(request);
+            if (result == Guid.Empty)
+                return Ok();
+            else
+                return Ok(result);
         }
-
-        //[HttpPut]
-        //public async Task UpdateConfigurationAsync([FromForm] VmConfigurationUpdate update)
-        //{
-        //    await _configurationService.UpdateConfigurationAsync(update.MapTo<ConfigurationUpdateDto>(_mapper));
-        //}
-
-        //[HttpDelete]
-        //public async Task RemoveConfigurationAsync(Guid id)
-        //{
-        //    await _configurationService.RemoveConfigurationAsync(id);
-        //}
-
-        //[HttpGet]
-        //public async Task<ICollection<Contracts.Models.Contractor.VmConfigurationItem>> GetConfigurationItemsAsync(Guid productVersionId)
-        //{
-        //    return (await _configurationService.GetConfigurationItemsAsync(productVersionId)).MapTo<ICollection<Contracts.Models.Contractor.VmConfigurationItem>>(_mapper);
-        //}
 
         [HttpGet]
         public async Task<DataSourceResult> GetConfigurationItemsAsync(Guid productVersionId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
@@ -56,24 +38,6 @@ namespace DesignGear.Contractor.Api.Controllers
             var queryString = this.Request.QueryString.Value;
             return await _configurationService.GetConfigurationItemsAsync(queryString);
         }
-
-        //[HttpGet("{id}")]
-        //public async Task<Contracts.Models.Contractor.VmConfiguration> GetConfigurationAsync([FromRoute] Guid id)
-        //{
-        //    return (await _configurationService.GetConfigurationAsync(id)).MapTo< Contracts.Models.Contractor.VmConfiguration>(_mapper);
-        //}
-
-        //[HttpGet]
-        //[Route("{id}/Model")]
-        //public async Task<ActionResult> GetModelFileAsync([FromRoute] Guid id)
-        //{
-        //    var modelFile = await _configurationService.GetModelFileAsync(id);
-        //    if (modelFile == null || modelFile.Content == null)
-        //    {
-        //        return Ok();
-        //    }
-        //    return File(modelFile.Content, modelFile.ContentType, modelFile.FileName);
-        //}
 
         [HttpGet("{configurationId}/svf")]
         public async Task<string> GetSvfRootFileNameAsync([FromRoute] Guid configurationId)

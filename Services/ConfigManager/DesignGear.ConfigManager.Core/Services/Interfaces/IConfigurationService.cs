@@ -7,7 +7,7 @@ namespace DesignGear.ConfigManager.Core.Services.Interfaces
     public interface IConfigurationService
     {
         Task<ICollection<ConfigurationItemExDto>> GetConfigurationListAsync(ConfigurationFilterDto filter);
-        Task CreateConfigurationRequestAsync(ConfigurationRequestDto request);
+        Task<Guid> CreateConfigurationRequestAsync(ConfigurationRequestDto request);
         Task CreateConfigurationFromPackageAsync(ConfigurationCreateDto create);
         Task<FileStreamDto> CreateConfigurationRequestPackageAsync(Guid configurationId);
         Task AddSvfAsync(Guid configurationId, ICollection<Stream> svfList);

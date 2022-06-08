@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
-    //[Authorize(Policy = "OrganizationSelected")]
+    [Authorize(Policy = "OrganizationSelected")]
     [Route("[controller]")]
     public class AppBundleController : ControllerBase
     {

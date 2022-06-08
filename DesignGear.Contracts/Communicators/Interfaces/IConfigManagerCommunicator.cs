@@ -19,7 +19,7 @@ namespace DesignGear.Contracts.Communicators.Interfaces
 
         Task CreateConfigurationAsync(VmConfigurationCreate create);
 
-        Task CreateConfigurationRequestAsync(VmConfigurationRequest request);
+        Task<Guid> CreateConfigurationRequestAsync(VmConfigurationRequest request);
 
         Task UpdateConfigurationAsync(ConfigurationUpdateDto update);
 

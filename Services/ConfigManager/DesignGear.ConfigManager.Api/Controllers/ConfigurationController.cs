@@ -32,9 +32,9 @@ namespace DesignGear.ConfigManager.Api.Controllers
         }
 
         [HttpPost("request")]
-        public async Task CreateConfigurationRequestAsync([FromBody] VmConfigurationRequest request)
+        public async Task<Guid> CreateConfigurationRequestAsync([FromBody] VmConfigurationRequest request)
         {
-            await _configurationService.CreateConfigurationRequestAsync(request.MapTo<ConfigurationRequestDto>(_mapper));
+            return await _configurationService.CreateConfigurationRequestAsync(request.MapTo<ConfigurationRequestDto>(_mapper));
         }
 
         [HttpGet]

@@ -22,14 +22,14 @@ namespace DesignGear.Contractor.Core.Services
             _configManagerService = configManagerService;
         }
 
-        public async Task CreateConfigurationRequestAsync(VmConfigurationRequest create)
+        public async Task<Guid> CreateConfigurationRequestAsync(VmConfigurationRequest create)
         {
             if (create == null)
             {
                 throw new ArgumentNullException(nameof(create));
             }
 
-            await _configManagerService.CreateConfigurationRequestAsync(create);
+            return await _configManagerService.CreateConfigurationRequestAsync(create);
 
             //var templateItem = await _dataAccessor.Reader.Configurations.
             //    Include(x => x.ParameterDefinitions).FirstOrDefaultAsync(x => x.Id == create.TemplateConfigurationId);

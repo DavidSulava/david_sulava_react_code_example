@@ -55,13 +55,12 @@ namespace DesignGear.ConfigManager.Core.Services
         /*
          * Создаем заявку на конфигурацию. Т.е. создается конфигурация со статусом InQueue
          */
-        public async Task CreateConfigurationRequestAsync(ConfigurationRequestDto request)
+        public async Task<Guid> CreateConfigurationRequestAsync(ConfigurationRequestDto request)
         {
             var newConfiguration = _mapper.Map<Configuration>(request);
             newConfiguration.RootConfigurationId = newConfiguration.Id = Guid.NewGuid();
             newConfiguration.ComponentDefinitionId = (await _dataAccessor.Reader.Configurations.FirstOrDefaultAsync(x => x.Id == request.BaseConfigurationId)).ComponentDefinitionId;
 
-            //var parameterList = request.ParameterValues.Select(x => x.ParameterDefinitionId);
             var parameters = await _dataAccessor.Reader.ParameterDefinitions.Where(x => x.ConfigurationId == request.BaseConfigurationId).ToListAsync();
             newConfiguration.ParameterDefinitions = new List<ParameterDefinition>();
             foreach (var parameter in parameters)
@@ -75,6 +74,8 @@ namespace DesignGear.ConfigManager.Core.Services
 
             await _dataAccessor.Editor.CreateAsync(newConfiguration);
             await _dataAccessor.Editor.SaveAsync();
+            //todo - if it find existed configuration, it will return a valid Guid
+            return Guid.Empty;
         }
 
         /*
@@ -82,7 +83,7 @@ namespace DesignGear.ConfigManager.Core.Services
          * Svf при этом у нас отсутствует и его нужно сформировать. Для этого присваивается соответствующий статус
          * todo - создание записи в БД и папки с файлами должно быть в рамках транзакции
          */
-        public async Task CreateConfigurationFromPackageAsync(ConfigurationCreateDto create)
+            public async Task CreateConfigurationFromPackageAsync(ConfigurationCreateDto create)
         {
             /*
              * Распаковываем пакет и кладем его в хранилище
