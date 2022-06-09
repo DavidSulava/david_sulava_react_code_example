@@ -14,6 +14,8 @@ namespace DesignGear.Contractor.Core.Mapping
             CreateMap<ConfigurationParametersDto, VmComponentParameterDefinitions>(MemberList.None);
             CreateMap<ParameterDefinitionDto, VmParameterDefinition>(MemberList.None);
             CreateMap<ValueOptionDto, VmValueOption>(MemberList.None);
+            CreateMap<ConfigurationDto, VmConfiguration>(MemberList.None);
+            CreateMap<VmConfiguration, ConfigurationDto>(MemberList.None);
         }
     }
 }

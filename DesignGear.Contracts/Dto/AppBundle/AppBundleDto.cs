@@ -7,5 +7,7 @@
         public string Description { get; set; }
         public string DesignGearVersion { get; set; }
         public string InventorVersion { get; set; }
+        public string FileName { get; set; }
+        public byte[] Content { get; set; }
     }
 }

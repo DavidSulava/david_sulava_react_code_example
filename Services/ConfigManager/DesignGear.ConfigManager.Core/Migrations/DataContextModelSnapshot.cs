@@ -28,6 +28,10 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -36,6 +40,11 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DesignGearVersion")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("FileName")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
@@ -151,6 +160,14 @@ namespace DesignGear.ConfigManager.Core.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("WorkItemId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("WorkItemUrl")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.HasKey("Id");
 

@@ -2,7 +2,9 @@
 using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.Contracts.Dto;
 using DesignGear.Contracts.Dto.ServerManager.Derivative;
+using DesignGear.Contracts.Enums;
 using DesignGear.Contracts.Helpers;
+using DesignGear.Contracts.Models.ServerManager.Derivative;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -37,11 +39,6 @@ namespace DesignGear.Contracts.Communicators
         {
             var content = new MultipartFormDataContent();
             content.Add(new StreamContent(packageFile.Content), "\"packageFile\"", packageFile.FileName);
-            /*using (var memoryStream = new MemoryStream())
-            {
-                await packageFile.Content.CopyToAsync(memoryStream);
-                content.Add(new ByteArrayContent(memoryStream.ToArray()), "\"packageFile\"", packageFile.FileName);
-            }*/
             content.Add(new StringContent(rootFileName), "\"rootFileName\"");
 
             var response = await _httpClient.PostAsync($"{_settings.ServerManagerUrl}derivative", content);
@@ -49,13 +46,43 @@ namespace DesignGear.Contracts.Communicators
             return await response.Content.ReadAsStringAsync();
         }
 
-        public async Task<SvfStatusJobDto> CheckStatusJobAsync(string urn)
+        public async Task<SvfStatus> CheckSvfStatusJobAsync(string urn)
+        {
+            return await SendHttpRequestAsync<SvfStatus>($"{_settings.ServerManagerUrl}derivative/{urn}/status");
+        }
+
+        public async Task<byte[]> DownloadSvfAsync(string urn)
         {
             var message = await _httpClient.GetAsync($"{_settings.ServerManagerUrl}derivative/{urn}");
             message.EnsureSuccessStatusCode();
-            return new SvfStatusJobDto()
+            return await message.Content.ReadAsByteArrayAsync();
+        }
+
+        public async Task<VmWorkItem> ProcessModelAsync(byte[] appBundleFile, FileStreamDto packageFile)
+        {
+            var content = new MultipartFormDataContent();
+            content.Add(new ByteArrayContent(appBundleFile), "\"appBundleFile\"", "appbundle");
+            content.Add(new StreamContent(packageFile.Content), "\"packageFile\"", packageFile.FileName);
+
+            var response = await _httpClient.PostAsync($"{_settings.ServerManagerUrl}automation", content);
+            response.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<VmWorkItem>(await response.Content.ReadAsStringAsync());
+        }
+
+        public async Task<ConfigurationStatus> CheckStatusJobAsync(string workItemId)
+        {
+            return await SendHttpRequestAsync<ConfigurationStatus>($"{_settings.ServerManagerUrl}automation/{workItemId}/status");
+        }
+
+        public async Task<FileStreamDto> DownloadModelAsync(string url)
+        {
+            var content = (await _httpClient.GetAsync(url)).Content;
+            return new FileStreamDto()
             {
-                SvfFiles = await message.Content.ReadAsByteArrayAsync()
+                Content = await content.ReadAsStreamAsync(),
+                Length = content.Headers.ContentLength.Value,
+                ContentType = content.Headers.ContentType.ToString(),
+                FileName = content.Headers.ContentDisposition?.FileName.Trim('"')
             };
         }
     }

@@ -9,15 +9,18 @@ namespace DesignGear.ConfigManager.Core.Jobs
 {
     public class ConfigurationPushingJob : IJob
     {
+        private readonly IAppBundleService _appBundleService;
         private readonly IConfigurationService _configurationService;
         private readonly IServerManagerCommunicator _serverManagerService;
         private readonly IConfigurationFileStorage _configurationFileStorage;
 
 
-        public ConfigurationPushingJob(IConfigurationService configurationService,
+        public ConfigurationPushingJob(IAppBundleService appBundleService,
+            IConfigurationService configurationService,
             IServerManagerCommunicator serverManagerService,
             IConfigurationFileStorage configurationFileStorage)
         {
+            _appBundleService = appBundleService ?? throw new ArgumentNullException(nameof(appBundleService));
             _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
             _serverManagerService = serverManagerService ?? throw new ArgumentNullException(nameof(serverManagerService));
             _configurationFileStorage = configurationFileStorage ?? throw new ArgumentNullException(nameof(configurationFileStorage));
@@ -43,6 +46,23 @@ namespace DesignGear.ConfigManager.Core.Jobs
                     /*
                      * Здесь выполняем отправку в инвентор и меняем статус конфигурации на InProcess
                      */
+                    
+                    var packageFile = _configurationService.CreateConfigurationRequestPackageAsync(configuration.Id).Result;
+                    var appBundleFile = _appBundleService.GetAppBundleAsync(configuration.AppBundleId).Result;
+                    if (packageFile != null && appBundleFile != null)
+                    {
+                        var result = _serverManagerService.ProcessModelAsync(appBundleFile.Content, packageFile).Result;
+                        if (result != null)
+                        {
+                            _configurationService.UpdateModelStatus(new ConfigurationUpdateModelDto
+                            {
+                                ConfigurationId = configuration.Id,
+                                Status = ConfigurationStatus.InProcess,
+                                WorkItemId = result.Id,
+                                WorkItemUrl = result.Url
+                            });
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -65,12 +85,12 @@ namespace DesignGear.ConfigManager.Core.Jobs
             foreach (var configuration in configurations)
             {
                 var packageFile = _configurationFileStorage.GetZipArchive(configuration.ProductVersionId, configuration.Id);
-                if (packageFile != null)
+                if (packageFile != null && configuration.RootFileName != null)
                 {
                     var urn = _serverManagerService.GetSvfAsync(packageFile, configuration.RootFileName).Result;
                     if (urn != null)
                     {
-                        _configurationService.UpdateSvfStatus(new ConfigurationUpdateSvfDto
+                        _configurationService.UpdateSvfStatus(new ConfigurationSvfStatusUpdateDto
                         {
                             ConfigurationId = configuration.Id,
                             SvfStatus = SvfStatus.InProcess,

@@ -8,6 +8,7 @@ namespace DesignGear.Contracts.Models.ConfigManager
         public Guid Id { get; set; }
         public Guid? ParentId { get; set; }
         public string ConfigurationName { get; set; }
+        public string Comment { get; set; }
         public string ComponentName { get; set; }
         public ConfigurationStatus Status { get; set; }
         public SvfStatus SvfStatus { get; set; }

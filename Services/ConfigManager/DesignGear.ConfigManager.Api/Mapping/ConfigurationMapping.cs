@@ -2,7 +2,6 @@
 using DesignGear.Contracts.Dto;
 using DesignGear.Contracts.Dto.ConfigManager;
 using DesignGear.Contracts.Models.ConfigManager;
-using ParameterDefinitionDto = DesignGear.Contracts.Dto.ConfigManager.ParameterDefinitionDto;
 
 namespace DesignGear.ConfigManager.Api.Mapping
 {
@@ -14,12 +13,14 @@ namespace DesignGear.ConfigManager.Api.Mapping
             CreateMap<VmParameterValue, ParameterValueDto>(MemberList.None);
             CreateMap<VmConfigurationRequest, ConfigurationRequestDto>(MemberList.None);
             CreateMap<ConfigurationItemDto, VmConfigurationItem>(MemberList.None);
-            /*CreateMap<VmConfigurationUpdate, ConfigurationUpdateDto>(MemberList.None);
             CreateMap<ConfigurationDto, VmConfiguration>(MemberList.None);
+            /*CreateMap<VmConfigurationUpdate, ConfigurationUpdateDto>(MemberList.None);
             CreateMap<ConfigurationItemDto, VmConfigurationItem>(MemberList.None);*/
             CreateMap<ConfigurationParametersDto, VmComponentParameterDefinitions>(MemberList.None);
             CreateMap<ParameterDefinitionDto, VmParameterDefinition>(MemberList.None);
             CreateMap<ValueOptionDto, VmValueOption>(MemberList.None);
+            CreateMap<IFormFile, FileStreamDto>(MemberList.None)
+                .ForMember(x => x.Content, m => m.MapFrom(x => x.OpenReadStream()));
         }
     }
 }

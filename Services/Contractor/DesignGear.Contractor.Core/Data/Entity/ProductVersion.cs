@@ -35,7 +35,7 @@ namespace DesignGear.Contractor.Core.Data.Entity
         public virtual Product CurrentVersionProduct { get; set; }
 
         //[ForeignKey("AppBundle")]
-        //public Guid AppBundleId { get; set; }
+        public Guid AppBundleId { get; set; }
         //public virtual AppBundle AppBundle { get; set; }
 
         //public ICollection<ParameterDefinition> ParameterDefinitions { get; set; }

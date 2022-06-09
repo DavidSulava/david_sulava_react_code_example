@@ -55,7 +55,6 @@ builder.Services.AddAuthorization(opts => {
 });
 
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-//builder.Services.Configure<CommunicatorSettings>(builder.Configuration.GetSection("CommunicatorSettings"));
 builder.Services.AddOptions<CommunicatorSettings>().Bind(builder.Configuration.GetSection("CommunicatorSettings")).ValidateDataAnnotations();
 builder.Services.AddOptions<NotificationOptions>().Bind(builder.Configuration.GetSection("Notifications")).ValidateDataAnnotations();
 builder.Services.AddOptions<SecurityOptions>().Bind(builder.Configuration.GetSection("Security")).ValidateDataAnnotations();
@@ -71,7 +70,7 @@ builder.Services.AddCors(options => {
             "http://localhost:3000/",
             "https://localhost:3000/",
             "http://95.170.154.243:8055",
-            "http://evraz-auth1:8055");
+            "http://evraz-auth1:8056");
 
         builder.WithExposedHeaders("Content-Disposition");
         builder.AllowAnyHeader();
@@ -83,7 +82,8 @@ builder.Services.AddCors(options => {
 var app = builder.Build();
 
 //Do migration
-using (var scope = app.Services.CreateScope()) {
+using (var scope = app.Services.CreateScope())
+{
     var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
     dataContext.Database.Migrate();
 }

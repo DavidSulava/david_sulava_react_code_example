@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DesignGear.Contracts.Dto;
-using DesignGear.Contracts.Models.Contractor;
+using DesignGear.Contracts.Models.ConfigManager;
 
 namespace DesignGear.Contractor.Api.Mapping
 {
@@ -8,7 +8,9 @@ namespace DesignGear.Contractor.Api.Mapping
     {
         public AppBundleMapping()
         {
-            CreateMap<AppBundleDto, VmAppBundle>(MemberList.None);
+            CreateMap<AppBundleDto, VmAppBundleItem>(MemberList.None);
+            CreateMap<VmAppBundleCreate, CreateAppBundleDto>(MemberList.None);
+            CreateMap<VmAppBundleUpdate, UpdateAppBundleDto>(MemberList.None);
         }
     }
 }

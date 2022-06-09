@@ -1,4 +1,6 @@
-﻿namespace DesignGear.Contracts.Dto
+﻿using DesignGear.Contracts.Dto.ConfigManager;
+
+namespace DesignGear.Contracts.Dto
 {
     public class ProductVersionDto
     {

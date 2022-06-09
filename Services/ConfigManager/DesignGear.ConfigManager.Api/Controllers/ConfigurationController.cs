@@ -32,9 +32,9 @@ namespace DesignGear.ConfigManager.Api.Controllers
         }
 
         [HttpPost("request")]
-        public async Task CreateConfigurationRequestAsync([FromBody] VmConfigurationRequest request)
+        public async Task<Guid> CreateConfigurationRequestAsync([FromBody] VmConfigurationRequest request)
         {
-            await _configurationService.CreateConfigurationRequestAsync(request.MapTo<ConfigurationRequestDto>(_mapper));
+            return await _configurationService.CreateConfigurationRequestAsync(request.MapTo<ConfigurationRequestDto>(_mapper));
         }
 
         [HttpGet]
@@ -51,10 +51,13 @@ namespace DesignGear.ConfigManager.Api.Controllers
             return await _configurationService.GetSvfRootFileNameAsync(configurationId);
         }
 
-        [HttpGet("{configurationId}/svf/{svfName}")]
+        [HttpGet("{configurationId}/svf/{*svfName}")]
         public async Task<IActionResult> GetSvfAsync([FromRoute] Guid configurationId, [FromRoute] string svfName)
         {
-            return Ok((await _configurationService.GetSvfAsync(configurationId, svfName)).Content);
+            var result = await _configurationService.GetSvfAsync(configurationId, svfName);
+            if(result != null)
+                return File(result.Content, result.ContentType, result.FileName);
+            return Ok();
         }
 
         [HttpGet("{configurationId}/parameters")]
@@ -63,10 +66,11 @@ namespace DesignGear.ConfigManager.Api.Controllers
             return (await _configurationService.GetConfigurationParametersAsync(configurationId)).MapTo<VmComponentParameterDefinitions>(_mapper);
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<VmConfiguration> GetConfigurationAsync([FromRoute] Guid id) {
-        //    return null;
-        //}
+        [HttpGet("{id}")]
+        public async Task<VmConfiguration> GetConfigurationAsync([FromRoute] Guid id)
+        {
+            return (await _configurationService.GetConfigurationAsync(id)).MapTo<VmConfiguration>(_mapper);
+        }
 
         //[HttpDelete("{id}")]
         //public async Task DeleteConfigurationAsync([FromRoute] Guid id) {

@@ -27,7 +27,7 @@ namespace DesignGear.Contractor.Core.Data
         {
             if (!options.IsConfigured)
             {
-                options.UseSqlServer("Server=DESKTOP-04NOTM8\\MSSQLSERVER01;Database=DesignGearCloud;Trusted_Connection=True;");
+                options.UseSqlServer("Server=DATABASE3\\DEV2019;Database=DesignGearCloud;user ID=dguser;password=designgear123;");
             }
         }
 

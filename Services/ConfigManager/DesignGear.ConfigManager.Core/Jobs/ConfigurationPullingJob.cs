@@ -7,7 +7,8 @@ using DesignGear.Contracts.Enums;
 
 namespace DesignGear.ConfigManager.Core.Jobs
 {
-    public class ConfigurationPullingJob : IJob {
+    public class ConfigurationPullingJob : IJob
+    {
         private readonly IConfigurationService _configurationService;
         private readonly IServerManagerCommunicator _serverManagerService;
         private readonly IConfigurationFileStorage _configurationFileStorage;
@@ -21,11 +22,13 @@ namespace DesignGear.ConfigManager.Core.Jobs
             _configurationFileStorage = configurationFileStorage ?? throw new ArgumentNullException(nameof(configurationFileStorage));
         }
 
-        public void Do() {
+        public void Do()
+        {
             /*
              * Получаем список конфигураций со статусом InProcess
              */
-            var configurations = _configurationService.GetConfigurationListAsync(new ConfigurationFilterDto {
+            var configurations = _configurationService.GetConfigurationListAsync(new ConfigurationFilterDto
+            {
                 Status = ConfigurationStatus.InProcess
             }).Result;
 
@@ -33,8 +36,25 @@ namespace DesignGear.ConfigManager.Core.Jobs
              * Для каждой конфигурации делаем запрос о статусе, получаем результат если готово и сохраняем его
              * через IConfigurationService. Фиксируем статус Ready для тех конфигураций, который в итоге пересчитаны
              */
-            foreach (var configuration in configurations) {
-            
+            try
+            {
+                foreach (var configuration in configurations)
+                {
+                    var result = _serverManagerService.CheckStatusJobAsync(configuration.WorkItemId).Result;
+                    if (result == ConfigurationStatus.Ready)
+                    {
+                        var modelStream = _serverManagerService.DownloadModelAsync(configuration.WorkItemUrl).Result;
+                        _configurationService.UpdateConfigurationAsync(new ConfigurationStatusUpdateDto()
+                        {
+                            ConfigurationId = configuration.Id,
+                            Status = ConfigurationStatus.Ready,
+                            ConfigurationPackage = modelStream
+                        }).Wait();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
             }
 
             /*
@@ -45,16 +65,29 @@ namespace DesignGear.ConfigManager.Core.Jobs
                 SvfStatus = SvfStatus.InProcess
             }).Result;
 
-            foreach (var configuration in configurations)
+            try
             {
-                var result = _serverManagerService.CheckStatusJobAsync(configuration.URN).Result;
-                if (result.Status == "success")
+                foreach (var configuration in configurations)
                 {
-                    //foreach(var file in result.SvfFiles)
-                    //{
-                    //    _configurationFileStorage.SaveSvfAsync(configuration.ProductVersionId, configuration.Id, file);
-                    //}
+                    var result = _serverManagerService.CheckSvfStatusJobAsync(configuration.URN).Result;
+                    if (result == SvfStatus.Ready)
+                    {
+                        var file = _serverManagerService.DownloadSvfAsync(configuration.URN).Result;
+                        if (file != null)
+                        {
+                            _configurationFileStorage.SaveSvfAsync(configuration.ProductVersionId, configuration.Id, file).Wait();
+                            _configurationService.UpdateSvfStatus(new ConfigurationSvfStatusUpdateDto
+                            {
+                                ConfigurationId = configuration.Id,
+                                SvfStatus = SvfStatus.Ready,
+                                URN = configuration.URN
+                            });
+                        }
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
             }
         }
     }

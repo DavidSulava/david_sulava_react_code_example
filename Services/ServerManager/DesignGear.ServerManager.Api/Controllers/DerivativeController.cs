@@ -25,14 +25,20 @@ namespace DesignGear.ServerManager.Api.Controllers
 			return new ObjectResult(urn);
 		}
 
-		[HttpGet("{urn}")]
+		[HttpGet("{urn}/status")]
 		public async Task<IActionResult> CheckStatusJobAsync([FromRoute] string urn)
+		{ 
+			return Ok(await _serverManagerService.CheckStatusJobAsync(urn));
+		}
+
+		[HttpGet("{urn}")]
+		public async Task<IActionResult> DownloadSvfAsync([FromRoute] string urn)
 		{
-			var result = await _serverManagerService.CheckStatusJobAsync(urn);
-			if (result.Status == "success")
-				return File(result.SvfFiles, "application/octet-stream");
+			var result = await _serverManagerService.DownloadSvfAsync(urn);
+			if (result != null)
+				return File(result, "application/octet-stream");
 			else
-				return Ok(result.Status);
+				return Ok();
 		}
 	}
 }

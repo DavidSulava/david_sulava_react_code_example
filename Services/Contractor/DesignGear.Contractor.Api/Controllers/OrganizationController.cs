@@ -23,9 +23,12 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<Guid> CreateOrganizationAsync(VmOrganizationCreate organization)
+        public async Task<IActionResult> CreateOrganizationAsync(VmOrganizationCreate organization)
         {
-            return await _organizationService.CreateOrganizationAsync(organization.MapTo<OrganizationCreateDto>(_mapper));
+            if (organization.Name.Length > 300)
+                return BadRequest(new { message = "Name value must be less than 300 characters" });
+
+            return Ok(await _organizationService.CreateOrganizationAsync(organization.MapTo<OrganizationCreateDto>(_mapper)));
         }
 
         [HttpGet("byuser")]

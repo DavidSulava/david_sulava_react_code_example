@@ -13,7 +13,7 @@ namespace DesignGear.Contracts.Models.Contractor
         public DateTime Created { get; set; }
         public Guid ProductId { get; set; }
         public Guid AppBundleId { get; set; }
-        public ICollection<IFormFile> ImageFiles { get; set; }
+        public ICollection<IFormFile>? ImageFiles { get; set; }
         public bool IsCurrent { get; set; }
     }
 }

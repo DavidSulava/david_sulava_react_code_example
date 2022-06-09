@@ -15,21 +15,26 @@ using DesignGear.Contracts.Enums;
 using DesignGear.Contracts.Dto;
 using ParameterDefinitionDto = DesignGear.Contracts.Dto.ConfigManager.ParameterDefinitionDto;
 using System.Transactions;
+using static DesignGear.ModelPackage.DesignGearModelPackage;
+using System.IO.Compression;
 
 namespace DesignGear.ConfigManager.Core.Services
 {
     public class ConfigurationService : IConfigurationService
     {
         private readonly IMapper _mapper;
+        private readonly HttpClient _httpClient;
         private readonly DataAccessor _dataAccessor;
         private readonly IConfigurationFileStorage _configurationFileStorage;
 
         public ConfigurationService(IMapper mapper,
             DataAccessor dataAccessor,
+            IHttpClientFactory clientFactory,
             IConfigurationFileStorage configurationFileStorage)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _dataAccessor = dataAccessor ?? throw new ArgumentNullException(nameof(dataAccessor));
+            _httpClient = clientFactory.CreateClient();
             _configurationFileStorage = configurationFileStorage ?? throw new ArgumentNullException(nameof(configurationFileStorage));
         }
 
@@ -52,13 +57,12 @@ namespace DesignGear.ConfigManager.Core.Services
         /*
          * Создаем заявку на конфигурацию. Т.е. создается конфигурация со статусом InQueue
          */
-        public async Task CreateConfigurationRequestAsync(ConfigurationRequestDto request)
+        public async Task<Guid> CreateConfigurationRequestAsync(ConfigurationRequestDto request)
         {
             var newConfiguration = _mapper.Map<Configuration>(request);
             newConfiguration.RootConfigurationId = newConfiguration.Id = Guid.NewGuid();
             newConfiguration.ComponentDefinitionId = (await _dataAccessor.Reader.Configurations.FirstOrDefaultAsync(x => x.Id == request.BaseConfigurationId)).ComponentDefinitionId;
 
-            //var parameterList = request.ParameterValues.Select(x => x.ParameterDefinitionId);
             var parameters = await _dataAccessor.Reader.ParameterDefinitions.Where(x => x.ConfigurationId == request.BaseConfigurationId).ToListAsync();
             newConfiguration.ParameterDefinitions = new List<ParameterDefinition>();
             foreach (var parameter in parameters)
@@ -72,6 +76,8 @@ namespace DesignGear.ConfigManager.Core.Services
 
             await _dataAccessor.Editor.CreateAsync(newConfiguration);
             await _dataAccessor.Editor.SaveAsync();
+            //todo - if it find existed configuration, it will return a valid Guid
+            return Guid.Empty;
         }
 
         /*
@@ -90,7 +96,7 @@ namespace DesignGear.ConfigManager.Core.Services
             {
                 ProductVersionId = create.ProductVersionId,
                 ConfigurationId = rootConfigurationId,
-                ConfigurationPackage = create.ConfigurationPackage
+                ConfigurationPackage = create.ConfigurationPackage.MapTo<FileStreamDto>(_mapper)
             });
 
             /* todo
@@ -100,7 +106,6 @@ namespace DesignGear.ConfigManager.Core.Services
             var configurations = model.MapTo<ICollection<Configuration>>(_mapper);
             using (var ts = new TransactionScope())
             {
-
                 foreach (var configuration in configurations)
                 {
                     _mapper.Map(create, configuration);
@@ -110,9 +115,6 @@ namespace DesignGear.ConfigManager.Core.Services
                         configuration.Id = rootConfigurationId;
                     }
                     configuration.RootConfigurationId = rootConfigurationId;
-                    //configuration.Status = ConfigurationStatus.Ready;
-                    //configuration.SvfStatus = SvfStatus.InQueue;
-                    //configuration.ComponentDefinition.AppBundleId = create.AppBundleId;
                     _dataAccessor.Editor.Create(configuration);
                 }
 
@@ -138,7 +140,7 @@ namespace DesignGear.ConfigManager.Core.Services
          * При этом учитываем, что запись корневой кофигурации была создана ранее как заявка
          * Вызывается фоновой задачей, когда получен ответ от инвентора
          */
-        public async Task UpdateConfigurationAsync(Contracts.Dto.ConfigManager.ConfigurationUpdateDto update)
+        public async Task UpdateConfigurationAsync(Contracts.Dto.ConfigManager.ConfigurationStatusUpdateDto update)
         {
             /*
              * Получаем из базы корневую конфигурацию (заявку)
@@ -155,27 +157,44 @@ namespace DesignGear.ConfigManager.Core.Services
             /*
              *  Распаковываем пакет и кладем его в хранилище
              */
-            /*var model = await _configurationFileStorage.SaveConfigurationPackageAsync(new ConfigurationPackageDto {
-                ProductVersionId = rootConfiguration.ProductVersionId,
+            var model = await _configurationFileStorage.SaveConfigurationPackageAsync(new ConfigurationPackageDto
+            {
+                ProductVersionId = rootConfiguration.TemplateConfiguration.ComponentDefinition.ProductVersionId,
                 ConfigurationId = update.ConfigurationId,
                 ConfigurationPackage = update.ConfigurationPackage,
-            });*/
+            });
 
             /*
              * todo Обновляем базу, обновляя корневую конфигурацию, добавляя дочерние кофигурации, 
              * добавляя ComponentDefinition (если такового нет), ParameterDefinition
              */
 
-            /*var configurations = model.MapTo<ICollection<Configuration>>(_mapper);
-            foreach (var configuration in configurations) {
-                if (configuration.ParentConfigurationId == null) {
-                    _mapper.Map(configuration, rootConfiguration);
-                } else {
-                    await _dataAccessor.Editor.CreateAsync(configuration);                    
+            var configurations = model.MapTo<ICollection<Configuration>>(_mapper);
+            using (var ts = new TransactionScope())
+            {
+                foreach (var configuration in configurations)
+                {
+                    if (configuration.ParentConfigurationId == null)
+                    {
+                        _mapper.Map(configuration, rootConfiguration);
+                    }
+                    else
+                    {
+                        _dataAccessor.Editor.Create(configuration);
+                    }
                 }
-            }*/
 
-            await _dataAccessor.Editor.SaveAsync();
+                _dataAccessor.Editor.Save();
+
+                foreach (var configuration in configurations)
+                {
+                    configuration.TargetFileId = configuration.FileItems.First(x => x.FileId == configuration.TargetFileIdInternal).Id;
+                }
+
+                _dataAccessor.Editor.Save();
+
+                ts.Complete();
+            }
 
             /*
              * todo Уведомляем подписчиков по email о том, что конфигурация перерасчитана
@@ -186,13 +205,29 @@ namespace DesignGear.ConfigManager.Core.Services
          * Имя файла (архива), содержащего все необходимые для инвентора данные
          * Вызывается фоновой задачей, которая делает отправку кофигурации на перерасчет в инвентор
          */
-        public async Task<Stream> CreateConfigurationRequestPackageAsync(Guid configurationId)
+        public async Task<FileStreamDto> CreateConfigurationRequestPackageAsync(Guid configurationId)
         {
             /*
              * todo Поднять конфигурацию (запрос) с ее параметрами, поднять распакованный пакет из хранилища, 
              * заменить в json значения параметров, упаковать и вернуть архив как ответ             
              */
-            throw new NotImplementedException();
+            var configuration = await _dataAccessor.Reader.Configurations.Include(x => x.ParameterDefinitions).FirstOrDefaultAsync(x => x.Id == configurationId);
+            var tempConfiguration = await _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition)
+                .FirstOrDefaultAsync(x => x.Id == configuration.TemplateConfigurationId);
+            var modelData = await _configurationFileStorage.GetPackageModelAsync(tempConfiguration.ComponentDefinition.ProductVersionId, tempConfiguration.Id);
+            if (modelData == null)
+                throw new EntityNotFoundException<ZipArchive>(tempConfiguration.Id);
+
+            foreach (ParameterRow parameterRow in modelData.Parameter.Rows)
+            {
+                var newValue = configuration.ParameterDefinitions.FirstOrDefault(x => x.Name == parameterRow.Name);
+                if (newValue != null)
+                    parameterRow.Value = newValue.Value;
+            }
+            var json = JsonConvert.SerializeObject(modelData);
+
+            _configurationFileStorage.CopyZipArchive(tempConfiguration.ComponentDefinition.ProductVersionId, tempConfiguration.Id, configurationId, json);
+            return _configurationFileStorage.GetZipArchive(tempConfiguration.ComponentDefinition.ProductVersionId, configurationId);
         }
 
         /*
@@ -281,7 +316,7 @@ namespace DesignGear.ConfigManager.Core.Services
             return await Task.FromResult(result);
         }
 
-        public void UpdateSvfStatus(ConfigurationUpdateSvfDto update)
+        public void UpdateSvfStatus(ConfigurationSvfStatusUpdateDto update)
         {
             var item = _dataAccessor.Editor.Configurations.FirstOrDefault(x => x.Id == update.ConfigurationId);
             if (item == null)
@@ -293,6 +328,28 @@ namespace DesignGear.ConfigManager.Core.Services
             _dataAccessor.Editor.Save();
         }
 
+        public void UpdateModelStatus(ConfigurationUpdateModelDto update)
+        {
+            var item = _dataAccessor.Editor.Configurations.FirstOrDefault(x => x.Id == update.ConfigurationId);
+            if (item == null)
+            {
+                throw new EntityNotFoundException<Configuration>(update.ConfigurationId);
+            }
+
+            _mapper.Map(update, item);
+            _dataAccessor.Editor.Save();
+        }
+
+        public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
+        {
+            var result = await _dataAccessor.Reader.Configurations.ProjectTo<ConfigurationDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
+            if (result == null)
+            {
+                throw new EntityNotFoundException<Configuration>(id);
+            }
+
+            return result;
+        }
 
         //public async Task<Guid> CreateConfigurationAsync(ConfigurationCreateDto create)
         //{
@@ -347,19 +404,6 @@ namespace DesignGear.ConfigManager.Core.Services
         _dataAccessor.Editor.Delete(item);
         DeleteFiles(item.ProductVersionId, item.Id);
         await _dataAccessor.Editor.SaveAsync();
-    }
-
-    public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
-    {
-        var result = await _dataAccessor.Reader.Configurations.ProjectTo<ConfigurationDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
-        if (result == null)
-        {
-            throw new EntityNotFoundException<Configuration>(id);
-    }
-
-        result.ModelFile = GetModelFileName(result.ProductVersionId, id);
-
-        return result;
     }
 
     private string GetModelFileName(Guid productVersionId, Guid id)

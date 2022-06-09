@@ -8,6 +8,8 @@ namespace DesignGear.ConfigManager.Api.Mapping
     {
         public AppBundleMapping()
         {
+            CreateMap<VmAppBundleCreate, CreateAppBundleDto>(MemberList.None);
+            CreateMap<VmAppBundleUpdate, UpdateAppBundleDto>(MemberList.None);
             CreateMap<AppBundleDto, VmAppBundleItem>(MemberList.None);
         }
     }

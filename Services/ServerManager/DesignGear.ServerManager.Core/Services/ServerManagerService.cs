@@ -1,4 +1,6 @@
-﻿using DesignGear.Contracts.Dto.ServerManager.Derivative;
+﻿using Autodesk.Forge.DesignAutomation.Model;
+using DesignGear.Contracts.Enums;
+using DesignGear.Contracts.Models.ServerManager.Derivative;
 using DesignGear.ServerManager.Core.ForgeUtils;
 using DesignGear.ServerManager.Core.Helpers;
 using DesignGear.ServerManager.Core.Services.Interfaces;
@@ -11,7 +13,6 @@ namespace DesignGear.ServerManager.Core.Services
     {
         private readonly ForgeSettings _forgeSettings;
         static readonly string bucketName = "test_bucket_tv237s4155";
-        static readonly string svfPath = @"d:\Suspension\";
         static readonly string outputPath = @"d:\result";
 
         public ServerManagerService(IOptions<ForgeSettings> forgeSettings)
@@ -28,7 +29,7 @@ namespace DesignGear.ServerManager.Core.Services
             return await api.Translate(Base64(objInfo.ObjectId), rootFileName);
         }
 
-        public async Task<SvfStatusJobDto> CheckStatusJobAsync(string urn)
+        public async Task<SvfStatus> CheckStatusJobAsync(string urn)
         {
             var api = new Derivative(_forgeSettings);
             await api.Authenticate();
@@ -38,31 +39,27 @@ namespace DesignGear.ServerManager.Core.Services
                 var status = manifest.derivatives?[0].status;
                 if (status == "success")
                 {
-                    var files = await api.DownloadSvf2(urn);
-                    if (files != null)
-                        return new SvfStatusJobDto()
-                        {
-                            Status = "success",
-                            SvfFiles = files
-                        };
+                    return SvfStatus.Ready;
                 }
 
-                return new SvfStatusJobDto()
-                {
-                    Status = "error"
-                };
+                return SvfStatus.IncorrectRequestError;
             }
-            return new SvfStatusJobDto()
-            {
-                Status = "inprocess"
-            };
+            return SvfStatus.InProcess;
         }
 
-        public async Task<string> ProcessModelAsync(IFormFile packageFile)
+        public async Task<byte[]> DownloadSvfAsync(string urn)
+        {
+            var api = new Derivative(_forgeSettings);
+            await api.Authenticate();
+            return await api.DownloadSvfAsync(urn);
+        }
+
+        public async Task<VmWorkItem> ProcessModelAsync(IFormFile appBundleFile, IFormFile packageFile)
         {
             var inventor = new Automation();
             await inventor.SetupOwnerAsync();
-            var myApp = await inventor.SetupAppBundleAsync();
+            //var myApp = await inventor.SetupAppBundleAsync();
+            var myApp = await inventor.SetupAppBundleAsync(appBundleFile);
             var myActivity = await inventor.SetupActivityAsync(myApp);
             //create bucket
             var api = new Derivative(_forgeSettings);
@@ -74,16 +71,36 @@ namespace DesignGear.ServerManager.Core.Services
             var inputFile = await api.CreateSignedResource(bucketKey, objInfo.ObjectKey);
             //create output file temp URL
             var outputFile = await api.CreateSignedResource(bucketKey, objInfo.ObjectKey + "output");
-            await inventor.SubmitWorkItemAsync(myActivity, inputFile.SignedUrl, outputFile.SignedUrl);
+            var workItemId = await inventor.SubmitWorkItemAsync(myActivity, inputFile.SignedUrl, outputFile.SignedUrl);
             //download from temp URL
-            await inventor.DownloadToDocsAsync(outputFile.SignedUrl, outputPath);
-            return outputFile.SignedUrl;
+            //await inventor.DownloadToDocsAsync(outputFile.SignedUrl, outputPath);
+            return new VmWorkItem()
+            {
+                Id = workItemId,
+                Url = outputFile.SignedUrl
+            };
+        }
+
+        public async Task<ConfigurationStatus> CheckStatusAsync(string id)
+        {
+            var inventor = new Automation();
+            var status = await inventor.CheckStatusAsync(id);
+
+            if (status.IsDone())
+            {
+                if (status == Status.Success)
+                    return ConfigurationStatus.Ready;
+
+                return ConfigurationStatus.IncorrectRequestError;
+
+            }
+            return ConfigurationStatus.InProcess;
         }
 
         private static string Base64(string input)
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(input);
-            return (string)System.Convert.ToBase64String(plainTextBytes);
+            return Convert.ToBase64String(plainTextBytes);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 {
     public interface IConfigurationService
     {
-        Task CreateConfigurationRequestAsync(VmConfigurationRequest request);
+        Task<Guid> CreateConfigurationRequestAsync(VmConfigurationRequest request);
 
         //Task UpdateConfigurationAsync(Contracts.Dto.ConfigurationUpdateDto Configuration);
 
@@ -17,7 +17,7 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 
         Task<DataSourceResult> GetConfigurationItemsAsync(string queryString);
 
-        //Task<ConfigurationDto> GetConfigurationAsync(Guid id);
+        Task<ConfigurationDto> GetConfigurationAsync(Guid id);
 
         //Task<AttachmentDto> GetModelFileAsync(Guid id);
 

@@ -1,6 +1,7 @@
 ﻿using Autodesk.Forge.Core;
 using Autodesk.Forge.DesignAutomation;
 using Autodesk.Forge.DesignAutomation.Model;
+using Microsoft.AspNetCore.Http;
 using System.IO.Compression;
 using System.Net;
 using System.Security.Cryptography;
@@ -9,16 +10,16 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
 {
     public class Automation
     {
-		static readonly string PackageName = "MyTestPackage";
-		static readonly string ActivityName = "MyTestActivity";
-		static readonly string Owner = "AppNickName_1"; //e.g. MyTestApp (it must be *globally* unique)
-		//static readonly string UploadUrl = "https://developer.api.autodesk.com/oss/v2/signedresources/60646052-59ea-49a8-8487-6d420c77652e?region=US";
-		static readonly string Label = "prod";
-		static readonly string TargetEngine = "Autodesk.AutoCAD+23";
+        static readonly string PackageName = "MyTestPackage";
+        static readonly string ActivityName = "MyTestActivity";
+        static readonly string Owner = "AppNickName_1"; //e.g. MyTestApp (it must be *globally* unique)
+                                                        //static readonly string UploadUrl = "https://developer.api.autodesk.com/oss/v2/signedresources/60646052-59ea-49a8-8487-6d420c77652e?region=US";
+        static readonly string Label = "prod";
+        static readonly string TargetEngine = "Autodesk.AutoCAD+23";
 
-		DesignAutomationClient api = new DesignAutomationClient();
+        DesignAutomationClient api = new DesignAutomationClient();
 
-        public async Task SubmitWorkItemAsync(string myActivity, string inputUrl, string outputUrl)
+        public async Task<string> SubmitWorkItemAsync(string myActivity, string inputUrl, string outputUrl)
         {
             var workItemStatus = await api.CreateWorkItemAsync(new WorkItem()
             {
@@ -33,13 +34,28 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
                 }
             });
 
-            while (!workItemStatus.Status.IsDone())
-            {
-                await Task.Delay(TimeSpan.FromSeconds(2));
-                workItemStatus = await api.GetWorkitemStatusAsync(workItemStatus.Id);
-            }
+            //while (!workItemStatus.Status.IsDone())
+            //{
+            //    await Task.Delay(TimeSpan.FromSeconds(2));
+            //    workItemStatus = await api.GetWorkitemStatusAsync(workItemStatus.Id);
+            //}
+
             //if (workItemStatus.Status == Status.Success)
-            var fname = await DownloadToDocsAsync(workItemStatus.ReportUrl, "Das-report.txt");
+            //var fname = await DownloadToDocsAsync(workItemStatus.ReportUrl, "Das-report.txt");
+            return workItemStatus.Id;
+        }
+
+        public async Task<Status> CheckStatusAsync(string id)
+        {
+            return (await api.GetWorkitemStatusAsync(id)).Status;
+            //WorkItemStatus workItemStatus;
+            //do
+            //{
+            //    await Task.Delay(TimeSpan.FromSeconds(2));
+            //    workItemStatus = await api.GetWorkitemStatusAsync(id);
+            //}
+            //while (!workItemStatus.Status.IsDone());
+            //return workItemStatus.Status;
         }
 
         public async Task<string> SetupActivityAsync(string myApp)
@@ -130,6 +146,30 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
             }
         }
 
+        public async Task<string> SetupAppBundleAsync(IFormFile appBundle)
+        {
+            var myApp = $"{Owner}.{PackageName}+{Label}";
+            var appResponse = await this.api.AppBundlesApi.GetAppBundleAsync(myApp, throwOnError: false);
+            var app = new AppBundle()
+            {
+                Engine = TargetEngine,
+                Id = PackageName
+            };
+            var package = CreateZip(appBundle);
+            if (appResponse.HttpResponse.StatusCode == HttpStatusCode.NotFound)
+            {
+                await api.CreateAppBundleAsync(app, Label, package);
+                if (File.Exists(package))
+                    File.Delete(package);
+                return myApp;
+            }
+            await appResponse.HttpResponse.EnsureSuccessStatusCodeAsync();
+            await api.UpdateAppBundleAsync(app, Label, package);
+            if (File.Exists(package))
+                File.Delete(package);
+            return myApp;
+        }
+
         public async Task<bool> SetupOwnerAsync()
         {
             var nickname = await api.GetNicknameAsync("me");
@@ -160,6 +200,19 @@ namespace DesignGear.ServerManager.Core.ForgeUtils
                 archive.CreateEntryFromFile(folderPath + "\\" + name, Path.Combine(bundle, "Contents", name));
                 name = "Newtonsoft.Json.dll";
                 archive.CreateEntryFromFile(folderPath + "\\" + name, Path.Combine(bundle, "Contents", name));
+            }
+            return zip;
+
+        }
+
+        static string CreateZip(IFormFile appBundle)
+        {
+            var id = Guid.NewGuid();
+            string zip = $"d:\\{id}.zip";
+            using (var ms = new MemoryStream())
+            {
+                appBundle.CopyTo(ms);
+                File.WriteAllBytes(zip, ms.ToArray());
             }
             return zip;
 
