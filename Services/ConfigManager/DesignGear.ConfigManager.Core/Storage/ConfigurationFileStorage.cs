@@ -12,7 +12,7 @@ namespace DesignGear.ConfigManager.Core.Storage
     {
         private readonly string _fileBucket = @"C:\DesignGearFiles\Versions\";
         private readonly string _designGearPackageFileName = "DesignGearPackageContents.json";
-        private readonly string _svfFileExtension = "svf";
+        //private readonly string _svfFileExtension = "svf";
 
         public ConfigurationFileStorage()
         {
@@ -116,6 +116,37 @@ namespace DesignGear.ConfigManager.Core.Storage
             }
 
             return null;
+        }
+
+        public void CopyZipArchive(Guid productVersionId, Guid sourceConfigurationId, Guid destinationConfigurationId, string json)
+        {
+            var sourceFilePath = $"{_fileBucket}{productVersionId}\\{sourceConfigurationId}\\model\\";
+            var destinationFilePath = $"{_fileBucket}{productVersionId}\\{destinationConfigurationId}\\model\\";
+            var di = new DirectoryInfo(sourceFilePath);
+            if (di.Exists)
+            {
+                var file = di.EnumerateFiles().FirstOrDefault();
+                if (file != null)
+                {
+                    var newFilePath = Path.Combine(destinationFilePath, file.Name);
+                    file.CopyTo(newFilePath, true);
+                    using (var archive = ZipFile.Open(newFilePath, ZipArchiveMode.Update))
+                    {
+                        var entry = archive.Entries.FirstOrDefault(x => x.Name == _designGearPackageFileName);
+                        if (entry != null)
+                        {
+                            entry.Delete();
+                            var demoFile = archive.CreateEntry(_designGearPackageFileName);
+
+                            using (var entryStream = demoFile.Open())
+                            using (var streamWriter = new StreamWriter(entryStream))
+                            {
+                                streamWriter.Write(json);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public async Task<DesignGearModelPackage> SaveConfigurationPackageAsync(ConfigurationPackageDto package)

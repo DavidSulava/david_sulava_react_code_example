@@ -15,6 +15,8 @@ using DesignGear.Contracts.Enums;
 using DesignGear.Contracts.Dto;
 using ParameterDefinitionDto = DesignGear.Contracts.Dto.ConfigManager.ParameterDefinitionDto;
 using System.Transactions;
+using static DesignGear.ModelPackage.DesignGearModelPackage;
+using System.IO.Compression;
 
 namespace DesignGear.ConfigManager.Core.Services
 {
@@ -83,7 +85,7 @@ namespace DesignGear.ConfigManager.Core.Services
          * Svf при этом у нас отсутствует и его нужно сформировать. Для этого присваивается соответствующий статус
          * todo - создание записи в БД и папки с файлами должно быть в рамках транзакции
          */
-            public async Task CreateConfigurationFromPackageAsync(ConfigurationCreateDto create)
+        public async Task CreateConfigurationFromPackageAsync(ConfigurationCreateDto create)
         {
             /*
              * Распаковываем пакет и кладем его в хранилище
@@ -209,8 +211,23 @@ namespace DesignGear.ConfigManager.Core.Services
              * todo Поднять конфигурацию (запрос) с ее параметрами, поднять распакованный пакет из хранилища, 
              * заменить в json значения параметров, упаковать и вернуть архив как ответ             
              */
-            throw new NotImplementedException();
-            //var packageFile = _configurationFileStorage.GetZipArchive(configuration.ProductVersionId, configurationId);
+            var configuration = await _dataAccessor.Reader.Configurations.Include(x => x.ParameterDefinitions).FirstOrDefaultAsync(x => x.Id == configurationId);
+            var tempConfiguration = await _dataAccessor.Reader.Configurations.Include(x => x.ComponentDefinition)
+                .FirstOrDefaultAsync(x => x.Id == configuration.TemplateConfigurationId);
+            var modelData = await _configurationFileStorage.GetPackageModelAsync(tempConfiguration.ComponentDefinition.ProductVersionId, tempConfiguration.Id);
+            if (modelData == null)
+                throw new EntityNotFoundException<ZipArchive>(tempConfiguration.Id);
+
+            foreach (ParameterRow parameterRow in modelData.Parameter.Rows)
+            {
+                var newValue = configuration.ParameterDefinitions.FirstOrDefault(x => x.Name == parameterRow.Name);
+                if (newValue != null)
+                    parameterRow.Value = newValue.Value;
+            }
+            var json = JsonConvert.SerializeObject(modelData);
+
+            _configurationFileStorage.CopyZipArchive(tempConfiguration.ComponentDefinition.ProductVersionId, tempConfiguration.Id, configurationId, json);
+            return _configurationFileStorage.GetZipArchive(tempConfiguration.ComponentDefinition.ProductVersionId, configurationId);
         }
 
         /*

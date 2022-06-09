@@ -23,5 +23,8 @@ namespace DesignGear.ConfigManager.Core.Storage.Interfaces {
 
         //Получение архива с моделью
         FileStreamDto GetZipArchive(Guid productVersionId, Guid configurationId);
+
+        //Копируем архив и обновляем json
+        void CopyZipArchive(Guid productVersionId, Guid sourceConfigurationId, Guid targetConfigurationId, string json);
     }
 }

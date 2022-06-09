@@ -48,8 +48,6 @@ namespace DesignGear.ConfigManager.Core.Jobs
                      */
                     
                     var packageFile = _configurationService.CreateConfigurationRequestPackageAsync(configuration.Id).Result;
-                    //var packageFile = _configurationFileStorage.GetZipArchive(configuration.ProductVersionId, configuration.Id);
-                    
                     var appBundleFile = _appBundleService.GetAppBundleAsync(configuration.AppBundleId).Result;
                     if (packageFile != null && appBundleFile != null)
                     {
@@ -87,7 +85,7 @@ namespace DesignGear.ConfigManager.Core.Jobs
             foreach (var configuration in configurations)
             {
                 var packageFile = _configurationFileStorage.GetZipArchive(configuration.ProductVersionId, configuration.Id);
-                if (packageFile != null)
+                if (packageFile != null && configuration.RootFileName != null)
                 {
                     var urn = _serverManagerService.GetSvfAsync(packageFile, configuration.RootFileName).Result;
                     if (urn != null)
