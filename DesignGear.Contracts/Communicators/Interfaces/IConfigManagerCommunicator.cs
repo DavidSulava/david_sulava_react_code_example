@@ -24,7 +24,7 @@ namespace DesignGear.Contracts.Communicators.Interfaces
 
         //Task UpdateConfigurationAsync(ConfigurationUpdateDto update);
 
-        Task<FileStreamDto> GetSvfAsync(Guid configurationId, string svfName);
+        Task<Stream> GetSvfAsync(Guid configurationId, string svfName);
 
         Task<string> GetSvfRootFileNameAsync(Guid configurationId);
 

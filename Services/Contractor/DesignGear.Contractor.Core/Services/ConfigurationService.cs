@@ -137,7 +137,7 @@ namespace DesignGear.Contractor.Core.Services
         //        di.Delete(true);
         //}
 
-        public async Task<FileStreamDto> GetSvfAsync(Guid configurationId, string svfName)
+        public async Task<Stream> GetSvfAsync(Guid configurationId, string svfName)
         {
             return await _configManagerService.GetSvfAsync(configurationId, svfName);
         }

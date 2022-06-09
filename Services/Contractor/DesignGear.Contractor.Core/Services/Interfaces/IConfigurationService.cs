@@ -21,7 +21,7 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 
         //Task<AttachmentDto> GetModelFileAsync(Guid id);
 
-        Task<FileStreamDto> GetSvfAsync(Guid configurationId, string svfName);
+        Task<Stream> GetSvfAsync(Guid configurationId, string svfName);
 
         Task<string> GetSvfRootFileNameAsync(Guid configurationId);
 

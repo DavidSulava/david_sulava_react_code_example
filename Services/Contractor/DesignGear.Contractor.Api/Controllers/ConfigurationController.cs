@@ -9,7 +9,7 @@ using DesignGear.Contractor.Core.Services.Interfaces;
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
-    //[Authorize(Policy = "OrganizationSelected")]
+    [Authorize(Policy = "OrganizationSelected")]
     [Route("[controller]")]
     public class ConfigurationController : ControllerBase
     {
@@ -48,7 +48,7 @@ namespace DesignGear.Contractor.Api.Controllers
         [HttpGet("{configurationId}/svf/{svfName}")]
         public async Task<IActionResult> GetSvfAsync([FromRoute] Guid configurationId, [FromRoute] string svfName)
         {
-            return Ok((await _configurationService.GetSvfAsync(configurationId, svfName)).Content);
+            return File(await _configurationService.GetSvfAsync(configurationId, svfName), "application/octet-stream");
         }
 
         [HttpGet("{configurationId}/parameters")]
