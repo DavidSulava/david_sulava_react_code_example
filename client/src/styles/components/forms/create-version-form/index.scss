@@ -1,6 +1,7 @@
 $param-config-height: 300px;
 $param-config-padding: 10px;
 $config-parameters-container-height: 350px;
+$file-list-max-height: 55px;
 
 .create-version-form {
   .k-window-content {
@@ -14,8 +15,25 @@ $config-parameters-container-height: 350px;
     width: 40vw;
   }
 
+  .upload-component{
+    width: 100%;
+  }
   .chosen-files-container {
-    max-width: 35vw;
+    @include setFlex(column, start, flex-start);
+    max-height: $file-list-max-height;
+    width: 100%;
+    overflow: auto;
+    background-color: $select-back-ground-color;
+    border-radius: 5px;
+    margin-top: 6px;
+    padding: 5px;
+
+
+    .close-icon{
+      cursor: pointer;
+      margin-bottom: 2px;
+      color: $std-btn-color;
+    }
   }
 }
 

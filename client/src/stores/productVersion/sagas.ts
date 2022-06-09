@@ -9,7 +9,7 @@ import {
   postProdVerByProdId,
   putProdVer,
   setProdVersion,
-  setProdVersionList,
+  setProdVersionList, setProdVersionListLoading,
   setProdVersionLoading
 } from './reducer';
 import { IState } from '../configureStore';
@@ -21,7 +21,7 @@ function* getProdVersionListSaga({payload: id}: PayloadAction<string>):any {
     const dataState = yield select((state: IState) => state.prodVersion.dataState)
     const dataString: string = toDataSourceRequestString({...dataState})
     const idParam = `&productId=${id}`
-    yield put(setProdVersionLoading(true))
+    yield put(setProdVersionListLoading(true))
     const response = yield* call(Api.getProdVersionList,  dataString + idParam)
     yield put(setProdVersionList(response))
   }
@@ -29,7 +29,7 @@ function* getProdVersionListSaga({payload: id}: PayloadAction<string>):any {
     yield put(setError(e))
   }
   finally {
-    yield put(setProdVersionLoading(false))
+    yield put(setProdVersionListLoading(false))
   }
 }
 function* getProdVersionSaga({payload: id}: PayloadAction<string>):any {

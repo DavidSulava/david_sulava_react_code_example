@@ -7,12 +7,14 @@ const useProdVersion= () => {
   const prodVersionList = useSelector((state: IState) => state.prodVersion.prodVersionList)
   const prodVersion = useSelector((state: IState) => state.prodVersion.prodVersion)
   const isProdVersionLoading = useSelector((state: IState) => state.prodVersion.isProdVersionLoading)
+  const isProdVersionListLoading = useSelector((state: IState) => state.prodVersion.isProdVersionListLoading)
 
   return {
     dataState,
     prodVersionList,
     prodVersion,
-    isProdVersionLoading
+    isProdVersionLoading,
+    isProdVersionListLoading,
   }
 }
 

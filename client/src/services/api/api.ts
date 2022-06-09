@@ -3,9 +3,9 @@ import { ISignInData, ISignUpData, ITariff, IUser } from "../../types/user";
 import client from './http.client';
 import { IOrganisation, IPostOrganisation } from '../../types/organisationPage';
 import { IGetProdResp, IPostProduct, IProduct, IPutProduct } from '../../types/product';
-import { IGetProductVersion, IPostProductVersion, IProductVersion } from '../../types/productVersion';
-import { IAppBundle } from '../../types/common';
+import { IGetProductVersionList, IPostProductVersion, IProductVersion } from '../../types/productVersion';
 import { IConfigurationParamData, IGetConfigurations, IPostConfigurations } from '../../types/producVersionConfigurations';
+import { IAppBundle } from '../../types/appBundle';
 
 export default class Api {
   public static async signIn(formData: ISignInData): Promise<IUser> {
@@ -58,7 +58,7 @@ export default class Api {
     return response.data
   }
 
-  public static async getProdVersionList(params: string): Promise<IGetProductVersion> {
+  public static async getProdVersionList(params: string): Promise<IGetProductVersionList> {
     const response = await client.get(apiRoutes.productVersion.root(params))
     return response.data
   }

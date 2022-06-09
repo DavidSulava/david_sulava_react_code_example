@@ -7,7 +7,7 @@ import { Grid, GridColumn, GridDataStateChangeEvent, GridItemChangeEvent, GridNo
 import CreateVersion from './modals/CreateVersion';
 import { IGridDataState } from '../../../../types/common';
 import useProdVersion from '../../../../helpers/hooks/useProdVersion';
-import { IProductVersion } from '../../../../types/productVersion';
+import { IProductVersion, IProductVersionList } from '../../../../types/productVersion';
 import { DateCell } from '../../../../components/grid-components/DateCell';
 import NoRecords from '../../../../components/grid-components/NoRecords';
 import { IProduct } from '../../../../types/product';
@@ -24,10 +24,10 @@ const VersionsPage = () => {
   const {state} = useLocation();
   const product = state as IProduct
 
-  const {prodVersionList, dataState, isProdVersionLoading} = useProdVersion()
+  const {prodVersionList, dataState, isProdVersionListLoading} = useProdVersion()
   const [isShowCreateVersionModal, setIsShowCreateVersionModal] = useState(false)
-  const [dataToUpdate, setDataToUpdate] = useState<IProductVersion>()
-  const [gridData, setGridData] = useState<IProductVersion[]>([])
+  const [dataToUpdateId, setDataToUpdateId] = useState<string>('')
+  const [gridData, setGridData] = useState<IProductVersionList[]>([])
 
   useEffect(() => {
     dispatch(getProdVersionList(productId ?? ''))
@@ -38,7 +38,10 @@ const VersionsPage = () => {
 
   const onCreateVersionClick = () => {
     setIsShowCreateVersionModal(!isShowCreateVersionModal)
-    setDataToUpdate(undefined)
+  }
+  const onCreateVerClose = () =>{
+    setIsShowCreateVersionModal(!isShowCreateVersionModal)
+    setDataToUpdateId('')
   }
   const onDataStateChange = (e: GridDataStateChangeEvent) => {
     dispatch(setProdVersionDataState(e.dataState as any))
@@ -55,7 +58,7 @@ const VersionsPage = () => {
   };
   const onEdit = (data: IProductVersion) => {
     setIsShowCreateVersionModal(true)
-    setDataToUpdate(data)
+    setDataToUpdateId(data.id)
   }
   const onDelete = (data: IProductVersion) => dispatch(delProdVer(data))
 
@@ -83,7 +86,7 @@ const VersionsPage = () => {
               </Button>
             </GridToolbar>
             <GridNoRecords>
-              <NoRecords isLoading={isProdVersionLoading}/>
+              <NoRecords isLoading={isProdVersionListLoading}/>
             </GridNoRecords>
             <GridColumn field="name" title="Name"/>
             <GridColumn field="sequenceNumber" title="Sequence Number"/>
@@ -97,7 +100,7 @@ const VersionsPage = () => {
       </div>
       {
         isShowCreateVersionModal && productId &&
-        <CreateVersion isOpen={isShowCreateVersionModal} onClose={onCreateVersionClick} productId={productId} dataToUpdate={dataToUpdate}/>
+        <CreateVersion isOpen={isShowCreateVersionModal} onClose={onCreateVerClose} productId={productId} dataToUpdateId={dataToUpdateId}/>
       }
     </div>
   )

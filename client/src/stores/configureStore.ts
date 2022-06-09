@@ -13,6 +13,8 @@ import prodVersionSlice, { IProdVersionState } from './productVersion/reducer';
 import prodVersionWatcher from './productVersion/sagas';
 import configurationsSlice, { IConfigurationsState } from './productConfigurations/reducer';
 import configurationsWatcher from './productConfigurations/sagas';
+import appBundleWatcher from './appBundle/sagas';
+import appBundleSlice, { IAppBundleState } from './appBundle/reducer';
 
 export interface IState {
   auth: IAuthState,
@@ -20,7 +22,8 @@ export interface IState {
   organisation: IOrganisationState,
   product: IProductState,
   prodVersion: IProdVersionState,
-  configurations: IConfigurationsState
+  configurations: IConfigurationsState,
+  appBundle: IAppBundleState,
 }
 
 const reducers = combineReducers<IState>({
@@ -30,6 +33,7 @@ const reducers = combineReducers<IState>({
   product: productSlice,
   prodVersion: prodVersionSlice,
   configurations: configurationsSlice,
+  appBundle: appBundleSlice,
 })
 
 function* sagas() {
@@ -40,6 +44,7 @@ function* sagas() {
     productWatcher(),
     prodVersionWatcher(),
     configurationsWatcher(),
+    appBundleWatcher(),
   ])
 }
 
