@@ -70,7 +70,8 @@ builder.Services.AddCors(options =>
             "http://localhost:3000",
             "https://localhost:3000",
             "http://localhost:3000/",
-            "https://localhost:3000/");
+            "https://localhost:3000/",
+            "http://evraz-auth1:8056");
 
 
         builder.WithExposedHeaders("Content-Disposition");
@@ -89,11 +90,11 @@ using (var scope = app.Services.CreateScope()) {
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 

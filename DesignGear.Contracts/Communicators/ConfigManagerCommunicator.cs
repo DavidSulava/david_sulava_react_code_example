@@ -125,7 +125,7 @@ namespace DesignGear.Contracts.Communicators
 
         public async Task<string> GetSvfRootFileNameAsync(Guid configurationId)
         {
-            return await SendHttpRequestAsync<string>($"{_settings.ConfigManagerUrl}configuration/{configurationId}/svf");
+            return await SendHttpRequestAsync($"{_settings.ConfigManagerUrl}configuration/{configurationId}/svf");
         }
 
         public async Task<Dto.ConfigManager.ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId)

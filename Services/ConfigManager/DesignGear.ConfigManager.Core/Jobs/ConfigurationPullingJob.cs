@@ -36,9 +36,10 @@ namespace DesignGear.ConfigManager.Core.Jobs
              * Для каждой конфигурации делаем запрос о статусе, получаем результат если готово и сохраняем его
              * через IConfigurationService. Фиксируем статус Ready для тех конфигураций, который в итоге пересчитаны
              */
-            try
+
+            foreach (var configuration in configurations)
             {
-                foreach (var configuration in configurations)
+                try
                 {
                     var result = _serverManagerService.CheckStatusJobAsync(configuration.WorkItemId).Result;
                     if (result == ConfigurationStatus.Ready)
@@ -52,9 +53,9 @@ namespace DesignGear.ConfigManager.Core.Jobs
                         }).Wait();
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+                catch (Exception ex)
+                {
+                }
             }
 
             /*
@@ -65,9 +66,9 @@ namespace DesignGear.ConfigManager.Core.Jobs
                 SvfStatus = SvfStatus.InProcess
             }).Result;
 
-            try
+            foreach (var configuration in configurations)
             {
-                foreach (var configuration in configurations)
+                try
                 {
                     var result = _serverManagerService.CheckSvfStatusJobAsync(configuration.URN).Result;
                     if (result == SvfStatus.Ready)
@@ -85,9 +86,9 @@ namespace DesignGear.ConfigManager.Core.Jobs
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+                catch (Exception ex)
+                {
+                }
             }
         }
     }
