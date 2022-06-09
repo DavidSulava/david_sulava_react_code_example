@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IGridDataFilter, IGridDataStateFilter, IGridFilterSetting, Nullable } from '../../types/common';
 import {
+  IConfiguration,
   IConfigurationParamData,
   IGetConfigurations,
   IPostConfigurations,
@@ -11,6 +12,7 @@ export interface IConfigurationsState {
   isConfigLoading: boolean,
   configurationsList: Nullable<IGetConfigurations>,
   searchedConfigList: Nullable<IGetConfigurations>,
+  configuration: Nullable<IConfiguration>,
   configParams:  Nullable<IConfigurationParamData>,
   dataState: IGridDataStateFilter,
 }
@@ -19,6 +21,7 @@ export const initialConfigurationsState: IConfigurationsState = {
   isConfigLoading: false,
   configurationsList: null,
   searchedConfigList: null,
+  configuration: null,
   configParams: null,
   dataState:{
     filter: {
@@ -36,7 +39,9 @@ const configurationsSlice = createSlice({
   name: "configurations",
   initialState: initialConfigurationsState,
   reducers: {
-    getConfigurations: (state, action: PayloadAction<string>) => {
+    getConfigurationList: (state, action: PayloadAction<string>) => {
+    },
+    getConfigurationById: (state, action: PayloadAction<string>) => {
     },
     searchConfiguration: (state, action: PayloadAction<ISearchConfigPayload>) => {
     },
@@ -53,6 +58,9 @@ const configurationsSlice = createSlice({
     setConfigurationsList: (state, action: PayloadAction<IGetConfigurations>) => {
       state.configurationsList = action.payload
     },
+    setConfiguration: (state, action: PayloadAction<IConfiguration>) => {
+      state.configuration = action.payload
+    },
     setSearchedConfigList: (state, action: PayloadAction<IGetConfigurations>) => {
       state.searchedConfigList = action.payload
     },
@@ -63,10 +71,12 @@ const configurationsSlice = createSlice({
 });
 
 export const {
-  getConfigurations,
+  getConfigurationList,
+  getConfigurationById,
   getConfigParams,
   searchConfiguration,
   postConfig,
+  setConfiguration,
   setConfigParams,
   setIsConfigLoading,
   setConfigurationsList,

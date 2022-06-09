@@ -4,7 +4,7 @@ import client from './http.client';
 import { IOrganisation, IPostOrganisation } from '../../types/organisationPage';
 import { IGetProdResp, IPostProduct, IProduct, IPutProduct } from '../../types/product';
 import { IGetProductVersionList, IPostProductVersion, IProductVersion } from '../../types/productVersion';
-import { IConfigurationParamData, IGetConfigurations, IPostConfigurations } from '../../types/producVersionConfigurations';
+import { IConfiguration, IConfigurationParamData, IGetConfigurations, IPostConfigurations } from '../../types/producVersionConfigurations';
 import { IAppBundle } from '../../types/appBundle';
 
 export default class Api {
@@ -66,15 +66,19 @@ export default class Api {
     const response = await client.get(apiRoutes.productVersion.item(id))
     return response.data
   }
-  public static async getConfigurations(params: string): Promise<IGetConfigurations> {
+  public static async getConfigurationList(params: string): Promise<IGetConfigurations> {
     const response = await client.get(apiRoutes.configurations.root(params))
+    return response.data
+  }
+  public static async getConfigurationById(id: string): Promise<IConfiguration> {
+    const response = await client.get(apiRoutes.configurations.item(id))
     return response.data
   }
   public static async getConfigParams(configurationId: string): Promise<IConfigurationParamData> {
     const response = await client.get(apiRoutes.configurations.params(configurationId))
     return response.data
   }
-  public static async postConfig(formData: IPostConfigurations): Promise<IConfigurationParamData> {
+  public static async postConfig(formData: IPostConfigurations): Promise<string> {
     const response = await client.post(apiRoutes.configurations.root(), formData)
     return response.data
   }

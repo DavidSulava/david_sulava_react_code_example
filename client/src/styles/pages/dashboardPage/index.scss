@@ -1,8 +1,9 @@
+$dash-board-header-height: 85px;
+
 .dash-board-header{
   @include setFlex(row, space-between);
-  margin-top: 10px;
   padding: 5px;
-  height: 70px;
+  height: $dash-board-header-height;
 }
 .dash-board-body{
   display: flex;
@@ -20,6 +21,6 @@
 .dash-board-content{
   @include setFlex(column, start, stretch);
   flex-grow: 8;
-  height: calc( 100vh - #{$header-height} - 70px - 30px);
-  padding: 0 5px 5px 5px;
+  //height: calc( 100vh - #{$header-height} - 70px - 30px);
+  padding: 0 0 5px 5px;
 }

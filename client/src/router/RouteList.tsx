@@ -17,6 +17,7 @@ import RegistrationPage from '../pages/AuthPages/RegistrationPage/RegistartionPa
 import ForgotPassword from '../pages/AuthPages/ForgotPassword/ForgotPassword';
 import VersionsPage from '../pages/DashboardPage/pages/ProdVersionsPage/VersionsPage';
 import ProdVersionPage from '../pages/DashboardPage/pages/ProdVersionPage/ProdVersionPage';
+import ProductConfigurationPage from '../pages/DashboardPage/pages/ProductConfigurationPage/ProductConfigurationPage';
 
 const RouteList = () => {
   return (
@@ -42,6 +43,7 @@ const RouteList = () => {
           <Route path={ERoutes.Users} element={<UsersPage/>}/>
           <Route path={ERoutes.Billing} element={<BillingPage/>}/>
         </Route>
+        <Route path={ERoutes.ProdVersionConfig} element={<ProductConfigurationPage/>}/>
       </Route>
     </Routes>
   )

@@ -1,15 +1,24 @@
 import { IKendoResp } from './common';
 
 export interface IGetConfigurations extends IKendoResp {
-  data: IConfigurations[],
+  data: IConfigurationListItem[],
 }
-export interface IPostConfigurations{
-  organizationId: string,
-  productId: string,
+export interface IConfiguration{
+  id: string,
+  name: string,
+  componentName: string,
+  comment: string,
+  modelState: EModelState,
   productVersionId: string,
-  appBundleId: string,
+  targetFileId: string,
+  parentId: string,
+  created: string,
   status: EConfigurationStatus,
   svfStatus: ESvfStatus,
+  parameterDefinitions: IConfigParam,
+}
+
+export interface IPostConfigurations{
   name: string,
   comment: string,
   baseConfigurationId: string,
@@ -20,10 +29,11 @@ export interface IPostParamValues {
   value: string
 }
 
-export interface IConfigurations {
+export interface IConfigurationListItem {
   id: string,
   configurationName: string,
   componentName: string,
+  comment: string,
   parentId: string,
   created: string,
   status: EConfigurationStatus,

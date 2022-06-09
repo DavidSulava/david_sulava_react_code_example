@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import useAuthCheck from '../../helpers/hooks/useAuthCheck';
 import setPath from '../../helpers/setPath';
 import BtnLink from '../../components/BtnLink';
-import { authOrg } from '../../stores/authentication/reducer';
 import { useDispatch } from 'react-redux';
 import { initialProdVerState, setProdVersionDataState } from '../../stores/productVersion/reducer';
 
@@ -18,7 +17,6 @@ const DashboardPage = () => {
   const insideSubPageReg = new RegExp(`(${dashboardRoot}\/)([A-z\\d\\-]+\/){2,}`)
 
   useEffect(() => {
-    dispatch(authOrg(organizationId ?? ''))
     return () => {
       dispatch(setProdVersionDataState(initialProdVerState.dataState))
     }
@@ -28,7 +26,7 @@ const DashboardPage = () => {
   }
 
   return (
-    <>
+    <div className="page-body">
       <div className="dash-board-header">
         <div>
           <h6>Welcome, {user?.firstName}</h6>
@@ -99,7 +97,7 @@ const DashboardPage = () => {
           <Outlet/>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

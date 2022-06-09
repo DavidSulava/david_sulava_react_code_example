@@ -1,3 +1,7 @@
+$version-info-height: 178px;
+$version-info-button-bar-height: 38px;
+$version-grid-height: calc(100vh - (#{$header-height} + #{$dash-board-header-height} + #{$version-info-height} + #{$version-info-button-bar-height}) - 45px);
+
 .version-page{
   @include setFlex(column, center, stretch);
   &>:not(:nth-child(1)){
@@ -5,9 +9,11 @@
   }
 }
 .version-info{
+  height: $version-info-height;
   background-color: $form-background-color;
   border-radius: 5px;
   padding: 10px;
+  overflow: auto;
 
   .version-info-body{
     @include setFlex(row, start, start);
@@ -27,4 +33,16 @@
 .version-info-button-bar{
   @include setFlex(row, start, start);
   gap: 10px;
+  height: $version-info-button-bar-height;
+  overflow: auto;
+}
+.configurations-grid{
+  max-height: $version-grid-height;
+
+  td{
+    text-align: center;
+  }
+  th{
+    justify-content: center;
+  }
 }
