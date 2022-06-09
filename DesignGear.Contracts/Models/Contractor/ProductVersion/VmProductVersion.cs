@@ -22,7 +22,7 @@
         
         public ICollection<string> ImageFiles { get; set; }
 
-        public ICollection<VmConfiguration> Configurations { get; set; }
+        //public ICollection<VmConfiguration> Configurations { get; set; }
 
         public bool IsCurrent { get; set; }
     }

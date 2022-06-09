@@ -2,9 +2,10 @@
 
 namespace DesignGear.Contracts.Dto.ConfigManager
 {
-    public class ConfigurationUpdateSvfDto {
+    public class ConfigurationStatusUpdateDto {
         public Guid ConfigurationId { get; set; }
+        public ConfigurationStatus Status { get; set; }
         public SvfStatus SvfStatus { get; set; }
-        public string URN { get; set; }
+        public FileStreamDto ConfigurationPackage { get; set; }
     }
 }

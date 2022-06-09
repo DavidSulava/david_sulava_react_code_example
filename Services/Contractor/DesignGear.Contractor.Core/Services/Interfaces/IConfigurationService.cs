@@ -17,7 +17,7 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 
         Task<DataSourceResult> GetConfigurationItemsAsync(string queryString);
 
-        //Task<ConfigurationDto> GetConfigurationAsync(Guid id);
+        Task<ConfigurationDto> GetConfigurationAsync(Guid id);
 
         //Task<AttachmentDto> GetModelFileAsync(Guid id);
 

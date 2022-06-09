@@ -91,18 +91,10 @@ namespace DesignGear.Contractor.Core.Services
             return await _configManagerService.GetConfigurationItemsAsync(queryString);
         }
 
-        //public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
-        //{
-        //    var result = await _dataAccessor.Reader.Configurations.ProjectTo<ConfigurationDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
-        //    if (result == null)
-        //    {
-        //        throw new EntityNotFoundException<Configuration>(id);
-        //    }
-
-        //    result.ModelFile = GetModelFileName(result.ProductVersionId, id);
-
-        //    return result;
-        //}
+        public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
+        {
+            return await _configManagerService.GetConfigurationAsync(id);
+        }
 
         //private string GetModelFileName(Guid productVersionId, Guid id)
         //{

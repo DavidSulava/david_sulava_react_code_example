@@ -2,6 +2,7 @@
 using DesignGear.Common.Extensions;
 using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.Contracts.Dto;
+using DesignGear.Contracts.Dto.ConfigManager;
 using DesignGear.Contracts.Helpers;
 using DesignGear.Contracts.Models.ConfigManager;
 using Kendo.Mvc.UI;
@@ -111,11 +112,11 @@ namespace DesignGear.Contracts.Communicators
             return JsonConvert.DeserializeObject<Guid>(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update)
-        {
-            var response = await _httpClient.PutAsync($"{_settings.ConfigManagerUrl}configuration", new StringContent(JsonConvert.SerializeObject(update), Encoding.UTF8, "application/json"));
-            response.EnsureSuccessStatusCode();
-        }
+        //public async Task UpdateConfigurationAsync(ConfigurationUpdateDto update)
+        //{
+        //    var response = await _httpClient.PutAsync($"{_settings.ConfigManagerUrl}configuration", new StringContent(JsonConvert.SerializeObject(update), Encoding.UTF8, "application/json"));
+        //    response.EnsureSuccessStatusCode();
+        //}
 
         public async Task<FileStreamDto> GetSvfAsync(Guid configurationId, string svfName)
         {
@@ -129,12 +130,17 @@ namespace DesignGear.Contracts.Communicators
 
         public async Task<Dto.ConfigManager.ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId)
         {
-            return (await SendHttpRequestAsync<VmComponentParameterDefinitions>($"{_settings.ConfigManagerUrl}configuration/{configurationId}/parameters")).MapTo<Dto.ConfigManager.ConfigurationParametersDto>(_mapper);
+            return (await SendHttpRequestAsync<VmComponentParameterDefinitions>($"{_settings.ConfigManagerUrl}configuration/{configurationId}/parameters")).MapTo<ConfigurationParametersDto>(_mapper);
         }
 
         public async Task<DataSourceResult> GetConfigurationItemsAsync(string queryString)
         {
             return (await SendHttpRequestJsonAsync<DataSourceResult>($"{_settings.ConfigManagerUrl}configuration{queryString}"));
+        }
+
+        public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
+        {
+            return (await SendHttpRequestJsonAsync<ConfigurationDto>($"{_settings.ConfigManagerUrl}configuration/{id}")).MapTo<ConfigurationDto>(_mapper);
         }
     }
 }

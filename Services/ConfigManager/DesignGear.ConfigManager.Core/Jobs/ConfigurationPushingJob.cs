@@ -90,7 +90,7 @@ namespace DesignGear.ConfigManager.Core.Jobs
                     var urn = _serverManagerService.GetSvfAsync(packageFile, configuration.RootFileName).Result;
                     if (urn != null)
                     {
-                        _configurationService.UpdateSvfStatus(new ConfigurationUpdateSvfDto
+                        _configurationService.UpdateSvfStatus(new ConfigurationSvfStatusUpdateDto
                         {
                             ConfigurationId = configuration.Id,
                             SvfStatus = SvfStatus.InProcess,

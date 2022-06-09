@@ -66,10 +66,11 @@ namespace DesignGear.ConfigManager.Api.Controllers
             return (await _configurationService.GetConfigurationParametersAsync(configurationId)).MapTo<VmComponentParameterDefinitions>(_mapper);
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<VmConfiguration> GetConfigurationAsync([FromRoute] Guid id) {
-        //    return null;
-        //}
+        [HttpGet("{id}")]
+        public async Task<VmConfiguration> GetConfigurationAsync([FromRoute] Guid id)
+        {
+            return (await _configurationService.GetConfigurationAsync(id)).MapTo<VmConfiguration>(_mapper);
+        }
 
         //[HttpDelete("{id}")]
         //public async Task DeleteConfigurationAsync([FromRoute] Guid id) {

@@ -21,17 +21,17 @@ namespace DesignGear.ConfigManager.Core.Services.Interfaces
 
         Task<ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId);
 
-        void UpdateSvfStatus(ConfigurationUpdateSvfDto update);
+        void UpdateSvfStatus(ConfigurationSvfStatusUpdateDto update);
 
         void UpdateModelStatus(ConfigurationUpdateModelDto update);
 
-        Task UpdateConfigurationAsync(Contracts.Dto.ConfigManager.ConfigurationUpdateDto Configuration);
+        Task UpdateConfigurationAsync(Contracts.Dto.ConfigManager.ConfigurationStatusUpdateDto Configuration);
+
+        Task<ConfigurationDto> GetConfigurationAsync(Guid id);
 
         /*Task RemoveConfigurationAsync(Guid id);
 
         Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId);
-
-        Task<ConfigurationDto> GetConfigurationAsync(Guid id);
 
         Task<AttachmentDto> GetModelFileAsync(Guid id);*/
     }

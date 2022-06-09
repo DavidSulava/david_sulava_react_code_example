@@ -140,7 +140,7 @@ namespace DesignGear.ConfigManager.Core.Services
          * При этом учитываем, что запись корневой кофигурации была создана ранее как заявка
          * Вызывается фоновой задачей, когда получен ответ от инвентора
          */
-        public async Task UpdateConfigurationAsync(Contracts.Dto.ConfigManager.ConfigurationUpdateDto update)
+        public async Task UpdateConfigurationAsync(Contracts.Dto.ConfigManager.ConfigurationStatusUpdateDto update)
         {
             /*
              * Получаем из базы корневую конфигурацию (заявку)
@@ -316,7 +316,7 @@ namespace DesignGear.ConfigManager.Core.Services
             return await Task.FromResult(result);
         }
 
-        public void UpdateSvfStatus(ConfigurationUpdateSvfDto update)
+        public void UpdateSvfStatus(ConfigurationSvfStatusUpdateDto update)
         {
             var item = _dataAccessor.Editor.Configurations.FirstOrDefault(x => x.Id == update.ConfigurationId);
             if (item == null)
@@ -338,6 +338,17 @@ namespace DesignGear.ConfigManager.Core.Services
 
             _mapper.Map(update, item);
             _dataAccessor.Editor.Save();
+        }
+
+        public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
+        {
+            var result = await _dataAccessor.Reader.Configurations.ProjectTo<ConfigurationDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
+            if (result == null)
+            {
+                throw new EntityNotFoundException<Configuration>(id);
+            }
+
+            return result;
         }
 
         //public async Task<Guid> CreateConfigurationAsync(ConfigurationCreateDto create)
@@ -393,19 +404,6 @@ namespace DesignGear.ConfigManager.Core.Services
         _dataAccessor.Editor.Delete(item);
         DeleteFiles(item.ProductVersionId, item.Id);
         await _dataAccessor.Editor.SaveAsync();
-    }
-
-    public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
-    {
-        var result = await _dataAccessor.Reader.Configurations.ProjectTo<ConfigurationDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
-        if (result == null)
-        {
-            throw new EntityNotFoundException<Configuration>(id);
-    }
-
-        result.ModelFile = GetModelFileName(result.ProductVersionId, id);
-
-        return result;
     }
 
     private string GetModelFileName(Guid productVersionId, Guid id)

@@ -44,7 +44,7 @@ namespace DesignGear.ConfigManager.Core.Jobs
                     if (result == ConfigurationStatus.Ready)
                     {
                         var modelStream = _serverManagerService.DownloadModelAsync(configuration.WorkItemUrl).Result;
-                        _configurationService.UpdateConfigurationAsync(new ConfigurationUpdateDto()
+                        _configurationService.UpdateConfigurationAsync(new ConfigurationStatusUpdateDto()
                         {
                             ConfigurationId = configuration.Id,
                             Status = ConfigurationStatus.Ready,
@@ -76,7 +76,7 @@ namespace DesignGear.ConfigManager.Core.Jobs
                         if (file != null)
                         {
                             _configurationFileStorage.SaveSvfAsync(configuration.ProductVersionId, configuration.Id, file).Wait();
-                            _configurationService.UpdateSvfStatus(new ConfigurationUpdateSvfDto
+                            _configurationService.UpdateSvfStatus(new ConfigurationSvfStatusUpdateDto
                             {
                                 ConfigurationId = configuration.Id,
                                 SvfStatus = SvfStatus.Ready,

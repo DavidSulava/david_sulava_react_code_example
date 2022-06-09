@@ -1,11 +1,11 @@
-﻿using DesignGear.Contracts.Dto;
+﻿//using DesignGear.Contracts.Dto;
 
-namespace DesignGear.ConfigManager.Core.Services.Interfaces
-{
-    public interface IModelService
-    {
-        //Task SetModelAsync(ModelDto create);
+//namespace DesignGear.ConfigManager.Core.Services.Interfaces
+//{
+//    public interface IModelService
+//    {
+//        //Task SetModelAsync(ModelDto create);
 
-        Task<ICollection<ParameterDefinitionDto>> GetParamaterDefinitions();
-    }
-}
+//        Task<ICollection<ParameterDefinitionDto>> GetParamaterDefinitions();
+//    }
+//}

@@ -1,15 +1,21 @@
-﻿using DesignGear.Contracts.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using DesignGear.Common.Enums;
 
-namespace DesignGear.Contracts.Dto.ConfigManager {
-    public class ConfigurationUpdateDto {
-        public Guid ConfigurationId { get; set; }
-        public ConfigurationStatus Status { get; set; }
-        public SvfStatus SvfStatus { get; set; }
-        public FileStreamDto ConfigurationPackage { get; set; }
-    }
-}
+//namespace DesignGear.Contracts.Dto
+//{
+//    public class ConfigurationUpdateDto
+//    {
+//        public Guid Id { get; set; }
+
+//        public string Name { get; set; }
+
+//        public string Comment { get; set; }
+
+//        public ModelState ModelState { get; set; }
+
+//        public Guid ProductVersionId { get; set; }
+
+//        public Guid TargetFileId { get; set; }
+
+//        public ICollection<ParameterDefinitionDto> ParameterDefinitions { get; set; }
+//    }
+//}

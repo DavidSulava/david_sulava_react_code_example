@@ -9,7 +9,7 @@ using DesignGear.Contractor.Core.Services.Interfaces;
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
-    [Authorize(Policy = "OrganizationSelected")]
+    //[Authorize(Policy = "OrganizationSelected")]
     [Route("[controller]")]
     public class ConfigurationController : ControllerBase
     {
@@ -55,6 +55,12 @@ namespace DesignGear.Contractor.Api.Controllers
         public async Task<VmComponentParameterDefinitions> GetComponentParameterDefinitionsAsync(Guid configurationId)
         {
             return (await _configurationService.GetConfigurationParametersAsync(configurationId)).MapTo<VmComponentParameterDefinitions>(_mapper);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<VmConfiguration> GetConfigurationAsync([FromRoute] Guid id)
+        {
+            return (await _configurationService.GetConfigurationAsync(id)).MapTo<VmConfiguration>(_mapper);
         }
     }
 }
