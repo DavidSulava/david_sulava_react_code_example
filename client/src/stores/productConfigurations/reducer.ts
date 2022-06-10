@@ -14,6 +14,7 @@ export interface IConfigurationsState {
   searchedConfigList: Nullable<IGetConfigurations>,
   configuration: Nullable<IConfiguration>,
   configParams:  Nullable<IConfigurationParamData>,
+  svfPath: string,
   dataState: IGridDataStateFilter,
 }
 
@@ -23,6 +24,7 @@ export const initialConfigurationsState: IConfigurationsState = {
   searchedConfigList: null,
   configuration: null,
   configParams: null,
+  svfPath: '',
   dataState:{
     filter: {
       filters: [] as IGridFilterSetting[],
@@ -47,6 +49,8 @@ const configurationsSlice = createSlice({
     },
     getConfigParams: (state, action: PayloadAction<string>) => {
     },
+    getSvfPath: (state, action: PayloadAction<string>) => {
+    },
     postConfig: (state, action: PayloadAction<IPostConfigurations>) => {
     },
     setConfigParams: (state, action: PayloadAction<IConfigurationParamData>) => {
@@ -64,6 +68,9 @@ const configurationsSlice = createSlice({
     setSearchedConfigList: (state, action: PayloadAction<IGetConfigurations>) => {
       state.searchedConfigList = action.payload
     },
+    setSvfPath:  (state, action: PayloadAction<string>) => {
+      state.svfPath = action.payload
+    },
     setConfigurationsDataState: (state, action: PayloadAction<IGridDataStateFilter>) => {
       state.dataState = action.payload
     },
@@ -75,12 +82,14 @@ export const {
   getConfigurationById,
   getConfigParams,
   searchConfiguration,
+  getSvfPath,
   postConfig,
   setConfiguration,
   setConfigParams,
   setIsConfigLoading,
   setConfigurationsList,
   setSearchedConfigList,
+  setSvfPath,
   setConfigurationsDataState
 } = configurationsSlice.actions
 

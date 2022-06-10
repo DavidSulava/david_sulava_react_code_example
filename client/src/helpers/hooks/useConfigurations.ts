@@ -1,5 +1,7 @@
 import { useSelector } from 'react-redux';
 import { IState } from '../../stores/configureStore';
+import { BASE_URL } from '../../constants/api';
+import { apiRoutes } from '../../services/api/routes';
 
 const useConfigurations = () => {
   const dataState = useSelector((state: IState) => state.configurations.dataState)
@@ -8,6 +10,7 @@ const useConfigurations = () => {
   const isConfigLoading = useSelector((state: IState) => state.configurations.isConfigLoading)
   const searchedConfigList = useSelector((state: IState) => state.configurations.searchedConfigList)
   const configParams = useSelector((state: IState) => state.configurations.configParams)
+  const svfPath = useSelector((state: IState) => state.configurations.svfPath)
 
   return {
     dataState,
@@ -15,7 +18,8 @@ const useConfigurations = () => {
     configuration,
     configParams,
     searchedConfigList,
-    isConfigLoading
+    isConfigLoading,
+    svfPath: {initial: svfPath, url: svfPath? apiRoutes.configurations.svf(configuration?.id??'') + '/' + svfPath : ''}
   }
 }
 

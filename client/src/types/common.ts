@@ -4,6 +4,7 @@ import { JwtPayload } from 'jwt-decode';
 declare global {
   interface Window {
     API_URL: string;
+    Autodesk:  typeof Autodesk,
   }
 }
 
