@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DesignGear.Common.Enums;
 using DesignGear.Common.Extensions;
 using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contractor.Core.Services.Interfaces;
@@ -7,8 +6,9 @@ using DesignGear.Contracts.Dto;
 using DesignGear.Contracts.Models.Contractor;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DesignGear.Contractor.Api.Controllers {
-    [Authorize(Policy = "OrganizationSelected")]
+namespace DesignGear.Contractor.Api.Controllers
+{
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class AccountController : ControllerBase {
