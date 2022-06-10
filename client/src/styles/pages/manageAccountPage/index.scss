@@ -1,0 +1,15 @@
+.account-content{
+  width: 100%;
+  background-color: $form-background-color;
+  padding: 10px;
+  margin-left: 5px;
+}
+.account-info-details{
+  @include setFlex(column);
+  &>*{
+    text-align: left ;
+  }
+  .details-button-container{
+    text-align: center;
+  }
+}

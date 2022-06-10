@@ -18,6 +18,10 @@ import ForgotPassword from '../pages/AuthPages/ForgotPassword/ForgotPassword';
 import VersionsPage from '../pages/DashboardPage/pages/ProdVersionsPage/VersionsPage';
 import ProdVersionPage from '../pages/DashboardPage/pages/ProdVersionPage/ProdVersionPage';
 import ProductConfigurationPage from '../pages/DashboardPage/pages/ProductConfigurationPage/ProductConfigurationPage';
+import ManageAccountPage from '../pages/ManageAccountPage/ManageAccountPage';
+import InfoDetailsPage from '../pages/ManageAccountPage/pages/InfoDetailsPage/InfoDetailsPage';
+import SecurityPage from '../pages/ManageAccountPage/pages/SecurityPage/SecurityPage';
+import ResetPasswordPage from '../pages/AuthPages/ResetPasswordPage/ResetPasswordPage';
 
 const RouteList = () => {
   return (
@@ -27,6 +31,7 @@ const RouteList = () => {
         <Route index element={<LoginPage/>}/>
         <Route path={ERoutes.SignUp} element={<RegistrationPage/>}/>
         <Route path={ERoutes.ForgotPwd} element={<ForgotPassword/>}/>
+        <Route path={ERoutes.ResetPwd} element={<ResetPasswordPage/>}/>
       </Route>
 
       {/*Protected Routes*/}
@@ -44,6 +49,11 @@ const RouteList = () => {
           <Route path={ERoutes.Billing} element={<BillingPage/>}/>
         </Route>
         <Route path={ERoutes.ProdVersionConfig} element={<ProductConfigurationPage/>}/>
+
+        <Route path={ERoutes.ManageAccount} element={<ManageAccountPage/>}>
+          <Route index element={<InfoDetailsPage/>}/>
+          <Route path={ERoutes.AccountSecurity} element={<SecurityPage/>}/>
+        </Route>
       </Route>
     </Routes>
   )

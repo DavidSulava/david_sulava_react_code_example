@@ -1,7 +1,7 @@
 import { Field, Form, FormElement } from '@progress/kendo-react-form';
 import { Button } from 'react-bootstrap';
 import CInput from '../../../components/form-components/CInput';
-import { isEmpty } from '../../../components/form-components/helpers/valodation-functions';
+import { isEmpty } from '../../../components/form-components/helpers/validation-functions';
 import { useDispatch, useSelector } from 'react-redux'
 import useAuthCheck from '../../../helpers/hooks/useAuthCheck';
 import { ERoutes } from '../../../router/Routes';

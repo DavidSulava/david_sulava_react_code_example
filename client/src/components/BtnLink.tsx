@@ -8,6 +8,7 @@ interface IBtnLinkProps {
   to: string,
   className?: string,
   state?: {}
+  [key:string]: any
 }
 
 const BtnLink: FC<PropsWithChildren<IBtnLinkProps>> = ({
@@ -16,14 +17,15 @@ const BtnLink: FC<PropsWithChildren<IBtnLinkProps>> = ({
   className = '',
   to,
   state,
-  children
+  children,
+  ...others
 }) => {
   const isDisabledInner = idDisabled ? 'disabled' : ''
   const isActiveInner = isActive ? 'active' : ''
   const classNameInner = className ? className : ''
 
   return (
-    <Link role="button" className={`${classNameInner} ${isDisabledInner} ${isActiveInner}`} to={to} state={{...state}}>
+    <Link role="button" className={`${classNameInner} ${isDisabledInner} ${isActiveInner}`} to={to} state={{...state}}  {...others}>
       {children}
     </Link>
   )

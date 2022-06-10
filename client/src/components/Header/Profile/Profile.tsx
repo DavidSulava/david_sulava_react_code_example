@@ -6,6 +6,8 @@ import { Button } from 'react-bootstrap';
 import { setUser } from '../../../stores/authentication/reducer';
 import { Nullable } from '../../../types/common';
 import { setLocalStorage } from '../../../helpers/localStorage';
+import BtnLink from '../../BtnLink';
+import { ERoutes } from '../../../router/Routes';
 
 const Profile: React.FC<{user:Nullable<IUser>}> = ({user }) => {
   const dispatch = useDispatch()
@@ -29,9 +31,7 @@ const Profile: React.FC<{user:Nullable<IUser>}> = ({user }) => {
           <div className="profile-modal mt-1 me-1">
             <div> Hello {user?.firstName}, {user?.lastName}</div>
             <br/>
-            <Button variant="outlined" className="mb-1 btn-outline-primary">
-              Manage account
-            </Button>
+            <BtnLink to={ERoutes.ManageAccount} className='mb-1 btn btn-outline-primary' onClick={onIconClick}>Manage account</BtnLink>
             <Button variant="outlined" className="mb-1 btn-outline-primary" onClick={onLogOut}>
               Log Out
             </Button>

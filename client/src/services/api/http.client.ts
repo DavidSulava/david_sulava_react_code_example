@@ -9,7 +9,7 @@ const token = getLocalStorage(ACCESS_TOKEN_KEY);
 const getAuthHeaderString = (token: string|null) => `Bearer ${token}`
 
 const client = axios.create({
-  baseURL: apiRoutes.signIn,
+  baseURL: apiRoutes.auth.signIn,
   headers: {Authorization: getAuthHeaderString(token)}
 });
 

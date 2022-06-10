@@ -1,15 +1,24 @@
 import { apiRoutes } from "./routes"
-import { ISignInData, ISignUpData, ITariff, IUser } from "../../types/user";
+import {
+  IAccountInfo,
+  IPostPasswordRecovery,
+  IPostPasswordRecoveryConfirm,
+  IPutAccountInfo,
+  ISignInData,
+  ISignUpData,
+  ITariff,
+  IUser
+} from "../../types/user";
 import client from './http.client';
 import { IOrganisation, IPostOrganisation } from '../../types/organisationPage';
-import { IGetProdResp, IPostProduct, IProduct, IPutProduct } from '../../types/product';
+import { IGetProdResp, IPostProduct, IPutProduct } from '../../types/product';
 import { IGetProductVersionList, IPostProductVersion, IProductVersion } from '../../types/productVersion';
 import { IConfiguration, IConfigurationParamData, IGetConfigurations, IPostConfigurations } from '../../types/producVersionConfigurations';
 import { IAppBundle } from '../../types/appBundle';
 
 export default class Api {
   public static async signIn(formData: ISignInData): Promise<IUser> {
-    const response = await client.post(apiRoutes.signIn, formData)
+    const response = await client.post(apiRoutes.auth.signIn, formData)
     return response.data
   }
 
@@ -18,8 +27,23 @@ export default class Api {
     return response.data
   }
 
+  public static async postSendEmailToRestorePassword(formData: IPostPasswordRecovery): Promise<string> {
+    const response = await client.post(apiRoutes.auth.pwdEmail, formData)
+    return response.data
+  }
+
+  public static async postPasswordRecoveryConfirm(formData: IPostPasswordRecoveryConfirm): Promise<string> {
+    const response = await client.post(apiRoutes.auth.pwdConfirm, formData)
+    return response.data
+  }
+
+  public static async putAccountInfo(formData: IPutAccountInfo): Promise<string> {
+    const response = await client.put(apiRoutes.account, formData)
+    return response.data
+  }
+
   public static async authOrg(orgId: string): Promise<IUser> {
-    const response = await client.post(apiRoutes.authOrg(orgId))
+    const response = await client.post(apiRoutes.auth.org(orgId))
     return response.data
   }
 
@@ -30,6 +54,11 @@ export default class Api {
 
   public static async postOrganisation(organisation: IPostOrganisation): Promise<string> {
     const response = await client.post(apiRoutes.organisations.root, organisation)
+    return response.data
+  }
+
+  public static async getAccount(): Promise<IAccountInfo> {
+    const response = await client.get(apiRoutes.account)
     return response.data
   }
 

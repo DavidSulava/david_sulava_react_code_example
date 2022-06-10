@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { Field, Form, FormElement } from '@progress/kendo-react-form';
 import CInput from '../../../../../../components/form-components/CInput';
-import { isEmpty } from '../../../../../../components/form-components/helpers/valodation-functions';
+import { isEmpty } from '../../../../../../components/form-components/helpers/validation-functions';
 import { Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -29,7 +29,6 @@ const DefaultConfigForm: FC = () => {
       dispatch(getConfigurationById(configId))
       dispatch(getConfigParams(configId))
     }
-
   },[configId])
   useEffect(()=>{
     if(configuration){

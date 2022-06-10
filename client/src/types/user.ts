@@ -22,6 +22,23 @@ export interface ISignUpData {
   role: EUserRoles
 }
 
+export interface IAccountInfo extends ISignUpData {
+}
+export interface IPutAccountInfo {
+  firstName: string,
+  lastName: string,
+  phone: string,
+}
+
+export interface IPostPasswordRecovery {
+  email: string
+}
+export interface IPostPasswordRecoveryConfirm{
+  newPassword: string,
+  confirmPassword: string,
+  passwordRecoveryKey: string
+}
+
 export interface ITariff {
   id: string,
   name: string
