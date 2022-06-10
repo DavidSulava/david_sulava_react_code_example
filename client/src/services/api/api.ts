@@ -78,6 +78,10 @@ export default class Api {
     const response = await client.get(apiRoutes.configurations.params(configurationId))
     return response.data
   }
+  public static async getSvfPath(configurationId: string): Promise<string> {
+    const response = await client.get(apiRoutes.configurations.svf(configurationId))
+    return response.data
+  }
   public static async postConfig(formData: IPostConfigurations): Promise<string> {
     const response = await client.post(apiRoutes.configurations.root(), formData)
     return response.data

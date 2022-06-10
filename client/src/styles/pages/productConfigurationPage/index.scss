@@ -82,6 +82,13 @@ $config-page-button-bar-height: 39px;
 }
 
 .config-svf {
-  @include setFlex(column, strech);
+  //@include setFlex(column, strech);
+  align-self: flex-start;
   flex-basis: 50vw;
+  height: inherit;
+
+  .adsk-viewing-viewer{
+    height: inherit !important;
+    width: 50vw !important;
+  }
 }
