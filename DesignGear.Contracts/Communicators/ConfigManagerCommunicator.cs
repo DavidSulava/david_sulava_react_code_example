@@ -151,5 +151,17 @@ namespace DesignGear.Contracts.Communicators
             var message = await _httpClient.DeleteAsync($"{_settings.ConfigManagerUrl}configuration/{id}");
             message.EnsureSuccessStatusCode();
         }
+
+        public async Task RemoveProductVersionAsync(Guid id)
+        {
+            var message = await _httpClient.DeleteAsync($"{_settings.ConfigManagerUrl}configuration/byproductversion/{id}");
+            message.EnsureSuccessStatusCode();
+        }
+
+        public async Task RemoveProductAsync(Guid id)
+        {
+            var message = await _httpClient.DeleteAsync($"{_settings.ConfigManagerUrl}configuration/byproduct/{id}");
+            message.EnsureSuccessStatusCode();
+        }
     }
 }

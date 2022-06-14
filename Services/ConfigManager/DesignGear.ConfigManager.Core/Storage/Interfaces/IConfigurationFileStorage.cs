@@ -28,5 +28,7 @@ namespace DesignGear.ConfigManager.Core.Storage.Interfaces {
         void CopyZipArchive(Guid productVersionId, Guid sourceConfigurationId, Guid targetConfigurationId, string json);
 
         Task DeleteConfigurationFilesAsync(Guid productVersionId, Guid configurationId);
+
+        Task DeleteConfigurationFilesAsync(Guid productVersionId);
     }
 }

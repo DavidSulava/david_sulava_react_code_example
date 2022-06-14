@@ -360,6 +360,36 @@ namespace DesignGear.ConfigManager.Core.Services
             await _dataAccessor.Editor.SaveAsync();
         }
 
+        public async Task RemoveProductVersionAsync(Guid id)
+        {
+            var items = await _dataAccessor.Editor.ComponentDefinitions.Where(x => x.ProductVersionId == id).ToListAsync();
+
+            if (items.Count > 0)
+            {
+                foreach (var component in items)
+                {
+                    _dataAccessor.Editor.Delete(component);
+                    await _configurationFileStorage.DeleteConfigurationFilesAsync(component.ProductVersionId);
+                }
+                await _dataAccessor.Editor.SaveAsync();
+            }
+        }
+
+        public async Task RemoveProductAsync(Guid id)
+        {
+            var items = await _dataAccessor.Editor.ComponentDefinitions.Where(x => x.ProductId == id).ToListAsync();
+
+            if (items.Count > 0)
+            {
+                foreach (var component in items)
+                {
+                    _dataAccessor.Editor.Delete(component);
+                    await _configurationFileStorage.DeleteConfigurationFilesAsync(component.ProductVersionId);
+                }
+                await _dataAccessor.Editor.SaveAsync();
+            }
+        }
+
         //public async Task<Guid> CreateConfigurationAsync(ConfigurationCreateDto create)
         //{
         //    if (create == null)

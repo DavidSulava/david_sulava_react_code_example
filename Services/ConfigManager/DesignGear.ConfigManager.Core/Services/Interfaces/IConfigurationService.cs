@@ -31,6 +31,10 @@ namespace DesignGear.ConfigManager.Core.Services.Interfaces
 
         Task RemoveConfigurationAsync(Guid id);
 
+        Task RemoveProductVersionAsync(Guid id);
+
+        Task RemoveProductAsync(Guid id);
+
         /*Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId);
 
         Task<AttachmentDto> GetModelFileAsync(Guid id);*/

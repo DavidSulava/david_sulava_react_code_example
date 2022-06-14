@@ -35,5 +35,9 @@ namespace DesignGear.Contracts.Communicators.Interfaces
         Task<ConfigurationDto> GetConfigurationAsync(Guid id);
 
         Task RemoveConfigurationAsync(Guid id);
+
+        Task RemoveProductVersionAsync(Guid id);
+
+        Task RemoveProductAsync(Guid id);
     }
 }

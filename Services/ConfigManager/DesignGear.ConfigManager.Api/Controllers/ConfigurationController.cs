@@ -77,5 +77,17 @@ namespace DesignGear.ConfigManager.Api.Controllers
         {
             await _configurationService.RemoveConfigurationAsync(id);
         }
+
+        [HttpDelete("byproductversion/{id}")]
+        public async Task DeleteProductVersionAsync([FromRoute] Guid id)
+        {
+            await _configurationService.RemoveProductVersionAsync(id);
+        }
+
+        [HttpDelete("byproduct/{id}")]
+        public async Task DeleteProductAsync([FromRoute] Guid id)
+        {
+            await _configurationService.RemoveProductAsync(id);
+        }
     }
 }
