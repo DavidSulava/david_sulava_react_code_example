@@ -28,16 +28,21 @@ namespace DesignGear.ConfigManager.Core.Storage
                 var file = di.EnumerateFiles().FirstOrDefault();
                 if (file != null)
                 {
-                    using (var archive = await Task.Run(() => ZipFile.OpenRead(file.FullName)))
+                    try
                     {
-                        var entry = archive.Entries.FirstOrDefault(x => x.Name == _designGearPackageFileName);
-                        if (entry != null)
-                            using (var stream = entry.Open())
-                            {
-                                string json = new StreamReader(stream).ReadToEnd();
-                                return JsonConvert.DeserializeObject<DesignGearModelPackage>(json);
-                            }
+                        using (var archive = await Task.Run(() => ZipFile.OpenRead(file.FullName)))
+                        {
+                            var entry = archive.Entries.FirstOrDefault(x => x.Name == _designGearPackageFileName);
+                            if (entry != null)
+                                using (var stream = entry.Open())
+                                {
+                                    string json = new StreamReader(stream).ReadToEnd();
+                                    return JsonConvert.DeserializeObject<DesignGearModelPackage>(json);
+                                }
+                        }
                     }
+                    catch (Exception ex)
+                    { }
                 }
             }
             return null;

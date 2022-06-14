@@ -31,53 +31,55 @@ namespace DesignGear.ConfigManager.Core.Jobs
             /*
              * Получаем список конфигураций со статусом InQueue или ServiceUnavailableError
              */
-            var configurations = _configurationService.GetConfigurationListAsync(new ConfigurationFilterDto
-            {
-                Status = ConfigurationStatus.InQueue// | ConfigurationStatus.ServiceUnavailableError
-            }).Result;
+            //var configurations = _configurationService.GetConfigurationListAsync(new ConfigurationFilterDto
+            //{
+            //    Status = ConfigurationStatus.InQueue// | ConfigurationStatus.ServiceUnavailableError
+            //}).Result;
 
-            /*
-             * Для каждой конфигурации формируем пакет вместе с пакетом AppBundle и отправляем в инвентор
-             */
-            foreach (var configuration in configurations)
-            {
-                try
-                {
-                    /*
-                     * Здесь выполняем отправку в инвентор и меняем статус конфигурации на InProcess
-                     */
-                    
-                    var packageFile = _configurationService.CreateConfigurationRequestPackageAsync(configuration.Id).Result;
-                    var appBundleFile = _appBundleService.GetAppBundleAsync(configuration.AppBundleId).Result;
-                    if (packageFile != null && appBundleFile != null)
-                    {
-                        var result = _serverManagerService.ProcessModelAsync(appBundleFile.Content, packageFile).Result;
-                        if (result != null)
-                        {
-                            _configurationService.UpdateModelStatus(new ConfigurationUpdateModelDto
-                            {
-                                ConfigurationId = configuration.Id,
-                                Status = ConfigurationStatus.InProcess,
-                                WorkItemId = result.Id,
-                                WorkItemUrl = result.Url
-                            });
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    /*
-                     * Здесь анализируем ошибку и в зависимости от ее типа устанавливаем статус конфигурации
-                     * в ServiceUnavailableError или IncorrectRequestError. Также заполняем поле ErrorMessage,
-                     * особенно в случае IncorrectRequestError
-                     */
-                }
-            }
+            ///*
+            // * Для каждой конфигурации формируем пакет вместе с пакетом AppBundle и отправляем в инвентор
+            // */
+            //foreach (var configuration in configurations)
+            //{
+            //    try
+            //    {
+            //        /*
+            //         * Здесь выполняем отправку в инвентор и меняем статус конфигурации на InProcess
+            //         */
+
+            //        using (var packageFile = _configurationService.CreateConfigurationRequestPackageAsync(configuration.Id).Result)
+            //        {
+            //            var appBundleFile = _appBundleService.GetAppBundleAsync(configuration.AppBundleId).Result;
+            //            if (packageFile != null && appBundleFile != null)
+            //            {
+            //                var result = _serverManagerService.ProcessModelAsync(appBundleFile.Content, packageFile).Result;
+            //                if (result != null)
+            //                {
+            //                    _configurationService.UpdateModelStatus(new ConfigurationUpdateModelDto
+            //                    {
+            //                        ConfigurationId = configuration.Id,
+            //                        Status = ConfigurationStatus.InProcess,
+            //                        WorkItemId = result.Id,
+            //                        WorkItemUrl = result.Url
+            //                    });
+            //                }
+            //            }
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        /*
+            //         * Здесь анализируем ошибку и в зависимости от ее типа устанавливаем статус конфигурации
+            //         * в ServiceUnavailableError или IncorrectRequestError. Также заполняем поле ErrorMessage,
+            //         * особенно в случае IncorrectRequestError
+            //         */
+            //    }
+            //}
 
             /*
              * В таком же русле необходимо сделать отправку запроса на формирование svf
              */
-            configurations = _configurationService.GetConfigurationListAsync(new ConfigurationFilterDto
+            var configurations = _configurationService.GetConfigurationListAsync(new ConfigurationFilterDto
             {
                 SvfStatus = SvfStatus.InQueue// | SvfStatus.ServiceUnavailableError
             }).Result;
@@ -86,19 +88,22 @@ namespace DesignGear.ConfigManager.Core.Jobs
             {
                 try
                 {
-                    var packageFile = _configurationFileStorage.GetZipArchive(configuration.ProductVersionId, configuration.Id);
-                    if (packageFile != null && configuration.RootFileName != null)
+                    if (configuration.RootFileName != null)
                     {
-                        var urn = _serverManagerService.GetSvfAsync(packageFile, configuration.RootFileName).Result;
-                        if (urn != null)
-                        {
-                            _configurationService.UpdateSvfStatus(new ConfigurationSvfStatusUpdateDto
+                        using (var packageFile = _configurationFileStorage.GetZipArchive(configuration.ProductVersionId, configuration.Id))
+                            if (packageFile != null)
                             {
-                                ConfigurationId = configuration.Id,
-                                SvfStatus = SvfStatus.InProcess,
-                                URN = urn
-                            });
-                        }
+                                var urn = _serverManagerService.GetSvfAsync(packageFile, configuration.RootFileName).Result;
+                                if (urn != null)
+                                {
+                                    _configurationService.UpdateSvfStatus(new ConfigurationSvfStatusUpdateDto
+                                    {
+                                        ConfigurationId = configuration.Id,
+                                        SvfStatus = SvfStatus.InProcess,
+                                        URN = urn
+                                    });
+                                }
+                            }
                     }
                 }
                 catch (Exception ex)
