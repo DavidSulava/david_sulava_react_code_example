@@ -118,14 +118,17 @@ namespace DesignGear.Contracts.Communicators
         //    response.EnsureSuccessStatusCode();
         //}
 
-        public async Task<FileStreamDto> GetSvfAsync(Guid configurationId, string svfName)
+        public async Task<Stream> GetSvfAsync(Guid configurationId, string svfName)
         {
-            return await SendHttpRequestAsync<FileStreamDto>($"{_settings.ConfigManagerUrl}configuration/{configurationId}/svf{svfName}");
+            var url = $"{_settings.ConfigManagerUrl}configuration/{configurationId}/svf/{svfName}";
+            var message = await _httpClient.GetAsync(url);
+            message.EnsureSuccessStatusCode();
+            return await message.Content.ReadAsStreamAsync();
         }
 
         public async Task<string> GetSvfRootFileNameAsync(Guid configurationId)
         {
-            return await SendHttpRequestAsync<string>($"{_settings.ConfigManagerUrl}configuration/{configurationId}/svf");
+            return await SendHttpRequestAsync($"{_settings.ConfigManagerUrl}configuration/{configurationId}/svf");
         }
 
         public async Task<Dto.ConfigManager.ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId)
@@ -140,7 +143,7 @@ namespace DesignGear.Contracts.Communicators
 
         public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
         {
-            return (await SendHttpRequestJsonAsync<ConfigurationDto>($"{_settings.ConfigManagerUrl}configuration/{id}")).MapTo<ConfigurationDto>(_mapper);
+            return (await SendHttpRequestAsync<ConfigurationDto>($"{_settings.ConfigManagerUrl}configuration/{id}")).MapTo<ConfigurationDto>(_mapper);
         }
     }
 }

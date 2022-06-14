@@ -9,7 +9,6 @@ using DesignGear.Contractor.Core.Services.Interfaces;
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
-    //[Authorize(Policy = "OrganizationSelected")]
     [Route("[controller]")]
     public class ConfigurationController : ControllerBase
     {
@@ -22,6 +21,7 @@ namespace DesignGear.Contractor.Api.Controllers
             _mapper = mapper;
         }
 
+        [Authorize(Policy = "OrganizationSelected")]
         [HttpPost]
         public async Task<IActionResult> CreateConfigurationRequestAsync([FromBody] VmConfigurationRequest request)
         {
@@ -32,6 +32,7 @@ namespace DesignGear.Contractor.Api.Controllers
                 return Ok(result);
         }
 
+        [Authorize(Policy = "OrganizationSelected")]
         [HttpGet]
         public async Task<DataSourceResult> GetConfigurationItemsAsync(Guid productVersionId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
@@ -39,24 +40,27 @@ namespace DesignGear.Contractor.Api.Controllers
             return await _configurationService.GetConfigurationItemsAsync(queryString);
         }
 
+        [Authorize(Policy = "OrganizationSelected")]
         [HttpGet("{configurationId}/svf")]
         public async Task<string> GetSvfRootFileNameAsync([FromRoute] Guid configurationId)
         {
             return await _configurationService.GetSvfRootFileNameAsync(configurationId);
         }
 
-        [HttpGet("{configurationId}/svf/{svfName}")]
+        [HttpGet("{configurationId}/svf/{*svfName}")]
         public async Task<IActionResult> GetSvfAsync([FromRoute] Guid configurationId, [FromRoute] string svfName)
         {
-            return Ok((await _configurationService.GetSvfAsync(configurationId, svfName)).Content);
+            return File(await _configurationService.GetSvfAsync(configurationId, svfName), "application/octet-stream");
         }
 
+        [Authorize(Policy = "OrganizationSelected")]
         [HttpGet("{configurationId}/parameters")]
         public async Task<VmComponentParameterDefinitions> GetComponentParameterDefinitionsAsync(Guid configurationId)
         {
             return (await _configurationService.GetConfigurationParametersAsync(configurationId)).MapTo<VmComponentParameterDefinitions>(_mapper);
         }
 
+        [Authorize(Policy = "OrganizationSelected")]
         [HttpGet("{id}")]
         public async Task<VmConfiguration> GetConfigurationAsync([FromRoute] Guid id)
         {

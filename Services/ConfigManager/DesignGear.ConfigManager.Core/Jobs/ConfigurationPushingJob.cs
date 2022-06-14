@@ -84,19 +84,25 @@ namespace DesignGear.ConfigManager.Core.Jobs
 
             foreach (var configuration in configurations)
             {
-                var packageFile = _configurationFileStorage.GetZipArchive(configuration.ProductVersionId, configuration.Id);
-                if (packageFile != null && configuration.RootFileName != null)
+                try
                 {
-                    var urn = _serverManagerService.GetSvfAsync(packageFile, configuration.RootFileName).Result;
-                    if (urn != null)
+                    var packageFile = _configurationFileStorage.GetZipArchive(configuration.ProductVersionId, configuration.Id);
+                    if (packageFile != null && configuration.RootFileName != null)
                     {
-                        _configurationService.UpdateSvfStatus(new ConfigurationSvfStatusUpdateDto
+                        var urn = _serverManagerService.GetSvfAsync(packageFile, configuration.RootFileName).Result;
+                        if (urn != null)
                         {
-                            ConfigurationId = configuration.Id,
-                            SvfStatus = SvfStatus.InProcess,
-                            URN = urn
-                        });
+                            _configurationService.UpdateSvfStatus(new ConfigurationSvfStatusUpdateDto
+                            {
+                                ConfigurationId = configuration.Id,
+                                SvfStatus = SvfStatus.InProcess,
+                                URN = urn
+                            });
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
                 }
             }
         }
