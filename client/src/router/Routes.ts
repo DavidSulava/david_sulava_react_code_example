@@ -9,15 +9,15 @@ export enum ERoutes {
   Organisations = '/organisations',
 
   Dashboard = '/dashboard/:organizationId',
-  ProdVersions = '/dashboard/:organizationId/:productId/products',
-  ProdVersion = '/dashboard/:organizationId/:productId/:versionId/products',
-
-  ManageOrganisation = 'manage-organisation',
-  Products = 'products',
-  Publications = 'publications',
-  CPThreshold = 'cp-threshold',
-  Users = 'users',
-  Billing = 'billing',
+    ManageOrganisation = 'manage-organisation',
+    Products = 'products',
+      ProdVersions = '/dashboard/:organizationId/:productId/products',
+      ProdVersion = '/dashboard/:organizationId/:productId/:versionId/products',
+      ProdVersionConfig = '/dashboard/:organizationId/:productId/:versionId/:configId/products',
+    Publications = 'publications',
+    CPThreshold = 'cp-threshold',
+    Users = 'users',
+    Billing = 'billing',
 
   UserProfile = '/user-profile',
 

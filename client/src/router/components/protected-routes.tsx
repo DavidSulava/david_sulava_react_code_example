@@ -17,7 +17,7 @@ const ProtectedRoutes: React.FC<controlledRouteProps> = ({
   const {authenticated, authLoading} = useAuthCheck()
   const location = useLocation();
 
-  if(!authenticated && !authLoading) {
+  if((!authenticated || !isAllowed) && !authLoading) {
     return <Navigate to={redirectPath} state={{from: location}} replace/>;
   }
 

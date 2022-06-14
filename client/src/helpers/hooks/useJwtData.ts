@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 const useJwtData = () => {
   const token = getLocalStorage(ACCESS_TOKEN_KEY);
   try {
-    const decoded = jwt_decode<IAppJwtPayload>(token??'');
+    const decoded = jwt_decode<IAppJwtPayload>(token ?? '');
     const {
       OrganisationId,
       UserId,
@@ -22,9 +22,9 @@ const useJwtData = () => {
       iat
     } = decoded
 
-    const isExpired = dayjs.unix(exp??0).diff(dayjs()) < 1
+    const isExpired = dayjs.unix(exp ?? 0).diff(dayjs()) < 1
 
-    return{
+    return {
       OrganisationId,
       UserId,
       FirstName,
@@ -37,23 +37,24 @@ const useJwtData = () => {
       exp,
       isExpired,
       iat,
-      token: token??''
+      token: token ?? ''
     }
-  }catch(e){
-    return{
-      OrganisationId : '',
-      UserId : '',
-      FirstName : '',
-      LastName : '',
-      Email : '',
-      Phone : '',
-      Role : '',
-      Created : '',
-      nbf : '',
-      exp : '',
-      isExpired : '',
-      iat : '',
-      token: token??''
+  }
+  catch(e) {
+    return {
+      OrganisationId: '',
+      UserId: '',
+      FirstName: '',
+      LastName: '',
+      Email: '',
+      Phone: '',
+      Role: '',
+      Created: '',
+      nbf: '',
+      exp: '',
+      isExpired: '',
+      iat: '',
+      token: token ?? ''
     }
   }
 

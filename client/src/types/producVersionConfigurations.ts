@@ -1,21 +1,47 @@
 import { IKendoResp } from './common';
 
 export interface IGetConfigurations extends IKendoResp {
-  data: IConfigurations[],
+  data: IConfigurationListItem[],
 }
-
-export interface IConfigurations {
+export interface IConfiguration{
   id: string,
   name: string,
+  componentName: string,
   comment: string,
-  modelState?: EModelState,
+  modelState: EModelState,
   productVersionId: string,
-  modelFile?: string,
   targetFileId: string,
-  parameterDefinitions: IParameterDefinition[]
+  parentId: string,
+  created: string,
+  status: EConfigurationStatus,
+  svfStatus: ESvfStatus,
+  parameterDefinitions: IConfigParam,
+}
+
+export interface IPostConfigurations{
+  name: string,
+  comment: string,
+  baseConfigurationId: string,
+  parameterValues: IPostParamValues[]
+}
+export interface IPostParamValues {
+  parameterDefinitionId: string,
+  value: string
+}
+
+export interface IConfigurationListItem {
+  id: string,
+  configurationName: string,
+  componentName: string,
+  comment: string,
+  parentId: string,
+  created: string,
+  status: EConfigurationStatus,
+  svfStatus: ESvfStatus
 }
 
 export interface IConfigurationParamData {
+  childs: IConfigurationParamData[],
   componentId: string,
   componentName: string,
   parameters: IConfigParam[]
@@ -23,10 +49,10 @@ export interface IConfigurationParamData {
 
 export interface IConfigParam {
   id: string,
-  displayPriority: 0,
+  displayPriority: number,
   name: string,
   displayName: string,
-  valueType: 1,
+  valueType: EParameterValueType,
   units: string,
   configurationId: string,
   isReadOnly: boolean,
@@ -44,19 +70,6 @@ export interface IConfParamOptions {
   created: string,
 }
 
-export interface IParameterDefinition {
-  id: string,
-  displayPriority: number,
-  name?: string,
-  displayName?: string,
-  valueType: EValueType,
-  units?: string,
-  configurationId: string,
-  isReadOnly: boolean,
-  isHidden: boolean,
-  allowCustomValues: boolean,
-  value?: string,
-}
 
 export interface ISearchConfigPayload {
   id: string,
@@ -67,12 +80,6 @@ export interface ISearchConfigPayload {
 
 export enum EModelState {
   Master = 0
-}
-
-export enum EValueType {
-  String = 1,
-  Int,
-  Double
 }
 
 export enum ESvfStatus {
@@ -87,4 +94,11 @@ export enum EConfigurationStatus {
   InProcess = 1,
   Error = 2,
   Ready = 3
+}
+
+export enum EParameterValueType
+{
+  String = 1,
+  Int,
+  Double
 }

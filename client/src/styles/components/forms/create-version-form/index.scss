@@ -1,14 +1,36 @@
-.create-version-form{
-  .k-window-content{
+$param-config-height: 300px;
+$file-list-max-height: 55px;
+
+.create-version-form {
+  .k-window-content {
     padding: 0;
   }
-  .modal-body{
+
+  .modal-body {
     overflow: auto;
     padding: 15px;
     height: 65vh;
     width: 40vw;
   }
-  .chosen-files-container{
-    max-width: 35vw;
+
+  .upload-component{
+    width: 100%;
+  }
+  .chosen-files-container {
+    @include setFlex(column, start, flex-start);
+    max-height: $file-list-max-height;
+    width: 100%;
+    overflow: auto;
+    background-color: $select-back-ground-color;
+    border-radius: 5px;
+    margin-top: 6px;
+    padding: 5px;
+
+
+    .close-icon{
+      cursor: pointer;
+      margin-bottom: 2px;
+      color: $std-btn-color;
+    }
   }
 }

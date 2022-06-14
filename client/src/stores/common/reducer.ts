@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IAppBundle } from '../../types/common';
+import { IAppBundle } from '../../types/appBundle';
 
 export interface ICommonState {
   error: any,
-  postReqResp: string,
+  postReqResp: any,
   appBundle: IAppBundle[],
 }
 
@@ -17,12 +17,7 @@ const commonSlice = createSlice({
   name: "common",
   initialState: initialState,
   reducers: {
-    getAppBundle: (state, action: PayloadAction) => {
-    },
-    setAppBundle: (state, action: PayloadAction<IAppBundle[]>) => {
-      state.appBundle = action.payload
-    },
-    setPostReqResp: (state, action: PayloadAction<string>) => {
+    setPostReqResp: (state, action: PayloadAction<any>) => {
       state.postReqResp = action.payload
     },
     setError: (state, action: PayloadAction<string>) => {
@@ -31,6 +26,6 @@ const commonSlice = createSlice({
   }
 });
 
-export const {getAppBundle, setAppBundle, setError, setPostReqResp} = commonSlice.actions
+export const {setError, setPostReqResp} = commonSlice.actions
 
 export default commonSlice.reducer

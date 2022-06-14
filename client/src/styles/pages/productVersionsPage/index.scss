@@ -1,4 +1,5 @@
 $button-bar-height: 56px;
+$versions-grid-height: calc(100vh - (#{$header-height} + #{$dash-board-header-height} + #{$button-bar-height}) - 25px);
 
 .version-info-section{
   @include setFlex(column, start, end);
@@ -7,6 +8,7 @@ $button-bar-height: 56px;
   margin-bottom: 10px;
 }
 .version-grid{
+  max-height: $versions-grid-height;
   td{
     text-align: center;
     justify-content: center;

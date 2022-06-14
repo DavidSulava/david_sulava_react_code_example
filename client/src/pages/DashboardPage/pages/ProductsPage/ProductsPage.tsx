@@ -48,9 +48,10 @@ const ProductsPage = () => {
   const [dataState, setDataState] = useState<IGridProductData[]>([]);
 
   useEffect(() => {
-    dispatch(setProduct(null))
     dispatch(getProduct())
-    setDataState(product?.data ?? [])
+    return() => {
+      dispatch(setProduct(null))
+    }
   }, [dispatch])
   useEffect(() => {
     setDataState(product?.data ?? [])

@@ -72,6 +72,8 @@
     ]
   },
   "devDependencies": {
+    "@types/forge-viewer": "^7.69.1",
+    "@types/three": "^0.141.0",
     "sass": "^1.51.0"
   }
 }

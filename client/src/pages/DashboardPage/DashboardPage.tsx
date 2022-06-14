@@ -4,21 +4,21 @@ import React, { useEffect } from 'react';
 import useAuthCheck from '../../helpers/hooks/useAuthCheck';
 import setPath from '../../helpers/setPath';
 import BtnLink from '../../components/BtnLink';
-import { authOrg } from '../../stores/authentication/reducer';
 import { useDispatch } from 'react-redux';
 import { initialProdVerState, setProdVersionDataState } from '../../stores/productVersion/reducer';
 
 const DashboardPage = () => {
   const dispatch = useDispatch()
   const location = useLocation();
-  const {organizationId} = useParams();
+  const {organizationId, productId} = useParams();
   const {user} = useAuthCheck()
 
-  const dashboardRoot = ERoutes.Dashboard.match(/(?!\/).*(?=\/)/)?.[0]
-  const insideSubPageReg = new RegExp(`(${dashboardRoot}\/)([A-z\\d\\-]+\/){2,}`)
+  const dashboardRootRegExp = ERoutes.Dashboard.match(/(?!\/).*(?=\/)/)?.[0]
+  const insideSubPageRegExp = new RegExp(`(${dashboardRootRegExp}\/)([A-z\\d\\-]+\/){2,}`)
+  const onProductVersionListPageRegExp = new RegExp(`(${dashboardRootRegExp}\/)([A-z\\d\\-]+\/){2}products`)
+  const onProductVersionPageRegExp = new RegExp(`(${dashboardRootRegExp}\/)([A-z\\d\\-]+\/){3}products`)
 
   useEffect(() => {
-    dispatch(authOrg(organizationId ?? ''))
     return () => {
       dispatch(setProdVersionDataState(initialProdVerState.dataState))
     }
@@ -26,9 +26,17 @@ const DashboardPage = () => {
   const isNavLikActive = (route: string = ""): boolean => {
     return location.pathname.endsWith(route)
   }
+  const returnBack = () => {
+    if(location.pathname.match(onProductVersionListPageRegExp))
+      return setPath(ERoutes.Products, [organizationId])
+    else if(location.pathname.match(onProductVersionPageRegExp) && productId)
+      return setPath(ERoutes.ProdVersions, [organizationId, productId])
+
+    return -1 as any
+  }
 
   return (
-    <>
+    <div className="page-body">
       <div className="dash-board-header">
         <div>
           <h6>Welcome, {user?.firstName}</h6>
@@ -36,8 +44,8 @@ const DashboardPage = () => {
         </div>
         <div>
           {
-            location.pathname.match(insideSubPageReg) &&
-            <BtnLink to={-1 as any} className='btn btn-outline-primary'>Return </BtnLink>
+            location.pathname.match(insideSubPageRegExp) &&
+            <BtnLink to={returnBack()} className='btn btn-outline-primary'>Return</BtnLink>
           }
         </div>
 
@@ -99,7 +107,7 @@ const DashboardPage = () => {
           <Outlet/>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

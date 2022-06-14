@@ -91,8 +91,7 @@ namespace DesignGear.Contractor.Core.Services
             }
 
             var user = await _dataAccessor.Editor.Users
-                .Where(x => x.Email == commit.Email 
-                    && x.PasswordRecoveryKey == commit.PasswordRecoveryKey 
+                .Where(x => x.PasswordRecoveryKey == commit.PasswordRecoveryKey 
                     && x.PasswordRecoveryKeyCreated <= DateTimeOffset.Now.AddSeconds(_securityOptions.RecoveryTokenLifeTimeInSeconds))
                 .FirstOrDefaultAsync();
             if (user == null) {

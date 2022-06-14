@@ -6,9 +6,9 @@ import useProdVersion from '../../../../helpers/hooks/useProdVersion';
 import { Button } from 'react-bootstrap';
 import { ICommonObject } from '../../../../types/common';
 import ConfigurationsTable from './ConfigurationsTable/ConfigurationsTable';
-import { getAppBundle } from '../../../../stores/common/reducer';
 import { IState } from '../../../../stores/configureStore';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
+import { getAppBundleList } from '../../../../stores/appBundle/reducer';
 
 const buttonText = {
   Configurations: 'Configurations',
@@ -20,7 +20,7 @@ const ProdVersionPage = () => {
   const dispatch = useDispatch()
   const {versionId} = useParams();
   const {prodVersion} = useProdVersion()
-  const appBundle = useSelector((state: IState) => state.common.appBundle)
+  const appBundleList = useSelector((state: IState) => state.appBundle.appBundleList)
   const [btnPressed, setBtnPressed] = useState<ICommonObject>({
     [buttonText.Configurations]: false,
     [buttonText.InterfaceParameterDefinitions]: false,
@@ -29,7 +29,7 @@ const ProdVersionPage = () => {
   })
 
   useEffect(() => {
-    dispatch(getAppBundle())
+    dispatch(getAppBundleList())
     dispatch(getProdVersion(versionId ?? ''))
     setPressedBtn(buttonText.Configurations)
   }, [])
@@ -98,10 +98,11 @@ const ProdVersionPage = () => {
             Select Your AppBundle
             <DropDownList
               name="AppBundleId"
-              data={appBundle}
+              data={appBundleList}
               textField="name"
               dataItemKey="id"
-              defaultValue={appBundle[0]}
+              defaultValue={appBundleList[0]}
+              loading={!appBundleList.length}
               // onChange={val => formRef?.current?.valueSetter("AppBundleId", val.target.value)}
               disabled={true}
             />

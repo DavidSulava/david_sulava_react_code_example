@@ -1,6 +1,13 @@
 import { SortDescriptor } from '@progress/kendo-data-query';
 import { JwtPayload } from 'jwt-decode';
 
+declare global {
+  interface Window {
+    API_URL: string;
+    Autodesk:  typeof Autodesk,
+  }
+}
+
 export type Nullable<T> = T|undefined|null
 
 export interface IKendoResp {
@@ -8,6 +15,10 @@ export interface IKendoResp {
   data: any,
   errors: any,
   total: number
+}
+export interface IKendoOnChangeEvent {
+  target?: any,
+  value?: any
 }
 
 export interface  IGridFilterSetting {
@@ -30,14 +41,6 @@ export interface IGridDataState {
   take: number,
   skip: number,
   sort: SortDescriptor[]
-}
-
-export interface IAppBundle {
-  id: string,
-  name: string,
-  description: string,
-  designGearVersion: string,
-  inventorVersion: string,
 }
 
 export interface IAppJwtPayload extends JwtPayload{

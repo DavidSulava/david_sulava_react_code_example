@@ -1,16 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IGridDataFilter, IGridDataStateFilter, IGridFilterSetting, Nullable } from '../../types/common';
-import { IGetProductVersion, IPostProductVersion, IProductVersion } from '../../types/productVersion';
+import { IGetProductVersionList, IPostProductVersion, IProductVersion } from '../../types/productVersion';
 
 export interface IProdVersionState {
   isProdVersionLoading: boolean,
-  prodVersionList: Nullable<IGetProductVersion>,
+  isProdVersionListLoading: boolean,
+  prodVersionList: Nullable<IGetProductVersionList>,
   prodVersion: Nullable<IProductVersion>,
   dataState: IGridDataStateFilter,
 }
 
 export const initialProdVerState: IProdVersionState = {
   isProdVersionLoading: false,
+  isProdVersionListLoading: false,
   prodVersionList: null,
   prodVersion: null,
   dataState: {
@@ -41,14 +43,17 @@ const prodVersionSlice = createSlice({
     },
     delProdVer: (state, action: PayloadAction<IProductVersion>) => {
     },
-    setProdVersionList: (state, action: PayloadAction<IGetProductVersion>) => {
+    setProdVersionList: (state, action: PayloadAction<IGetProductVersionList>) => {
       state.prodVersionList = action.payload
     },
-    setProdVersion: (state, action: PayloadAction<IProductVersion>) => {
+    setProdVersion: (state, action: PayloadAction<IProductVersion|null>) => {
       state.prodVersion = action.payload
     },
     setProdVersionLoading: (state, action: PayloadAction<boolean>) => {
       state.isProdVersionLoading = action.payload
+    },
+    setProdVersionListLoading: (state, action: PayloadAction<boolean>) => {
+      state.isProdVersionListLoading = action.payload
     },
     setProdVersionDataState: (state, action: PayloadAction<IGridDataStateFilter>) => {
       state.dataState = action.payload
@@ -65,6 +70,7 @@ export const {
   setProdVersionList,
   setProdVersion,
   setProdVersionLoading,
+  setProdVersionListLoading,
   setProdVersionDataState
 } = prodVersionSlice.actions
 

@@ -3,9 +3,9 @@ import { ISignInData, ISignUpData, ITariff, IUser } from "../../types/user";
 import client from './http.client';
 import { IOrganisation, IPostOrganisation } from '../../types/organisationPage';
 import { IGetProdResp, IPostProduct, IProduct, IPutProduct } from '../../types/product';
-import { IGetProductVersion, IPostProductVersion, IProductVersion } from '../../types/productVersion';
-import { IAppBundle } from '../../types/common';
-import { IConfigurationParamData, IGetConfigurations } from '../../types/producVersionConfigurations';
+import { IGetProductVersionList, IPostProductVersion, IProductVersion } from '../../types/productVersion';
+import { IConfiguration, IConfigurationParamData, IGetConfigurations, IPostConfigurations } from '../../types/producVersionConfigurations';
+import { IAppBundle } from '../../types/appBundle';
 
 export default class Api {
   public static async signIn(formData: ISignInData): Promise<IUser> {
@@ -58,7 +58,7 @@ export default class Api {
     return response.data
   }
 
-  public static async getProdVersionList(params: string): Promise<IGetProductVersion> {
+  public static async getProdVersionList(params: string): Promise<IGetProductVersionList> {
     const response = await client.get(apiRoutes.productVersion.root(params))
     return response.data
   }
@@ -66,12 +66,24 @@ export default class Api {
     const response = await client.get(apiRoutes.productVersion.item(id))
     return response.data
   }
-  public static async getConfigurations(params: string): Promise<IGetConfigurations> {
+  public static async getConfigurationList(params: string): Promise<IGetConfigurations> {
     const response = await client.get(apiRoutes.configurations.root(params))
+    return response.data
+  }
+  public static async getConfigurationById(id: string): Promise<IConfiguration> {
+    const response = await client.get(apiRoutes.configurations.item(id))
     return response.data
   }
   public static async getConfigParams(configurationId: string): Promise<IConfigurationParamData> {
     const response = await client.get(apiRoutes.configurations.params(configurationId))
+    return response.data
+  }
+  public static async getSvfPath(configurationId: string): Promise<string> {
+    const response = await client.get(apiRoutes.configurations.svf(configurationId))
+    return response.data
+  }
+  public static async postConfig(formData: IPostConfigurations): Promise<string> {
+    const response = await client.post(apiRoutes.configurations.root(), formData)
     return response.data
   }
   public static async postProdVersion(formData: IPostProductVersion): Promise<string> {

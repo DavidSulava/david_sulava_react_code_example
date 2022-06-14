@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FieldRenderProps, FieldWrapper } from '@progress/kendo-react-form';
 import { Button } from 'react-bootstrap';
 import { Error } from '@progress/kendo-react-labels';
@@ -15,12 +15,40 @@ export const FormFile: React.FC<FieldRenderProps> = (fieldRenderProps) => {
     validationMessage,
     inputRef,
     multiple = false,
-    chosenFiles = [],
     onFileSelect,
+    presetFiles,
     onChange,
   } = fieldRenderProps
 
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  const [fileNames, setFileNames] = useState<string[]>([])
   const errorClassName = valid ? "" : "input-error"
+
+  useEffect(()=>{
+    const selectedFileNames = selectedFiles.map(file=> file.name)
+    setFileNames(selectedFileNames)
+  }, [selectedFiles])
+  useEffect(() => {
+    if(presetFiles?.length)
+      setFileNames([...presetFiles])
+  }, [presetFiles])
+
+  const onChangeInner = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = [...event?.target?.files||[]]
+    setSelectedFiles(files)
+
+    if(event?.target)
+      event.target.value = ''
+    onChange({value: files})
+  }
+  const onFileRemove = (fileName: string) => {
+    setSelectedFiles(prev => {
+      const updatedPrev = [...prev].filter(item => item.name !== fileName)||[]
+      onChange({value: updatedPrev})
+      return  updatedPrev
+    })
+  }
+
   return (
     <FieldWrapper>
       {label && (
@@ -37,18 +65,18 @@ export const FormFile: React.FC<FieldRenderProps> = (fieldRenderProps) => {
             type="file"
             ref={inputRef}
             multiple={multiple}
-            onChange={onChange}
+            onChange={onChangeInner}
             style={{display: "none"}}
           />
           {/*Chosen file names*/}
           {
-            chosenFiles.length ? (
-              <div className="chosen-files-container k-mt-1">
+            fileNames.length ? (
+              <div className="chosen-files-container">
                 {
-                  chosenFiles.map((file: HTMLInputElement, index: number) => (
-                    <span className="k-align-self-center" key={index}>
-                      {" "}
-                      {index > 0 ? ", " : ""} {file.name}{" "}
+                  fileNames.map((name, index: number) => (
+                    <span className="file-row" key={index + name}>
+                      {name} {" "}
+                      <span className="k-icon k-i-close-outline close-icon" title="remove file" onClick={()=>onFileRemove(name)}></span>
                     </span>
                   ))}
               </div>
