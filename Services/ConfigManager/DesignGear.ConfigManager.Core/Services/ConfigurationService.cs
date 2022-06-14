@@ -363,12 +363,27 @@ namespace DesignGear.ConfigManager.Core.Services
         public async Task RemoveProductVersionAsync(Guid id)
         {
             var items = await _dataAccessor.Editor.ComponentDefinitions.Where(x => x.ProductVersionId == id).ToListAsync();
+            await RemoveComponents(items);
+        }
 
-            if (items.Count > 0)
+        private async Task RemoveComponents(ICollection<ComponentDefinition> components)
+        { 
+            if (components.Count > 0)
             {
-                foreach (var component in items)
+                foreach (var component in components)
                 {
                     _dataAccessor.Editor.Delete(component);
+                    var configurations = await _dataAccessor.Editor.Configurations.Where(x => x.ComponentDefinitionId == component.Id).ToListAsync();
+                    foreach (var configuration in configurations)
+                    {
+                        _dataAccessor.Editor.Delete(configuration);
+                        var parameters = await _dataAccessor.Editor.ParameterDefinitions.Where(x => x.ConfigurationId == configuration.Id).ToListAsync();
+                        foreach (var parameter in parameters)
+                        {
+                            _dataAccessor.Editor.Delete(parameter);
+
+                        }
+                    }
                     await _configurationFileStorage.DeleteConfigurationFilesAsync(component.ProductVersionId);
                 }
                 await _dataAccessor.Editor.SaveAsync();
@@ -378,16 +393,7 @@ namespace DesignGear.ConfigManager.Core.Services
         public async Task RemoveProductAsync(Guid id)
         {
             var items = await _dataAccessor.Editor.ComponentDefinitions.Where(x => x.ProductId == id).ToListAsync();
-
-            if (items.Count > 0)
-            {
-                foreach (var component in items)
-                {
-                    _dataAccessor.Editor.Delete(component);
-                    await _configurationFileStorage.DeleteConfigurationFilesAsync(component.ProductVersionId);
-                }
-                await _dataAccessor.Editor.SaveAsync();
-            }
+            await RemoveComponents(items);
         }
 
         //public async Task<Guid> CreateConfigurationAsync(ConfigurationCreateDto create)

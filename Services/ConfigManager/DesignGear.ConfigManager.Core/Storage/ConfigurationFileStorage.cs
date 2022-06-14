@@ -222,7 +222,7 @@ namespace DesignGear.ConfigManager.Core.Storage
             var filePath = $"{_fileBucket}{productVersionId}\\{configurationId}";
             var di = new DirectoryInfo(filePath);
             if (di.Exists)
-                di.Delete();
+                di.Delete(true);
         }
 
         public async Task DeleteConfigurationFilesAsync(Guid productVersionId)
@@ -230,7 +230,7 @@ namespace DesignGear.ConfigManager.Core.Storage
             var filePath = $"{_fileBucket}{productVersionId}";
             var di = new DirectoryInfo(filePath);
             if (di.Exists)
-                di.Delete();
+                di.Delete(true);
         }
     }
 }
