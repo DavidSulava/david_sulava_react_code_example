@@ -13,6 +13,8 @@ using DesignGear.Contracts.Dto;
 using System.Transactions;
 using static DesignGear.ModelPackage.DesignGearModelPackage;
 using System.IO.Compression;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace DesignGear.ConfigManager.Core.Services
 {
@@ -69,11 +71,31 @@ namespace DesignGear.ConfigManager.Core.Services
                 parameter.Id = Guid.NewGuid();
                 newConfiguration.ParameterDefinitions.Add(parameter);
             }
+            var hashParam = ParameterHash(newConfiguration.ParameterDefinitions);
+            var existedConfig = await _dataAccessor.Reader.Configurations.FirstOrDefaultAsync(x => x.ParameterHash == hashParam);
+            if (existedConfig != null)
+                return existedConfig.Id;
 
             await _dataAccessor.Editor.CreateAsync(newConfiguration);
             await _dataAccessor.Editor.SaveAsync();
-            //todo - if it find existed configuration, it will return a valid Guid
             return Guid.Empty;
+        }
+
+        private string ParameterHash(ICollection<ParameterDefinition> parameters)
+        {
+            var keyValues = string.Empty;
+            var pList = parameters.OrderBy(x => x.DisplayPriority).ThenBy(x => x.Name);
+            foreach (var parameter in pList)
+                keyValues += keyValues.Length > 0 ? ";" : "" + $"{parameter.Name}:{parameter.Value}";
+
+            var crypt = SHA256.Create();
+            var hash = new StringBuilder();
+            byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(keyValues));
+            foreach (byte theByte in crypto)
+            {
+                hash.Append(theByte.ToString("x2"));
+            }
+            return hash.ToString();
         }
 
         /*
@@ -111,6 +133,7 @@ namespace DesignGear.ConfigManager.Core.Services
                         configuration.Id = rootConfigurationId;
                     }
                     configuration.RootConfigurationId = rootConfigurationId;
+                    configuration.ParameterHash = ParameterHash(configuration.ParameterDefinitions);
                     _dataAccessor.Editor.Create(configuration);
                 }
 
@@ -357,6 +380,11 @@ namespace DesignGear.ConfigManager.Core.Services
 
             await _configurationFileStorage.DeleteConfigurationFilesAsync(item.ComponentDefinition.ProductVersionId, id);
             _dataAccessor.Editor.Delete(item);
+            var parameters = await _dataAccessor.Editor.ParameterDefinitions.Where(x => x.ConfigurationId == id).ToListAsync();
+            foreach (var parameter in parameters)
+            {
+                _dataAccessor.Editor.Delete(parameter);
+            }
             await _dataAccessor.Editor.SaveAsync();
         }
 
@@ -367,7 +395,7 @@ namespace DesignGear.ConfigManager.Core.Services
         }
 
         private async Task RemoveComponents(ICollection<ComponentDefinition> components)
-        { 
+        {
             if (components.Count > 0)
             {
                 foreach (var component in components)
@@ -381,7 +409,6 @@ namespace DesignGear.ConfigManager.Core.Services
                         foreach (var parameter in parameters)
                         {
                             _dataAccessor.Editor.Delete(parameter);
-
                         }
                     }
                     await _configurationFileStorage.DeleteConfigurationFilesAsync(component.ProductVersionId);

@@ -57,6 +57,8 @@ namespace DesignGear.ConfigManager.Core.Data.Entity
         [StringLength(300)]
         public string? WorkItemUrl { get; set; }
 
+        public string? ParameterHash { get; set; }
+
         [NotMapped]
         public int ComponentDefinitionIdInternal { get; set; }
 
