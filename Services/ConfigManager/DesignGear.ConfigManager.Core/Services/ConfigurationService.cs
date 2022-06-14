@@ -2,18 +2,14 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DesignGear.Common.Exceptions;
-using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.ConfigManager.Core.Services.Interfaces;
 using DesignGear.ConfigManager.Core.Data;
 using DesignGear.Contracts.Dto.ConfigManager;
 using DesignGear.ConfigManager.Core.Data.Entity;
 using Newtonsoft.Json;
-using DesignGear.ModelPackage;
 using DesignGear.ConfigManager.Core.Storage.Interfaces;
 using DesignGear.Common.Extensions;
-using DesignGear.Contracts.Enums;
 using DesignGear.Contracts.Dto;
-using ParameterDefinitionDto = DesignGear.Contracts.Dto.ConfigManager.ParameterDefinitionDto;
 using System.Transactions;
 using static DesignGear.ModelPackage.DesignGearModelPackage;
 using System.IO.Compression;
@@ -351,6 +347,19 @@ namespace DesignGear.ConfigManager.Core.Services
             return result;
         }
 
+        public async Task RemoveConfigurationAsync(Guid id)
+        {
+            var item = await _dataAccessor.Editor.Configurations.Include(x => x.ComponentDefinition).FirstOrDefaultAsync(x => x.Id == id);
+            if (item == null)
+            {
+                throw new EntityNotFoundException<Configuration>(id);
+            }
+
+            await _configurationFileStorage.DeleteConfigurationFilesAsync(item.ComponentDefinition.ProductVersionId, id);
+            _dataAccessor.Editor.Delete(item);
+            await _dataAccessor.Editor.SaveAsync();
+        }
+
         //public async Task<Guid> CreateConfigurationAsync(ConfigurationCreateDto create)
         //{
         //    if (create == null)
@@ -390,19 +399,6 @@ namespace DesignGear.ConfigManager.Core.Services
         }
 
         _mapper.Map(update, item);
-        await _dataAccessor.Editor.SaveAsync();
-    }
-
-    public async Task RemoveConfigurationAsync(Guid id)
-    {
-        var item = await _dataAccessor.Editor.Configurations.FirstOrDefaultAsync(x => x.Id == id);
-        if (item == null)
-        {
-            throw new EntityNotFoundException<Configuration>(id);
-        }
-
-        _dataAccessor.Editor.Delete(item);
-        DeleteFiles(item.ProductVersionId, item.Id);
         await _dataAccessor.Editor.SaveAsync();
     }
 

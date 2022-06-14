@@ -216,5 +216,13 @@ namespace DesignGear.ConfigManager.Core.Storage
             //result.Length = result.Content.Length;
             return result;
         }
+
+        public async Task DeleteConfigurationFilesAsync(Guid productVersionId, Guid configurationId)
+        {
+            var filePath = $"{_fileBucket}{productVersionId}\\{configurationId}";
+            var di = new DirectoryInfo(filePath);
+            if (di.Exists)
+                di.Delete();
+        }
     }
 }

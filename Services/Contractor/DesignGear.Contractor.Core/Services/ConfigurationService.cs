@@ -65,18 +65,10 @@ namespace DesignGear.Contractor.Core.Services
         //    await _dataAccessor.Editor.SaveAsync();
         //}
 
-        //public async Task RemoveConfigurationAsync(Guid id)
-        //{
-        //    var item = await _dataAccessor.Editor.Configurations.FirstOrDefaultAsync(x => x.Id == id);
-        //    if (item == null)
-        //    {
-        //        throw new EntityNotFoundException<Configuration>(id);
-        //    }
-
-        //    _dataAccessor.Editor.Delete(item);
-        //    DeleteFiles(item.ProductVersionId, item.Id);
-        //    await _dataAccessor.Editor.SaveAsync();
-        //}
+        public async Task RemoveConfigurationAsync(Guid id)
+        {
+            await _configManagerService.RemoveConfigurationAsync(id);
+        }
 
         //public async Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId)
         //{

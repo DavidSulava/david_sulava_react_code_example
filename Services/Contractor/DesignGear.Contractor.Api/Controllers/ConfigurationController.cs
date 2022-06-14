@@ -66,5 +66,12 @@ namespace DesignGear.Contractor.Api.Controllers
         {
             return (await _configurationService.GetConfigurationAsync(id)).MapTo<VmConfiguration>(_mapper);
         }
+
+        [Authorize(Policy = "OrganizationSelected")]
+        [HttpDelete("{id}")]
+        public async Task RemoveConfigurationAsync([FromRoute] Guid id)
+        {
+            await _configurationService.RemoveConfigurationAsync(id);
+        }
     }
 }

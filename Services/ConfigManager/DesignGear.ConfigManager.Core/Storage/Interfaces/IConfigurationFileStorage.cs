@@ -26,5 +26,7 @@ namespace DesignGear.ConfigManager.Core.Storage.Interfaces {
 
         //Копируем архив и обновляем json
         void CopyZipArchive(Guid productVersionId, Guid sourceConfigurationId, Guid targetConfigurationId, string json);
+
+        Task DeleteConfigurationFilesAsync(Guid productVersionId, Guid configurationId);
     }
 }

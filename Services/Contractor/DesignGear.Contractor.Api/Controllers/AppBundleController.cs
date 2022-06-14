@@ -34,8 +34,8 @@ namespace DesignGear.Contractor.Api.Controllers
             await _appBundleService.UpdateAppBundleAsync(update.MapTo<UpdateAppBundleDto>(_mapper));
         }
 
-        [HttpDelete]
-        public async Task RemoveAppBundleAsync(Guid id)
+        [HttpDelete("{id}")]
+        public async Task RemoveAppBundleAsync([FromRoute] Guid id)
         {
             await _appBundleService.RemoveAppBundleAsync(id);
         }

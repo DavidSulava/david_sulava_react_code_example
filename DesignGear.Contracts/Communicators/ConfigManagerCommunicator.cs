@@ -78,7 +78,7 @@ namespace DesignGear.Contracts.Communicators
 
         public async Task RemoveAppBundleAsync(Guid id)
         {
-            var message = await _httpClient.DeleteAsync($"{_settings.ConfigManagerUrl}appbundle?id={id}");
+            var message = await _httpClient.DeleteAsync($"{_settings.ConfigManagerUrl}appbundle/{id}");
             message.EnsureSuccessStatusCode();
         }
 
@@ -144,6 +144,12 @@ namespace DesignGear.Contracts.Communicators
         public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)
         {
             return (await SendHttpRequestAsync<ConfigurationDto>($"{_settings.ConfigManagerUrl}configuration/{id}")).MapTo<ConfigurationDto>(_mapper);
+        }
+
+        public async Task RemoveConfigurationAsync(Guid id)
+        {
+            var message = await _httpClient.DeleteAsync($"{_settings.ConfigManagerUrl}configuration/{id}");
+            message.EnsureSuccessStatusCode();
         }
     }
 }

@@ -55,7 +55,7 @@ namespace DesignGear.ConfigManager.Api.Controllers
         public async Task<IActionResult> GetSvfAsync([FromRoute] Guid configurationId, [FromRoute] string svfName)
         {
             var result = await _configurationService.GetSvfAsync(configurationId, svfName);
-            if(result != null)
+            if (result != null)
                 return File(result.Content, result.ContentType, result.FileName);
             return Ok();
         }
@@ -72,9 +72,10 @@ namespace DesignGear.ConfigManager.Api.Controllers
             return (await _configurationService.GetConfigurationAsync(id)).MapTo<VmConfiguration>(_mapper);
         }
 
-        //[HttpDelete("{id}")]
-        //public async Task DeleteConfigurationAsync([FromRoute] Guid id) {
-
-        //}
+        [HttpDelete("{id}")]
+        public async Task DeleteConfigurationAsync([FromRoute] Guid id)
+        {
+            await _configurationService.RemoveConfigurationAsync(id);
+        }
     }
 }

@@ -91,7 +91,7 @@ namespace DesignGear.Contractor.Core.Services
 
             _dataAccessor.Editor.Delete(item);
             await _dataAccessor.Editor.SaveAsync();
-            // todo - delete all configurations
+            // todo - delete all component definitions/configurations
         }
 
         public async Task<TResult> GetProductVersionsByProductAsync<TResult>(Guid productId, Func<IQueryable<ProductVersionItemDto>, TResult> resultBuilder)
