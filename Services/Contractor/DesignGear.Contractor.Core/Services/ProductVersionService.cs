@@ -89,10 +89,9 @@ namespace DesignGear.Contractor.Core.Services
             if (item.Product.CurrentVersionId == item.Id)
                 item.Product.CurrentVersionId = null;
 
+            await _configManagerService.RemoveProductVersionAsync(id);
             _dataAccessor.Editor.Delete(item);
             await _dataAccessor.Editor.SaveAsync();
-
-            await _configManagerService.RemoveProductVersionAsync(id);
         }
 
         public async Task<TResult> GetProductVersionsByProductAsync<TResult>(Guid productId, Func<IQueryable<ProductVersionItemDto>, TResult> resultBuilder)

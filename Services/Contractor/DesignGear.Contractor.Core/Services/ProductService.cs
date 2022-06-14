@@ -61,10 +61,9 @@ namespace DesignGear.Contractor.Core.Services
                 throw new EntityNotFoundException<Product>(id);
             }
 
+            await _configManagerService.RemoveProductAsync(id);
             _dataAccessor.Editor.Delete(item);
             await _dataAccessor.Editor.SaveAsync();
-
-            await _configManagerService.RemoveProductAsync(id);
         }
 
         public async Task<ProductDto> GetProductAsync(Guid id)
