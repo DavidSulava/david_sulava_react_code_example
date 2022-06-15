@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DesignGear.Common.Exceptions;
+using DesignGear.Contracts.Communicators.Interfaces;
 
 namespace DesignGear.Contractor.Core.Services
 {
@@ -13,11 +14,13 @@ namespace DesignGear.Contractor.Core.Services
     {
         private readonly IMapper _mapper;
         private readonly DataAccessor _dataAccessor;
+        private readonly IConfigManagerCommunicator _configManagerService;
 
-        public ProductService(IMapper mapper, DataAccessor dataAccessor)
+        public ProductService(IMapper mapper, DataAccessor dataAccessor, IConfigManagerCommunicator configManagerService)
         {
             _mapper = mapper;
             _dataAccessor = dataAccessor;
+            _configManagerService = configManagerService;
         }
 
         public async Task<Guid> CreateProductAsync(ProductCreateDto create)
@@ -58,6 +61,7 @@ namespace DesignGear.Contractor.Core.Services
                 throw new EntityNotFoundException<Product>(id);
             }
 
+            await _configManagerService.RemoveProductAsync(id);
             _dataAccessor.Editor.Delete(item);
             await _dataAccessor.Editor.SaveAsync();
         }

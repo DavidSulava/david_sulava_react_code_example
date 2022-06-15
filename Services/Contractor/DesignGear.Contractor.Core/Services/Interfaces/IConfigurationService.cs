@@ -11,7 +11,7 @@ namespace DesignGear.Contractor.Core.Services.Interfaces
 
         //Task UpdateConfigurationAsync(Contracts.Dto.ConfigurationUpdateDto Configuration);
 
-        //Task RemoveConfigurationAsync(Guid id);
+        Task RemoveConfigurationAsync(Guid id);
 
         //Task<ICollection<ConfigurationItemDto>> GetConfigurationItemsAsync(Guid productVersionId);
 

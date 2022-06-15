@@ -27,6 +27,8 @@ namespace DesignGear.Contractor.Api.Controllers
         {
             if (organization.Name.Length > 300)
                 return BadRequest(new { message = "Name value must be less than 300 characters" });
+            if (organization.Description.Length > 500)
+                return BadRequest(new { message = "Description value must be less than 500 characters" });
 
             return Ok(await _organizationService.CreateOrganizationAsync(organization.MapTo<OrganizationCreateDto>(_mapper)));
         }
