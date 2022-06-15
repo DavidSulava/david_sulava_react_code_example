@@ -1,7 +1,7 @@
 import ModalWrapper from '../../../../../components/ModalWrapper/ModalWrapper';
 import { Field, Form, FormElement } from '@progress/kendo-react-form';
 import CInput from '../../../../../components/form-components/CInput';
-import { isEmpty } from '../../../../../components/form-components/helpers/valodation-functions';
+import { isEmpty } from '../../../../../components/form-components/helpers/validation-functions';
 import CTextArea from '../../../../../components/form-components/CTextArea';
 import { Button } from 'react-bootstrap';
 import React, { useRef } from 'react';

@@ -1,4 +1,5 @@
 import { parseNumber } from "@telerik/kendo-intl";
+import { getter } from '@progress/kendo-data-query';
 
 const imageFileRegex: RegExp = new RegExp(/\.PNG|\.JPG|\.GIF|\.BMP|\.TIFF/, "i");
 const zipFileRegex: RegExp = new RegExp(/\.zip/, "i");
@@ -42,3 +43,23 @@ export function isZip(value: File[]){
   const isImage = value.every(el => zipFileRegex.test(el.name))
   return isImage && value.length ? '' : 'The file must be in zip format'
 }
+
+export const passwordValidation = (values: any, pwdField = 'password', confirmPwdField = 'confirmPassword') => {
+  const password: string = getter(pwdField)(values);
+  const passConfirm: string = getter(confirmPwdField)(values);
+
+  const passRegex: RegExp = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/);
+
+  let msg = ""
+  if(password !== passConfirm)
+    msg = 'passwords do not match'
+  else if(!password?.length || password?.length < 8 || passConfirm?.length < 8)
+    msg = 'password must contain at least 8 characters'
+  else if(!passRegex.test(password))
+    msg = 'The password must contain at least one : uppercase letter, lowercase letter, number.'
+
+  return {
+    ["password"]: msg ? ' ' : '',
+    ["confirmPassword"]: msg,
+  };
+};

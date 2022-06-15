@@ -3,8 +3,7 @@ export enum ERoutes {
 
   SignUp = '/signup',
   ForgotPwd = '/forgot-pwd',
-  ResetPwd = '/reset-pwd',
-  EmailConfirmation = '/email-confirmation',
+  ResetPwd = '/passwordrecovery/:passwordRecoveryKey',
 
   Organisations = '/organisations',
 
@@ -19,8 +18,7 @@ export enum ERoutes {
     Users = 'users',
     Billing = 'billing',
 
-  UserProfile = '/user-profile',
-
-  AdminUserList = '/admin/users',
-  AdminUserEdit = '/admin/users/:id/edit',
+  ManageAccount = '/manage-account',
+    AccountSecurity = '/manage-account/account-security',
+    AdminUserList = '/admin/users',
 }

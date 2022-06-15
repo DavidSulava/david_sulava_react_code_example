@@ -2,7 +2,7 @@ import { IConfigParam, IConfigurationParamData } from '../../../../../../../type
 import React, { FC, RefObject, useEffect, useState } from 'react';
 import { Field, Form } from '@progress/kendo-react-form';
 import CInput from '../../../../../../../components/form-components/CInput';
-import { isEmpty } from '../../../../../../../components/form-components/helpers/valodation-functions';
+import { isEmpty } from '../../../../../../../components/form-components/helpers/validation-functions';
 import { DropDownList, DropDownListChangeEvent } from '@progress/kendo-react-dropdowns';
 import NavPanel from './NavPannelParams';
 

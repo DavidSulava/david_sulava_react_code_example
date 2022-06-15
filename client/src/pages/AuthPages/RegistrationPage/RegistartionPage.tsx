@@ -2,17 +2,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import useAuthCheck from '../../../helpers/hooks/useAuthCheck';
 import { Field, Form, FormElement } from '@progress/kendo-react-form';
 import CInput from '../../../components/form-components/CInput';
-import { emailValidator, isEmpty } from '../../../components/form-components/helpers/valodation-functions';
+import { emailValidator, isEmpty, passwordValidation } from '../../../components/form-components/helpers/validation-functions';
 import { Button } from 'react-bootstrap';
 import React, { useEffect, useRef } from 'react';
 import { ERoutes } from '../../../router/Routes';
 import { EUserRoles, ISignUpData } from '../../../types/user';
-import { getter } from '@progress/kendo-data-query';
 import { signUp } from '../../../stores/authentication/reducer';
-import { setPostReqResp, setError } from '../../../stores/common/reducer';
+import { setError, setPostReqResp } from '../../../stores/common/reducer';
 import { IState } from '../../../stores/configureStore';
 import { Error } from '@progress/kendo-react-labels';
 import BtnLink from '../../../components/BtnLink';
+import { ICommonObject } from '../../../types/common';
 
 const RegistrationPage = () => {
   const dispatch = useDispatch()
@@ -30,7 +30,7 @@ const RegistrationPage = () => {
     }
   }, [dispatch])
 
-  const handleSubmit = (dataItem: {[p: string]: any}) => {
+  const handleSubmit = (dataItem: ICommonObject) => {
     const postData = {...dataItem}
     delete postData?.confirmPassword
     postData.phone = ''
@@ -38,26 +38,6 @@ const RegistrationPage = () => {
 
     dispatch(signUp(postData as ISignUpData))
   }
-  const passwordValidation = (values: any) => {
-    const password: string = getter("password")(values);
-    const passConfirm: string = getter("confirmPassword")(values);
-
-    const passRegex: RegExp = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/);
-
-    let msg = ""
-    if(password !== passConfirm)
-      msg = 'passwords do not match'
-    else if(!password?.length || password?.length < 8 || passConfirm?.length < 8)
-      msg = 'password must contain at least 8 characters'
-    else if(!passRegex.test(password))
-      msg = 'The password must contain at least one : uppercase letter, lowercase letter, number.'
-
-
-    return {
-      ["password"]: msg? ' ': '',
-      ["confirmPassword"]: msg,
-    };
-  };
 
   return (
     <div className="sign-in-form">
@@ -80,7 +60,7 @@ const RegistrationPage = () => {
             <Form
               onSubmit={handleSubmit}
               ref={formRef}
-              validator={passwordValidation}
+              validator={(val)=>passwordValidation(val)}
               render={(formRenderProps) => (
                 <FormElement>
                   <fieldset className={"k-form-fieldset"}>

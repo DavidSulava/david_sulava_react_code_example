@@ -1,7 +1,7 @@
 import { GridCellProps } from '@progress/kendo-react-grid';
 import { Field } from '@progress/kendo-react-form';
 import CInput from '../../../../../components/form-components/CInput';
-import { isEmptyNoMsg } from '../../../../../components/form-components/helpers/valodation-functions';
+import { isEmptyNoMsg } from '../../../../../components/form-components/helpers/validation-functions';
 import React from 'react';
 import CTextArea from '../../../../../components/form-components/CTextArea';
 

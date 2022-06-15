@@ -9,7 +9,7 @@ import {
   isImage,
   isNumberErrorMsg,
   isZip
-} from '../../../../../components/form-components/helpers/valodation-functions';
+} from '../../../../../components/form-components/helpers/validation-functions';
 import { Button } from 'react-bootstrap';
 import { IState } from '../../../../../stores/configureStore';
 import { getProdVersion, postProdVerByProdId, putProdVer, setProdVersion } from '../../../../../stores/productVersion/reducer';
@@ -26,7 +26,6 @@ interface ICreateVerProps extends ICommonModalProps {
   productId: string,
   dataToUpdateId?: string,
 }
-
 //TODO: CreateVersion: доделать логику для PUT запроса,
 // изменить логику для картинок , когда будут приходить настоящие данные с картинками
 const CreateVersion: FC<ICreateVerProps> = ({
@@ -83,8 +82,10 @@ const CreateVersion: FC<ICreateVerProps> = ({
 
   }, [appBundleList])
   useEffect(() => {
-    if(dataToUpdateId)
+    if(dataToUpdateId){
+      dispatch(setProdVersion(null))
       dispatch(getProdVersion(dataToUpdateId))
+    }
   }, [dataToUpdateId])
   useEffect(()=>{
     if(prodVersion){

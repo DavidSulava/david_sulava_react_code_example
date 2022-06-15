@@ -1,9 +1,14 @@
 import { BASE_URL } from '../../constants/api';
 
 export const apiRoutes = {
-  signIn: `${BASE_URL}/Authentication`,
   signUp: `${BASE_URL}/User`,
-  authOrg: (id: string) => `${BASE_URL}/Authentication/organization?organizationId=${id}`,
+  account: `${BASE_URL}/Account`,
+  auth:{
+    signIn: `${BASE_URL}/Authentication`,
+    org: (id: string) => `${BASE_URL}/Authentication/organization?organizationId=${id}`,
+    pwdEmail: `${BASE_URL}/Authentication/PasswordRecovery`,
+    pwdConfirm: `${BASE_URL}/Authentication/PasswordRecoveryConfirm`,
+  },
   organisations: {
     root: `${BASE_URL}/Organization`,
     list: (id: string) => `${BASE_URL}/Organization/byuser?userId=${id}`

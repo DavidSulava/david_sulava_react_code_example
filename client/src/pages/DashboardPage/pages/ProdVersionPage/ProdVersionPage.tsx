@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getProdVersion } from '../../../../stores/productVersion/reducer';
+import { getProdVersion, setProdVersion } from '../../../../stores/productVersion/reducer';
 import useProdVersion from '../../../../helpers/hooks/useProdVersion';
 import { Button } from 'react-bootstrap';
 import { ICommonObject } from '../../../../types/common';
@@ -9,6 +9,7 @@ import ConfigurationsTable from './ConfigurationsTable/ConfigurationsTable';
 import { IState } from '../../../../stores/configureStore';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { getAppBundleList } from '../../../../stores/appBundle/reducer';
+import { IAppBundle } from '../../../../types/appBundle';
 
 const buttonText = {
   Configurations: 'Configurations',
@@ -21,6 +22,7 @@ const ProdVersionPage = () => {
   const {versionId} = useParams();
   const {prodVersion} = useProdVersion()
   const appBundleList = useSelector((state: IState) => state.appBundle.appBundleList)
+  const [defaultBundle, setDefaultBundle] = useState<IAppBundle|null>(null)
   const [btnPressed, setBtnPressed] = useState<ICommonObject>({
     [buttonText.Configurations]: false,
     [buttonText.InterfaceParameterDefinitions]: false,
@@ -32,7 +34,18 @@ const ProdVersionPage = () => {
     dispatch(getAppBundleList())
     dispatch(getProdVersion(versionId ?? ''))
     setPressedBtn(buttonText.Configurations)
+    return()=>{
+      dispatch(setProdVersion(null))
+    }
   }, [])
+  useEffect(() => {
+    if(appBundleList.length){
+      const presetBundle = appBundleList.find(item=> item.id === prodVersion?.appBundleId)
+      const bundle = presetBundle||appBundleList[0]
+      setDefaultBundle(bundle)
+    }
+
+  }, [appBundleList, prodVersion])
 
   const setPressedBtn = (btn: string) => {
     const newState: ICommonObject = {}
@@ -101,7 +114,7 @@ const ProdVersionPage = () => {
               data={appBundleList}
               textField="name"
               dataItemKey="id"
-              defaultValue={appBundleList[0]}
+              defaultValue={defaultBundle}
               loading={!appBundleList.length}
               // onChange={val => formRef?.current?.valueSetter("AppBundleId", val.target.value)}
               disabled={true}

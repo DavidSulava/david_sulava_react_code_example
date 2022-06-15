@@ -1,4 +1,4 @@
-import DefaultConfigForm from './components/CreateConfigForm/DefaultConfigForm';
+import DefaultConfigForm from './components/DefaultConfigForm/DefaultConfigForm';
 import React, { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import useConfigurations from '../../../../helpers/hooks/useConfigurations';
