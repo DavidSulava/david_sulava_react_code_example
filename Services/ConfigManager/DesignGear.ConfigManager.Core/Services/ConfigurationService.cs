@@ -72,7 +72,8 @@ namespace DesignGear.ConfigManager.Core.Services
                 newConfiguration.ParameterDefinitions.Add(parameter);
             }
             var hashParam = ParameterHash(newConfiguration.ParameterDefinitions);
-            var existedConfig = await _dataAccessor.Reader.Configurations.FirstOrDefaultAsync(x => x.ParameterHash == hashParam);
+            var existedConfig = await _dataAccessor.Reader.Configurations
+                .FirstOrDefaultAsync(x => x.ParameterHash == hashParam && x.TemplateConfigurationId == request.BaseConfigurationId);
             if (existedConfig != null)
                 return existedConfig.Id;
 
