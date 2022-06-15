@@ -4,6 +4,8 @@ using DesignGear.Contracts.Dto.ConfigManager;
 using DesignGear.ModelPackage;
 using Newtonsoft.Json;
 using System.IO.Compression;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 
 namespace DesignGear.ConfigManager.Core.Storage
@@ -184,6 +186,19 @@ namespace DesignGear.ConfigManager.Core.Storage
                     }
             }
             return null;
+        }
+
+        private static string GetMD5HashFromFile(Stream stream)
+        {
+            var md5 = MD5.Create();
+            var buffer = md5.ComputeHash(stream);
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                sb.Append(buffer[i].ToString("x2"));
+            }
+            return sb.ToString();
         }
 
         public async Task SaveSvfAsync(Guid productVersionId, Guid configurationId, FileStreamDto svf)

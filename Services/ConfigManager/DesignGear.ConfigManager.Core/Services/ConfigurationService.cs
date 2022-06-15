@@ -89,7 +89,7 @@ namespace DesignGear.ConfigManager.Core.Services
             foreach (var parameter in pList)
                 keyValues += keyValues.Length > 0 ? ";" : "" + $"{parameter.Name}:{parameter.Value}";
 
-            var crypt = SHA256.Create();
+            var crypt = MD5.Create();
             var hash = new StringBuilder();
             byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(keyValues));
             foreach (byte theByte in crypto)
