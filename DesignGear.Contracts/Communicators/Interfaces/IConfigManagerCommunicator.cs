@@ -13,7 +13,7 @@ namespace DesignGear.Contracts.Communicators.Interfaces
         
         Task RemoveAppBundleAsync(Guid id);
 
-        Task<ICollection<AppBundleDto>> GetAppBundleListAsync();
+        Task<DataSourceResult> GetAppBundleListAsync(string queryString);
 
         Task<AppBundleDto> GetAppBundleAsync(Guid id);
 

@@ -4,12 +4,13 @@ using DesignGear.Contractor.Core.Helpers;
 using DesignGear.Contractor.Core.Services.Interfaces;
 using DesignGear.Contracts.Dto;
 using DesignGear.Contracts.Models.ConfigManager;
+using Kendo.Mvc.UI;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesignGear.Contractor.Api.Controllers
 {
     [ApiController]
-    [Authorize(Policy = "OrganizationSelected")]
+    //[Authorize(Policy = "OrganizationSelected")]
     [Route("[controller]")]
     public class AppBundleController : ControllerBase
     {
@@ -41,9 +42,9 @@ namespace DesignGear.Contractor.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ICollection<VmAppBundleItem>> AppBundleListAsync()
+        public async Task<DataSourceResult> AppBundleListAsync([DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
-            return (await _appBundleService.GetAppBundlesAsync()).MapTo<ICollection<VmAppBundleItem>>(_mapper);
+            return await _appBundleService.GetAppBundlesAsync(Request.QueryString.Value);
         }
 
         [HttpGet("{id}")]

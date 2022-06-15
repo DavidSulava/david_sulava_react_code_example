@@ -4,7 +4,7 @@ namespace DesignGear.ConfigManager.Core.Services.Interfaces
 {
     public interface IAppBundleService
     {
-        Task<ICollection<AppBundleDto>> GetAppBundleListAsync();
+        Task<TResult> GetAppBundleListAsync<TResult>(Func<IQueryable<AppBundleDto>, TResult> resultBuilder);
 
         Task<Guid> CreateAppBundleAsync(CreateAppBundleDto create);
 

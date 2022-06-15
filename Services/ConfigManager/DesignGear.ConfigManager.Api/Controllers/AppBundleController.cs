@@ -4,6 +4,9 @@ using DesignGear.Contracts.Models.ConfigManager;
 using Microsoft.AspNetCore.Mvc;
 using DesignGear.Common.Extensions;
 using DesignGear.Contracts.Dto;
+using Kendo.Mvc.UI;
+using Newtonsoft.Json;
+using Kendo.Mvc.Extensions;
 
 namespace DesignGear.ConfigManager.Api.Controllers
 {
@@ -39,9 +42,11 @@ namespace DesignGear.ConfigManager.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ICollection<VmAppBundleItem>> GetAppBundleListAsync()
+        public async Task<IActionResult> GetAppBundleListAsync([DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
-            return (await _appBundleService.GetAppBundleListAsync()).MapTo<ICollection<VmAppBundleItem>>(_mapper);
+            var result = await _appBundleService.GetAppBundleListAsync(query => query.ToDataSourceResult(dataSourceRequest, _mapper.Map<AppBundleDto, VmAppBundleItem>));
+            var json = JsonConvert.SerializeObject(result, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
+            return Ok(json);
         }
 
         [HttpGet("{id}")]

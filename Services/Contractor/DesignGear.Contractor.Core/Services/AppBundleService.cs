@@ -4,6 +4,7 @@ using DesignGear.Contractor.Core.Data;
 using DesignGear.Contractor.Core.Services.Interfaces;
 using DesignGear.Contracts.Communicators.Interfaces;
 using DesignGear.Contracts.Dto;
+using Kendo.Mvc.UI;
 using Microsoft.EntityFrameworkCore;
 
 namespace DesignGear.Contractor.Core.Services
@@ -36,9 +37,9 @@ namespace DesignGear.Contractor.Core.Services
             await _configManagerService.RemoveAppBundleAsync(id);
         }
 
-        public async Task<ICollection<AppBundleDto>> GetAppBundlesAsync()
+        public async Task<DataSourceResult> GetAppBundlesAsync(string queryString)
         {
-            return await _configManagerService.GetAppBundleListAsync();
+            return await _configManagerService.GetAppBundleListAsync(queryString);
         }
 
         public async Task<AppBundleDto> GetAppBundleAsync(Guid id)

@@ -68,9 +68,15 @@ namespace DesignGear.ConfigManager.Core.Services
             await _dataAccessor.Editor.SaveAsync();
         }
 
-        public async Task<ICollection<AppBundleDto>> GetAppBundleListAsync()
+        public async Task<TResult> GetAppBundleListAsync<TResult>(Func<IQueryable<AppBundleDto>, TResult> resultBuilder)
         {
-            return await _dataAccessor.Reader.AppBundles.ProjectTo<AppBundleDto>(_mapper.ConfigurationProvider).ToListAsync();
+            if (resultBuilder == null)
+            {
+                throw new ArgumentNullException(nameof(resultBuilder));
+            }
+            var query = _dataAccessor.Reader.AppBundles.ProjectTo<AppBundleDto>(_mapper.ConfigurationProvider);
+            var result = resultBuilder(query);
+            return await Task.FromResult(result);
         }
 
         public async Task<AppBundleDto> GetAppBundleAsync(Guid id)

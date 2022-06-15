@@ -82,9 +82,9 @@ namespace DesignGear.Contracts.Communicators
             message.EnsureSuccessStatusCode();
         }
 
-        public async Task<ICollection<AppBundleDto>> GetAppBundleListAsync()
+        public async Task<DataSourceResult> GetAppBundleListAsync(string queryString)
         {
-            return (await SendHttpRequestAsync<ICollection<VmAppBundleItem>>($"{_settings.ConfigManagerUrl}appbundle")).MapTo<ICollection<AppBundleDto>>(_mapper);
+            return await SendHttpRequestJsonAsync<DataSourceResult>($"{_settings.ConfigManagerUrl}appbundle{queryString}");
         }
 
         public async Task<AppBundleDto> GetAppBundleAsync(Guid id)
@@ -131,14 +131,14 @@ namespace DesignGear.Contracts.Communicators
             return await SendHttpRequestAsync($"{_settings.ConfigManagerUrl}configuration/{configurationId}/svf");
         }
 
-        public async Task<Dto.ConfigManager.ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId)
+        public async Task<ConfigurationParametersDto> GetConfigurationParametersAsync(Guid configurationId)
         {
             return (await SendHttpRequestAsync<VmComponentParameterDefinitions>($"{_settings.ConfigManagerUrl}configuration/{configurationId}/parameters")).MapTo<ConfigurationParametersDto>(_mapper);
         }
 
         public async Task<DataSourceResult> GetConfigurationItemsAsync(string queryString)
         {
-            return (await SendHttpRequestJsonAsync<DataSourceResult>($"{_settings.ConfigManagerUrl}configuration{queryString}"));
+            return await SendHttpRequestJsonAsync<DataSourceResult>($"{_settings.ConfigManagerUrl}configuration{queryString}");
         }
 
         public async Task<ConfigurationDto> GetConfigurationAsync(Guid id)

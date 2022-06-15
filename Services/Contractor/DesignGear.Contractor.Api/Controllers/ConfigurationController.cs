@@ -36,8 +36,7 @@ namespace DesignGear.Contractor.Api.Controllers
         [HttpGet]
         public async Task<DataSourceResult> GetConfigurationItemsAsync(Guid productVersionId, [DataSourceRequest] DataSourceRequest dataSourceRequest)
         {
-            var queryString = this.Request.QueryString.Value;
-            return await _configurationService.GetConfigurationItemsAsync(queryString);
+            return await _configurationService.GetConfigurationItemsAsync(Request.QueryString.Value);
         }
 
         [Authorize(Policy = "OrganizationSelected")]
