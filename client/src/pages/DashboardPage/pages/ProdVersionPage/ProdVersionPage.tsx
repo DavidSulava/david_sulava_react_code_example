@@ -39,12 +39,11 @@ const ProdVersionPage = () => {
     }
   }, [])
   useEffect(() => {
-    if(appBundleList.length){
-      const presetBundle = appBundleList.find(item=> item.id === prodVersion?.appBundleId)
-      const bundle = presetBundle||appBundleList[0]
+    if(appBundleList?.data.length){
+      const presetBundle = appBundleList.data.find(item=> item.id === prodVersion?.appBundleId)
+      const bundle = presetBundle||appBundleList?.data[0]
       setDefaultBundle(bundle)
     }
-
   }, [appBundleList, prodVersion])
 
   const setPressedBtn = (btn: string) => {
@@ -111,12 +110,11 @@ const ProdVersionPage = () => {
             Select Your AppBundle
             <DropDownList
               name="AppBundleId"
-              data={appBundleList}
+              data={appBundleList?.data}
               textField="name"
               dataItemKey="id"
               defaultValue={defaultBundle}
-              loading={!appBundleList.length}
-              // onChange={val => formRef?.current?.valueSetter("AppBundleId", val.target.value)}
+              loading={!appBundleList?.data.length}
               disabled={true}
             />
           </div>

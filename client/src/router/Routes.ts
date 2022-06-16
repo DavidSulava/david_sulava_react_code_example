@@ -17,6 +17,7 @@ export enum ERoutes {
     CPThreshold = 'cp-threshold',
     Users = 'users',
     Billing = 'billing',
+    AppBundle = 'app-bundle',
 
   ManageAccount = '/manage-account',
     AccountSecurity = '/manage-account/account-security',

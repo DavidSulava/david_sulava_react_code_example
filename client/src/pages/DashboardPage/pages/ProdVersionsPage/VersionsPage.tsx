@@ -1,7 +1,7 @@
 import { useLocation, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import React, { createContext, useEffect, useState } from 'react';
-import { delProdVer, getProdVersionList, setProdVersionDataState } from '../../../../stores/productVersion/reducer';
+import { delProdVer, getProdVersionList, initialProdVerState, setProdVersionDataState } from '../../../../stores/productVersion/reducer';
 import { Button } from 'react-bootstrap';
 import { Grid, GridColumn, GridDataStateChangeEvent, GridItemChangeEvent, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
 import CreateVersion from './modals/CreateVersion';
@@ -14,7 +14,7 @@ import { IProduct } from '../../../../types/product';
 import VersionsActionCell from './components/VersionsActionCell';
 
 export const ProdVersionContext = createContext<{
-  productId: string| undefined,
+  productId: string|undefined,
   onEdit: (dataItem: IProductVersion) => void,
   onDelete: (dataItem: IProductVersion) => void,
 }>({} as any);
@@ -31,6 +31,9 @@ const VersionsPage = () => {
 
   useEffect(() => {
     dispatch(getProdVersionList(productId ?? ''))
+    return () => {
+      dispatch(setProdVersionDataState(initialProdVerState.dataState))
+    }
   }, [])
   useEffect(() => {
     setGridData(prodVersionList?.data ?? [])
@@ -39,7 +42,7 @@ const VersionsPage = () => {
   const onCreateVersionClick = () => {
     setIsShowCreateVersionModal(!isShowCreateVersionModal)
   }
-  const onCreateVerClose = () =>{
+  const onCreateVerClose = () => {
     setIsShowCreateVersionModal(!isShowCreateVersionModal)
     setDataToUpdateId('')
   }
