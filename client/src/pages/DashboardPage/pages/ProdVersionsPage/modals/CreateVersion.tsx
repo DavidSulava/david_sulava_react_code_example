@@ -51,7 +51,7 @@ const CreateVersion: FC<ICreateVerProps> = ({
     InventorVersion: '',
     IsCurrent: false,
     ProductId: productId,
-    AppBundleId: appBundleList[0]
+    AppBundleId: appBundleList?.data[0]
   })
   const [chosenImgFiles, setChosenImgFiles] = useState<File[]>([])
   const [preloadedImgFiles, setPreloadedImgFiles] = useState<string[]>([])
@@ -69,15 +69,15 @@ const CreateVersion: FC<ICreateVerProps> = ({
     }
   }, [])
   useEffect(() => {
-    if(prodVersion?.appBundleId && appBundleList.length){
-      const presetBundle = appBundleList.find(item=> item.id === prodVersion?.appBundleId)
-      const bundle = presetBundle||appBundleList[0]
+    if(prodVersion?.appBundleId && appBundleList?.data.length){
+      const presetBundle = appBundleList.data.find(item=> item.id === prodVersion?.appBundleId)
+      const bundle = presetBundle||appBundleList.data[0]
       formRef?.current?.valueSetter("AppBundleId", bundle)
       setDefaultBundle(bundle)
     }
     else{
-      formRef?.current?.valueSetter("AppBundleId", appBundleList[0])
-      setDefaultBundle(appBundleList[0])
+      formRef?.current?.valueSetter("AppBundleId", appBundleList?.data[0])
+      setDefaultBundle(appBundleList?.data[0]||null)
     }
 
   }, [appBundleList])
@@ -225,11 +225,11 @@ const CreateVersion: FC<ICreateVerProps> = ({
                   <DropDownList
                     name="AppBundleId"
                     style={{width: "50%"}}
-                    data={appBundleList}
+                    data={appBundleList?.data}
                     textField="name"
                     dataItemKey="id"
                     defaultValue={defaultBundle}
-                    loading={!appBundleList.length}
+                    loading={!appBundleList?.data.length}
                     onChange={val => formRef?.current?.valueSetter("AppBundleId", val.target.value)}
                     required={true}
                   />

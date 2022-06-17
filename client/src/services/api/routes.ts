@@ -29,5 +29,8 @@ export const apiRoutes = {
     params: (configurationId: string) => `${BASE_URL}/Configuration/${configurationId}/parameters`,
     svf: (id: string, svfName?: string) => `${BASE_URL}/Configuration/${id}/svf${svfName? '/'+svfName : ''}`,
   },
-  appBundle: `${BASE_URL}/AppBundle`,
+  appBundle: {
+    root: (dataString: string = '')=>`${BASE_URL}/AppBundle${dataString ? '?' + dataString : ''}`,
+    item: (id:string) => `${BASE_URL}/AppBundle/${id}`
+  },
 }

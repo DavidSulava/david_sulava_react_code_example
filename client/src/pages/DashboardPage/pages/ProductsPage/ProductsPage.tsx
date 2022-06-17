@@ -9,7 +9,7 @@ import {
 } from '@progress/kendo-react-grid';
 import React, { createContext, ReactElement, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { delProduct, getProduct, putProduct, setFilter, setProduct } from '../../../../stores/product/reducer';
+import { delProduct, getProduct, putProduct, setProductFilter, setProduct, initialProductState } from '../../../../stores/product/reducer';
 import useProduct from '../../../../helpers/hooks/useProduct';
 import { IProduct, IPutProduct } from '../../../../types/product';
 import { Button } from 'react-bootstrap';
@@ -51,6 +51,7 @@ const ProductsPage = () => {
     dispatch(getProduct())
     return() => {
       dispatch(setProduct(null))
+      dispatch(setProductFilter(initialProductState.dataState))
     }
   }, [dispatch])
   useEffect(() => {
@@ -61,7 +62,7 @@ const ProductsPage = () => {
     setIsShowAddProductModal(!isShowAddProductModal)
   }
   const onDataStateChange = (e: GridDataStateChangeEvent) => {
-    dispatch(setFilter(e.dataState as any))
+    dispatch(setProductFilter(e.dataState as any))
     dispatch(getProduct())
   }
   const itemChange = (event: GridItemChangeEvent) => {
