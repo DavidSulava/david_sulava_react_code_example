@@ -11,7 +11,7 @@ import {
 } from "../../types/user";
 import client from './http.client';
 import { IOrganisation, IPostOrganisation } from '../../types/organisationPage';
-import { IGetProdResp, IPostProduct, IPutProduct } from '../../types/product';
+import { IGetProdListResp, IPostProduct, IProduct, IPutProduct } from '../../types/product';
 import { IGetProductVersionList, IPostProductVersion, IProductVersion } from '../../types/productVersion';
 import { IConfiguration, IConfigurationParamData, IGetConfigurations, IPostConfigurations } from '../../types/producVersionConfigurations';
 import { IAppBundle, IGetAppBundleResp, IPostAppBundle, IPuttAppBundle } from '../../types/appBundle';
@@ -67,8 +67,13 @@ export default class Api {
     return response.data
   }
 
-  public static async getProduct(dataString?: string): Promise<IGetProdResp> {
+  public static async getProductList(dataString?: string): Promise<IGetProdListResp> {
     const response = await client.get(apiRoutes.product.root(dataString))
+    return response.data
+  }
+
+  public static async getProduct(id: string): Promise<IProduct> {
+    const response = await client.get(apiRoutes.product.item(id))
     return response.data
   }
 

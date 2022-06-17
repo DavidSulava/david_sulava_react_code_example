@@ -45,7 +45,7 @@ export const ProductsActionCell = (props: GridCellProps) => {
             :
             <>
               <Button variant="outline-secondary" className='k-m-1 pt-0 pb-0 btn-with-link'>
-                <Link to={setPath(ERoutes.ProdVersions, [organizationId, dataItem.id])} state={{...dataItem as IProduct}}>Show</Link>
+                <Link to={setPath(ERoutes.ProdVersions, [organizationId, dataItem.id])}>Show</Link>
               </Button>
               <Button variant="outline-secondary" className='k-m-1 pt-0 pb-0' onClick={onEditClick}>
                 Edit

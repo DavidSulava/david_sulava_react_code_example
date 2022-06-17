@@ -5,8 +5,12 @@ import CInput from '../../../../../../../components/form-components/CInput';
 import { isEmpty } from '../../../../../../../components/form-components/helpers/validation-functions';
 import { DropDownList, DropDownListChangeEvent } from '@progress/kendo-react-dropdowns';
 import NavPanel from './NavPannelParams';
+import Spinner from '../../../../../../../components/Loaders/Spinner/Spinner';
+import { Nullable } from '../../../../../../../types/common';
 
-interface IParamItemInner {
+export const PARAM_CHANGED_CLASS_NAME = 'item-changed'
+
+export interface IParamItemPrepared {
   tempId: string,
   parameters: IConfigParam[]
 }
@@ -22,26 +26,37 @@ export interface IConfigItem {
 }
 
 interface IParamProps {
-  configs: IConfigurationParamData
+  configs: Nullable<IConfigurationParamData>
   formRef: RefObject<Form>
   title: string,
   isDisabled?: boolean,
+  isLoading?: boolean,
 }
 
-const Parameters: FC<IParamProps> = ({configs, formRef, title, isDisabled= false}) => {
+const Parameters: FC<IParamProps> = ({
+  configs,
+  formRef,
+  title,
+  isDisabled = false,
+  isLoading= false
+}) => {
   const ARRAY_INPUT_NAME_C_PARAMS = 'parameterValues'
   const [configItems, setConfigItems] = useState<IConfigItem>()
-  const [parameterItems, setParameterItems] = useState<IParamItemInner[]>([])
+  const [parameterItems, setParameterItems] = useState<IParamItemPrepared[]>([])
+  const [defaultParameterItems, setDefaultParameterItems] = useState<IConfigParam[]>([])
   const [selectedNavBtn, setSelectedNavBtn] = useState('')
   const [selectedParams, setSelectedParams] = useState<IConfigParam[]>([])
 
   useEffect(() => {
     formRef?.current?.valueSetter('parameterValues', '')
     setSelectedParams([])
-    const {configItems, paramList} = getItemsRecursive(configs)
-    setConfigItems(configItems)
-    setParameterItems(paramList)
-    setSelectedNavItem(configItems?.tempId)
+    if(configs){
+      const {configItems, paramList} = getItemsRecursive(configs)
+      setConfigItems(configItems)
+      setParameterItems(paramList)
+      setDefaultParameterItems(paramList.map(param => param.parameters).flat())
+      setSelectedNavItem(configItems?.tempId)
+    }
   }, [configs])
   useEffect(() => {
     if(selectedNavBtn) {
@@ -54,7 +69,7 @@ const Parameters: FC<IParamProps> = ({configs, formRef, title, isDisabled= false
     setFormDataForParameters(parameterItems)
   }, [parameterItems])
 
-  const getItemsRecursive = (configsParam: IConfigurationParamData, paramList: IParamItemInner[] = [], depth: number = 0) => {
+  const getItemsRecursive = (configsParam: IConfigurationParamData, paramList: IParamItemPrepared[] = [], depth: number = 0) => {
     const innerDepth = depth
     const randomId = Math.random().toString(36).slice(2, 7);
     const innerConfig: IConfigItem = {
@@ -65,7 +80,7 @@ const Parameters: FC<IParamProps> = ({configs, formRef, title, isDisabled= false
       children: [],
       parameters: configsParam.parameters
     }
-    const innerParamList: IParamItemInner[] = paramList
+    const innerParamList: IParamItemPrepared[] = paramList
     innerParamList.push({tempId: randomId, parameters: configsParam.parameters})
 
     configsParam.childs.forEach((item, childIndex) => {
@@ -87,7 +102,7 @@ const Parameters: FC<IParamProps> = ({configs, formRef, title, isDisabled= false
   const getDefaultValOptions = (item: IConfigParam) => {
     return item.valueOptions.find(option => option.value === item.value)
   }
-  const setFormDataForParameters = (paramList: IParamItemInner[]) => {
+  const setFormDataForParameters = (paramList: IParamItemPrepared[]) => {
     formRef?.current?.valueSetter(ARRAY_INPUT_NAME_C_PARAMS, '')
     paramList.forEach((item, index) => {
       item?.parameters.forEach((param, index) => {
@@ -103,6 +118,7 @@ const Parameters: FC<IParamProps> = ({configs, formRef, title, isDisabled= false
     })
   }
   const setSelectedNavItem = (id?: string) => setSelectedNavBtn(id ?? '')
+  const isParamChanged = (param:IConfigParam) => defaultParameterItems.find(defItem => defItem.id === param.id)?.value !== param.value
   const onParamChange = (e: DropDownListChangeEvent, param: IConfigParam) => {
     const chosenValue = e.value?.value
 
@@ -134,51 +150,60 @@ const Parameters: FC<IParamProps> = ({configs, formRef, title, isDisabled= false
         {title}
       </legend>
       <div className="config-parameters-container">
-        <div className="conf-param-navigation">
-          {
-            configItems &&
-            <NavPanel data={[configItems]} selectedNavBtn={selectedNavBtn} onNavClick={setSelectedNavItem}/>
-          }
-        </div>
-        <div className="conf-param-form-fields">
-          {
-            selectedParams.map((param, index) => {
-              return (
-                <div key={param.id} className="param-field-container">
-                  {
-                    !param.isHidden &&
-                    (
-                      param.valueOptions ?
-                        <div>
-                          <div>{param.displayName}</div>
-                          <DropDownList
-                            name={ARRAY_INPUT_NAME_C_PARAMS + '.' + getDefaultValOptions(param)?.id || param.id}
-                            data={param.valueOptions}
-                            textField="value"
-                            dataItemKey="id"
-                            defaultValue={getDefaultValOptions(param)}
-                            onChange={(e) => onParamChange(e, param)}
-                            required={true}
-                            disabled={param.isReadOnly ||  isDisabled}
-                          />
-                        </div>
-                        :
-                        <Field
-                          wrapperClassName={!index && 'mt-0'}
-                          name={ARRAY_INPUT_NAME_C_PARAMS + '.' + param.id}
-                          component={CInput}
-                          label={param.displayName}
-                          validator={isEmpty}
-                          onChange={val => formRef?.current?.valueSetter(ARRAY_INPUT_NAME_C_PARAMS + '.' + param.id, val.target.value)}
-                          disabled={param.isReadOnly}
-                        />
+        {
+          isLoading ? <Spinner/> :
+            <>
+              <div className="conf-param-navigation">
+                {
+                  configItems &&
+                  <NavPanel data={[configItems]} selectedNavBtn={selectedNavBtn} onNavClick={setSelectedNavItem} parameterItems={parameterItems}/>
+                }
+              </div>
+              <div className="conf-param-form-fields">
+                {
+                  selectedParams.map((param, index) => {
+                    const fieldName = param.valueOptions ? ARRAY_INPUT_NAME_C_PARAMS + '.' + getDefaultValOptions(param)?.id || param.id : ARRAY_INPUT_NAME_C_PARAMS + '.' + param.id
+                    const isChanged = isParamChanged(param)
+
+                    return (
+                      <div key={param.id} className={`param-field-container ${isChanged ? PARAM_CHANGED_CLASS_NAME : ''}`}>
+                        {
+                          !param.isHidden &&
+                          (
+                            param.valueOptions ?
+                              <div>
+                                <div>{param.displayName}</div>
+                                <DropDownList
+                                  name={fieldName}
+                                  data={param.valueOptions}
+                                  textField="value"
+                                  dataItemKey="id"
+                                  defaultValue={getDefaultValOptions(param)}
+                                  onChange={(e) => onParamChange(e, param)}
+                                  required={true}
+                                  disabled={param.isReadOnly || isDisabled}
+                                />
+                              </div>
+                              :
+                              <Field
+                                wrapperClassName={!index && 'mt-0'}
+                                name={fieldName}
+                                component={CInput}
+                                label={param.displayName}
+                                validator={isEmpty}
+                                onChange={val => formRef?.current?.valueSetter(fieldName, val.target.value)}
+                                disabled={param.isReadOnly}
+                              />
+                          )
+                        }
+                      </div>
                     )
-                  }
-                </div>
-              )
-            })
-          }
-        </div>
+                  })
+                }
+              </div>
+            </>
+        }
+
       </div>
     </>
   )

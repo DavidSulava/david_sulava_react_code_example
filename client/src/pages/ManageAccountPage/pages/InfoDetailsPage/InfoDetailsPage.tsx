@@ -1,4 +1,4 @@
-import useAuthCheck from '../../../../helpers/hooks/useAuthCheck';
+import useAuthCheck from '../../../../helpers/hooks/storeHooks/useAuthCheck';
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import InfoEditModal from './Modals/infoEditModal';

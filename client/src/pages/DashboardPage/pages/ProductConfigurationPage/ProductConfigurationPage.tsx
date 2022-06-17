@@ -1,7 +1,7 @@
 import DefaultConfigForm from './components/DefaultConfigForm/DefaultConfigForm';
 import React, { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import useConfigurations from '../../../../helpers/hooks/useConfigurations';
+import useConfigurations from '../../../../helpers/hooks/storeHooks/useConfigurations';
 import { useDispatch } from 'react-redux';
 import { getSvfPath } from '../../../../stores/productConfigurations/reducer';
 import AutodeskViewer from './components/AutodeskViewer/AutodeskVewer';

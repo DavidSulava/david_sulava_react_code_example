@@ -1,4 +1,4 @@
-import { all, call, put, select, takeLatest } from 'typed-redux-saga';
+import { all, call, delay, put, select, takeLatest } from 'typed-redux-saga';
 import { setError } from '../common/reducer';
 import Api from '../../services/api/api';
 import { PayloadAction } from '@reduxjs/toolkit';
@@ -36,6 +36,7 @@ function* getProdVersionSaga({payload: id}: PayloadAction<string>):any {
   try {
     yield put(setProdVersionLoading(true))
     const response = yield* call(Api.getProdVersion,  id)
+    yield* call(delay, 500);
     yield put(setProdVersion(response))
   }
   catch(e: any) {
@@ -48,6 +49,7 @@ function* getProdVersionSaga({payload: id}: PayloadAction<string>):any {
 
 function* postProdVersionSaga({payload: formData}: PayloadAction<IPostProductVersion>) {
   try {
+    yield* put(setProdVersionLoading(true))
     yield* call(Api.postProdVersion,  formData)
     const productId = formData.get('ProductId')
     yield* put(getProdVersionList(productId as string))
@@ -55,9 +57,12 @@ function* postProdVersionSaga({payload: formData}: PayloadAction<IPostProductVer
   catch(e: any) {
     yield put(setError(e))
   }
+  finally {
+    yield* put(setProdVersionLoading(false))
+  }
 }
 
-function* puttProdVersionSaga({payload: formData}: PayloadAction<IPostProductVersion>) {
+function* putProdVersionSaga({payload: formData}: PayloadAction<IPostProductVersion>) {
   try {
     yield* call(Api.putProdVersion,  formData)
     const productId = formData.get('ProductId')
@@ -84,7 +89,7 @@ function* prodVersionWatcher() {
   yield all([
     takeLatest(getProdVersionList.type, getProdVersionListSaga),
     takeLatest(postProdVerByProdId.type, postProdVersionSaga),
-    takeLatest(putProdVer.type, puttProdVersionSaga),
+    takeLatest(putProdVer.type, putProdVersionSaga),
     takeLatest(delProdVer.type, delProdVersionSaga),
     takeLatest(getProdVersion.type, getProdVersionSaga),
   ])

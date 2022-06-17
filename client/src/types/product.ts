@@ -1,7 +1,7 @@
 import { IKendoResp } from './common';
 import { IProductVersion } from './productVersion';
 
-export interface IGetProdResp extends IKendoResp{
+export interface IGetProdListResp extends IKendoResp{
   data: IProduct[],
 }
 

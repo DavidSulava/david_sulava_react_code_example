@@ -43,7 +43,7 @@ const prodVersionSlice = createSlice({
     },
     delProdVer: (state, action: PayloadAction<IProductVersion>) => {
     },
-    setProdVersionList: (state, action: PayloadAction<IGetProductVersionList>) => {
+    setProdVersionList: (state, action: PayloadAction<IGetProductVersionList|null>) => {
       state.prodVersionList = action.payload
     },
     setProdVersion: (state, action: PayloadAction<IProductVersion|null>) => {

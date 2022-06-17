@@ -1,4 +1,4 @@
-import useConfigurations from '../../../../../helpers/hooks/useConfigurations';
+import useConfigurations from '../../../../../helpers/hooks/storeHooks/useConfigurations';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
@@ -23,6 +23,7 @@ import { enumGetKey } from '../../../../../helpers/enumFunctions';
 import { EConfigurationStatus, ESvfStatus, IConfigurationListItem } from '../../../../../types/producVersionConfigurations';
 import setPath from '../../../../../helpers/setPath';
 import { ERoutes } from '../../../../../router/Routes';
+import GridLoader from '../../../../../components/Loaders/GridLoader/GridLoader';
 
 const EnumToCell = (props: GridCellProps, enumObj: IStdEnum) => {
   const field = props.field || ""
@@ -80,7 +81,7 @@ const ConfigurationsTable = () => {
   }
 
   return (
-    <div className="configurations-grid-component">
+    <div className="product-grid configurations-grid-component">
       <Grid
         className="configurations-grid"
         data={gridData}
@@ -92,7 +93,7 @@ const ConfigurationsTable = () => {
         onDataStateChange={onDataStateChange}
       >
         <GridNoRecords>
-          <NoRecords isLoading={isConfigLoading}/>
+          <GridLoader isLoading={isConfigLoading}/>
         </GridNoRecords>
         <GridColumn field="configurationName" title="Name"/>
         <GridColumn field="componentName" title="Component name"/>

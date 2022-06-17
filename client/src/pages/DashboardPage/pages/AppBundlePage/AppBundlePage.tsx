@@ -1,4 +1,4 @@
-import useAppBundle from '../../../../helpers/hooks/useAppBundle';
+import useAppBundle from '../../../../helpers/hooks/storeHooks/useAppBundle';
 import { useDispatch } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { IAppBundle } from '../../../../types/appBundle';
@@ -23,6 +23,7 @@ import { Button } from 'react-bootstrap';
 import NoRecords from '../../../../components/grid-components/NoRecords';
 import AppBundleActionCell from './components/AppBundleActionCell';
 import CreateAppBundleModal from './modals/CreateAppBundleModal';
+import GridLoader from '../../../../components/Loaders/GridLoader/GridLoader';
 
 const AppBundlePage = () => {
   const dispatch = useDispatch()
@@ -86,10 +87,10 @@ const AppBundlePage = () => {
           </Button>
         </GridToolbar>
         <GridNoRecords>
-          <NoRecords isLoading={isBundleListLoading}/>
+          <GridLoader isLoading={isBundleListLoading}/>
         </GridNoRecords>
-        <GridColumn field="name" title="Bundle name" className="grid-cell-form"/>
-        <GridColumn field="description" title="Short description" className="grid-cell-form"/>
+        <GridColumn field="name" title="Bundle name"/>
+        <GridColumn field="description" title="Short description"/>
         <GridColumn field="designGearVersion" title="Version" sortable={false} editable={false}/>
         <GridColumn field="inventorVersion" title="Inventor version" sortable={false} editable={false}/>
         <GridColumn

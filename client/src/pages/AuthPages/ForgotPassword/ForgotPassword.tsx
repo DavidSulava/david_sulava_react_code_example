@@ -8,7 +8,7 @@ import { Error } from '@progress/kendo-react-labels';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '../../../stores/configureStore';
-import useAuthCheck from '../../../helpers/hooks/useAuthCheck';
+import useAuthCheck from '../../../helpers/hooks/storeHooks/useAuthCheck';
 import { setError, setPostReqResp } from '../../../stores/common/reducer';
 import { IPostPasswordRecovery } from '../../../types/user';
 import { postSendEmailToRestorePassword } from '../../../stores/authentication/reducer';
@@ -89,8 +89,8 @@ const ForgotPassword = () => {
       }
 
       <br/>
+      <BtnLink to={ERoutes.Root} className="btn btn-outline-primary mb-1" idDisabled={authLoading}>Sign in</BtnLink>
       <BtnLink to={ERoutes.SignUp} idDisabled={authLoading} className='btn btn-outline-primary mb-1'>Sign Up</BtnLink>
-      <BtnLink to={ERoutes.ForgotPwd} idDisabled={authLoading} className='btn btn-outline-primary mb-1'>Forgot Password?</BtnLink>
       <br/>
     </div>
   )

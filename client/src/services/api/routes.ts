@@ -18,6 +18,7 @@ export const apiRoutes = {
   },
   product: {
     root: (dataString: string = '') => `${BASE_URL}/Product${dataString ? '?' + dataString : ''}`,
+    item: (id: string) => `${BASE_URL}/Product/${id}`,
   },
   productVersion: {
     root: (dataString: string = '') => `${BASE_URL}/ProductVersion${dataString ? '?' + dataString : ''}`,

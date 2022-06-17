@@ -10,7 +10,7 @@ import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { EOrganisationTypes, IPostOrganisation } from '../../../types/organisationPage';
 import { enumGetKeys } from '../../../helpers/enumFunctions';
 import { useDispatch } from 'react-redux';
-import useAuthCheck from '../../../helpers/hooks/useAuthCheck';
+import useAuthCheck from '../../../helpers/hooks/storeHooks/useAuthCheck';
 import { postOrganisation } from '../../../stores/organisation/reducer';
 import { ICommonModalProps } from '../../../types/common';
 

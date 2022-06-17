@@ -1,4 +1,4 @@
-import useAuthCheck from '../../helpers/hooks/useAuthCheck';
+import useAuthCheck from '../../helpers/hooks/storeHooks/useAuthCheck';
 import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '../../stores/configureStore';
 import React, { useEffect, useState } from 'react';

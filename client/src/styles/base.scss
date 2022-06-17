@@ -5,6 +5,7 @@
 @import "components/header";
 @import "components/profile";
 @import "components/forms";
+@import "components/loaders/spinner";
 @import "pages";
 
 body{
@@ -13,9 +14,6 @@ body{
 }
 a{
   text-decoration: none;
-}
-th{
-  user-select: none;
 }
 .btn-nav{
   @include setFlex(column, center, stretch);
@@ -29,6 +27,15 @@ th{
   &>*{
     width: inherit;
     padding-inline: 12px;
+  }
+}
+
+//-[GRID]-
+th{
+  user-select: none;
+  padding: 0!important;
+  .k-cell-inner{
+    margin: 0!important;
   }
 }
 .k-grid-toolbar {
