@@ -22,6 +22,7 @@ import ManageAccountPage from '../pages/ManageAccountPage/ManageAccountPage';
 import InfoDetailsPage from '../pages/ManageAccountPage/pages/InfoDetailsPage/InfoDetailsPage';
 import SecurityPage from '../pages/ManageAccountPage/pages/SecurityPage/SecurityPage';
 import ResetPasswordPage from '../pages/AuthPages/ResetPasswordPage/ResetPasswordPage';
+import AppBundlePage from '../pages/DashboardPage/pages/AppBundlePage/AppBundlePage';
 
 const RouteList = () => {
   return (
@@ -47,6 +48,7 @@ const RouteList = () => {
           <Route path={ERoutes.CPThreshold} element={<CPThresholdPage/>}/>
           <Route path={ERoutes.Users} element={<UsersPage/>}/>
           <Route path={ERoutes.Billing} element={<BillingPage/>}/>
+          <Route path={ERoutes.AppBundle} element={<AppBundlePage/>}/>
         </Route>
         <Route path={ERoutes.ProdVersionConfig} element={<ProductConfigurationPage/>}/>
 

@@ -39,7 +39,7 @@ export function isImage(value: File[]){
   return isImage && value.length ? '' : 'Supported image formats: png, jpg, gif, bmp, tiff'
 }
 export function isZip(value: File[]){
-  if(!value?.length) return 'A model file is required'
+  if(!value?.length) return 'Please select a file'
   const isImage = value.every(el => zipFileRegex.test(el.name))
   return isImage && value.length ? '' : 'The file must be in zip format'
 }

@@ -12,7 +12,7 @@ export interface IProductState {
   isProductLoading: boolean,
 }
 
-const initialState: IProductState = {
+export const initialProductState: IProductState = {
   product: null,
   isProductLoading: false,
   dataState: {
@@ -29,7 +29,7 @@ const initialState: IProductState = {
 
 const productSlice = createSlice({
   name: "product",
-  initialState: initialState,
+  initialState: initialProductState,
   reducers: {
     getProduct: (state, action: PayloadAction) => {
     },
@@ -42,7 +42,7 @@ const productSlice = createSlice({
     setIsProductLoading: (state, action: PayloadAction<boolean>) => {
       state.isProductLoading = action.payload
     },
-    setFilter: (state, action: PayloadAction<IGridDataStateFilter>) => {
+    setProductFilter: (state, action: PayloadAction<IGridDataStateFilter>) => {
       state.dataState = action.payload
     },
     setProduct: (state, action: PayloadAction<Nullable<IGetProdResp>>) => {
@@ -51,6 +51,6 @@ const productSlice = createSlice({
   }
 });
 
-export const {setFilter, setProduct, getProduct, postProduct, putProduct, delProduct, setIsProductLoading} = productSlice.actions
+export const {setProductFilter, setProduct, getProduct, postProduct, putProduct, delProduct, setIsProductLoading} = productSlice.actions
 
 export default productSlice.reducer

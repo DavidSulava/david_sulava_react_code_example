@@ -99,6 +99,13 @@ const DashboardPage = () => {
           >
             Billing
           </BtnLink>
+          <BtnLink
+            to={setPath(ERoutes.AppBundle, [organizationId])}
+            isActive={isNavLikActive(ERoutes.AppBundle, location.pathname)}
+            className='btn btn-outline-primary mb-2'
+          >
+            App bundle
+          </BtnLink>
         </div>
 
         <div className="dash-board-content">
