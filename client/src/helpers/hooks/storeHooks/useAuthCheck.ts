@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { IState } from '../../stores/configureStore';
+import { IState } from '../../../stores/configureStore';
 
 const useAuthCheck = () => {
   const user = useSelector((state: IState) => state.auth.user)

@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useParams } from 'react-router-dom';
 import { ERoutes } from '../../router/Routes';
 import React, { useEffect } from 'react';
-import useAuthCheck from '../../helpers/hooks/useAuthCheck';
+import useAuthCheck from '../../helpers/hooks/storeHooks/useAuthCheck';
 import setPath from '../../helpers/setPath';
 import BtnLink from '../../components/BtnLink';
 import { useDispatch } from 'react-redux';

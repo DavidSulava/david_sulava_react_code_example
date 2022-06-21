@@ -3,7 +3,7 @@ import { ICommonModalProps } from '../../../../../types/common';
 import { useDispatch } from 'react-redux';
 import { IModalWrapperButton } from '../../../../../types/modal';
 import { Field, Form, FormElement } from '@progress/kendo-react-form';
-import useAuthCheck from '../../../../../helpers/hooks/useAuthCheck';
+import useAuthCheck from '../../../../../helpers/hooks/storeHooks/useAuthCheck';
 import ModalWrapper from '../../../../../components/ModalWrapper/ModalWrapper';
 import CInput from '../../../../../components/form-components/CInput';
 import { isEmpty } from '../../../../../components/form-components/helpers/validation-functions';

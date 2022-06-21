@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux';
-import { IState } from '../../stores/configureStore';
-import { useEffect } from 'react';
+import { IState } from '../../../stores/configureStore';
 
 const useProdVersion= () => {
   const dataState = useSelector((state: IState) => state.prodVersion.dataState)

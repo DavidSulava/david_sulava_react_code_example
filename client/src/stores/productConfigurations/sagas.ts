@@ -1,4 +1,4 @@
-import { all, call, put, select, takeLatest, throttle } from 'typed-redux-saga';
+import { all, call, delay, put, select, takeLatest, throttle } from 'typed-redux-saga';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { IState } from '../configureStore';
 import { toDataSourceRequestString } from '@progress/kendo-data-query';
@@ -10,7 +10,7 @@ import {
   searchConfiguration,
   setConfigParams, setConfiguration,
   setConfigurationsList,
-  setIsConfigLoading, setSearchedConfigList, setSvfPath
+  setIsConfigLoading, setIsParamsLoading, setSearchedConfigList, setSvfPath
 } from './reducer';
 import { IPostConfigurations, ISearchConfigPayload } from '../../types/producVersionConfigurations';
 import { IGridFilterSetting } from '../../types/common';
@@ -31,17 +31,18 @@ function* getConfigurationListSaga({payload: productVersionId}: PayloadAction<st
     yield put(setIsConfigLoading(false))
   }
 }
+
 function* searchConfigurationsSaga({payload: {id, value, skip, take}}: PayloadAction<ISearchConfigPayload>): any {
   try {
     const dataState = yield select((state: IState) => state.configurations.dataState)
     const searchDataState = {
       ...dataState,
       filter: {
-        filters: [{value: value, operator: 'contains', field:'configurationName'}] as IGridFilterSetting[],
+        filters: [{value: value, operator: 'contains', field: 'configurationName'}] as IGridFilterSetting[],
         logic: ''
       },
-      skip: skip?? dataState.skip,
-      take: take?? dataState.take
+      skip: skip ?? dataState.skip,
+      take: take ?? dataState.take
     }
     const dataString: string = toDataSourceRequestString({...searchDataState})
     const idParam = `&productVersionId=${id}`
@@ -56,36 +57,50 @@ function* searchConfigurationsSaga({payload: {id, value, skip, take}}: PayloadAc
     yield put(setIsConfigLoading(false))
   }
 }
+
 function* getConfigurationByIdSaga({payload: configId}: PayloadAction<string>) {
   try {
-    const response = yield* call(Api.getConfigurationById,  configId)
+    yield put(setIsConfigLoading(true))
+    const response = yield* call(Api.getConfigurationById, configId)
+    yield* call(getConfigParamsSaga, {payload: configId, type: getConfigParams.type})
     yield put(setConfiguration(response))
   }
   catch(e: any) {
     yield put(setError(e))
   }
+  finally {
+    yield put(setIsConfigLoading(false))
+  }
 }
+
 function* getConfigParamsSaga({payload: productVersionId}: PayloadAction<string>) {
   try {
-    const response = yield* call(Api.getConfigParams,  productVersionId)
+    yield put(setIsParamsLoading(true))
+    const response = yield* call(Api.getConfigParams, productVersionId)
+    yield* call(delay, 500)
     yield put(setConfigParams(response))
   }
   catch(e: any) {
     yield put(setError(e))
   }
+  finally {
+    yield put(setIsParamsLoading(false))
+  }
 }
+
 function* getSvfPathSaga({payload: configId}: PayloadAction<string>) {
   try {
-    const response = yield* call(Api.getSvfPath,  configId)
+    const response = yield* call(Api.getSvfPath, configId)
     yield put(setSvfPath(response))
   }
   catch(e: any) {
     yield put(setError(e))
   }
 }
+
 function* postConfigSaga({payload: formData}: PayloadAction<IPostConfigurations>) {
   try {
-    const responce = yield* call(Api.postConfig,  formData)
+    const responce = yield* call(Api.postConfig, formData)
 
     if(responce)
       yield put(setPostReqResp(responce))

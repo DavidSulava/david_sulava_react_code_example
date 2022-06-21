@@ -1,7 +1,7 @@
 import { Navigate, Outlet, RouteProps, useLocation } from 'react-router-dom';
 import React from 'react';
 import { ERoutes } from '../Routes';
-import useAuthCheck from '../../helpers/hooks/useAuthCheck';
+import useAuthCheck from '../../helpers/hooks/storeHooks/useAuthCheck';
 
 export interface propsGuest extends RouteProps {
   isAllowed?: boolean,

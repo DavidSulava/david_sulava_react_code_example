@@ -1,18 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  IDelProduct, IGetProdResp,
-  IPostProduct,
+  IDelProduct, IGetProdListResp,
+  IPostProduct, IProduct,
   IPutProduct
 } from '../../types/product';
 import { IGridDataFilter, IGridDataStateFilter, IGridFilterSetting, Nullable } from '../../types/common';
 
 export interface IProductState {
   dataState: IGridDataStateFilter,
-  product: Nullable<IGetProdResp>,
+  productList: Nullable<IGetProdListResp>,
+  product: Nullable<IProduct>,
   isProductLoading: boolean,
 }
 
 export const initialProductState: IProductState = {
+  productList: null,
   product: null,
   isProductLoading: false,
   dataState: {
@@ -31,7 +33,9 @@ const productSlice = createSlice({
   name: "product",
   initialState: initialProductState,
   reducers: {
-    getProduct: (state, action: PayloadAction) => {
+    getProductList: (state, action: PayloadAction) => {
+    },
+    getProductById: (state, action: PayloadAction<string>) => {
     },
     postProduct: (state, action: PayloadAction<IPostProduct>) => {
     },
@@ -45,12 +49,25 @@ const productSlice = createSlice({
     setProductFilter: (state, action: PayloadAction<IGridDataStateFilter>) => {
       state.dataState = action.payload
     },
-    setProduct: (state, action: PayloadAction<Nullable<IGetProdResp>>) => {
+    setProductList: (state, action: PayloadAction<Nullable<IGetProdListResp>>) => {
+      state.productList = action.payload
+    },
+    setProduct: (state, action: PayloadAction<IProduct>) => {
       state.product = action.payload
     }
   }
 });
 
-export const {setProductFilter, setProduct, getProduct, postProduct, putProduct, delProduct, setIsProductLoading} = productSlice.actions
+export const {
+  setProductFilter,
+  setProductList,
+  setProduct,
+  getProductList,
+  getProductById,
+  postProduct,
+  putProduct,
+  delProduct,
+  setIsProductLoading
+} = productSlice.actions
 
 export default productSlice.reducer

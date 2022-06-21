@@ -10,8 +10,9 @@ import { FormFile } from '../../../../../components/form-components/FormFile';
 import { Button } from 'react-bootstrap';
 import { getAppBundleById, postAppBundle, putAppBundle } from '../../../../../stores/appBundle/reducer';
 import { IPostAppBundle, IPuttAppBundle } from '../../../../../types/appBundle';
-import useAppBundle from '../../../../../helpers/hooks/useAppBundle';
+import useAppBundle from '../../../../../helpers/hooks/storeHooks/useAppBundle';
 import CTextArea from '../../../../../components/form-components/CTextArea';
+import Spinner from '../../../../../components/Loaders/Spinner/Spinner';
 
 interface ICreateAppBundle extends ICommonModalProps {
   dataToUpdateId?: string,
@@ -124,59 +125,62 @@ const CreateAppBundleModal: FC<ICreateAppBundle> = ({
         ref={formRef}
         render={(formRenderProps) => (
           <FormElement className={'modal-body'}>
-            <fieldset className={"k-form-fieldset"}>
-              <div className="mb-3">
-                <Field
-                  name="Name"
-                  component={CInput}
-                  label="Bundle name"
-                  validator={isEmpty}
-                />
-              </div>
-              <div className="mb-3">
-                <Field
-                  name="Description"
-                  label="Description"
-                  component={CTextArea}
-                  max={200}
-                  cols={25}
-                  rows={2}
-                  validator={isEmpty}
-                />
-              </div>
-              <div className="mb-3">
-                <Field
-                  name="DesignGearVersion"
-                  component={CInput}
-                  label="Design gear version"
-                  validator={isNumberErrorMsg}
-                  maxLength={10}
-                />
-              </div>
-              <div className="mb-3">
-                <Field
-                  name="InventorVersion"
-                  component={CInput}
-                  label="Inventor version"
-                  validator={isNumberErrorMsg}
-                  maxLength={10}
-                />
-              </div>
-              <div className="mb-3">
-                <Field
-                  name="File"
-                  component={FormFile}
-                  className="upload-component"
-                  label="Select file"
-                  btnText="select"
-                  inputRef={bundleFileRef}
-                  presetFiles={preloadedBundleFile ? [preloadedBundleFile] : []}
-                  onFileSelect={onBundleFileSelect}
-                  onChange={onBundleFileChange}
-                  validator={innerValidateFile}
-                />
-              </div>
-            </fieldset>
+            {
+              isBundleLoading ? <Spinner/> :
+                <fieldset className={"k-form-fieldset"}>
+                  <div className="mb-3">
+                    <Field
+                      name="Name"
+                      component={CInput}
+                      label="Bundle name"
+                      validator={isEmpty}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <Field
+                      name="Description"
+                      label="Description"
+                      component={CTextArea}
+                      max={200}
+                      cols={25}
+                      rows={2}
+                      validator={isEmpty}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <Field
+                      name="DesignGearVersion"
+                      component={CInput}
+                      label="Design gear version"
+                      validator={isNumberErrorMsg}
+                      maxLength={10}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <Field
+                      name="InventorVersion"
+                      component={CInput}
+                      label="Inventor version"
+                      validator={isNumberErrorMsg}
+                      maxLength={10}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <Field
+                      name="File"
+                      component={FormFile}
+                      className="upload-component"
+                      label="Select file"
+                      btnText="select"
+                      inputRef={bundleFileRef}
+                      presetFiles={preloadedBundleFile ? [preloadedBundleFile] : []}
+                      onFileSelect={onBundleFileSelect}
+                      onChange={onBundleFileChange}
+                      validator={innerValidateFile}
+                    />
+                  </div>
+                </fieldset>
+            }
 
             <Button
               type="submit"

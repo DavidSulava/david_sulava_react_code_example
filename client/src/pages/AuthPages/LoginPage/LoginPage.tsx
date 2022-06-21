@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import CInput from '../../../components/form-components/CInput';
 import { isEmpty } from '../../../components/form-components/helpers/validation-functions';
 import { useDispatch, useSelector } from 'react-redux'
-import useAuthCheck from '../../../helpers/hooks/useAuthCheck';
+import useAuthCheck from '../../../helpers/hooks/storeHooks/useAuthCheck';
 import { ERoutes } from '../../../router/Routes';
 import React, { useEffect } from 'react';
 import { signIn } from '../../../stores/authentication/reducer';

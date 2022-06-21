@@ -10,13 +10,14 @@ const ModalWrapper: React.FC<IModalCommonProps> = ({
   className,
   onClose,
   buttons,
-  children
+  children,
 }) => {
+
   return (
     <>
       {
         isOpen &&
-        <Dialog title={headerText} closeIcon={false} className={className}>
+        <Dialog title={headerText} closeIcon={false} className={className??''}>
           {children}
           <DialogActionsBar layout={'end'}>
             {buttons.map((b, index) => {

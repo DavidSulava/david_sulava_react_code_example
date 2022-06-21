@@ -9,7 +9,7 @@ import CTextArea from '../../../../../../../components/form-components/CTextArea
 import Parameters from '../components/Parameters';
 import { useParams } from 'react-router-dom';
 import { IConfParamOptions } from '../../../../../../../types/producVersionConfigurations';
-import useConfigurations from '../../../../../../../helpers/hooks/useConfigurations';
+import useConfigurations from '../../../../../../../helpers/hooks/storeHooks/useConfigurations';
 import { getConfigParams, postConfig } from '../../../../../../../stores/productConfigurations/reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { IModalWrapperButton } from '../../../../../../../types/modal';
@@ -27,19 +27,19 @@ const CreateConfigModal: FC<ICommonModalProps> = ({
   const postResp = useSelector((state: IState) => state.common.postReqResp)
   const formSubmitBtnRef = useRef<HTMLButtonElement|null>(null)
   const formRef = useRef<Form>(null)
-  const {configParams} = useConfigurations()
+  const {configParams, isParamsLoading} = useConfigurations()
   const [formState, setFormState] = useState({})
-  const [alertParams, setAlertParams] = useState({isOpen: false, isDataCashed: false, id:''})
+  const [alertParams, setAlertParams] = useState({isOpen: false, isDataCashed: false, id: ''})
   const modalButtons: IModalWrapperButton[] = [
     {buttonText: 'close', onButtonClick: () => onClose()},
     {buttonText: 'reset changes', onButtonClick: () => onResetPress()},
     {buttonText: 'save', onButtonClick: () => formSubmitBtnRef?.current?.click()}
   ]
 
-  useEffect(()=>{
-    if(isOpen){
+  useEffect(() => {
+    if(isOpen) {
       if(configId)
-        dispatch(getConfigParams(configId))
+        dispatch(getConfigParams(configId)) // test id = 223CAEE5-AEE8-415C-829D-A63660D9D7D2
 
       setFormState({
         name: '',
@@ -48,17 +48,17 @@ const CreateConfigModal: FC<ICommonModalProps> = ({
         parameterValues: [],
       })
     }
-  },[isOpen])
-  useEffect(()=>{
-    if(postResp === null ){
-      setAlertParams({isOpen: true, isDataCashed: false, id:''})
+  }, [isOpen])
+  useEffect(() => {
+    if(postResp === null) {
+      setAlertParams({isOpen: true, isDataCashed: false, id: ''})
       dispatch(setPostReqResp(''))
     }
-    else if(postResp){
-      setAlertParams({isOpen: true, isDataCashed: true, id:postResp})
+    else if(postResp) {
+      setAlertParams({isOpen: true, isDataCashed: true, id: postResp})
       dispatch(setPostReqResp(''))
     }
-  },[postResp])
+  }, [postResp])
 
   const onSubmitLocal = (formData: any) => {
     if(!formRef?.current?.isValid() || !configId) return
@@ -85,8 +85,8 @@ const CreateConfigModal: FC<ICommonModalProps> = ({
 
     dispatch(postConfig(data))
   }
-  const onResetPress = () =>  dispatch(getConfigParams(configId??''))
-  const onCloseConfigAlert = () =>  {
+  const onResetPress = () => dispatch(getConfigParams(configId ?? ''))
+  const onCloseConfigAlert = () => {
     setAlertParams({isOpen: false, isDataCashed: false, id: ''})
     onClose()
   }
@@ -126,11 +126,12 @@ const CreateConfigModal: FC<ICommonModalProps> = ({
                     validator={isEmpty}
                   />
                 </div>
-                <div className="mb-3">
-                  {
-                    configParams &&
-                    <Parameters configs={configParams} formRef={formRef} title="Please set configuration parameters:"/>
-                  }
+                <div>
+                  <Parameters
+                    configs={configParams}
+                    formRef={formRef}
+                    isLoading={isParamsLoading} title="Please set configuration parameters:"
+                  />
                 </div>
               </fieldset>
 

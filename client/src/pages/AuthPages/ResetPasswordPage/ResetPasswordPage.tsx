@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import useAuthCheck from '../../../helpers/hooks/useAuthCheck';
+import useAuthCheck from '../../../helpers/hooks/storeHooks/useAuthCheck';
 import { IState } from '../../../stores/configureStore';
 import React, { useEffect, useState } from 'react';
 import { Field, Form, FormElement } from '@progress/kendo-react-form';

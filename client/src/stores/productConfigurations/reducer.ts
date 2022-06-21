@@ -10,6 +10,7 @@ import {
 
 export interface IConfigurationsState {
   isConfigLoading: boolean,
+  isParamsLoading: boolean,
   configurationsList: Nullable<IGetConfigurations>,
   searchedConfigList: Nullable<IGetConfigurations>,
   configuration: Nullable<IConfiguration>,
@@ -20,6 +21,7 @@ export interface IConfigurationsState {
 
 export const initialConfigurationsState: IConfigurationsState = {
   isConfigLoading: false,
+  isParamsLoading: false,
   configurationsList: null,
   searchedConfigList: null,
   configuration: null,
@@ -56,9 +58,6 @@ const configurationsSlice = createSlice({
     setConfigParams: (state, action: PayloadAction<IConfigurationParamData>) => {
       state.configParams = action.payload
     },
-    setIsConfigLoading: (state, action: PayloadAction<boolean>) => {
-      state.isConfigLoading = action.payload
-    },
     setConfigurationsList: (state, action: PayloadAction<IGetConfigurations>) => {
       state.configurationsList = action.payload
     },
@@ -74,6 +73,12 @@ const configurationsSlice = createSlice({
     setConfigurationsDataState: (state, action: PayloadAction<IGridDataStateFilter>) => {
       state.dataState = action.payload
     },
+    setIsConfigLoading: (state, action: PayloadAction<boolean>) => {
+      state.isConfigLoading = action.payload
+    },
+    setIsParamsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isParamsLoading = action.payload
+    },
   }
 });
 
@@ -86,11 +91,12 @@ export const {
   postConfig,
   setConfiguration,
   setConfigParams,
-  setIsConfigLoading,
   setConfigurationsList,
   setSearchedConfigList,
   setSvfPath,
-  setConfigurationsDataState
+  setConfigurationsDataState,
+  setIsConfigLoading,
+  setIsParamsLoading
 } = configurationsSlice.actions
 
 export default configurationsSlice.reducer

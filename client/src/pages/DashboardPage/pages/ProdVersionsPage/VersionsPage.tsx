@@ -1,4 +1,4 @@
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import React, { createContext, useEffect, useState } from 'react';
 import { delProdVer, getProdVersionList, initialProdVerState, setProdVersionDataState } from '../../../../stores/productVersion/reducer';
@@ -6,12 +6,14 @@ import { Button } from 'react-bootstrap';
 import { Grid, GridColumn, GridDataStateChangeEvent, GridItemChangeEvent, GridNoRecords, GridToolbar } from '@progress/kendo-react-grid';
 import CreateVersion from './modals/CreateVersion';
 import { IGridDataState } from '../../../../types/common';
-import useProdVersion from '../../../../helpers/hooks/useProdVersion';
+import useProdVersion from '../../../../helpers/hooks/storeHooks/useProdVersion';
 import { IProductVersion, IProductVersionList } from '../../../../types/productVersion';
 import { DateCell } from '../../../../components/grid-components/DateCell';
-import NoRecords from '../../../../components/grid-components/NoRecords';
-import { IProduct } from '../../../../types/product';
 import VersionsActionCell from './components/VersionsActionCell';
+import useProduct from '../../../../helpers/hooks/storeHooks/useProduct';
+import { getProductById } from '../../../../stores/product/reducer';
+import { Loader } from '@progress/kendo-react-indicators';
+import GridLoader from '../../../../components/Loaders/GridLoader/GridLoader';
 
 export const ProdVersionContext = createContext<{
   productId: string|undefined,
@@ -21,15 +23,16 @@ export const ProdVersionContext = createContext<{
 const VersionsPage = () => {
   const dispatch = useDispatch()
   const {productId} = useParams();
-  const {state} = useLocation();
-  const product = state as IProduct
+  const {product, isProductLoading} = useProduct()
 
   const {prodVersionList, dataState, isProdVersionListLoading} = useProdVersion()
   const [isShowCreateVersionModal, setIsShowCreateVersionModal] = useState(false)
   const [dataToUpdateId, setDataToUpdateId] = useState<string>('')
   const [gridData, setGridData] = useState<IProductVersionList[]>([])
+  const lineLoader = <Loader type="pulsing" size="small"/>
 
   useEffect(() => {
+    dispatch(getProductById(productId ?? ''))
     dispatch(getProdVersionList(productId ?? ''))
     return () => {
       dispatch(setProdVersionDataState(initialProdVerState.dataState))
@@ -68,13 +71,13 @@ const VersionsPage = () => {
   return (
     <div>
       <div className="version-info-section">
-        <h6>Product Name: {product?.name}</h6>
-        <h6>Product Description: {product?.description}</h6>
+        <h6>Product Name: {!isProductLoading? product?.name: lineLoader}</h6>
+        <h6>Product Description: {!isProductLoading? product?.description: lineLoader}</h6>
       </div>
       <div className="version-table">
         <ProdVersionContext.Provider value={{productId, onDelete, onEdit}}>
           <Grid
-            className="version-grid"
+            className="product-grid version-grid"
             data={gridData}
             {...(dataState as IGridDataState)}
             total={prodVersionList?.total}
@@ -89,7 +92,7 @@ const VersionsPage = () => {
               </Button>
             </GridToolbar>
             <GridNoRecords>
-              <NoRecords isLoading={isProdVersionListLoading}/>
+              <GridLoader isLoading={isProdVersionListLoading}/>
             </GridNoRecords>
             <GridColumn field="name" title="Name"/>
             <GridColumn field="sequenceNumber" title="Sequence Number"/>

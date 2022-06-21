@@ -1,5 +1,5 @@
 import Profile from "./Profile/Profile"
-import useAuthCheck from '../../helpers/hooks/useAuthCheck';
+import useAuthCheck from '../../helpers/hooks/storeHooks/useAuthCheck';
 import React from 'react';
 import BtnLink from '../BtnLink';
 import { ERoutes } from '../../router/Routes';

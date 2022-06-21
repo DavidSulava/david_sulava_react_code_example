@@ -12,20 +12,27 @@ import {
 } from '../../../../../components/form-components/helpers/validation-functions';
 import { Button } from 'react-bootstrap';
 import { IState } from '../../../../../stores/configureStore';
-import { getProdVersion, postProdVerByProdId, putProdVer, setProdVersion } from '../../../../../stores/productVersion/reducer';
+import {
+  getProdVersion,
+  postProdVerByProdId,
+  putProdVer,
+  setProdVersion,
+} from '../../../../../stores/productVersion/reducer';
 import { IPostProductVersion } from '../../../../../types/productVersion';
 import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { ICommonModalProps, IKendoOnChangeEvent } from '../../../../../types/common';
 import { FormFile } from '../../../../../components/form-components/FormFile';
-import useProdVersion from '../../../../../helpers/hooks/useProdVersion';
+import useProdVersion from '../../../../../helpers/hooks/storeHooks/useProdVersion';
 import FormCheckBox from '../../../../../components/form-components/CheckBox';
 import { getAppBundleList } from '../../../../../stores/appBundle/reducer';
 import { IAppBundle } from '../../../../../types/appBundle';
+import Spinner from '../../../../../components/Loaders/Spinner/Spinner';
 
 interface ICreateVerProps extends ICommonModalProps {
   productId: string,
   dataToUpdateId?: string,
 }
+
 //TODO: CreateVersion: доделать логику для PUT запроса,
 // изменить логику для картинок , когда будут приходить настоящие данные с картинками
 const CreateVersion: FC<ICreateVerProps> = ({
@@ -42,7 +49,7 @@ const CreateVersion: FC<ICreateVerProps> = ({
   const modelFileRef = useRef<HTMLInputElement|null>(null)
   const formSubmitBtnRef = useRef<HTMLButtonElement|null>(null)
 
-  const headerText = dataToUpdateId? 'Update version' : 'Create version';
+  const headerText = dataToUpdateId ? 'Update version' : 'Create version';
   const [formState, setFormState] = useState({
     SequenceNumber: '',
     Name: '',
@@ -64,31 +71,31 @@ const CreateVersion: FC<ICreateVerProps> = ({
 
   useEffect(() => {
     dispatch(getAppBundleList())
-    return()=>{
+    return () => {
       dispatch(setProdVersion(null))
     }
   }, [])
   useEffect(() => {
-    if(prodVersion?.appBundleId && appBundleList?.data.length){
-      const presetBundle = appBundleList.data.find(item=> item.id === prodVersion?.appBundleId)
-      const bundle = presetBundle||appBundleList.data[0]
+    if(prodVersion?.appBundleId && appBundleList?.data.length) {
+      const presetBundle = appBundleList.data.find(item => item.id === prodVersion?.appBundleId)
+      const bundle = presetBundle || appBundleList.data[0]
       formRef?.current?.valueSetter("AppBundleId", bundle)
       setDefaultBundle(bundle)
     }
-    else{
+    else {
       formRef?.current?.valueSetter("AppBundleId", appBundleList?.data[0])
-      setDefaultBundle(appBundleList?.data[0]||null)
+      setDefaultBundle(appBundleList?.data[0] || null)
     }
 
   }, [appBundleList])
   useEffect(() => {
-    if(dataToUpdateId){
+    if(dataToUpdateId) {
       dispatch(setProdVersion(null))
       dispatch(getProdVersion(dataToUpdateId))
     }
   }, [dataToUpdateId])
-  useEffect(()=>{
-    if(prodVersion){
+  useEffect(() => {
+    if(prodVersion) {
       setFormState({
         ...formState,
         SequenceNumber: prodVersion.sequenceNumber.toString(),
@@ -101,7 +108,7 @@ const CreateVersion: FC<ICreateVerProps> = ({
       setPreloadedImgFiles(prodVersion.imageFiles)
       dispatch(getAppBundleList())
     }
-  },[prodVersion])
+  }, [prodVersion])
 
   const onSubmitLocal = (formData: any) => {
     if(!formRef?.current?.isValid()) return
@@ -122,7 +129,7 @@ const CreateVersion: FC<ICreateVerProps> = ({
 
     if(!dataToUpdateId)
       dispatch(postProdVerByProdId(data as IPostProductVersion))
-    else{
+    else {
       data.append('id', dataToUpdateId)
       dispatch(putProdVer(data as IPostProductVersion))
     }
@@ -148,7 +155,7 @@ const CreateVersion: FC<ICreateVerProps> = ({
   const innerValidateImg = (val: any) => {
     if(formRef?.current)
       formRef.current.modified['ImageFiles'] = true
-    return !preloadedImgFiles.length? isImage(val) : ''
+    return !preloadedImgFiles.length ? isImage(val) : ''
   }
 
   return (
@@ -159,6 +166,7 @@ const CreateVersion: FC<ICreateVerProps> = ({
       buttons={modalButtons}
       className={'create-version-form'}
     >
+
       <Form
         onSubmit={onSubmitLocal}
         initialValues={formState}
@@ -166,110 +174,112 @@ const CreateVersion: FC<ICreateVerProps> = ({
         ref={formRef}
         render={(formRenderProps) => (
           <FormElement className={'modal-body'}>
-            <fieldset className={"k-form-fieldset"}>
-              <div className="mb-3">
-                <Field
-                  name="SequenceNumber"
-                  component={CInput}
-                  label="Sequence Number"
-                  validator={isNumberErrorMsg}
-                  maxLength={10}
-                />
-              </div>
-              <div className="mb-3">
-                <Field
-                  name="Name"
-                  component={CInput}
-                  label="Version name"
-                  validator={isEmpty}
-                />
-              </div>
-              <div className="mb-3">
-                <Field
-                  name="Version"
-                  component={CInput}
-                  label="Version"
-                  validator={isNumberErrorMsg}
-                  maxLength={10}
-                />
-              </div>
-              <div className="mb-3">
-                <Field
-                  name="DesignGearVersion"
-                  component={CInput}
-                  label="Design gear version"
-                  validator={isNumberErrorMsg}
-                  maxLength={10}
-                />
-              </div>
-              <div className="mb-3">
-                <Field
-                  name="InventorVersion"
-                  component={CInput}
-                  label="Inventor version"
-                  validator={isNumberErrorMsg}
-                  maxLength={10}
-                />
-              </div>
-              <div className="mb-3">
-                <Field
-                  name="IsCurrent"
-                  id="IsCurrent"
-                  component={FormCheckBox}
-                  label="default version"
-                />
-              </div>
-              <div className="mb-3">
-                <div>Select app bundle</div>
-                <FieldWrapper>
-                  <DropDownList
-                    name="AppBundleId"
-                    style={{width: "50%"}}
-                    data={appBundleList?.data}
-                    textField="name"
-                    dataItemKey="id"
-                    defaultValue={defaultBundle}
-                    loading={!appBundleList?.data.length}
-                    onChange={val => formRef?.current?.valueSetter("AppBundleId", val.target.value)}
-                    required={true}
-                  />
-                </FieldWrapper>
+            {
+              isProdVersionLoading ? <Spinner/> :
+                <fieldset className={"k-form-fieldset"}>
+                  <div className="mb-3">
+                    <Field
+                      name="SequenceNumber"
+                      component={CInput}
+                      label="Sequence Number"
+                      validator={isNumberErrorMsg}
+                      maxLength={10}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <Field
+                      name="Name"
+                      component={CInput}
+                      label="Version name"
+                      validator={isEmpty}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <Field
+                      name="Version"
+                      component={CInput}
+                      label="Version"
+                      validator={isNumberErrorMsg}
+                      maxLength={10}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <Field
+                      name="DesignGearVersion"
+                      component={CInput}
+                      label="Design gear version"
+                      validator={isNumberErrorMsg}
+                      maxLength={10}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <Field
+                      name="InventorVersion"
+                      component={CInput}
+                      label="Inventor version"
+                      validator={isNumberErrorMsg}
+                      maxLength={10}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <Field
+                      name="IsCurrent"
+                      id="IsCurrent"
+                      component={FormCheckBox}
+                      label="default version"
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <div>Select app bundle</div>
+                    <FieldWrapper>
+                      <DropDownList
+                        name="AppBundleId"
+                        style={{width: "50%"}}
+                        data={appBundleList?.data}
+                        textField="name"
+                        dataItemKey="id"
+                        defaultValue={defaultBundle}
+                        loading={!appBundleList?.data.length}
+                        onChange={val => formRef?.current?.valueSetter("AppBundleId", val.target.value)}
+                        required={true}
+                      />
+                    </FieldWrapper>
 
-              </div>
-              <div className="mb-3">
-                <Field
-                  name="ImageFiles"
-                  component={FormFile}
-                  className="upload-component"
-                  label="Select images"
-                  btnText="select"
-                  multiple={true}
-                  inputRef={imageFilesRef}
-                  presetFiles={preloadedImgFiles||[]}
-                  onFileSelect={onFileSelect}
-                  onChange={onFileChange}
-                  validator={innerValidateImg}
-                />
-              </div>
-              {
-                !dataToUpdateId &&
-                <div className="mb-3">
-                  <Field
-                    name="ModelFile"
-                    component={FormFile}
-                    className="upload-component"
-                    label="Select model"
-                    btnText="select"
-                    inputRef={modelFileRef}
-                    onFileSelect={onModelSelect}
-                    onChange={onModelChange}
-                    validator={isZip}
-                  />
-                </div>
-              }
+                  </div>
+                  <div className="mb-3">
+                    <Field
+                      name="ImageFiles"
+                      component={FormFile}
+                      className="upload-component"
+                      label="Select images"
+                      btnText="select"
+                      multiple={true}
+                      inputRef={imageFilesRef}
+                      presetFiles={preloadedImgFiles || []}
+                      onFileSelect={onFileSelect}
+                      onChange={onFileChange}
+                      validator={innerValidateImg}
+                    />
+                  </div>
+                  {
+                    !dataToUpdateId &&
+                    <div className="mb-3">
+                      <Field
+                        name="ModelFile"
+                        component={FormFile}
+                        className="upload-component"
+                        label="Select model"
+                        btnText="select"
+                        inputRef={modelFileRef}
+                        onFileSelect={onModelSelect}
+                        onChange={onModelChange}
+                        validator={isZip}
+                      />
+                    </div>
+                  }
 
-            </fieldset>
-
+                </fieldset>
+            }
             <Button
               type="submit"
               hidden={true}
@@ -280,6 +290,7 @@ const CreateVersion: FC<ICreateVerProps> = ({
           </FormElement>
         )}
       />
+
     </ModalWrapper>
   )
 }

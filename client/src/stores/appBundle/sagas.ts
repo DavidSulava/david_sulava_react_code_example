@@ -1,4 +1,4 @@
-import { all, call, put, select, takeLatest } from 'typed-redux-saga';
+import { all, call, delay, put, select, takeLatest } from 'typed-redux-saga';
 import Api from '../../services/api/api';
 import {
   deleteAppBundle,
@@ -76,6 +76,7 @@ function* getAppBundleByIdSaga({payload: id}: PayloadAction<string>) {
   try {
     yield put(setAppBundleIsLoading(true))
     const bundle = yield* call(Api.getAppBundleById, id)
+    yield* call(delay, 500)
     yield put(setAppBundle(bundle))
   }
   catch(e: any) {

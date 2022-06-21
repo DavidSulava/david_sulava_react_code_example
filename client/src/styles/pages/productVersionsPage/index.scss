@@ -9,13 +9,6 @@ $versions-grid-height: calc(100vh - (#{$header-height} + #{$dash-board-header-he
 }
 .version-grid{
   max-height: $versions-grid-height;
-  td{
-    text-align: center;
-    justify-content: center;
-  }
-  th{
-    justify-content: center;
-  }
   .action-cell{
     @include setFlex(column);
     & >*{

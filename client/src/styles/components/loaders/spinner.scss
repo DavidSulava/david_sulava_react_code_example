@@ -1,7 +1,8 @@
+$loader-color : $std-btn-color;
 
 .spinner-wrapper{
-  width: inherit;
-  height:  inherit;
+  width: 100%;
+  height:  100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,7 +18,7 @@
   height: 50px;
 
   & .path {
-    stroke: $servier-blue-color;
+    stroke: $loader-color;
     stroke-linecap: round;
     animation: dash 1.5s ease-in-out infinite;
   }

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import useAuthCheck from '../../../helpers/hooks/useAuthCheck';
+import useAuthCheck from '../../../helpers/hooks/storeHooks/useAuthCheck';
 import { Field, Form, FormElement } from '@progress/kendo-react-form';
 import CInput from '../../../components/form-components/CInput';
 import { emailValidator, isEmpty, passwordValidation } from '../../../components/form-components/helpers/validation-functions';

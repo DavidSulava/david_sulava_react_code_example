@@ -6,7 +6,7 @@ export interface IModalCommonProps {
   className?: string,
   onClose?: () => void,
   buttons: IModalWrapperButton[],
-  children: JSX.Element|string
+  children: JSX.Element|string,
 }
 
 export interface IModalWrapperButton {

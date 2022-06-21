@@ -2,6 +2,8 @@ $param-config-padding: 10px;
 $config-parameters-container-height: 350px;
 $config-page-header-height: 20px;
 $config-page-button-bar-height: 39px;
+$create-config-form-body-height: calc(100vh - (#{$header-height} + #{$config-page-header-height} + #{$config-page-button-bar-height}));
+$item-changed-border: 4px solid #8106ed;
 
 .configuration-page {
   @include setFlex(row, strech);
@@ -18,7 +20,7 @@ $config-page-button-bar-height: 39px;
 
   .create-config-form-body {
     padding: 0 15px;
-    height: calc(100vh - (#{$header-height} + #{$config-page-header-height} + #{$config-page-button-bar-height}));
+    height: $create-config-form-body-height;
     @include setFlex(column, space-between, strech);
   }
 
@@ -29,7 +31,7 @@ $config-page-button-bar-height: 39px;
   .config-parameters-container {
     @include setFlex(row, start, flex-start);
     width: 100%;
-    max-height: $config-parameters-container-height;
+    height: $config-parameters-container-height;
     overflow-y: auto;
     padding: 0;
 
@@ -47,11 +49,10 @@ $config-page-button-bar-height: 39px;
       padding: $param-config-padding;
 
       button {
-        width: 120px;
+        //width: 120px;
         padding: 1px 5px;
       }
     }
-
     .conf-param-form-fields {
       @include setFlex(column, flex-start);
       flex-basis: 100%;
@@ -66,6 +67,9 @@ $config-page-button-bar-height: 39px;
         min-width: 270px;
       }
     }
+    .item-changed{
+      border-bottom: $item-changed-border;
+    }
   }
 
   .prod-config-button-bar {
@@ -77,12 +81,11 @@ $config-page-button-bar-height: 39px;
 
 .create-config-form-modal {
   @extend .create-configuration-form;
-  height: 75vh;
+  height: 76vh;
   width: 65vw;
 }
 
 .config-svf {
-  //@include setFlex(column, strech);
   align-self: flex-start;
   flex-basis: 50vw;
   height: inherit;

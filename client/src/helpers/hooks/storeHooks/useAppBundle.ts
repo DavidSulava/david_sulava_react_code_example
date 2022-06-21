@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { IState } from '../../stores/configureStore';
+import { IState } from '../../../stores/configureStore';
 
 const useAppBundle= () => {
   const appBundleFilters = useSelector((state: IState) => state.appBundle.dataState)

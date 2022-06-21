@@ -1,5 +1,5 @@
 $version-info-height: 178px;
-$version-info-button-bar-height: 38px;
+$version-info-button-bar-height: 62px;
 $version-grid-height: calc(100vh - (#{$header-height} + #{$dash-board-header-height} + #{$version-info-height} + #{$version-info-button-bar-height}) - 45px);
 
 .version-page{
@@ -29,20 +29,16 @@ $version-grid-height: calc(100vh - (#{$header-height} + #{$dash-board-header-hei
       margin-left: 5px;
     }
   }
+  .version-info-spinner{
+    background-color: inherit;
+  }
 }
 .version-info-button-bar{
-  @include setFlex(row, start, start);
+  @include setFlex(row, start, center);
   gap: 10px;
   height: $version-info-button-bar-height;
   overflow: auto;
 }
 .configurations-grid{
   max-height: $version-grid-height;
-
-  td{
-    text-align: center;
-  }
-  th{
-    justify-content: center;
-  }
 }
