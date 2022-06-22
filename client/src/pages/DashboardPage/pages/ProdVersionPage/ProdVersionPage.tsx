@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import React, { MouseEventHandler, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getProdVersion, setProdVersion } from '../../../../stores/productVersion/reducer';
 import useProdVersion from '../../../../helpers/hooks/storeHooks/useProdVersion';
@@ -7,7 +7,6 @@ import { Button } from 'react-bootstrap';
 import { ICommonObject } from '../../../../types/common';
 import ConfigurationsTable from './ConfigurationsTable/ConfigurationsTable';
 import { IState } from '../../../../stores/configureStore';
-import { DropDownList } from '@progress/kendo-react-dropdowns';
 import { getAppBundleList } from '../../../../stores/appBundle/reducer';
 import { IAppBundle } from '../../../../types/appBundle';
 import Spinner from '../../../../components/Loaders/Spinner/Spinner';
@@ -30,6 +29,7 @@ const ProdVersionPage = () => {
     [buttonText.UpdateVersion]: false,
     [buttonText.CreatePublication]: false,
   })
+  const NO_DATA_TEXT = 'N/A'
 
   useEffect(() => {
     dispatch(getAppBundleList())
@@ -77,50 +77,43 @@ const ProdVersionPage = () => {
               <div className="version-info-body">
                 <div className="info-column">
                   <div className='body-row'>
-                    <span>Product Version:</span>
+                    <span>Product name:</span>
+                    <div>{prodVersion?.productName}</div>
+                  </div>
+                  <div className='body-row'>
+                    <span>Product version:</span>
                     <div>{prodVersion?.version}</div>
                   </div>
                   <div className='body-row'>
-                    <span>Design Gear Version:</span>
+                    <span>Design gear version:</span>
                     <div>{prodVersion?.designGearVersion}</div>
                   </div>
                   <div className='body-row'>
-                    <span>Inventor Version:</span>
+                    <span>Inventor version:</span>
                     <div>{prodVersion?.inventorVersion}</div>
                   </div>
                   <div className='body-row'>
-                    <span>Date Created:</span>
-                    <div>{new Date(prodVersion?.created || '').toLocaleDateString()}</div>
-                  </div>
-                  <div className='body-row'>
                     <span>Description:</span>
-                    <div> N/A </div>
+                    <div> {NO_DATA_TEXT} </div>
                   </div>
                 </div>
                 <div className="info-column">
                   <div className='body-row'>
-                    <span>Product Properties</span>
+                    <span>AppBundle: </span>
+                    <div>{defaultBundle?.name}</div>
                   </div>
                   <div className='body-row'>
                     <span>Author: </span>
-                    <div> N/A </div>
+                    <div> {NO_DATA_TEXT} </div>
                   </div>
                   <div className='body-row'>
                     <span>Company: </span>
-                    <div> N/A </div>
+                    <div> {NO_DATA_TEXT} </div>
                   </div>
-                </div>
-                <div className="info-column">
-                  Select Your AppBundle
-                  <DropDownList
-                    name="AppBundleId"
-                    data={appBundleList?.data}
-                    textField="name"
-                    dataItemKey="id"
-                    defaultValue={defaultBundle}
-                    loading={!appBundleList?.data.length}
-                    disabled={true}
-                  />
+                  <div className='body-row'>
+                    <span>Date created:</span>
+                    <div>{new Date(prodVersion?.created || '').toLocaleDateString()}</div>
+                  </div>
                 </div>
               </div>
             </>
