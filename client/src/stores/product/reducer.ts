@@ -10,12 +10,14 @@ export interface IProductState {
   dataState: IGridDataStateFilter,
   productList: Nullable<IGetProdListResp>,
   product: Nullable<IProduct>,
+  isProductListLoading: boolean,
   isProductLoading: boolean,
 }
 
 export const initialProductState: IProductState = {
   productList: null,
   product: null,
+  isProductListLoading: false,
   isProductLoading: false,
   dataState: {
     filter: {
@@ -43,6 +45,9 @@ const productSlice = createSlice({
     },
     delProduct: (state, action: PayloadAction<IDelProduct>) => {
     },
+    setIsProductListLoading: (state, action: PayloadAction<boolean>) => {
+      state.isProductListLoading = action.payload
+    },
     setIsProductLoading: (state, action: PayloadAction<boolean>) => {
       state.isProductLoading = action.payload
     },
@@ -67,7 +72,8 @@ export const {
   postProduct,
   putProduct,
   delProduct,
-  setIsProductLoading
+  setIsProductListLoading,
+  setIsProductLoading,
 } = productSlice.actions
 
 export default productSlice.reducer

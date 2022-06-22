@@ -1,0 +1,14 @@
+.create-product-modal{
+  .k-window-content {
+    padding: 0;
+  }
+
+  .modal-body {
+    overflow: auto;
+    padding: 15px;
+    height: 45vh;
+    max-height: 350px;
+    width: 50vw;
+    max-width: 500px;
+  }
+}

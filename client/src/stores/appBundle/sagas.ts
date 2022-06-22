@@ -9,7 +9,7 @@ import {
   setAppBundleList,
   setAppBundleListIsLoading, setAppBundleTableList
 } from './reducer';
-import { setError } from '../common/reducer';
+import { setError, setPostReqResp } from '../common/reducer';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { IPostAppBundle, IPuttAppBundle } from '../../types/appBundle';
 import { IState } from '../configureStore';
@@ -47,20 +47,30 @@ function* getAppBundleTableListSaga(): any {
 
 function* postAppBundleSaga({payload: formData}: PayloadAction<IPostAppBundle>) {
   try {
-    yield* call(Api.postAppBundle, formData)
+    yield put(setAppBundleIsLoading(true))
+    const resp = yield* call(Api.postAppBundle, formData)
     yield* call(getAppBundleTableListSaga)
+    yield put(setPostReqResp(resp))
   }
   catch(e: any) {
     yield put(setError(e))
+  }
+  finally {
+    yield put(setAppBundleIsLoading(false))
   }
 }
 function* putAppBundleSaga({payload: formData}: PayloadAction<IPuttAppBundle>) {
   try {
+    yield put(setAppBundleIsLoading(true))
     yield* call(Api.putAppBundle, formData)
     yield* call(getAppBundleTableListSaga)
+    yield put(setPostReqResp('200'))
   }
   catch(e: any) {
     yield put(setError(e))
+  }
+  finally {
+    yield put(setAppBundleIsLoading(false))
   }
 }
 function* deleteAppBundleSaga({payload: id}: PayloadAction<string>) {
