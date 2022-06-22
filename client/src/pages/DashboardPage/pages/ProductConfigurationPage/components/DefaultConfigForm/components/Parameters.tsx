@@ -168,6 +168,7 @@ const Parameters: FC<IParamProps> = ({
                     return (
                       <div key={param.id} className={`param-field-container ${isChanged ? PARAM_CHANGED_CLASS_NAME : ''}`}>
                         {
+                          //TODO: activate validation after the backEnd will handle models correctly
                           !param.isHidden &&
                           (
                             param.valueOptions ?
@@ -180,7 +181,7 @@ const Parameters: FC<IParamProps> = ({
                                   dataItemKey="id"
                                   defaultValue={getDefaultValOptions(param)}
                                   onChange={(e) => onParamChange(e, param)}
-                                  required={true}
+                                  // required={true}
                                   disabled={param.isReadOnly || isDisabled}
                                 />
                               </div>
@@ -190,7 +191,7 @@ const Parameters: FC<IParamProps> = ({
                                 name={fieldName}
                                 component={CInput}
                                 label={param.displayName}
-                                validator={isEmpty}
+                                // validator={isEmpty}
                                 onChange={val => formRef?.current?.valueSetter(fieldName, val.target.value)}
                                 disabled={param.isReadOnly}
                               />
