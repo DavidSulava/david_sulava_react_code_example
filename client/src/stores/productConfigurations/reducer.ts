@@ -61,7 +61,7 @@ const configurationsSlice = createSlice({
     setConfigurationsList: (state, action: PayloadAction<IGetConfigurations>) => {
       state.configurationsList = action.payload
     },
-    setConfiguration: (state, action: PayloadAction<IConfiguration>) => {
+    setConfiguration: (state, action: PayloadAction<IConfiguration|null>) => {
       state.configuration = action.payload
     },
     setSearchedConfigList: (state, action: PayloadAction<IGetConfigurations>) => {

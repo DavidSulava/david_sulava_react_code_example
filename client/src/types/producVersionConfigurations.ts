@@ -83,17 +83,20 @@ export enum EModelState {
 }
 
 export enum ESvfStatus {
-  InQueue = 0,
-  InProcess = 1,
-  Error = 2,
-  Ready = 3
+  InQueue = 1,
+  InProcess = 2,
+  ServiceUnavailableError = 4,
+  IncorrectRequestError = 8,
+  Ready = 16
 }
 
 export enum EConfigurationStatus {
-  InQueue = 0,
-  InProcess = 1,
-  Error = 2,
-  Ready = 3
+  InQueue = 1,
+  InProcess = 2,
+  ServiceUnavailableError = 4,
+  IncorrectRequestError = 8,
+  InvalidConfiguration = 16,
+  Ready = 32
 }
 
 export enum EParameterValueType

@@ -5,7 +5,7 @@ import { isEmpty } from '../../../../../../components/form-components/helpers/va
 import { Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getConfigParams, getConfigurationById } from '../../../../../../stores/productConfigurations/reducer';
+import { getConfigParams, getConfigurationById, setConfiguration } from '../../../../../../stores/productConfigurations/reducer';
 import useConfigurations from '../../../../../../helpers/hooks/storeHooks/useConfigurations';
 import Parameters from './components/Parameters';
 import CTextArea from '../../../../../../components/form-components/CTextArea';
@@ -25,6 +25,11 @@ const DefaultConfigForm: FC = () => {
   const [formConfigParams, setFormConfigParams] = useState<IConfigurationParamData>()
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  useEffect(()=>{
+    return ()=>{
+      dispatch(setConfiguration(null))
+    }
+  },[])
   useEffect(() => {
     if(configId)
       dispatch(getConfigurationById(configId))

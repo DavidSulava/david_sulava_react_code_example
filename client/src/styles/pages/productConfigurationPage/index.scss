@@ -86,7 +86,7 @@ $item-changed-border: 4px solid #8106ed;
 }
 
 .config-svf {
-  align-self: flex-start;
+  @include setFlex(row);
   flex-basis: 50vw;
   height: inherit;
 

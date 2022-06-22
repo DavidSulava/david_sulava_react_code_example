@@ -26,6 +26,7 @@ export interface IProductVersion {
   sequenceNumber: number,
   appBundleId: string,
   name: string,
+  productName: string,
   version: string,
   designGearVersion: string
   inventorVersion: string,
