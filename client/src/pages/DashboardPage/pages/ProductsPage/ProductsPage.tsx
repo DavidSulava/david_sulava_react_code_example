@@ -18,9 +18,8 @@ import { ProductsActionCell } from './components/ProductsActionCell';
 import { GridInlineFormRow } from './components/GridInlineFormRow';
 import { FormCell, IFormCellProps } from './components/FormCell';
 import { IGridDataState } from '../../../../types/common';
-import NoRecords from '../../../../components/grid-components/NoRecords';
-import { Loader } from '@progress/kendo-react-indicators';
 import GridLoader from '../../../../components/Loaders/GridLoader/GridLoader';
+import { DateCell } from '../../../../components/grid-components/DateCell';
 
 export const GridEditContext = createContext<{
   cancel: (dataItem: IGridProductData) => void,
@@ -45,7 +44,7 @@ export interface IGridProductData extends IProduct{
 }
 const ProductsPage = () => {
   const dispatch = useDispatch()
-  const {productList, productFilters, isProductLoading} = useProduct()
+  const {productList, productFilters, isProductListLoading} = useProduct()
   const [isShowAddProductModal, setIsShowAddProductModal] = useState(false)
   const [dataState, setDataState] = useState<IGridProductData[]>([]);
 
@@ -134,7 +133,7 @@ const ProductsPage = () => {
             </Button>
           </GridToolbar>
           <GridNoRecords>
-            <GridLoader isLoading={isProductLoading}/>
+            <GridLoader isLoading={isProductListLoading}/>
           </GridNoRecords>
           <GridColumn field="name" title="Product name" cell={FormCell} className="grid-cell-form"/>
           <GridColumn
@@ -142,7 +141,7 @@ const ProductsPage = () => {
             title="Short description"
             cell={(props: IFormCellProps) => <FormCell {...props} textArea={true} rows={2}/>}
           />
-          <GridColumn field="created" title="Date added" sortable={false} editable={false}/>
+          <GridColumn field="created" title="Date added" sortable={false} cell={DateCell}/>
           <GridColumn
             field="currentVersion"
             title="Version"

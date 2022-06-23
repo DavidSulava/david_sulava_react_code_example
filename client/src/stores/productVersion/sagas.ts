@@ -1,5 +1,5 @@
 import { all, call, delay, put, select, takeLatest } from 'typed-redux-saga';
-import { setError } from '../common/reducer';
+import { setError, setPostReqResp } from '../common/reducer';
 import Api from '../../services/api/api';
 import { PayloadAction } from '@reduxjs/toolkit';
 import {
@@ -51,8 +51,9 @@ function* postProdVersionSaga({payload: formData}: PayloadAction<IPostProductVer
   try {
     yield* put(setProdVersionLoading(true))
     yield* call(Api.postProdVersion,  formData)
-    const productId = formData.get('ProductId')
-    yield* put(getProdVersionList(productId as string))
+    const productId = formData.get('ProductId') as string
+    yield* put(getProdVersionList(productId))
+    yield put(setPostReqResp(productId))
   }
   catch(e: any) {
     yield put(setError(e))
@@ -64,12 +65,17 @@ function* postProdVersionSaga({payload: formData}: PayloadAction<IPostProductVer
 
 function* putProdVersionSaga({payload: formData}: PayloadAction<IPostProductVersion>) {
   try {
+    yield* put(setProdVersionLoading(true))
     yield* call(Api.putProdVersion,  formData)
     const productId = formData.get('ProductId')
     yield* put(getProdVersionList(productId as string))
+    yield put(setPostReqResp(productId))
   }
   catch(e: any) {
     yield put(setError(e))
+  }
+  finally {
+    yield* put(setProdVersionLoading(false))
   }
 }
 

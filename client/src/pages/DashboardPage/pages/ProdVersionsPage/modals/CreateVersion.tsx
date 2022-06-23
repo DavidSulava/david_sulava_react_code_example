@@ -27,6 +27,7 @@ import FormCheckBox from '../../../../../components/form-components/CheckBox';
 import { getAppBundleList } from '../../../../../stores/appBundle/reducer';
 import { IAppBundle } from '../../../../../types/appBundle';
 import Spinner from '../../../../../components/Loaders/Spinner/Spinner';
+import { setPostReqResp } from '../../../../../stores/common/reducer';
 
 interface ICreateVerProps extends ICommonModalProps {
   productId: string,
@@ -43,6 +44,7 @@ const CreateVersion: FC<ICreateVerProps> = ({
 }) => {
   const dispatch = useDispatch()
   const {prodVersion, isProdVersionLoading} = useProdVersion()
+  const backEndResp = useSelector((state: IState) => state.common.postReqResp)
   const appBundleList = useSelector((state: IState) => state.appBundle.appBundleList)
   const formRef = useRef<Form|null>(null)
   const imageFilesRef = useRef<HTMLInputElement|null>(null)
@@ -66,7 +68,7 @@ const CreateVersion: FC<ICreateVerProps> = ({
   const [defaultBundle, setDefaultBundle] = useState<IAppBundle|null>(null)
   const modalButtons: IModalWrapperButton[] = [
     {buttonText: 'close', onButtonClick: () => onClose()},
-    {buttonText: 'save', onButtonClick: () => formSubmitBtnRef?.current?.click()}
+    {buttonText: 'save', onButtonClick: () => formSubmitBtnRef?.current?.click(), buttonDisabled: isProdVersionLoading  }
   ]
 
   useEffect(() => {
@@ -109,6 +111,12 @@ const CreateVersion: FC<ICreateVerProps> = ({
       dispatch(getAppBundleList())
     }
   }, [prodVersion])
+  useEffect(() => {
+    if(backEndResp){
+      onClose()
+      dispatch(setPostReqResp(''))
+    }
+  }, [backEndResp, isProdVersionLoading])
 
   const onSubmitLocal = (formData: any) => {
     if(!formRef?.current?.isValid()) return
@@ -133,7 +141,6 @@ const CreateVersion: FC<ICreateVerProps> = ({
       data.append('id', dataToUpdateId)
       dispatch(putProdVer(data as IPostProductVersion))
     }
-    onClose()
   }
   const onFileSelect = () => {
     imageFilesRef?.current?.click()

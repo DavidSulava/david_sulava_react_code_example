@@ -1,6 +1,6 @@
 import { ICommonModalProps, IKendoOnChangeEvent } from '../../../../../types/common';
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Field, Form, FormElement } from '@progress/kendo-react-form';
 import { IModalWrapperButton } from '../../../../../types/modal';
 import ModalWrapper from '../../../../../components/ModalWrapper/ModalWrapper';
@@ -13,6 +13,8 @@ import { IPostAppBundle, IPuttAppBundle } from '../../../../../types/appBundle';
 import useAppBundle from '../../../../../helpers/hooks/storeHooks/useAppBundle';
 import CTextArea from '../../../../../components/form-components/CTextArea';
 import Spinner from '../../../../../components/Loaders/Spinner/Spinner';
+import { IState } from '../../../../../stores/configureStore';
+import { setPostReqResp } from '../../../../../stores/common/reducer';
 
 interface ICreateAppBundle extends ICommonModalProps {
   dataToUpdateId?: string,
@@ -27,6 +29,7 @@ const CreateAppBundleModal: FC<ICreateAppBundle> = ({
 }) => {
   const dispatch = useDispatch()
   const {appBundle, isBundleLoading} = useAppBundle()
+  const backEndResp = useSelector((state: IState) => state.common.postReqResp)
   const formRef = useRef<Form|null>(null)
   const bundleFileRef = useRef<HTMLInputElement|null>(null)
   const formSubmitBtnRef = useRef<HTMLButtonElement|null>(null)
@@ -43,7 +46,7 @@ const CreateAppBundleModal: FC<ICreateAppBundle> = ({
   const [preloadedBundleFile, setPreloadedBundleFile] = useState<string>()
   const modalButtons: IModalWrapperButton[] = [
     {buttonText: 'close', onButtonClick: () => onClose()},
-    {buttonText: 'save', onButtonClick: () => formSubmitBtnRef?.current?.click()}
+    {buttonText: 'save', onButtonClick: () => formSubmitBtnRef?.current?.click(), buttonDisabled: isBundleLoading}
   ]
 
   useEffect(() => {
@@ -75,6 +78,13 @@ const CreateAppBundleModal: FC<ICreateAppBundle> = ({
     }
 
   }, [appBundle])
+  useEffect(() => {
+    if(backEndResp){
+      onClose()
+      dispatch(setPostReqResp(''))
+    }
+  }, [backEndResp, isBundleLoading])
+
   const onSubmitLocal = (formData: any) => {
     if(!formRef?.current?.isValid()) return
 
@@ -93,7 +103,6 @@ const CreateAppBundleModal: FC<ICreateAppBundle> = ({
       data.append('id', dataToUpdateId)
       dispatch(putAppBundle(data as IPuttAppBundle))
     }
-    onClose()
   }
   const onBundleFileSelect = () => {
     bundleFileRef?.current?.click()
