@@ -38,7 +38,7 @@ const Parameters: FC<IParamProps> = ({
   formRef,
   title,
   isDisabled = false,
-  isLoading= false
+  isLoading = false
 }) => {
   const ARRAY_INPUT_NAME_C_PARAMS = 'parameterValues'
   const [configItems, setConfigItems] = useState<IConfigItem>()
@@ -50,7 +50,7 @@ const Parameters: FC<IParamProps> = ({
   useEffect(() => {
     formRef?.current?.valueSetter('parameterValues', '')
     setSelectedParams([])
-    if(configs){
+    if(configs) {
       const {configItems, paramList} = getItemsRecursive(configs)
       setConfigItems(configItems)
       setParameterItems(paramList)
@@ -100,7 +100,9 @@ const Parameters: FC<IParamProps> = ({
     return {configItems: innerConfig, paramList: innerParamList}
   }
   const getDefaultValOptions = (item: IConfigParam) => {
-    return item.valueOptions.find(option => option.value === item.value)
+    //TODO:delete logic after the || operator, when the backEnd will handle models correctly ?
+    // if leave it here, and valueOptions array length == 0, an empty value also will be sent to the server (when validation is disabled)
+    return item.valueOptions.find(option => option.value === item.value) || {id: item.id, parameterDefinitionId:item.id,  value: item.value}
   }
   const setFormDataForParameters = (paramList: IParamItemPrepared[]) => {
     formRef?.current?.valueSetter(ARRAY_INPUT_NAME_C_PARAMS, '')
@@ -118,7 +120,7 @@ const Parameters: FC<IParamProps> = ({
     })
   }
   const setSelectedNavItem = (id?: string) => setSelectedNavBtn(id ?? '')
-  const isParamChanged = (param:IConfigParam) => defaultParameterItems.find(defItem => defItem.id === param.id)?.value !== param.value
+  const isParamChanged = (param: IConfigParam) => defaultParameterItems.find(defItem => defItem.id === param.id)?.value !== param.value
   const onParamChange = (e: DropDownListChangeEvent, param: IConfigParam) => {
     const chosenValue = e.value?.value
 
@@ -156,7 +158,8 @@ const Parameters: FC<IParamProps> = ({
               <div className="conf-param-navigation">
                 {
                   configItems &&
-                  <NavPanel data={[configItems]} selectedNavBtn={selectedNavBtn} onNavClick={setSelectedNavItem} parameterItems={parameterItems}/>
+                  <NavPanel data={[configItems]} selectedNavBtn={selectedNavBtn} onNavClick={setSelectedNavItem}
+                            parameterItems={parameterItems}/>
                 }
               </div>
               <div className="conf-param-form-fields">

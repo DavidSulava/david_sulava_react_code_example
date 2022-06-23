@@ -1,4 +1,4 @@
-import { all, call, delay, put, select, takeLatest } from 'typed-redux-saga';
+import { all, call, delay, put, select, takeEvery, takeLatest } from 'typed-redux-saga';
 import Api from '../../services/api/api';
 import {
   deleteAppBundle,
@@ -9,7 +9,7 @@ import {
   setAppBundleList,
   setAppBundleListIsLoading, setAppBundleTableList
 } from './reducer';
-import { setError, setPostReqResp } from '../common/reducer';
+import { popFromPending, pushInPending, setError, setPostReqResp } from '../common/reducer';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { IPostAppBundle, IPuttAppBundle } from '../../types/appBundle';
 import { IState } from '../configureStore';
@@ -75,11 +75,15 @@ function* putAppBundleSaga({payload: formData}: PayloadAction<IPuttAppBundle>) {
 }
 function* deleteAppBundleSaga({payload: id}: PayloadAction<string>) {
   try {
+    yield put(pushInPending(id))
     yield* call(Api.deleteAppBundle, id)
     yield* call(getAppBundleTableListSaga)
   }
   catch(e: any) {
-    yield put(setError(e))
+    yield put(setError(e?.response.data||e))
+  }
+  finally {
+    yield put(popFromPending(id))
   }
 }
 function* getAppBundleByIdSaga({payload: id}: PayloadAction<string>) {
@@ -104,7 +108,7 @@ function* appBundleWatcher() {
     takeLatest(getAppBundleTableList.type, getAppBundleTableListSaga),
     takeLatest(postAppBundle.type, postAppBundleSaga),
     takeLatest(putAppBundle.type, putAppBundleSaga),
-    takeLatest(deleteAppBundle.type, deleteAppBundleSaga),
+    takeEvery(deleteAppBundle.type, deleteAppBundleSaga),
   ])
 }
 
