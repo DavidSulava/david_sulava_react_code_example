@@ -144,7 +144,7 @@ const ProductsPage = () => {
           <GridColumn field="created" title="Date added" sortable={false} cell={DateCell}/>
           <GridColumn
             field="currentVersion"
-            title="Version"
+            title="Current version"
             sortable={false}
             editable={false}
           />
