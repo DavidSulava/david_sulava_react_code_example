@@ -82,7 +82,6 @@ const CreateConfigModal: FC<ICommonModalProps> = ({
       baseConfigurationId: configId,
       parameterValues: paramValues
     };
-
     dispatch(postConfig(data))
   }
   const onResetPress = () => dispatch(getConfigParams(configId ?? ''))
