@@ -1,16 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IAppBundle } from '../../types/appBundle';
 
 export interface ICommonState {
   error: any,
   postReqResp: any,
-  appBundle: IAppBundle[],
+  inPendingList: string[],
 }
 
 const initialState: ICommonState = {
   error: '',
   postReqResp: '',
-  appBundle: [],
+  inPendingList: [],
 }
 
 const commonSlice = createSlice({
@@ -22,10 +21,16 @@ const commonSlice = createSlice({
     },
     setError: (state, action: PayloadAction<string>) => {
       state.error = action.payload
-    }
+    },
+    pushInPending: (state, action: PayloadAction<string>) => {
+      state.inPendingList.push(action.payload)
+    },
+    popFromPending: (state, action: PayloadAction<string>) => {
+      state.inPendingList = state.inPendingList.filter(el=> el !== action.payload)
+    },
   }
 });
 
-export const {setError, setPostReqResp} = commonSlice.actions
+export const {setError, setPostReqResp, pushInPending, popFromPending} = commonSlice.actions
 
 export default commonSlice.reducer
