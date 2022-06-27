@@ -68,9 +68,8 @@ const ForgotPassword = () => {
                     </div>
 
                     {
-                      //TODO: Display an error message sent from the backend, when 400 will be implemented
                       !!error && formRenderProps.valid &&
-                      <div className="k-d-flex k-justify-content-center"><Error>{'Something went wrong'}</Error></div>
+                      <div className="k-d-flex k-justify-content-center"><Error>{`${error}`}</Error></div>
                     }
                   </fieldset>
                   <div className="k-form-buttons k-flex k-justify-content-center k-mb-5 k-mt-2">

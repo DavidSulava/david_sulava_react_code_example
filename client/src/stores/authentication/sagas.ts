@@ -109,7 +109,7 @@ function* postSendEmailToRestorePasswordSaga({payload: formData}: PayloadAction<
     yield put(setPostReqResp(200))
   }
   catch(e: any) {
-    yield put(setError(e?.message))
+    yield put(setError(e?.response?.data?.message||e))
   }
   finally {
     yield put(setIsUserLoading(false))

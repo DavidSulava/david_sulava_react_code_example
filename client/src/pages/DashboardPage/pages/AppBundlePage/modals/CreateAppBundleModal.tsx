@@ -35,6 +35,7 @@ const CreateAppBundleModal: FC<ICreateAppBundle> = ({
   const formSubmitBtnRef = useRef<HTMLButtonElement|null>(null)
 
   const headerText = dataToUpdateId ? 'Update Bundle' : 'Create Bundle';
+  const MAX_BUNDLE_SIZE = 10000 // kb
   const [formState, setFormState] = useState({
     Name: '',
     Description: '',
@@ -42,7 +43,7 @@ const CreateAppBundleModal: FC<ICreateAppBundle> = ({
     InventorVersion: '',
     File: '',
   })
-  const [chosenBundleFiles, setChosenBundleFiles] = useState<string[]>([])
+  const [chosenBundleFiles, setChosenBundleFiles] = useState<File[]>([])
   const [preloadedBundleFile, setPreloadedBundleFile] = useState<string>()
   const modalButtons: IModalWrapperButton[] = [
     {buttonText: 'close', onButtonClick: () => onClose()},
@@ -116,6 +117,9 @@ const CreateAppBundleModal: FC<ICreateAppBundle> = ({
   const innerValidateFile = (val: any) => {
     if(formRef?.current)
       formRef.current.modified['File'] = true
+
+    if(!preloadedBundleFile && chosenBundleFiles.length && chosenBundleFiles[0]?.size)
+      return chosenBundleFiles[0].size <= MAX_BUNDLE_SIZE ? '' : 'file must be no larger than 10 mb'
     return !preloadedBundleFile ? isZip(val) : ''
   }
 
