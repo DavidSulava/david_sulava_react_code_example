@@ -23,3 +23,8 @@ export interface IPostAppBundle extends FormData{
 export interface IPuttAppBundle extends IPostAppBundle{
   id:string
 }
+
+export interface IOnDeleteBundlePayload {
+  id: string,
+  name: string
+}
