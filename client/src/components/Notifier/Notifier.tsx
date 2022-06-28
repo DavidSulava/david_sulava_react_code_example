@@ -8,6 +8,10 @@ const Notifier = () => {
   const handledErrorCodes = [422]
 
   useEffect(()=>{
+    console.log('error: ', error)
+  },[error])
+
+  useEffect(()=>{
     if(error?.message && handledErrorCodes.includes(error?.code))
       alert(error.message)
   },[error])

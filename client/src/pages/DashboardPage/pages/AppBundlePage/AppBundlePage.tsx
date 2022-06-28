@@ -1,7 +1,7 @@
 import useAppBundle from '../../../../helpers/hooks/storeHooks/useAppBundle';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
-import { IAppBundle } from '../../../../types/appBundle';
+import { IAppBundle, IOnDeleteBundlePayload } from '../../../../types/appBundle';
 import {
   Grid,
   GridCellProps,
@@ -60,8 +60,9 @@ const AppBundlePage = () => {
     setBundleIdToEdit('')
   }
   const onDelete = (item: IAppBundle) => {
+    const payload = {id: item.id, name: item.name} as IOnDeleteBundlePayload
     window.confirm(`Are you sure you want to delete:  ${item.name} ?`) &&
-    dispatch(deleteAppBundle(item.id))
+    dispatch(deleteAppBundle(payload))
   }
   const onEdit = (item: IAppBundle) => {
     setBundleIdToEdit(item.id)

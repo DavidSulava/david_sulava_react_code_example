@@ -11,7 +11,7 @@ import {
 } from './reducer';
 import { popFromPending, pushInPending, setError, setPostReqResp } from '../common/reducer';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { IPostAppBundle, IPuttAppBundle } from '../../types/appBundle';
+import { IOnDeleteBundlePayload, IPostAppBundle, IPuttAppBundle } from '../../types/appBundle';
 import { IState } from '../configureStore';
 import { toDataSourceRequestString } from '@progress/kendo-data-query';
 
@@ -73,17 +73,19 @@ function* putAppBundleSaga({payload: formData}: PayloadAction<IPuttAppBundle>) {
     yield put(setAppBundleIsLoading(false))
   }
 }
-function* deleteAppBundleSaga({payload: id}: PayloadAction<string>) {
+function* deleteAppBundleSaga({payload}: PayloadAction<IOnDeleteBundlePayload>) {
   try {
-    yield put(pushInPending(id))
-    yield* call(Api.deleteAppBundle, id)
+    yield put(pushInPending(payload.id))
+    yield* call(Api.deleteAppBundle, payload.id)
     yield* call(getAppBundleTableListSaga)
   }
   catch(e: any) {
-    yield put(setError(e?.response.data||e))
+    if(e?.response?.data.message)
+      e.response.data.message = `${payload.name} : ${e?.response?.data.message}`
+    yield put(setError(e?.response?.data||e))
   }
   finally {
-    yield put(popFromPending(id))
+    yield put(popFromPending(payload.id))
   }
 }
 function* getAppBundleByIdSaga({payload: id}: PayloadAction<string>) {

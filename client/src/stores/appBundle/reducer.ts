@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IAppBundle, IGetAppBundleResp, IPostAppBundle, IPuttAppBundle } from '../../types/appBundle';
+import { IAppBundle, IGetAppBundleResp, IOnDeleteBundlePayload, IPostAppBundle, IPuttAppBundle } from '../../types/appBundle';
 import { IGridDataFilter, IGridDataStateFilter, IGridFilterSetting, Nullable } from '../../types/common';
 
 export interface IAppBundleState {
@@ -43,7 +43,7 @@ const appBundleSlice = createSlice({
     },
     putAppBundle: (state, action: PayloadAction<IPuttAppBundle>) => {
     },
-    deleteAppBundle: (state, action: PayloadAction<string>) => {
+    deleteAppBundle: (state, action: PayloadAction<IOnDeleteBundlePayload>) => {
     },
     setAppBundleList: (state, action: PayloadAction<Nullable<IGetAppBundleResp>>) => {
       state.appBundleList = action.payload
