@@ -6,13 +6,13 @@ import Api from '../../services/api/api';
 import { setError, setPostReqResp } from '../common/reducer';
 import {
   getConfigParams, getConfigurationById,
-  getConfigurationList, getSvfPath, postConfig,
+  getConfigurationList, getSvfPath, postConfig, putConfig,
   searchConfiguration,
   setConfigParams, setConfiguration,
   setConfigurationsList,
   setIsConfigLoading, setIsParamsLoading, setSearchedConfigList, setSvfPath
 } from './reducer';
-import { IPostConfigurations, ISearchConfigPayload } from '../../types/producVersionConfigurations';
+import { IPostConfigurations, IPutConfigurations, ISearchConfigPayload } from '../../types/producVersionConfigurations';
 import { IGridFilterSetting } from '../../types/common';
 
 function* getConfigurationListSaga({payload: productVersionId}: PayloadAction<string>): any {
@@ -112,6 +112,15 @@ function* postConfigSaga({payload: formData}: PayloadAction<IPostConfigurations>
   }
 }
 
+function* putConfigSaga({payload: formData}: PayloadAction<IPutConfigurations>) {
+  try {
+    yield* call(Api.putConfig, formData)
+  }
+  catch(e: any) {
+    yield put(setError(e))
+  }
+}
+
 function* configurationsWatcher() {
   yield all([
     takeLatest(getConfigurationList.type, getConfigurationListSaga),
@@ -120,6 +129,7 @@ function* configurationsWatcher() {
     throttle(1000, searchConfiguration.type, searchConfigurationsSaga),
     takeLatest(getSvfPath.type, getSvfPathSaga),
     takeLatest(postConfig.type, postConfigSaga),
+    takeLatest(putConfig.type, putConfigSaga),
   ])
 }
 

@@ -4,11 +4,12 @@ import { IConfigurationListItem } from './producVersionConfigurations';
 export interface IGetProductVersionList extends IKendoResp {
   data: IProductVersionList[],
 }
+
 export interface IGetProductVersionById extends IKendoResp {
   data: IProductVersion,
 }
 
-export interface IPostProductVersion extends FormData{
+export interface IPostProductVersion extends FormData {
   ProductId: string,
   SequenceNumber: number,
   AppBundleId: string,
@@ -17,6 +18,7 @@ export interface IPostProductVersion extends FormData{
   DesignGearVersion: string
   InventorVersion: string,
   IsCurrent: boolean,
+  UseAsTemplateConfiguration?: boolean,
   ImageFiles: string[],
   ModelFile: string,
 }

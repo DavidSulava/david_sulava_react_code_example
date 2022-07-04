@@ -15,6 +15,7 @@ export interface IConfiguration{
   created: string,
   status: EConfigurationStatus,
   svfStatus: ESvfStatus,
+  useAsTemplateConfiguration: boolean,
   parameterDefinitions: IConfigParam,
 }
 
@@ -27,6 +28,12 @@ export interface IPostConfigurations{
 export interface IPostParamValues {
   parameterDefinitionId: string,
   value: string
+}
+export interface IPutConfigurations{
+  id: string,
+  name: string,
+  comment: string,
+  useAsTemplateConfiguration: boolean
 }
 
 export interface IConfigurationListItem {
