@@ -5,7 +5,12 @@ import { isEmpty } from '../../../../../../components/form-components/helpers/va
 import { Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getConfigParams, getConfigurationById, setConfiguration } from '../../../../../../stores/productConfigurations/reducer';
+import {
+  getConfigParams,
+  getConfigurationById,
+  postConfig, putConfig,
+  setConfiguration
+} from '../../../../../../stores/productConfigurations/reducer';
 import useConfigurations from '../../../../../../helpers/hooks/storeHooks/useConfigurations';
 import Parameters from './components/Parameters';
 import CTextArea from '../../../../../../components/form-components/CTextArea';
@@ -14,7 +19,8 @@ import CreateConfigModal from './modals/CreateConfigModal';
 import setPath from '../../../../../../helpers/setPath';
 import { ERoutes } from '../../../../../../router/Routes';
 import Spinner from '../../../../../../components/Loaders/Spinner/Spinner';
-import { IConfigurationParamData } from '../../../../../../types/producVersionConfigurations';
+import { IConfigurationParamData, IPutConfigurations } from '../../../../../../types/producVersionConfigurations';
+import FormCheckBox from '../../../../../../components/form-components/CheckBox';
 
 const DefaultConfigForm: FC = () => {
   const dispatch = useDispatch()
@@ -41,6 +47,7 @@ const DefaultConfigForm: FC = () => {
         comment: configuration.comment,
         baseConfigurationId: configuration.id,
         parameterValues: [],
+        useAsTemplateConfiguration: configuration.useAsTemplateConfiguration
       })
       if(configParams)
         setFormConfigParams(configParams)
@@ -48,10 +55,20 @@ const DefaultConfigForm: FC = () => {
   }, [configuration])
 
   const onClonePress = () => setIsModalOpen(!isModalOpen)
+  const onSubmit = (formData: any) => {
+    const data = {
+      name: formData?.name,
+      comment: formData?.comment,
+      id: configId,
+      useAsTemplateConfiguration: formData?.useAsTemplateConfiguration
+    };
+    dispatch(putConfig(data as IPutConfigurations))
+  }
 
   return (
     <>
       <Form
+        onSubmit={onSubmit}
         initialValues={formState}
         key={JSON.stringify(formState)}
         ref={formRef}
@@ -65,7 +82,6 @@ const DefaultConfigForm: FC = () => {
                       name={"name"}
                       label={"Name"}
                       component={CInput}
-                      disabled={true}
                       validator={isEmpty}
                     />
                   </div>
@@ -74,11 +90,18 @@ const DefaultConfigForm: FC = () => {
                       name={"comment"}
                       label={"Comment"}
                       component={CTextArea}
-                      disabled={true}
                       max={200}
                       cols={25}
                       rows={2}
-                      validator={isEmpty}
+                      // validator={isEmpty}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <Field
+                      name="useAsTemplateConfiguration"
+                      id="useAsTemplateConfiguration"
+                      component={FormCheckBox}
+                      label="set as template configuration"
                     />
                   </div>
                   <div className="mb-3">
@@ -102,6 +125,7 @@ const DefaultConfigForm: FC = () => {
               >
                 close
               </BtnLink>
+              <Button type="submit">save</Button>
               <Button onClick={onClonePress}>clone</Button>
             </div>
           </FormElement>

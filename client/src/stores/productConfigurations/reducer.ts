@@ -4,7 +4,7 @@ import {
   IConfiguration,
   IConfigurationParamData,
   IGetConfigurations,
-  IPostConfigurations,
+  IPostConfigurations, IPutConfigurations,
   ISearchConfigPayload
 } from '../../types/producVersionConfigurations';
 
@@ -55,6 +55,8 @@ const configurationsSlice = createSlice({
     },
     postConfig: (state, action: PayloadAction<IPostConfigurations>) => {
     },
+    putConfig: (state, action: PayloadAction<IPutConfigurations>) => {
+    },
     setConfigParams: (state, action: PayloadAction<IConfigurationParamData>) => {
       state.configParams = action.payload
     },
@@ -89,6 +91,7 @@ export const {
   searchConfiguration,
   getSvfPath,
   postConfig,
+  putConfig,
   setConfiguration,
   setConfigParams,
   setConfigurationsList,

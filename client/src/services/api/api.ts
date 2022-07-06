@@ -13,7 +13,13 @@ import client from './http.client';
 import { IOrganisation, IPostOrganisation } from '../../types/organisationPage';
 import { IGetProdListResp, IPostProduct, IProduct, IPutProduct } from '../../types/product';
 import { IGetProductVersionList, IPostProductVersion, IProductVersion } from '../../types/productVersion';
-import { IConfiguration, IConfigurationParamData, IGetConfigurations, IPostConfigurations } from '../../types/producVersionConfigurations';
+import {
+  IConfiguration,
+  IConfigurationParamData,
+  IGetConfigurations,
+  IPostConfigurations,
+  IPutConfigurations
+} from '../../types/producVersionConfigurations';
 import { IAppBundle, IGetAppBundleResp, IPostAppBundle, IPuttAppBundle } from '../../types/appBundle';
 
 export default class Api {
@@ -124,6 +130,11 @@ export default class Api {
 
   public static async postConfig(formData: IPostConfigurations): Promise<string> {
     const response = await client.post(apiRoutes.configurations.root(), formData)
+    return response.data
+  }
+
+  public static async putConfig(formData: IPutConfigurations): Promise<string> {
+    const response = await client.put(apiRoutes.configurations.root(), formData)
     return response.data
   }
 

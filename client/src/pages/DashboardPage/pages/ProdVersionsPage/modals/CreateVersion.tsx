@@ -52,7 +52,7 @@ const CreateVersion: FC<ICreateVerProps> = ({
   const formSubmitBtnRef = useRef<HTMLButtonElement|null>(null)
 
   const headerText = dataToUpdateId ? 'Update version' : 'Create version';
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<any>({
     SequenceNumber: '',
     Name: '',
     Version: '',
@@ -107,6 +107,8 @@ const CreateVersion: FC<ICreateVerProps> = ({
         InventorVersion: prodVersion.inventorVersion,
         IsCurrent: prodVersion.isCurrent,
       })
+      if(!dataToUpdateId)
+        setFormState({...formState, UseAsTemplateConfiguration: false})
       setPreloadedImgFiles(prodVersion.imageFiles)
       dispatch(getAppBundleList())
     }
@@ -135,8 +137,10 @@ const CreateVersion: FC<ICreateVerProps> = ({
     if(chosenImgFiles.length)
       chosenImgFiles.forEach(item => data.append('ImageFiles', item))
 
-    if(!dataToUpdateId)
+    if(!dataToUpdateId){
+      data.append('UseAsTemplateConfiguration', formData.UseAsTemplateConfiguration)
       dispatch(postProdVerByProdId(data as IPostProductVersion))
+    }
     else {
       data.append('id', dataToUpdateId)
       dispatch(putProdVer(data as IPostProductVersion))
@@ -235,6 +239,15 @@ const CreateVersion: FC<ICreateVerProps> = ({
                       component={FormCheckBox}
                       label="default version"
                     />
+                    {
+                      !dataToUpdateId &&
+                      <Field
+                        name="UseAsTemplateConfiguration"
+                        id="UseAsTemplateConfiguration"
+                        component={FormCheckBox}
+                        label="set as template configuration"
+                      />
+                    }
                   </div>
                   <div className="mb-3">
                     <div>Select app bundle</div>
