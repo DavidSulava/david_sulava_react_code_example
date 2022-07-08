@@ -35,7 +35,7 @@ const CreateAppBundleModal: FC<ICreateAppBundle> = ({
   const formSubmitBtnRef = useRef<HTMLButtonElement|null>(null)
 
   const headerText = dataToUpdateId ? 'Update Bundle' : 'Create Bundle';
-  const MAX_BUNDLE_SIZE = 10000 // kb
+  const MAX_BUNDLE_SIZE = 10000000 // kb
   const [formState, setFormState] = useState({
     Name: '',
     Description: '',
@@ -119,7 +119,8 @@ const CreateAppBundleModal: FC<ICreateAppBundle> = ({
       formRef.current.modified['File'] = true
 
     if(!preloadedBundleFile && chosenBundleFiles.length && chosenBundleFiles[0]?.size)
-      return chosenBundleFiles[0].size <= MAX_BUNDLE_SIZE ? '' : 'file must be no larger than 10 mb'
+      return chosenBundleFiles[0].size <= MAX_BUNDLE_SIZE ? isZip(val) : 'file must be no larger than 10 mb'
+
     return !preloadedBundleFile ? isZip(val) : ''
   }
 
